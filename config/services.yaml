@@ -1,0 +1,29 @@
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+
+    PiaApi\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+
+    PiaApi\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+
+    sensio_framework_extra.view.listener:
+      alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
+
+    # serializer.datetime_hander:
+    #   class: PiaApi\Serializer\Handler\DateTimeHandler
+    #   tags:
+    #     - {name:jms_serializer.handler, type:DateTime, method: serializeDateTimeToJson}
