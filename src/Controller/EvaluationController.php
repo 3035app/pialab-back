@@ -10,91 +10,61 @@
 
 namespace PiaApi\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Evaluation;
 
-class EvaluationController extends RestController
+class EvaluationController extends PiaSubController
 {
-    /**
-     * @FOSRest\Get("/evaluations")
-     *
-     * @return array
-     */
-    public function listAction(): View
-    {
-        $collection = $this->getRepository()->findAll();
+    protected static $DATA_KEY = 'evaluation';
 
-        return $this->view($collection, Response::HTTP_OK);
+    /**
+     * @FOSRest\Get("/pias/{piaId}/evaluations")
+     */
+    public function listAction(Request $request, $piaId)
+    {
+        return parent::listAction($request, $piaId);
     }
 
     /**
-     * @FOSRest\Get("/evaluations/example")
-     *
-     * @return array
+     * @FOSRest\Get("/pias/{piaId}/evaluations/{id}")
      */
-    public function exampleAction(Request $request)
+    public function showAction(Request $request, $piaId, $id)
     {
+        return parent::showAction($request, $piaId, $id);
     }
 
     /**
-     * @FOSRest\Get("/evaluations/{id}")
-     *
-     * @return array
+     * @FOSRest\Post("/pias/{piaId}/evaluations")
      */
-    public function showAction(Request $request, $id): View
+    public function createAction(Request $request, $piaId)
     {
-        $evaluation = $this->getRepository()->find($id);
-
-        return $this->view($evaluation, Response::HTTP_OK);
+        return parent::createAction($request, $piaId);
     }
 
     /**
-     * @FOSRest\Post("/evaluations")
-     *
-     * @ParamConverter("evaluation", converter="fos_rest.request_body")
-     *
-     * @return array
+     * @FOSRest\Put("/pias/{piaId}/evaluations/{id}")
+     * @FOSRest\Patch("/pias/{piaId}/evaluations/{id}")
+     * @FOSRest\Post("/pias/{piaId}/evaluations/{id}")
      */
-    public function createAction(Evaluation $evaluation)
+    public function updateAction(Request $request, $piaId, $id)
     {
-        $this->persist($evaluation);
-        return $this->view($evaluation, Response::HTTP_OK);
+        return parent::updateAction($request, $piaId, $id);
     }
 
     /**
-     * @FOSRest\Put("/evaluations/{id}")
-     * @FOSRest\Post("/evaluations/{id}")
-     *
-     * @ParamConverter("evaluation", converter="fos_rest.request_body")
+     * @FOSRest\Delete("pias/{piaId}/evaluations/{id}")
      *
      * @return array
      */
-    public function updateAction(Evaluation $evaluation)
+    public function deleteAction(Request $request, $piaId, $id)
     {
-
-        $this->update($evaluation);
-        return $this->view($evaluation, Response::HTTP_OK);
-    }
-
-    /**
-     * @FOSRest\Delete("/evaluations/{id}")
-     * @ParamConverter("evaluation", converter="fos_rest.request_body")
-     *
-     * @return array
-     */
-    public function deleteAction(Evaluation $evaluation)
-    {
-      $this->remove($evaluation);
-      return $this->view($evaluation, Response::HTTP_OK);
+        return parent::deleteAction($request, $piaId, $id);
     }
 
     protected function getEntityClass()
     {
         return Evaluation::class;
     }
-
 }

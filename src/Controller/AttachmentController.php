@@ -10,91 +10,61 @@
 
 namespace PiaApi\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Attachment;
 
-class AttachmentController extends RestController
+class AttachmentController extends PiaSubController
 {
-    /**
-     * @FOSRest\Get("/attachments")
-     *
-     * @return array
-     */
-    public function listAction(): View
-    {
-        $collection = $this->getRepository()->findAll();
+    protected static $DATA_KEY = 'attachment';
 
-        return $this->view($collection, Response::HTTP_OK);
+    /**
+     * @FOSRest\Get("/pias/{piaId}/attachments")
+     */
+    public function listAction(Request $request, $piaId)
+    {
+        return parent::listAction($request, $piaId);
     }
 
     /**
-     * @FOSRest\Get("/attachments/example")
-     *
-     * @return array
+     * @FOSRest\Get("/pias/{piaId}/attachments/{id}")
      */
-    public function exampleAction(Request $request)
+    public function showAction(Request $request, $piaId, $id)
     {
+        return parent::showAction($request, $piaId, $id);
     }
 
     /**
-     * @FOSRest\Get("/attachments/{id}")
-     *
-     * @return array
+     * @FOSRest\Post("/pias/{piaId}/attachments")
      */
-    public function showAction(Request $request, $id): View
+    public function createAction(Request $request, $piaId)
     {
-        $attachment = $this->getRepository()->find($id);
-
-        return $this->view($attachment, Response::HTTP_OK);
+        return parent::createAction($request, $piaId);
     }
 
     /**
-     * @FOSRest\Post("/attachments")
-     *
-     * @ParamConverter("attachment", converter="fos_rest.request_body")
-     *
-     * @return array
+     * @FOSRest\Put("/pias/{piaId}/attachments/{id}")
+     * @FOSRest\Patch("/pias/{piaId}/attachments/{id}")
+     * @FOSRest\Post("/pias/{piaId}/attachments/{id}")
      */
-    public function createAction(Attachment $attachment)
+    public function updateAction(Request $request, $piaId, $id)
     {
-        $this->persist($attachment);
-        return $this->view($attachment, Response::HTTP_OK);
+        return parent::updateAction($request, $piaId, $id);
     }
 
     /**
-     * @FOSRest\Put("/attachments/{id}")
-     * @FOSRest\Post("/attachments/{id}")
-     *
-     * @ParamConverter("attachment", converter="fos_rest.request_body")
+     * @FOSRest\Delete("pias/{piaId}/attachments/{id}")
      *
      * @return array
      */
-    public function updateAction(Attachment $attachment)
+    public function deleteAction(Request $request, $piaId, $id)
     {
-
-        $this->update($attachment);
-        return $this->view($attachment, Response::HTTP_OK);
-    }
-
-    /**
-     * @FOSRest\Delete("/attachments/{id}")
-     * @ParamConverter("attachment", converter="fos_rest.request_body")
-     *
-     * @return array
-     */
-    public function deleteAction(Attachment $attachment)
-    {
-      $this->remove($attachment);
-      return $this->view($attachment, Response::HTTP_OK);
+        return parent::deleteAction($request, $piaId, $id);
     }
 
     protected function getEntityClass()
     {
         return Attachment::class;
     }
-
 }

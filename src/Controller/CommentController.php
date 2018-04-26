@@ -10,91 +10,61 @@
 
 namespace PiaApi\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Comment;
 
-class CommentController extends RestController
+class CommentController extends PiaSubController
 {
-    /**
-     * @FOSRest\Get("/comments")
-     *
-     * @return array
-     */
-    public function listAction(): View
-    {
-        $collection = $this->getRepository()->findAll();
+    protected static $DATA_KEY = 'comment';
 
-        return $this->view($collection, Response::HTTP_OK);
+    /**
+     * @FOSRest\Get("/pias/{piaId}/comments")
+     */
+    public function listAction(Request $request, $piaId)
+    {
+        return parent::listAction($request, $piaId);
     }
 
     /**
-     * @FOSRest\Get("/comments/example")
-     *
-     * @return array
+     * @FOSRest\Get("/pias/{piaId}/comments/{id}")
      */
-    public function exampleAction(Request $request)
+    public function showAction(Request $request, $piaId, $id)
     {
+        return parent::showAction($request, $piaId, $id);
     }
 
     /**
-     * @FOSRest\Get("/comments/{id}")
-     *
-     * @return array
+     * @FOSRest\Post("/pias/{piaId}/comments")
      */
-    public function showAction(Request $request, $id): View
+    public function createAction(Request $request, $piaId)
     {
-        $comment = $this->getRepository()->find($id);
-
-        return $this->view($comment, Response::HTTP_OK);
+        return parent::createAction($request, $piaId);
     }
 
     /**
-     * @FOSRest\Post("/comments")
-     *
-     * @ParamConverter("comment", converter="fos_rest.request_body")
-     *
-     * @return array
+     * @FOSRest\Put("/pias/{piaId}/comments/{id}")
+     * @FOSRest\Patch("/pias/{piaId}/comments/{id}")
+     * @FOSRest\Post("/pias/{piaId}/comments/{id}")
      */
-    public function createAction(Comment $comment)
+    public function updateAction(Request $request, $piaId, $id)
     {
-        $this->persist($comment);
-        return $this->view($comment, Response::HTTP_OK);
+        return parent::updateAction($request, $piaId, $id);
     }
 
     /**
-     * @FOSRest\Put("/comments/{id}")
-     * @FOSRest\Post("/comments/{id}")
-     *
-     * @ParamConverter("comment", converter="fos_rest.request_body")
+     * @FOSRest\Delete("pias/{piaId}/comments/{id}")
      *
      * @return array
      */
-    public function updateAction(Comment $comment)
+    public function deleteAction(Request $request, $piaId, $id)
     {
-
-        $this->update($comment);
-        return $this->view($comment, Response::HTTP_OK);
-    }
-
-    /**
-     * @FOSRest\Delete("/comments/{id}")
-     * @ParamConverter("comment", converter="fos_rest.request_body")
-     *
-     * @return array
-     */
-    public function deleteAction(Comment $comment)
-    {
-      $this->remove($comment);
-      return $this->view($comment, Response::HTTP_OK);
+        return parent::deleteAction($request, $piaId, $id);
     }
 
     protected function getEntityClass()
     {
-        return Attachment::class;
+        return Comment::class;
     }
-
 }

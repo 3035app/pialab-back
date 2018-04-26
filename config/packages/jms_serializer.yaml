@@ -4,8 +4,8 @@ jms_serializer:
             format_output: '%kernel.debug%'
 
     handlers:
-        datetime:
-            default_format: 'D M d Y H:i:s eO'
+        # datetime:
+        #     default_format: 'D M d Y H:i:s eO'
 
     default_context:
       serialization:

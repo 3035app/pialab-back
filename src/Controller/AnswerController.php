@@ -10,39 +10,29 @@
 
 namespace PiaApi\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Answer;
-use PiaApi\Entity\Pia;
 
-class AnswerController extends RestController
+class AnswerController extends PiaSubController
 {
+    protected static $DATA_KEY = 'answer';
+
     /**
      * @FOSRest\Get("/pias/{piaId}/answers")
-     *
-     * @return array
      */
     public function listAction(Request $request, $piaId)
     {
-        $criteria = $this->extractCriteria($request, ['pia' => $piaId]);
-        $collection = $this->getRepository()->findBy($criteria);
-
-        return $this->view($collection, Response::HTTP_OK);
+        return parent::listAction($request, $piaId);
     }
 
     /**
      * @FOSRest\Get("/pias/{piaId}/answers/{id}")
-     *
-     * @return array
      */
-    public function showAction(Request $request, $piaId = null, $id): View
+    public function showAction(Request $request, $piaId, $id)
     {
-        $answer = $this->getRepository()->find($id);
-
-        return $this->view($answer, Response::HTTP_OK);
+        return parent::showAction($request, $piaId, $id);
     }
 
     /**
@@ -50,41 +40,28 @@ class AnswerController extends RestController
      */
     public function createAction(Request $request, $piaId)
     {
-        $answerData = $this->extractData($request);
-        $answer = $this->newFromArray($answerData, $piaId);
-        $this->persist($answer);
-
-        return $this->view($answer, Response::HTTP_OK);
+        return parent::createAction($request, $piaId);
     }
 
     /**
      * @FOSRest\Put("/pias/{piaId}/answers/{id}")
      * @FOSRest\Patch("/pias/{piaId}/answers/{id}")
      * @FOSRest\Post("/pias/{piaId}/answers/{id}")
-     *
-     * @return array
      */
     public function updateAction(Request $request, $piaId, $id)
     {
-        $answerData = $this->extractData($request);
-        $answer = $this->newFromArray($answerData, $piaId);
-        $this->update($answer);
 
-        return $this->view($answer, Response::HTTP_OK);
+        return parent::updateAction($request, $piaId, $id);
     }
 
     /**
      * @FOSRest\Delete("pias/{piaId}/answers/{id}")
-     * @ParamConverter("answer", converter="fos_rest.request_body")
      *
      * @return array
      */
     public function deleteAction(Request $request, $piaId, $id)
     {
-        $answer = $this->getRepository()->find($id);
-        $this->remove($answer);
-
-        return $this->view($answer, Response::HTTP_OK);
+        return parent::deleteAction($request, $piaId, $id);
     }
 
     protected function getEntityClass()

@@ -13,6 +13,7 @@ namespace PiaApi\Entity;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Traits\ResourceTrait;
 /**
  * @ORM\Entity
@@ -64,7 +65,7 @@ class Pia implements Timestampable
      *
      * @var string
      */
-    protected $dpo_opinion = '';
+    protected $dpoOpinion = '';
     /**
      * @ORM\Column(type="text")
      *
@@ -134,7 +135,7 @@ class Pia implements Timestampable
     protected $peopleNames = '';
     /**
      * @ORM\Column(type="boolean")
-     *
+     * @JMS\Type("boolean")
      * @var bool
      */
     protected $isExample = false;

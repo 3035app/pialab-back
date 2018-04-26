@@ -10,86 +10,57 @@
 
 namespace PiaApi\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Measure;
 
-class MeasureController extends RestController
+class MeasureController extends PiaSubController
 {
-    /**
-     * @FOSRest\Get("/measures")
-     *
-     * @return array
-     */
-    public function listAction(): View
-    {
-        $collection = $this->getRepository()->findAll();
+    protected static $DATA_KEY = 'measure';
 
-        return $this->view($collection, Response::HTTP_OK);
+    /**
+     * @FOSRest\Get("/pias/{piaId}/measures")
+     */
+    public function listAction(Request $request, $piaId)
+    {
+        return parent::listAction($request, $piaId);
     }
 
     /**
-     * @FOSRest\Get("/measures/example")
-     *
-     * @return array
+     * @FOSRest\Get("/pias/{piaId}/measures/{id}")
      */
-    public function exampleAction(Request $request)
+    public function showAction(Request $request, $piaId, $id)
     {
+        return parent::showAction($request, $piaId, $id);
     }
 
     /**
-     * @FOSRest\Get("/measures/{id}")
-     *
-     * @return array
+     * @FOSRest\Post("/pias/{piaId}/measures")
      */
-    public function showAction(Request $request, $id): View
+    public function createAction(Request $request, $piaId)
     {
-        $measure = $this->getRepository()->find($id);
-
-        return $this->view($measure, Response::HTTP_OK);
+        return parent::createAction($request, $piaId);
     }
 
     /**
-     * @FOSRest\Post("/measures")
-     *
-     * @ParamConverter("measure", converter="fos_rest.request_body")
-     *
-     * @return array
+     * @FOSRest\Put("/pias/{piaId}/measures/{id}")
+     * @FOSRest\Patch("/pias/{piaId}/measures/{id}")
+     * @FOSRest\Post("/pias/{piaId}/measures/{id}")
      */
-    public function createAction(Measure $measure)
+    public function updateAction(Request $request, $piaId, $id)
     {
-        $this->persist($measure);
-        return $this->view($measure, Response::HTTP_OK);
+        return parent::updateAction($request, $piaId, $id);
     }
 
     /**
-     * @FOSRest\Put("/measures/{id}")
-     * @FOSRest\Post("/measures/{id}")
-     *
-     * @ParamConverter("measure", converter="fos_rest.request_body")
+     * @FOSRest\Delete("pias/{piaId}/measures/{id}")
      *
      * @return array
      */
-    public function updateAction(Measure $measure)
+    public function deleteAction(Request $request, $piaId, $id)
     {
-
-        $this->update($measure);
-        return $this->view($measure, Response::HTTP_OK);
-    }
-
-    /**
-     * @FOSRest\Delete("/measures/{id}")
-     * @ParamConverter("measure", converter="fos_rest.request_body")
-     *
-     * @return array
-     */
-    public function deleteAction(Measure $measure)
-    {
-      $this->remove($measure);
-      return $this->view($measure, Response::HTTP_OK);
+        return parent::deleteAction($request, $piaId, $id);
     }
 
     protected function getEntityClass()

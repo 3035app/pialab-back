@@ -27,7 +27,6 @@ class Answer implements Timestampable
         HasPiaTrait,
         TimestampableEntity;
 
-
     /**
      * @ORM\Column(type="string")
      *
@@ -36,9 +35,19 @@ class Answer implements Timestampable
     protected $referenceTo = '';
     /**
      * @ORM\Column(type="json")
-     * @JMS\Type("array<string, string>")
+     * @JMS\Type("array")
      *
      * @var array
      */
     protected $data = [];
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    public function setData($data = [])
+    {
+        $this->data = $data;
+    }
 }

@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenserializeDateTimeToJsonced under the GNU LGPL v3.
+ * This file is licenced under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -12,24 +12,13 @@ namespace PiaApi\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia;
 
-
 class PiaController extends RestController
 {
-    /**
-     * @FOSRest\Get("/pias")
-     *
-     * @return array
-     */
-    public function listAction()
-    {
-        $collection = $this->getRepository()->findAll();
-        return $this->view($collection, Response::HTTP_OK);
-    }
+    protected static $DATA_KEY = 'pia';
 
     /**
      * @FOSRest\Get("/pias/example")
@@ -40,7 +29,18 @@ class PiaController extends RestController
     {
     }
 
+    /**
+     * @FOSRest\Get("/pias")
+     *
+     * @return array
+     */
+    public function listAction(Request $request)
+    {
+        $criteria = $this->extractCriteria($request);
+        $collection = $this->getRepository()->findBy($criteria);
 
+        return $this->view($collection, Response::HTTP_OK);
+    }
 
     /**
      * @FOSRest\Get("/pias/{id}")
@@ -49,8 +49,8 @@ class PiaController extends RestController
      */
     public function showAction(Request $request, $id)
     {
-
         $pia = $this->getRepository()->find($id);
+
         return $this->view($pia, Response::HTTP_OK);
     }
 
@@ -61,15 +61,12 @@ class PiaController extends RestController
      */
     public function createAction(Request $request)
     {
-        $data = $request->request->all();
-        $piaData = array_filter($data['pia'], function($item){
-          return $item != 'undefined';
-        });
 
-        $pia = $this->get('jms_serializer')->fromArray($piaData, $this->getEntityClass());
+        $entityData = $this->extractData($request, static::$DATA_KEY);
+        $entity = $this->newFromArray($entityData);
+        $this->persist($entity);
 
-        $this->persist($pia);
-        return $this->view($pia, Response::HTTP_OK);
+        return $this->view($entity, Response::HTTP_OK);
     }
 
     /**
@@ -81,7 +78,9 @@ class PiaController extends RestController
     public function updateAction(Request $request, $id)
     {
         $pia = $this->getRepository()->find($id);
+
         $this->update($pia);
+
         return $this->view($pia, Response::HTTP_OK);
     }
 
@@ -92,14 +91,14 @@ class PiaController extends RestController
      */
     public function deleteAction(Request $request, $id)
     {
-      $pia = $this->getRepository()->find($id);
-      $this->remove($pia);
-      return $this->view($pia, Response::HTTP_OK);
+        $pia = $this->getRepository()->find($id);
+        $this->remove($pia);
+
+        return $this->view($pia, Response::HTTP_OK);
     }
 
     protected function getEntityClass()
     {
         return Pia::class;
     }
-
 }
