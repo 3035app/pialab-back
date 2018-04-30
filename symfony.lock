@@ -59,6 +59,12 @@
     "doctrine/orm": {
         "version": "v2.6.1"
     },
+    "friendsofsymfony/oauth-server-bundle": {
+        "version": "1.6.1"
+    },
+    "friendsofsymfony/oauth2-php": {
+        "version": "1.2.3"
+    },
     "friendsofsymfony/rest-bundle": {
         "version": "2.2",
         "recipe": {
@@ -106,6 +112,9 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.1.1"
+    },
+    "paragonie/random_compat": {
+        "version": "v2.0.12"
     },
     "phpcollection/phpcollection": {
         "version": "0.5.0"
@@ -188,6 +197,9 @@
             "ref": "cc1afd81841db36fbef982fe56b48ade6716fac4"
         }
     },
+    "symfony/form": {
+        "version": "v4.0.8"
+    },
     "symfony/framework-bundle": {
         "version": "3.3",
         "recipe": {
@@ -203,16 +215,31 @@
     "symfony/http-kernel": {
         "version": "v4.0.8"
     },
+    "symfony/inflector": {
+        "version": "v4.0.8"
+    },
+    "symfony/intl": {
+        "version": "v4.0.8"
+    },
     "symfony/lts": {
         "version": "4-dev"
     },
+    "symfony/options-resolver": {
+        "version": "v4.0.8"
+    },
     "symfony/orm-pack": {
         "version": "v1.0.5"
+    },
+    "symfony/polyfill-intl-icu": {
+        "version": "v1.7.0"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.7.0"
     },
     "symfony/process": {
+        "version": "v4.0.8"
+    },
+    "symfony/property-access": {
         "version": "v4.0.8"
     },
     "symfony/routing": {
@@ -224,11 +251,32 @@
             "ref": "cda8b550123383d25827705d05a42acf6819fe4e"
         }
     },
+    "symfony/security-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "f8a63faa0d9521526499c0a8f403c9964ecb0527"
+        }
+    },
     "symfony/security-core": {
         "version": "v4.0.8"
     },
     "symfony/templating": {
         "version": "v4.0.8"
+    },
+    "symfony/twig-bridge": {
+        "version": "v4.0.8"
+    },
+    "symfony/twig-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "f75ac166398e107796ca94cc57fa1edaa06ec47f"
+        }
     },
     "symfony/web-server-bundle": {
         "version": "3.3",
@@ -241,6 +289,9 @@
     },
     "symfony/yaml": {
         "version": "v4.0.8"
+    },
+    "twig/twig": {
+        "version": "v2.4.8"
     },
     "willdurand/jsonp-callback-validator": {
         "version": "v1.1.0"

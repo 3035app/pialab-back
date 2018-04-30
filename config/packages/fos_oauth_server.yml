@@ -1,0 +1,6 @@
+fos_oauth_server:
+    db_driver: orm
+    client_class:        PiaApi\Entity\Oauth\Client
+    access_token_class:  PiaApi\Entity\Oauth\AccessToken
+    refresh_token_class: PiaApi\Entity\Oauth\RefreshToken
+    auth_code_class:     PiaApi\Entity\Oauth\AuthCode

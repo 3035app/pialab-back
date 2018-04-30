@@ -21,7 +21,7 @@ services:
 
 
     sensio_framework_extra.view.listener:
-      alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
+        alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
 
     # serializer.datetime_hander:
     #   class: PiaApi\Serializer\Handler\DateTimeHandler
