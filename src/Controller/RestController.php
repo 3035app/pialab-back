@@ -48,9 +48,9 @@ abstract class RestController extends FOSRestController
     protected function extractData(Request $request, $key = null)
     {
         $data = $request->request->all();
-        if ($key !== null) {
-            $data = $data[$key];
-        }
+        //if ($key !== null) {
+        //    $data = $data[$key];
+        //}
 
         return array_filter($data, function ($item) {
             return $item != 'undefined';
@@ -83,6 +83,16 @@ abstract class RestController extends FOSRestController
     protected function newFromArray($data, $piaId = null)
     {
         $entity = $this->get('jms_serializer')->fromArray($data, $this->getEntityClass());
+        if ($piaId !== null) {
+            $entity->setPia($this->getEntityManager()->getReference(Pia::class, $piaId));
+        }
+
+        return $entity;
+    }
+
+    protected function newFromRequest(Request $request, $piaId = null)
+    {
+        $entity = $this->get('jms_serializer')->deserialize($request->getContent(), $this->getEntityClass(),'json');
         if ($piaId !== null) {
             $entity->setPia($this->getEntityManager()->getReference(Pia::class, $piaId));
         }

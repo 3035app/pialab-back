@@ -61,9 +61,7 @@ class PiaController extends RestController
      */
     public function createAction(Request $request)
     {
-
-        $entityData = $this->extractData($request, static::$DATA_KEY);
-        $entity = $this->newFromArray($entityData);
+        $entity = $this->newFromRequest($request);
         $this->persist($entity);
 
         return $this->view($entity, Response::HTTP_OK);

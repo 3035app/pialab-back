@@ -36,9 +36,7 @@ abstract class PiaSubController extends RestController
 
     public function createAction(Request $request, $piaId)
     {
-        $entityData = $this->extractData($request, static::$DATA_KEY);
-        
-        $entity = $this->newFromArray($entityData, $piaId);
+        $entity = $this->newFromRequest($request, $piaId);
         $this->persist($entity);
 
         return $this->view($entity, Response::HTTP_OK);
@@ -46,9 +44,7 @@ abstract class PiaSubController extends RestController
 
     public function updateAction(Request $request, $piaId, $id)
     {
-        $entityData = $this->extractData($request, static::$DATA_KEY);
-        $entity = $this->newFromArray($entityData, $piaId);
-
+        $entity = $this->newFromRequest($request, $piaId);
         $this->update($entity);
 
         return $this->view($entity, Response::HTTP_OK);
