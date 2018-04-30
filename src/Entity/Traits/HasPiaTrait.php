@@ -17,8 +17,6 @@ use PiaApi\Entity\Pia;
 trait HasPiaTrait
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Pia", inversedBy="answers")
-     * @ORM\JoinColumn(name="pia_id", referencedColumnName="id")
      * @JMS\Exclude()
      *
      * @var Pia

@@ -17,16 +17,22 @@ use DateTime;
 use PiaApi\Entity\Traits\ResourceTrait;
 use PiaApi\Entity\Traits\HasPiaTrait;
 
-
 /**
  * @ORM\Entity
  * @ORM\Table(name="evaluation")
  */
 class Evaluation implements Timestampable
 {
-  use ResourceTrait,
-      HasPiaTrait,
-      TimestampableEntity;
+    use ResourceTrait,
+        HasPiaTrait,
+        TimestampableEntity;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Pia", inversedBy="evaluations")
+     *
+     * @var Pia
+     */
+    protected $pia;
     
     /**
      * @ORM\Column(type="smallint")
@@ -84,5 +90,4 @@ class Evaluation implements Timestampable
      * @var int
      */
     protected $globalStatus = 0;
-
 }

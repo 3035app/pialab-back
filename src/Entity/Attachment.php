@@ -16,16 +16,22 @@ use Doctrine\ORM\Mapping as ORM;
 use PiaApi\Entity\Traits\ResourceTrait;
 use PiaApi\Entity\Traits\HasPiaTrait;
 
-
 /**
  * @ORM\Entity
  * @ORM\Table(name="attachment")
  */
 class Attachment implements Timestampable
 {
-  use ResourceTrait,
-      HasPiaTrait,
-      TimestampableEntity;
+    use ResourceTrait,
+        HasPiaTrait,
+        TimestampableEntity;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Pia", inversedBy="attachments")
+     *
+     * @var Pia
+     */
+    protected $pia;
     
     /**
      * @ORM\Column(type="string")
@@ -39,5 +45,4 @@ class Attachment implements Timestampable
      * @var bool
      */
     protected $piaSigned = false;
-
 }

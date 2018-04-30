@@ -28,6 +28,13 @@ class Answer implements Timestampable
         TimestampableEntity;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Pia", inversedBy="answers")
+     *
+     * @var Pia
+     */
+    protected $pia;
+
+    /**
      * @ORM\Column(type="string")
      *
      * @var string

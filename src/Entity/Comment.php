@@ -16,16 +16,22 @@ use Doctrine\ORM\Mapping as ORM;
 use PiaApi\Entity\Traits\ResourceTrait;
 use PiaApi\Entity\Traits\HasPiaTrait;
 
-
 /**
  * @ORM\Entity
  * @ORM\Table(name="comment")
  */
 class Comment implements Timestampable
 {
-  use ResourceTrait,
-      HasPiaTrait,
-      TimestampableEntity;
+    use ResourceTrait,
+        HasPiaTrait,
+        TimestampableEntity;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Pia", inversedBy="comments")
+     *
+     * @var Pia
+     */
+    protected $pia;
     
     /**
      * @ORM\Column(type="text")
@@ -45,5 +51,4 @@ class Comment implements Timestampable
      * @var bool
      */
     protected $forMeasure = false;
-
 }

@@ -16,16 +16,22 @@ use Doctrine\ORM\Mapping as ORM;
 use PiaApi\Entity\Traits\ResourceTrait;
 use PiaApi\Entity\Traits\HasPiaTrait;
 
-
 /**
  * @ORM\Entity
  * @ORM\Table(name="measure")
  */
 class Measure implements Timestampable
 {
-  use ResourceTrait,
-      HasPiaTrait,
-      TimestampableEntity;
+    use ResourceTrait,
+        HasPiaTrait,
+        TimestampableEntity;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Pia", inversedBy="measures")
+     *
+     * @var Pia
+     */
+    protected $pia;
 
     /**
      * @var string
@@ -39,5 +45,4 @@ class Measure implements Timestampable
      * @var string
      */
     protected $placeholder;
-
 }
