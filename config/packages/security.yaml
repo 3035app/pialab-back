@@ -22,7 +22,7 @@ security:
                 provider: PiaApi\Auth\UserProvider
 
         api:
-            pattern:    ^/api
+            pattern:    ^/pias
             fos_oauth:  true
             stateless:  true
             anonymous:  true # can be omitted as its default value

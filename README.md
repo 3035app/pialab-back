@@ -29,10 +29,17 @@ Should response something like
 
 ```json
 {
-  "access_token": "NmJjOGFkNzE1NDY5YTY3NjRkZDVlNTM3MzNkYzFhNWFmNGQxYTlhY2NkNzA1ZWIwNjc0ZDFhYWEwMDJiMzdmMQ",
-  "expires_in": 3600,
-  "token_type": "bearer",
-  "scope": null,
-  "refresh_token": "NzhhOWZkMmViYzczYjcyMTBkNjY0OTE5NjcyM2RiZjlhZmIxYzA3MmVmZDVmMGM0ZGMwODU2MWI1MWExZDI5OQ"
+    "access_token": "NmJjOGFkNzE1NDY5YTY3NjRkZDVlNTM3MzNkYzFhNWFmNGQxYTlhY2NkNzA1ZWIwNjc0ZDFhYWEwMDJiMzdmMQ",
+    "expires_in": 3600,
+    "token_type": "bearer",
+    "scope": null,
+    "refresh_token": "NzhhOWZkMmViYzczYjcyMTBkNjY0OTE5NjcyM2RiZjlhZmIxYzA3MmVmZDVmMGM0ZGMwODU2MWI1MWExZDI5OQ"
 }
+```
+
+You can now request the api as :
+
+```http
+GET http://localhost:8000/pias
+    Authorization: Bearer NmJjOGFkNzE1NDY5YTY3NjRkZDVlNTM3MzNkYzFhNWFmNGQxYTlhY2NkNzA1ZWIwNjc0ZDFhYWEwMDJiMzdmMQ
 ```
