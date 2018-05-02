@@ -30,7 +30,9 @@ abstract class PiaSubController extends RestController
     public function showAction(Request $request, $piaId, $id)
     {
         $entity = $this->getRepository()->find($id);
-
+        if ($entity === null) {
+            return $this->view($entity, Response::HTTP_NOT_FOUND);
+        }
         return $this->view($entity, Response::HTTP_OK);
     }
 

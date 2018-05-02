@@ -50,7 +50,9 @@ class PiaController extends RestController
     public function showAction(Request $request, $id)
     {
         $pia = $this->getRepository()->find($id);
-
+        if ($pia === null) {
+            return $this->view($pia, Response::HTTP_NOT_FOUND);
+        }
         return $this->view($pia, Response::HTTP_OK);
     }
 
@@ -75,11 +77,10 @@ class PiaController extends RestController
      */
     public function updateAction(Request $request, $id)
     {
-        $pia = $this->getRepository()->find($id);
+        $entity = $this->newFromRequest($request);
+        $this->update($entity);
 
-        $this->update($pia);
-
-        return $this->view($pia, Response::HTTP_OK);
+        return $this->view($entity, Response::HTTP_OK);
     }
 
     /**
