@@ -27,6 +27,7 @@ class PiaController extends RestController
      */
     public function exampleAction(Request $request)
     {
+        $this->canAccessResourceOr304();
     }
 
     /**
@@ -36,6 +37,8 @@ class PiaController extends RestController
      */
     public function listAction(Request $request)
     {
+        $this->canAccessResourceOr304();
+
         $criteria = $this->extractCriteria($request);
         $collection = $this->getRepository()->findBy($criteria);
 
@@ -49,6 +52,8 @@ class PiaController extends RestController
      */
     public function showAction(Request $request, $id)
     {
+        $this->canAccessResourceOr304();
+
         $pia = $this->getRepository()->find($id);
 
         return $this->view($pia, Response::HTTP_OK);
@@ -61,6 +66,8 @@ class PiaController extends RestController
      */
     public function createAction(Request $request)
     {
+        $this->canAccessResourceOr304();
+
         $entity = $this->newFromRequest($request);
         $this->persist($entity);
 
@@ -75,6 +82,8 @@ class PiaController extends RestController
      */
     public function updateAction(Request $request, $id)
     {
+        $this->canAccessResourceOr304();
+
         $pia = $this->getRepository()->find($id);
 
         $this->update($pia);
@@ -89,6 +98,8 @@ class PiaController extends RestController
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->canAccessResourceOr304();
+        
         $pia = $this->getRepository()->find($id);
         $this->remove($pia);
 

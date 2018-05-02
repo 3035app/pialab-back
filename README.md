@@ -5,7 +5,7 @@
 ### Create Oauth client
 
 ```bash
-bin/console fos:oauth-server:create-client --redirect-uri="http://localhost:4200/" --grant-type="password" --grant-type="token"
+bin/console fos:oauth-server:create-client --redirect-uri="http://localhost:4200" --grant-type="password" --grant-type="token"
 ```
 
 ### Create a standard user

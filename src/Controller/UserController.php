@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class UserController extends Controller
 {
@@ -23,14 +24,14 @@ class UserController extends Controller
      */
     private $encoderFactory;
 
+    /**
+     * @var TokenStorage
+     */
+    private $tokenStorage;
+
     public function __construct(EncoderFactoryInterface $encoderFactory)
     {
         $this->encoderFactory = $encoderFactory;
-    }
-
-    public function indexAction()
-    {
-        return $this->render('index.html.twig');
     }
 
     public function loginAction(
@@ -56,10 +57,13 @@ class UserController extends Controller
             $daoProvider->authenticate($unauthenticatedToken);
         }
 
-        return new Response('OK');
+        return new Response('Logged in');
     }
 
     public function logoutAction(Request $request)
     {
+        $this->tokenStorage->setToken(null);
+        
+        return new Response('Logged out');
     }
 }

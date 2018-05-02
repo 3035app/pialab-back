@@ -50,7 +50,6 @@ class AnswerController extends PiaSubController
      */
     public function updateAction(Request $request, $piaId, $id)
     {
-
         return parent::updateAction($request, $piaId, $id);
     }
 
