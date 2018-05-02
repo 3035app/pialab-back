@@ -33,6 +33,10 @@ security:
 
         main:
             anonymous: true
+            form_login:
+                login_path: login
+                check_path: login
+                provider: PiaApi\Auth\UserProvider
 
             # activate different ways to authenticate
 

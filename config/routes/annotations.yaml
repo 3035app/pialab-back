@@ -2,10 +2,9 @@ api_controllers:
     resource: ../../src/Controller/
     type: annotation
 
-login:
-   path: /login
-   controller: PiaApi\Controller\UserController::loginAction
-
-logout:
-   path: /logout
-   controller: PiaApi\Controller\UserController::logoutAction
+home:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: /manageUsers
+        permanent: true

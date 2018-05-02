@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="ui middle aligned center aligned grid">
+        <div class="column">
+            <h2 class="ui teal image header">
+                <img src="assets/images/logo.png" class="image">
+                <div class="content">
+                    Log-in to your account
+                </div>
+            </h2>
+
+            {% if error %}
+                <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            <form class="ui large form" action="{{ path('login') }}" method="post">
+                <div class="ui stacked segment">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="_username" placeholder="E-mail address">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" name="_password" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="ui fluid large teal submit button" onclick="this.closest('form').submit()">Login</div>
+                </div>
+
+                <div class="ui error message"></div>
+
+            </form>
+        </div>
+    </div>
+{% endblock body %}

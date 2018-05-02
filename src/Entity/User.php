@@ -21,26 +21,32 @@ class User implements UserInterface, \Serializable
     protected $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="username", type="string", nullable=false, unique=true)
+     *
+     * @var string
      */
     protected $username;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="email", type="string", nullable=false, unique=true)
+     *
+     * @var string
      */
     protected $email;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="password", type="string", nullable=false)
+     *
+     * @var string
      */
     protected $password;
 
+    /**
+     * @ORM\Column(name="roles", type="array", nullable=false)
+     *
+     * @var array
+     */
+    protected $roles;
 
     public function __construct(?string $email = null, ?string $password)
     {
@@ -99,14 +105,26 @@ class User implements UserInterface, \Serializable
 
     public function getSalt()
     {
-        // you *may* need a real salt depending on your encoder
-        // see section on salt below
         return null;
     }
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return $this->roles;
+    }
+
+    public function addRole(string $role): void
+    {
+        if (!in_array($role, $this->roles)) {
+            $this->roles[] = $role;
+        }
+    }
+
+    public function removeRole(string $role): void
+    {
+        if (in_array($role, $this->roles)) {
+            $this->roles[] = $role;
+        }
     }
 
     public function getUsername()
@@ -126,8 +144,7 @@ class User implements UserInterface, \Serializable
             $this->email,
             $this->username,
             $this->password,
-            // see section on salt below
-            // $this->salt,
+            $this->roles,
         ));
     }
 
@@ -139,8 +156,7 @@ class User implements UserInterface, \Serializable
             $this->email,
             $this->username,
             $this->password,
-            // see section on salt below
-            // $this->salt
+            $this->roles,
         ) = unserialize($serialized);
     }
 }
