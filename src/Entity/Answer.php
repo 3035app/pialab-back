@@ -19,7 +19,7 @@ use PiaApi\Entity\Traits\HasPiaTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="answer")
+ * @ORM\Table(name="pia_answer")
  */
 class Answer implements Timestampable
 {

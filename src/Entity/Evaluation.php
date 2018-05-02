@@ -19,7 +19,7 @@ use PiaApi\Entity\Traits\HasPiaTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="evaluation")
+ * @ORM\Table(name="pia_evaluation")
  */
 class Evaluation implements Timestampable
 {

@@ -18,7 +18,7 @@ use PiaApi\Entity\Traits\HasPiaTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="attachment")
+ * @ORM\Table(name="pia_attachment")
  */
 class Attachment implements Timestampable
 {

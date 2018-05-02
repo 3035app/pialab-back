@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="user")
+ * @ORM\Table(name="pia_user")
  */
 class User implements UserInterface, \Serializable
 {

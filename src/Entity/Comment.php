@@ -18,7 +18,7 @@ use PiaApi\Entity\Traits\HasPiaTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="comment")
+ * @ORM\Table(name="pia_comment")
  */
 class Comment implements Timestampable
 {

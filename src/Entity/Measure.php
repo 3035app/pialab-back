@@ -18,7 +18,7 @@ use PiaApi\Entity\Traits\HasPiaTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="measure")
+ * @ORM\Table(name="pia_measure")
  */
 class Measure implements Timestampable
 {

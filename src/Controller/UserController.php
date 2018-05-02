@@ -56,10 +56,7 @@ class UserController extends Controller
             $daoProvider->authenticate($unauthenticatedToken);
         }
 
-        return $this->render('login.html.twig', array(
-            'last_username' => $lastUsername,
-            'error'         => $error,
-        ));
+        return new Response('OK');
     }
 
     public function logoutAction(Request $request)

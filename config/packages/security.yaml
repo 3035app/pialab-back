@@ -5,7 +5,7 @@ security:
             algorithm: bcrypt
             cost: 12
     providers:
-        db_provider:
+        PiaApi\Auth\UserProvider:
             entity:
                 class: PiaApi\Entity\User
                 property: username
@@ -19,16 +19,13 @@ security:
             form_login:
                 login_path: login
                 check_path: login
-                provider: db_provider
-            logout:
-                path:   /logout
-                target: /login
+                provider: PiaApi\Auth\UserProvider
 
         api:
             pattern:    ^/api
             fos_oauth:  true
             stateless:  true
-            anonymous:  false # can be omitted as its default value
+            anonymous:  true # can be omitted as its default value
 
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
