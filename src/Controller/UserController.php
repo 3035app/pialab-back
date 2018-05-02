@@ -20,6 +20,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
+use PiaApi\Form\User\CreateUserForm;
 
 class UserController extends Controller
 {
@@ -95,16 +98,68 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function manageUsersAction()
+    public function manageUsersAction(Request $request)
     {
         if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirect($this->generateUrl('login'));
         }
         
+        $this->canAccess();
+
+        $queryBuilder = $this->getDoctrine()->getRepository(User::class)->createQueryBuilder('u');
+
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+
+        $page = $request->get('page', 1);
+
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
+
+        return $this->render('User/manageUsers.html.twig', [
+            'users' => $pagerfanta
+        ]);
+    }
+
+    /**
+     * @Route("/manageUsers/addUser", name="manage_users_add_user")
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function addUserAction(Request $request)
+    {
+        $this->canAccess();
+
+        $form = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
+            'action' => $this->generateUrl('manage_users_add_user')
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userData = $form->getData();
+
+            $user = new User($userData['email'], $userData['password']);
+            foreach ($userData['roles'] as $role) {
+                $user->addRole($role);
+            }
+
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
+            
+            return $this->redirect($this->generateUrl('manage_users'));
+        }
+
+        return $this->render('User/form.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    protected function canAccess()
+    {
         if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedHttpException();
         }
-
-        return $this->render('User/manageUsers.html.twig');
     }
 }

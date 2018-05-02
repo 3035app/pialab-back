@@ -10,7 +10,25 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div class="ui inverted menu">
+            <div class="right menu">
+                <a class="active item" href="{{ path('logout') }}">
+                    Logout
+                </a>
+            </div>
+        </div>
+        <div class="ui container">
+            {% block body %}{% endblock %}
+        </div>
+        {% block javascripts %}
+            <script src="/js/jquery.min.js"></script>
+            <script src="/js/semantic.min.js"></script>
+            <script src="/js/semantic-custom.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('.ui.checkbox').checkbox();
+                })
+            </script>
+        {% endblock %}
     </body>
 </html>

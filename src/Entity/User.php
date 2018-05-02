@@ -53,6 +53,7 @@ class User implements UserInterface, \Serializable
         $this->email = $email;
         $this->username = $email;
         $this->password = $password;
+        $this->roles = [];
     }
 
     /**
