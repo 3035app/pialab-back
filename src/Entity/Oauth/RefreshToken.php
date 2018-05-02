@@ -4,23 +4,29 @@ namespace PiaApi\Entity\Oauth;
 
 use FOS\OAuthServerBundle\Entity\RefreshToken as BaseRefreshToken;
 use Doctrine\ORM\Mapping as ORM;
-use PiaApi\Entity\Traits\ResourceTrait;
 
 /**
  * @ORM\Entity
  */
 class RefreshToken extends BaseRefreshToken
 {
-    use ResourceTrait;
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="integer")
+     *
+     * @var string
+     */
+    protected $id;
     
     /**
-         * @ORM\ManyToOne(targetEntity="Client")
+         * @ORM\ManyToOne(targetEntity="PiaApi\Entity\Oauth\Client")
          * @ORM\JoinColumn(nullable=false)
          */
     protected $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Your\Own\Entity\User")
+     * @ORM\ManyToOne(targetEntity="PiaApi\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $user;

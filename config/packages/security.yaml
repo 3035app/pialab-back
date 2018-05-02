@@ -1,7 +1,14 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        PiaApi\Entity\User:
+            algorithm: bcrypt
+            cost: 12
     providers:
-        in_memory: { memory: ~ }
+        db_provider:
+            entity:
+                class: PiaApi\Entity\User
+                property: username
     firewalls:
         oauth_token:
             pattern:    ^/oauth/v2/token
@@ -9,7 +16,13 @@ security:
 
         oauth_authorize:
             pattern:    ^/oauth/v2/auth
-            # Add your favorite authentication process here
+            form_login:
+                login_path: login
+                check_path: login
+                provider: db_provider
+            logout:
+                path:   /logout
+                target: /login
 
         api:
             pattern:    ^/api
@@ -20,7 +33,7 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-            
+
         main:
             anonymous: true
 
