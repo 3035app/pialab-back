@@ -30,7 +30,10 @@
 
             <div class="ui segment">
 
-                <h2>Liste des applications</h2>
+                <h2>
+                    <a href="?limit=1000" class="ui tiny button" style="float:right;">Voir 1000</a>
+                    Liste des applications
+                </h2>
 
                 <table class="ui compact striped table">
                     <thead>
@@ -55,13 +58,21 @@
                                         <td class="right aligned">
                                             <b>Client_id:</b>
                                         </td>
-                                        <td><span class="ui teal large label">{{ application.id }}_{{ application.randomId }}</span></td>
+                                        <td>
+                                            <span class="ui teal large label" style="font-family: Mono;">
+                                                {{ application.id }}_{{ application.randomId }}
+                                            </span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="right aligned">
                                             <b>Client_secret:</b>
                                         </td>
-                                        <td><span class="ui teal large label">{{ application.secret }}</span></td>
+                                        <td>
+                                            <span class="ui teal large label" style="font-family: Mono;">
+                                                {{ application.secret }}
+                                            </span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

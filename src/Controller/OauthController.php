@@ -62,9 +62,10 @@ class OauthController extends Controller
         $adapter = new DoctrineORMAdapter($queryBuilder);
 
         $page = $request->get('page', 1);
+        $limit = $request->get('limit', 20);
 
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta->setMaxPerPage($limit);
         $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
 
         return $this->render('Applications/manageApplications.html.twig', [

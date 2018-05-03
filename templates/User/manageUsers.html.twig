@@ -30,7 +30,10 @@
 
             <div class="ui segment">
 
-                <h2>Liste des utilisateurs</h2>
+                <h2>
+                    <a href="?limit=1000" class="ui tiny button" style="float:right;">Voir 1000</a>
+                    Liste des utilisateurs
+                </h2>
 
                 <table class="ui compact striped table">
                     <thead>
@@ -119,22 +122,17 @@
                 success: (html) => {
                     let modal = $('.ui.modal');
 
-                    modal
-                        .find('.header').html('Modifier un utilisateur');
+                    modal.find('.header').html('Modifier un utilisateur');
 
                     modal
                         .find('.content')
                         .html(html)
                         .find('input[type="submit"]').hide();
 
-                    modal
-                        .find('.actions').html(
-                            $('<div/>').addClass('ui deny button').html('Annuler'), 
-                            $('<div/>').addClass('ui positive button').html('Enregistrer').on('click', () => {
-                                $(this).closest('.ui.modal').find('form').submit();
-                            })
-                        );
-                        
+                    modal.find('.actions').html($('<div/>').addClass('ui deny button').html('Annuler'), $('<div/>').addClass('ui positive button').html('Enregistrer').on('click', () => {
+                        $(this).closest('.ui.modal').find('form').submit();
+                    }));
+
                     $('.ui.checkbox').checkbox();
 
                     modal.modal('show');
