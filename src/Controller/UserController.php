@@ -23,6 +23,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use PiaApi\Form\User\CreateUserForm;
+use PiaApi\Form\User\EditUserForm;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends Controller
 {
@@ -84,13 +86,14 @@ class UserController extends Controller
      * @Route("/logout", name="logout")
      *
      * @param Request $request
+     *
      * @return void
      */
     public function logoutAction(Request $request)
     {
         $this->tokenStorage->setToken(null);
         
-        return new Response('Logged out');
+        return $this->redirect($this->generateUrl('login'));
     }
 
     /**
@@ -125,6 +128,7 @@ class UserController extends Controller
      * @Route("/manageUsers/addUser", name="manage_users_add_user")
      *
      * @param Request $request
+     *
      * @return void
      */
     public function addUserAction(Request $request)
@@ -144,6 +148,43 @@ class UserController extends Controller
             foreach ($userData['roles'] as $role) {
                 $user->addRole($role);
             }
+
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
+            
+            return $this->redirect($this->generateUrl('manage_users'));
+        }
+
+        return $this->render('User/form.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/manageUsers/editUser/{userId}", name="manage_users_edit_user")
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function editUserAction(Request $request)
+    {
+        $this->canAccess();
+
+        $userId = $request->get('userId');
+        $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
+
+        if ($user === null) {
+            throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
+        }
+
+        $form = $this->createForm(EditUserForm::class, $user, [
+            'action' => $this->generateUrl('manage_users_edit_user', ['userId' => $user->getId()])
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
 
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();

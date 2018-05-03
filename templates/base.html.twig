@@ -6,24 +6,21 @@
         <title>
             {% block title %}PIA User Management{% endblock %}
         </title>
-        <link rel="stylesheet" href="/css/semantic-librinfo.min.css"/>
+        {# <link rel="stylesheet" href="/assets/css/semantic-librinfo.min.css"/> #}
+        <link rel="stylesheet" href="/assets/css/semantic-superhero.min.css"/>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        <div class="ui inverted menu">
-            <div class="right menu">
-                <a class="active item" href="{{ path('logout') }}">
-                    Logout
-                </a>
-            </div>
-        </div>
-        <div class="ui container">
-            {% block body %}{% endblock %}
-        </div>
+        {% block navbar %}{% endblock navbar %}
+
+        {% block body %}{% endblock %}
+
+        {% include 'modal.html.twig' %}
+
         {% block javascripts %}
-            <script src="/js/jquery.min.js"></script>
-            <script src="/js/semantic.min.js"></script>
-            <script src="/js/semantic-custom.min.js"></script>
+            <script src="/assets/js/jquery.min.js"></script>
+            <script src="/assets/js/semantic.min.js"></script>
+            <script src="/assets/js/semantic-custom.min.js"></script>
             <script>
                 $(document).ready(function () {
                     $('.ui.checkbox').checkbox();

@@ -3,13 +3,13 @@
 namespace PiaApi\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="pia_user")
  */
-class User implements UserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var int
@@ -48,12 +48,42 @@ class User implements UserInterface, \Serializable
      */
     protected $roles;
 
+    /**
+     * @ORM\Column(name="creationDate", type="datetime")
+     *
+     * @var \DateTime
+     */
+    protected $creationDate;
+
+    /**
+     * @ORM\Column(name="expirationDate", type="datetime")
+     *
+     * @var \DateTime
+     */
+    protected $expirationDate;
+
+    /**
+     * @ORM\Column(name="enabled", type="boolean")
+     *
+     * @var bool
+     */
+    protected $enabled = true;
+
+    /**
+     * @ORM\Column(name="locked", type="boolean")
+     *
+     * @var bool
+     */
+    protected $locked = false;
+
     public function __construct(?string $email = null, ?string $password)
     {
         $this->email = $email;
         $this->username = $email;
         $this->password = $password;
-        $this->roles = [];
+        $this->roles = ['ROLE_USER'];
+        $this->creationDate = new \DateTime();
+        $this->expirationDate = new \DateTimeImmutable('+1 Year');
     }
 
     /**
@@ -146,6 +176,10 @@ class User implements UserInterface, \Serializable
             $this->username,
             $this->password,
             $this->roles,
+            $this->creationDate,
+            $this->expirationDate,
+            $this->enabled,
+            $this->locked,
         ));
     }
 
@@ -158,6 +192,92 @@ class User implements UserInterface, \Serializable
             $this->username,
             $this->password,
             $this->roles,
+            $this->creationDate,
+            $this->expirationDate,
+            $this->enabled,
+            $this->locked,
         ) = unserialize($serialized);
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreationDate(): \DateTime
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     */
+    public function setEnabled(bool $enabled): void
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Set the value of locked
+     *
+     * @param bool $locked
+     */
+    public function setLocked(bool $locked): void
+    {
+        $this->locked = $locked;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getExpirationDate(): \DateTime
+    {
+        return $this->expirationDate;
+    }
+
+    /**
+     * @param \DateTime $expirationDate
+     */
+    public function setExpirationDate(\DateTime $expirationDate): void
+    {
+        $this->expirationDate = $expirationDate;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isLocked(): bool
+    {
+        return $this->locked;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonLocked(): bool
+    {
+        return !$this->isLocked();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonExpired(): bool
+    {
+        return $this->expirationDate > new \DateTime();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function isCredentialsNonExpired(): bool
+    {
+        return true;
     }
 }

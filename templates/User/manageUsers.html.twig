@@ -1,44 +1,81 @@
 {% extends 'base.html.twig' %}
 
+{% import '_macros.html.twig' as macro %}
+
 {% block title %}PIA User Management{% endblock title %}
+
+{% block navbar %}
+    <div class="ui inverted menu">
+        <div class="right menu">
+            <a class="active item" href="{{ path('logout') }}">
+                Logout
+            </a>
+        </div>
+    </div>
+{% endblock navbar %}
 
 {% block body %}
 
-    <div class="ui segment">
-
-        <h2>Liste des utilisateurs</h2>
-
-        <table class="ui compact table">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Roles</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                {% for user in users %}
-                    <tr>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>
-                            {% for role in user.roles if role != 'ROLE_USER' %}
-                                <span class="ui label">{{ role }}</span>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
-
-            </tbody>
-        </table>
-
-        {{ pagerfanta(users, 'semantic_ui') }}
-
-    </div>
-
     <div class="ui grid">
-        <div class="eight wide column">
+
+        <div class="twelve wide column">
+
+            <div class="ui segment">
+
+                <h2>Liste des utilisateurs</h2>
+
+                <table class="ui compact striped table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Roles</th>
+                            <th>Actif</th>
+                            <th>Verrouillé</th>
+                            <th>Créé le</th>
+                            <th>Expire le</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% for role in user.roles if role != 'ROLE_USER' %}
+                                        <span class="ui label">{{ role }}</span>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {{ macro.boolLabel(user.enabled) }}
+                                </td>
+                                <td>
+                                    {{ macro.boolLabel(user.locked) }}
+                                </td>
+                                <td>
+                                    {{ user.creationDate|date('d/m/Y')}}
+                                </td>
+                                <td>
+                                    {{ user.expirationDate|date('d/m/Y')}}
+                                </td>
+                                <td>
+                                    <a class="ui green tiny icon button" data-modal="data-modal" href="{{ path('manage_users_edit_user', {'userId':user.id}) }}">
+                                        <i class="pencil icon"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+                {{ pagerfanta(users, 'semantic_ui') }}
+            </div>
+        </div>
+
+        <div class="four wide column">
             <div class="ui segment">
 
                 <h2>Ajouter un utilisateur</h2>
@@ -50,3 +87,48 @@
     </div>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).on('click', 'a[data-modal]', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            let url = $(e.currentTarget).attr('href');
+
+            console.info(url);
+            let modal = $('.ui.modal');
+            modal.hide();
+
+            $.ajax({
+                url: url,
+                success: (html) => {
+                    let modal = $('.ui.modal');
+
+                    modal
+                        .find('.header').html('Modifier un utilisateur');
+
+                    modal
+                        .find('.content')
+                        .html(html)
+                        .find('input[type="submit"]').hide();
+
+                    modal
+                        .find('.actions').html(
+                            $('<div/>').addClass('ui deny button').html('Annuler'), 
+                            $('<div/>').addClass('ui positive button').html('Enregistrer').on('click', () => {
+                                $(this).closest('.ui.modal').find('form').submit();
+                            })
+                        );
+                        
+                    $('.ui.checkbox').checkbox();
+
+                    modal.modal('show');
+                }
+            })
+        });
+    </script>
+{% endblock javascripts %}

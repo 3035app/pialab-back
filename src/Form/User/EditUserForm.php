@@ -2,30 +2,39 @@
 
 namespace PiaApi\Form\User;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
-class CreateUserForm extends AbstractType
+class EditUserForm extends CreateUserForm
 {
-    protected $userRoles = [
-        'ROLE_USER'        => 'ROLE_USER',
-        'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
-    ];
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildForm($builder, $options);
         $builder
-            ->add('email', EmailType::class)
-            ->add('password', PasswordType::class)
+            ->remove('roles')
+            ->remove('password')
+            ->remove('submit')
+
             ->add('roles', ChoiceType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
                 'choices'  => $this->userRoles
+            ])
+
+            ->add('expirationDate', DateType::class, [
+                'widget' => 'single_text'
+            ])
+            ->add('enabled', CheckboxType::class, [
+                'required' => false
+            ])
+            ->add('locked', CheckboxType::class, [
+                'required' => false
             ])
             ->add('submit', SubmitType::class)
         ;

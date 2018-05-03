@@ -2,16 +2,13 @@
 
 {% block body %}
     <div class="ui middle aligned center aligned grid">
-        <div class="column">
-            <h2 class="ui teal image header">
-                <img src="assets/images/logo.png" class="image">
-                <div class="content">
-                    Log-in to your account
-                </div>
+        <div class="column" style="transform: translateY(75%); max-width:400px">
+            <h2 class="ui image">
+                <img src="assets/img/pia-logo.png" class="image">
             </h2>
 
             {% if error %}
-                <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                <div class="ui error message">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
 
             <form class="ui large form" action="{{ path('login') }}" method="post">
@@ -28,11 +25,8 @@
                             <input type="password" name="_password" placeholder="Password">
                         </div>
                     </div>
-                    <div class="ui fluid large teal submit button" onclick="this.closest('form').submit()">Login</div>
+                    <div class="ui fluid large blue submit button" onclick="this.closest('form').submit()">Login</div>
                 </div>
-
-                <div class="ui error message"></div>
-
             </form>
         </div>
     </div>
