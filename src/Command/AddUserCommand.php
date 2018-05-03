@@ -78,8 +78,6 @@ class AddUserCommand extends Command
         $encoder = $this->encoderFactory->getEncoder($user);
         $user->setPassword($encoder->encodePassword($user->getPassword(), $user->getSalt()));
 
-        dump($user);die;
-
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

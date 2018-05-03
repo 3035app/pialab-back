@@ -101,6 +101,7 @@
 
             let url = $(e.currentTarget).attr('href');
 
+            console.info(url);
             let modal = $('.ui.modal');
             modal.hide();
 
@@ -109,22 +110,17 @@
                 success: (html) => {
                     let modal = $('.ui.modal');
 
-                    modal
-                        .find('.header').html('Modifier un utilisateur');
+                    modal.find('.header').html('Modifier un utilisateur');
 
                     modal
                         .find('.content')
                         .html(html)
                         .find('input[type="submit"]').hide();
 
-                    modal
-                        .find('.actions').html(
-                            $('<div/>').addClass('ui deny button').html('Annuler'), 
-                            $('<div/>').addClass('ui positive button').html('Enregistrer').on('click', () => {
-                                $(this).closest('.ui.modal').find('form').submit();
-                            })
-                        );
-                        
+                    modal.find('.actions').html($('<div/>').addClass('ui deny button').html('Annuler'), $('<div/>').addClass('ui positive button').html('Enregistrer').on('click', () => {
+                        $(this).closest('.ui.modal').find('form').submit();
+                    }));
+
                     $('.ui.checkbox').checkbox();
 
                     modal.modal('show');

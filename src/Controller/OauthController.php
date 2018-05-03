@@ -25,83 +25,20 @@ use Pagerfanta\Pagerfanta;
 use PiaApi\Form\User\CreateUserForm;
 use PiaApi\Form\User\EditUserForm;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use PiaApi\Entity\Oauth\Client;
 
-class UserController extends Controller
+class OauthController extends Controller
 {
-    /**
-     * @var EncoderFactoryInterface
-     */
-    private $encoderFactory;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    public function __construct(EncoderFactoryInterface $encoderFactory, TokenStorageInterface $tokenStorage)
+    public function __construct()
     {
-        $this->encoderFactory = $encoderFactory;
-        $this->tokenStorage = $tokenStorage;
     }
 
     /**
-     * @Route("/login", name="login")
-     *
-     * @param Request $request
-     * @param AuthenticationUtils $authenticationUtils
-     * @param UserProvider $userProvider
-     * @param UserChecker $userChecker
+     * @Route("/manageApplications", name="manage_applications")
      *
      * @return void
      */
-    public function loginAction(
-        Request $request,
-        AuthenticationUtils $authenticationUtils,
-        UserProvider $userProvider,
-        UserChecker $userChecker
-    ) {
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        $username = $request->get('_username');
-
-        if (!$request->isXmlHttpRequest()) {
-            if ($this->getUser() !== null) {
-                return $this->redirect($request->headers->get('refer', '/manageUsers'));
-            }
-
-            return $this->render('User/login.html.twig', [
-                'error' => $error,
-                'last_username' => $lastUsername,
-            ]);
-        }
-
-        return new Response('Logged in');
-    }
-
-    /**
-     * @Route("/logout", name="logout")
-     *
-     * @param Request $request
-     *
-     * @return void
-     */
-    public function logoutAction(Request $request)
-    {
-        $this->tokenStorage->setToken(null);
-        
-        return $this->redirect($this->generateUrl('login'));
-    }
-
-    /**
-     * @Route("/manageUsers", name="manage_users")
-     *
-     * @return void
-     */
-    public function manageUsersAction(Request $request)
+    public function manageApplicationsAction(Request $request)
     {
         if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirect($this->generateUrl('login'));
@@ -109,7 +46,7 @@ class UserController extends Controller
         
         $this->canAccess();
 
-        $queryBuilder = $this->getDoctrine()->getRepository(User::class)->createQueryBuilder('u');
+        $queryBuilder = $this->getDoctrine()->getRepository(Client::class)->createQueryBuilder('c');
 
         $adapter = new DoctrineORMAdapter($queryBuilder);
 
@@ -119,19 +56,19 @@ class UserController extends Controller
         $pagerfanta->setMaxPerPage(20);
         $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
 
-        return $this->render('User/manageUsers.html.twig', [
+        return $this->render('Applications/manageApplications.html.twig', [
             'users' => $pagerfanta
         ]);
     }
 
     /**
-     * @Route("/manageUsers/addUser", name="manage_users_add_user")
+     * @Route("/manageApplications/addApplication", name="manage_applications_add_application")
      *
      * @param Request $request
      *
      * @return void
      */
-    public function addUserAction(Request $request)
+    public function addApplicationAction(Request $request)
     {
         $this->canAccess();
 
@@ -149,16 +86,13 @@ class UserController extends Controller
                 $user->addRole($role);
             }
 
-            $encoder = $this->encoderFactory->getEncoder($user);
-            $user->setPassword($encoder->encodePassword($userData['password'], $user->getSalt()));
-
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
             
             return $this->redirect($this->generateUrl('manage_users'));
         }
 
-        return $this->render('form.html.twig', [
+        return $this->render('User/form.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -195,7 +129,7 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('manage_users'));
         }
 
-        return $this->render('form.html.twig', [
+        return $this->render('User/form.html.twig', [
             'form' => $form->createView()
         ]);
     }
