@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Entity\Pia\Pia;
+namespace PiaApi\Entity\Pia;
 
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;

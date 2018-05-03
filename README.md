@@ -11,7 +11,8 @@ cd pialab-back
 
 composer install
 
-bin/console do:sc:up --force
+bin/console do:da:cr --connection=default
+bin/console do:da:cr --connection=customer
 
 bin/console se:start
 ```

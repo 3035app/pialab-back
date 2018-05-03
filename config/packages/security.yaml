@@ -1,13 +1,13 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     encoders:
-        PiaApi\Entity\User:
+        PiaApi\Entity\Oauth\User:
             algorithm: bcrypt
             cost: 12
     providers:
         PiaApi\Auth\UserProvider:
             entity:
-                class: PiaApi\Entity\User
+                class: PiaApi\Entity\Oauth\User
                 property: username
     firewalls:
         oauth_token:
