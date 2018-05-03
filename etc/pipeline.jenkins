@@ -8,6 +8,8 @@ pipeline {
     }
 
     environment {
+        /* @todo: use posgres and generate config file & env */
+        DATABASE_URL='sqlite:///%kernel.project_dir%/var/data.db'
     }
 
     options {
@@ -25,7 +27,41 @@ pipeline {
             }
         }
 
+        stage ('Composer Install') {
+            steps {
+                sh "composer install --no-interaction"
+            }
+        }
 
+        stage ('Create Database') {
+            steps {
+                sh "bin/console doctrine:schema:update --force --no-interaction"
+            }
+        }
+
+        stage ('Add User') {
+            steps {
+                sh "echo waiting for branch back-oauth to be merged"
+            }
+        }
+
+        stage ('Start ') {
+            steps {
+                sh "bin/console server:start --no-interaction"
+            }
+        }
+
+        stage ('Run Test') {
+            steps {
+                sh "echo waiting for test creation"
+            }
+        }
+
+        stage ('Create Archive') {
+            steps {
+                sh "echo waiting for something smart to add in archive"
+            }
+        }
 
     }
 
