@@ -3,6 +3,7 @@
 namespace PiaApi\Form\User;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -36,7 +37,20 @@ class EditUserForm extends CreateUserForm
             ->add('locked', CheckboxType::class, [
                 'required' => false
             ])
-            ->add('submit', SubmitType::class)
+            ->add('cancel', ButtonType::class, [
+                'attr' => [
+                    'class' => 'red cancel',
+                    'style' => 'width: 48%;float:right;'
+                ],
+                'label' => 'Annuler'
+            ])
+            ->add('submit', SubmitType::class, [
+                'attr' => [
+                    'class' => '',
+                    'style' => 'width: 48%;'
+                ],
+                'label' => 'Enregistrer l\'utilisateur'
+            ])
         ;
     }
 }

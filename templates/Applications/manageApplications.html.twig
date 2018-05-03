@@ -92,7 +92,7 @@
                                     {% endfor %}
                                 </td>
                                 <td class="right aligned">
-                                    <div class="ui buttons">
+                                    <div class="ui small buttons">
                                         <a class="ui green tiny icon button" data-modal="data-modal" href="{{ path('manage_applications_edit_application', {'applicationId':application.id}) }}">
                                             <i class="pencil icon"></i>
                                         </a>
@@ -148,12 +148,14 @@
 
                     modal
                         .find('.content')
-                        .html(html)
-                        .find('input[type="submit"]').hide();
+                        .html(html);
+                    
+                    modal
+                        .find('.content .negative, .content .deny, .content .cancel').on('click', (e) => {
+                            $(e.currentTarget).closest('.ui.modal').modal('hide');
+                        });
 
-                    modal.find('.actions').html($('<div/>').addClass('ui deny button').html('Annuler'), $('<div/>').addClass('ui positive button').html('Enregistrer').on('click', () => {
-                        $(this).closest('.ui.modal').find('form').submit();
-                    }));
+                    modal.find('.actions').remove();
 
                     $('.ui.checkbox').checkbox();
 

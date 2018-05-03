@@ -199,7 +199,7 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('manage_users'));
         }
 
-        return $this->render('form.html.twig', [
+        return $this->render('User/createForm.html.twig', [
             'form' => $form->createView()
         ]);
     }

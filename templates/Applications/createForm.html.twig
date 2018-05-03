@@ -1,8 +1,8 @@
-{{ form_start(form)}}
+{{ form_start(form) }}
 
-{{ form_row(form.name)}}
+{{ form_row(form.name) }}
 
-{{ form_row(form.allowedGrantTypes)}}
+{{ form_row(form.allowedGrantTypes) }}
 
 <div class="required field">
     <a href="#" class="ui tiny primary button application-form-add-uri" data-list=".uri-fields-list" style="float:right;">
@@ -22,9 +22,11 @@
 
 </div>
 
-{% do 
-form.redirectUris.setRendered %}
+{% do form.redirectUris.setRendered %}
 
-{{ form_row(form.submit)}}
+<div class="ui divider"></div>
 
-{{ form_end(form)}}
+{{ form_rest(form) }}
+{{ form_row(form.submit) }}
+
+{{ form_end(form) }}

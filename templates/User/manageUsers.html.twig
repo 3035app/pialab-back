@@ -126,12 +126,14 @@
 
                     modal
                         .find('.content')
-                        .html(html)
-                        .find('input[type="submit"]').hide();
+                        .html(html);
 
-                    modal.find('.actions').html($('<div/>').addClass('ui deny button').html('Annuler'), $('<div/>').addClass('ui positive button').html('Enregistrer').on('click', () => {
-                        $(this).closest('.ui.modal').find('form').submit();
-                    }));
+                    modal
+                        .find('.content .negative, .content .deny, .content .cancel').on('click', (e) => {
+                            $(e.currentTarget).closest('.ui.modal').modal('hide');
+                        });
+
+                    modal.find('.actions').remove();
 
                     $('.ui.checkbox').checkbox();
 
