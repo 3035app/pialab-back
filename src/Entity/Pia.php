@@ -92,31 +92,31 @@ class Pia implements Timestampable
     protected $appliedAdjustements = '';
 
     /**
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="pia", cascade=["remove"])
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="pia", cascade={"remove"})
      *
      * @var Collection|Answer[]
      */
     protected $answers;
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="pia", cascade=["remove"])
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="pia", cascade={"remove"})
      *
      * @var Collection|Comment[]
      */
     protected $comments;
     /**
-     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="pia", cascade=["remove"])
+     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="pia", cascade={"remove"})
      *
      * @var Collection|Evaluation[]
      */
     protected $evaluations;
     /**
-     * @ORM\OneToMany(targetEntity="Measure", mappedBy="pia", cascade=["remove"])
+     * @ORM\OneToMany(targetEntity="Measure", mappedBy="pia", cascade={"remove"})
      *
      * @var Collection|Measure[]
      */
     protected $measures;
     /**
-     * @ORM\OneToMany(targetEntity="Attachment", mappedBy="pia", cascade=["remove"])
+     * @ORM\OneToMany(targetEntity="Attachment", mappedBy="pia", cascade={"remove"})
      *
      * @var Collection|Attachment[]
      */
