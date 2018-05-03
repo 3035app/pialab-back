@@ -1,0 +1,37 @@
+pipeline {
+    agent {
+        dockerfile {
+            filename "etc/dockerfile.jenkins"
+            additionalBuildArgs '--build-arg UID=$(id -u) --build-arg GID=$(id -g)'
+            args '--network=ci.network'
+        }
+    }
+
+    environment {
+    }
+
+    options {
+        timeout(time: 1, unit: 'HOURS')
+        timestamps()
+        disableConcurrentBuilds()
+        ansiColor('xterm')
+    }
+
+    stages {
+    	stage ('Where Am I') {
+            steps {
+                sh "uname -a"
+                sh "php -v"
+            }
+        }
+
+
+
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
