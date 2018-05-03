@@ -1,10 +1,45 @@
 # Pialab-backend
 
+## Installation
+
+Installation process :
+
+```bash
+git clone https://github.com/pia-lab/pialab-back
+
+cd pialab-back
+
+composer install
+
+bin/console do:sc:up --force
+
+bin/console se:start
+```
+
+## User creation
+
+Create your super admin user :
+
+```bash
+bin/console pia:user:create --email=your@email.address --password=yourSecretPassword
+bin/console pia:user:promote your@email.address --role=ROLE_SUPER_ADMIN
+```
+
+Note: You can demote a user for a specific role :
+
+```bash
+bin/console pia:user:demote your@email.address --role=ROLE_SUPER_ADMIN
+```
+
+## Backend admin UI
+
+With a super admin user (has role `ROLE_SUPER_ADMIN`), you can login into the admin panel here `http://localhost:8000/manageUsers` and into `http://localhost:8000/manageApplications`.
+
 ## Oauth usage
 
 ### Create Oauth client
 
-You must include thes grant_types :
+You must include these grant_types :
 
 - password
 - token
@@ -19,11 +54,15 @@ bin/console \
     --grant-type="refresh_token"
 ```
 
+Note: You can create this Oauth client in the backend admin UI.
+
 ### Create a standard user
 
 ```bash
 bin/console pia:user:create --email=api@pia.io --password=pia
 ```
+
+Note: You can create this user in the backend admin UI.
 
 ### Request a token 
 
@@ -73,3 +112,4 @@ Should response something like
     "scope": null,
     "refresh_token": "YjRhZjZjODRlZGI3Y2IwYTQxMzQ5MjYxNzc3YTExNDk0YmFkY2RmMDQxODEwYzU2ZmNjNDE1OTg0NGQwY2UwYw"
 }
+```

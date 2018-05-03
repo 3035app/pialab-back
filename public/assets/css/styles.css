@@ -1,0 +1,11 @@
+body ul.ui.list {
+    list-style-type: none;
+    padding: 0;
+}
+
+body .ui.bulleted.list .list>.item::before,
+body .ui.bulleted.list>.item::before,
+body ul.ui.list li::before {
+    content: '';
+    display: none;
+}

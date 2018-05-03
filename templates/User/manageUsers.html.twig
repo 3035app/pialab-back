@@ -6,6 +6,14 @@
 
 {% block navbar %}
     <div class="ui inverted menu">
+        <div class="menu">
+            <a class="active item" href="{{ path('manage_users') }}">
+                <i class="user icon"></i>Utilisateurs
+            </a>
+            <a class="item" href="{{ path('manage_applications') }}">
+                <i class="database icon"></i>Applications
+            </a>
+        </div>
         <div class="right menu">
             <a class="active item" href="{{ path('logout') }}">
                 Logout
@@ -27,6 +35,7 @@
                 <table class="ui compact striped table">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Roles</th>
@@ -43,6 +52,7 @@
 
                         {% for user in users %}
                             <tr>
+                                <td>{{ user.id }}</td>
                                 <td>{{ user.username }}</td>
                                 <td>{{ user.email }}</td>
                                 <td>

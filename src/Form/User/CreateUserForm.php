@@ -27,7 +27,12 @@ class CreateUserForm extends AbstractType
                 'expanded' => true,
                 'choices'  => $this->userRoles
             ])
-            ->add('submit', SubmitType::class)
+            ->add('submit', SubmitType::class, [
+                'attr' => [
+                    'class' => 'fluid'
+                ],
+                'label' => 'Créer l\'utilisateur'
+            ])
         ;
     }
 }

@@ -111,6 +111,9 @@ class UserController extends Controller
 
         $queryBuilder = $this->getDoctrine()->getRepository(User::class)->createQueryBuilder('u');
 
+        $queryBuilder
+            ->orderBy('u.id', 'DESC');
+
         $adapter = new DoctrineORMAdapter($queryBuilder);
 
         $page = $request->get('page', 1);
