@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use PiaApi\Entity\Pia;
+use PiaApi\Entity\Pia\Pia;
 
 class PiaController extends RestController
 {

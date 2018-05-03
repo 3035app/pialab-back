@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use PiaApi\Entity\User;
+use PiaApi\Entity\Oauth\User;
 use PiaApi\Auth\UserProvider;
 use PiaApi\Auth\UserChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

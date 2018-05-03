@@ -27,7 +27,7 @@ class AuthCode extends BaseAuthCode
     protected $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PiaApi\Entity\User")
+     * @ORM\ManyToOne(targetEntity="PiaApi\Entity\Oauth\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $user;

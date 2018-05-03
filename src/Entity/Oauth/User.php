@@ -1,6 +1,6 @@
 <?php
 
-namespace PiaApi\Entity;
+namespace PiaApi\Entity\Oauth;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;

@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Entity\Traits;
+namespace PiaApi\Entity\Pia\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use PiaApi\Entity\Pia;
+use PiaApi\Entity\Pia\Pia;
 
 trait HasPiaTrait
 {

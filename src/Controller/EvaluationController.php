@@ -13,7 +13,7 @@ namespace PiaApi\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use PiaApi\Entity\Evaluation;
+use PiaApi\Entity\Pia\Evaluation;
 
 class EvaluationController extends PiaSubController
 {

@@ -13,7 +13,7 @@ namespace PiaApi\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Util\Inflector as Inflector;
-use PiaApi\Entity\Pia;
+use PiaApi\Entity\Pia\Pia;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 abstract class RestController extends FOSRestController

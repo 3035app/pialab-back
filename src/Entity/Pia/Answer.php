@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Entity;
+namespace PiaApi\Entity\Pia\Pia;
 
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use PiaApi\Entity\Traits\ResourceTrait;
-use PiaApi\Entity\Traits\HasPiaTrait;
+use PiaApi\Entity\Pia\Traits\ResourceTrait;
+use PiaApi\Entity\Pia\Traits\HasPiaTrait;
 
 /**
  * @ORM\Entity

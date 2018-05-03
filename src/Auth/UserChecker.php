@@ -11,7 +11,7 @@
 
 namespace PiaApi\Auth;
 
-use PiaApi\Entity\User;
+use PiaApi\Entity\Oauth\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 

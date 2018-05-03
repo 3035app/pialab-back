@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Entity\Traits;
+namespace PiaApi\Entity\Pia\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
 

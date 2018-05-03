@@ -13,7 +13,7 @@ namespace PiaApi\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use PiaApi\Entity\User;
+use PiaApi\Entity\Oauth\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;

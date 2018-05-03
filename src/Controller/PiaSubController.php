@@ -13,7 +13,7 @@ namespace PiaApi\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
-use PiaApi\Entity\Pia;
+use PiaApi\Entity\Pia\Pia;
 
 abstract class PiaSubController extends RestController
 {

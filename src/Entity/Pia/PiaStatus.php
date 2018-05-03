@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Entity;
+namespace PiaApi\Entity\Pia\Pia;
 
 class PiaStatus
 {

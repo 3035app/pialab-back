@@ -4,7 +4,7 @@ namespace PiaApi\Auth;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use PiaApi\Entity\User;
+use PiaApi\Entity\Oauth\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class UserProvider implements UserProviderInterface
