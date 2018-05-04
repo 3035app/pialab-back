@@ -26,6 +26,7 @@ pipeline {
         stage ('Composer Install') {
             steps {
                 sh "composer install --no-interaction # Install Generate the .env"
+                sh "bin/ci-scripts/set_pgpass.sh"
             }
         }
 
