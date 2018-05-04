@@ -7,10 +7,6 @@ pipeline {
         }
     }
 
-    environment {
-        /* @todo: use posgres and generate config file & env */
-        DATABASE_URL='sqlite:///%kernel.project_dir%/var/data.db'
-    }
 
     options {
         timeout(time: 1, unit: 'HOURS')
@@ -29,12 +25,13 @@ pipeline {
 
         stage ('Composer Install') {
             steps {
-                sh "composer install --no-interaction"
+                sh "composer install --no-interaction # Install Generate the .env"
             }
         }
 
         stage ('Create Database') {
             steps {
+                sh "bin/ci-scripts/create_database.sh"
                 sh "bin/console doctrine:schema:update --force --no-interaction"
             }
         }
