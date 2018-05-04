@@ -4,6 +4,8 @@
     "require": {
         "php": "^7.1.3",
         "ext-iconv": "*",
+        "ext-pdo_pgsql": "*",
+
         "friendsofsymfony/rest-bundle": "^2.3",
         "jms/serializer-bundle": "^2.3",
         "nelmio/cors-bundle": "^1.5",
