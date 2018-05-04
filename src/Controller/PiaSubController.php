@@ -34,7 +34,9 @@ abstract class PiaSubController extends RestController
         $this->canAccessResourceOr304();
         
         $entity = $this->getRepository()->find($id);
-
+        if ($entity === null) {
+            return $this->view($entity, Response::HTTP_NOT_FOUND);
+        }
         return $this->view($entity, Response::HTTP_OK);
     }
 

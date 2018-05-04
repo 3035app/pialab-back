@@ -55,7 +55,9 @@ class PiaController extends RestController
         $this->canAccessResourceOr304();
 
         $pia = $this->getRepository()->find($id);
-
+        if ($pia === null) {
+            return $this->view($pia, Response::HTTP_NOT_FOUND);
+        }
         return $this->view($pia, Response::HTTP_OK);
     }
 
@@ -88,7 +90,7 @@ class PiaController extends RestController
 
         $this->update($pia);
 
-        return $this->view($pia, Response::HTTP_OK);
+        return $this->view($entity, Response::HTTP_OK);
     }
 
     /**

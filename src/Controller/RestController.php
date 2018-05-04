@@ -26,7 +26,7 @@ abstract class RestController extends FOSRestController
 
     protected function update($entity)
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->merge($entity);
         $this->getEntityManager()->flush();
     }
 
