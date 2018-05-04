@@ -3,19 +3,25 @@ parameters:
     # This allows you to run cache:warmup even if your
     # environment variables are not available yet.
     # You should not need to change this value.
-    env(DATABASE_URL): 'pdo_pgsql://pia_user:pia_password@127.0.0.1:5432/pia_db'
-
+    env(DATABASE_URL): ''
+    
 doctrine:
-    dbal:
+    dbal: 
         # configure these for your database server
-        driver: 'pdo_pgsql'
-        server_version: ~
+        driver:           '%env(resolve:DBDRIVER)%'
+        dbname:           '%env(resolve:DBAPPNAME)%'
+        user:             '%env(resolve:DBAPPUSER)%'
+        password:         '%env(resolve:DBAPPPASSWORD)%'
+        host:             '%env(resolve:DBHOST)%'
+        port:             '%env(resolve:DBPORT)%'
+        url:              '%env(resolve:DATABASE_URL)%'
+        #server_version:   '%env(resolve:DBVERSION)%'
         charset: utf8
         default_table_options:
             charset: utf8mb4
             collate: utf8mb4_unicode_ci
 
-        url: '%env(resolve:DATABASE_URL)%'
+
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
