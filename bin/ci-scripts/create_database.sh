@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
+
 set -ex
+
 
 # TODO share this between script (in an include)
 if [ -f .env ]

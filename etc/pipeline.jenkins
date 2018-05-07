@@ -34,7 +34,7 @@ pipeline {
             steps {
                 sh "bin/ci-scripts/create_database.sh"
                 sh "bin/ci-scripts/create_schema.sh"
-             }
+            }
         }
 
         stage ('Add User') {
@@ -63,11 +63,11 @@ pipeline {
 
     }
 
-   
+
     post {
         always {
             cleanWs()
         }
     }
-   
+
 }
