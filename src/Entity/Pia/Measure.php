@@ -34,14 +34,20 @@ class Measure implements Timestampable
     protected $pia;
 
     /**
+     * @ORM\Column(type="string")
+     *
      * @var string
      */
     protected $title;
     /**
+     * @ORM\Column(type="text")
+     *
      * @var string
      */
     protected $content;
     /**
+     * @ORM\Column(type="string")
+     *
      * @var string
      */
     protected $placeholder;
