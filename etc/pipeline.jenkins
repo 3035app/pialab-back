@@ -1,0 +1,73 @@
+pipeline {
+    agent {
+        dockerfile {
+            filename "etc/dockerfile.jenkins"
+            additionalBuildArgs '--build-arg UID=$(id -u) --build-arg GID=$(id -g)'
+            args '--network=ci.network'
+        }
+    }
+
+
+    options {
+        timeout(time: 1, unit: 'HOURS')
+        timestamps()
+        disableConcurrentBuilds()
+        ansiColor('xterm')
+    }
+
+    stages {
+    	stage ('Where Am I') {
+            steps {
+                sh "uname -a"
+                sh "php -v"
+            }
+        }
+
+        stage ('Composer Install') {
+            steps {
+                sh "composer install --no-interaction # Install Generate the .env"
+                sh "bin/ci-scripts/set_pgpass.sh"
+            }
+        }
+
+        stage ('Create Database') {
+            steps {
+                sh "bin/ci-scripts/create_database.sh"
+                sh "bin/ci-scripts/create_schema.sh"
+             }
+        }
+
+        stage ('Add User') {
+            steps {
+                sh "echo waiting for branch back-oauth to be merged"
+            }
+        }
+
+        stage ('Start ') {
+            steps {
+                sh "bin/console server:start --no-interaction"
+            }
+        }
+
+        stage ('Run Test') {
+            steps {
+                sh "echo waiting for test creation"
+            }
+        }
+
+        stage ('Create Archive') {
+            steps {
+                sh "echo waiting for something smart to add in archive"
+            }
+        }
+
+    }
+
+   
+    post {
+        always {
+            cleanWs()
+        }
+    }
+   
+}
