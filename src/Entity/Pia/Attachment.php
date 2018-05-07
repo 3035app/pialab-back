@@ -13,6 +13,7 @@ namespace PiaApi\Entity\Pia;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
 use PiaApi\Entity\Pia\Traits\HasPiaTrait;
 
@@ -32,9 +33,10 @@ class Attachment implements Timestampable
      * @var Pia
      */
     protected $pia;
-    
+
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="blob")
+     * @JMS\SerializedName("file")
      *
      * @var string
      */
