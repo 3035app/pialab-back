@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+set -e
 
 # TODO share this between script (in an include)
 if [ -f .env ]
@@ -26,18 +26,32 @@ fi
 #psql -w -h ${DBHOST} -c "DROP ROLE IF EXISTS ${DBAPPUSER};" -U ${DBROOTUSER}
 #fi
 
-userexist=$(psql -qt -w -h ${DBHOST} -U ${DBROOTUSER} -c "SELECT rolname FROM pg_catalog.pg_roles WHERE rolname = '${DBAPPUSER}';"|sed -e s/' '//g)
-if [ -z ${userexist} ]
-then
-    psql -w -h ${DBHOST} -c "CREATE USER ${DBAPPUSER} WITH PASSWORD '${DBAPPPASSWORD}';" -U ${DBROOTUSER}
-fi
-psql -w -h ${DBHOST} -c "ALTER ROLE ${DBAPPUSER} WITH CREATEDB;" -U ${DBROOTUSER}
+function create_database {
+    userexist=$(psql -qt -w -h ${DBHOST} -U ${DBROOTUSER} -c "SELECT rolname FROM pg_catalog.pg_roles WHERE rolname = '${DBAPPUSER}';"|sed -e s/' '//g)
+    if [ -z ${userexist} ]
+    then
+        psql -w -h ${DBHOST} -c "CREATE USER ${DBAPPUSER} WITH PASSWORD '${DBAPPPASSWORD}';" -U ${DBROOTUSER}
+    fi
+    psql -w -h ${DBHOST} -c "ALTER ROLE ${DBAPPUSER} WITH CREATEDB;" -U ${DBROOTUSER}
+    
+    dbexist=$(psql -qt -w -h ${DBHOST} -U ${DBROOTUSER} -c "SELECT datname FROM pg_catalog.pg_database WHERE datname = '${DBAPPNAME}';"|sed -e s/' '//g)
+    if [ -z ${dbexist} ]
+    then
+        psql -w -h ${DBHOST} -c "CREATE DATABASE ${DBAPPNAME};" -U ${DBROOTUSER}
+    fi
+    psql -w -h ${DBHOST} -c "ALTER DATABASE ${DBAPPNAME} OWNER TO ${DBAPPUSER};" -U ${DBROOTUSER}
+    
+    #psql -w -h ${DBHOST} -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' -U ${DBROOTUSER} -d ${DBAPPNAME}    
+}
 
-tableexist=$(psql -qt -w -h ${DBHOST} -U ${DBROOTUSER} -c "SELECT datname FROM pg_catalog.pg_database WHERE datname = '${DBAPPNAME}';"|sed -e s/' '//g)
-if [ -z ${tableexist} ]
-then
-    psql -w -h ${DBHOST} -c "CREATE DATABASE ${DBAPPNAME};" -U ${DBROOTUSER}
-fi
-psql -w -h ${DBHOST} -c "ALTER DATABASE ${DBAPPNAME} OWNER TO ${DBAPPUSER};" -U ${DBROOTUSER}
 
-#psql -w -h ${DBHOST} -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' -U ${DBROOTUSER} -d ${DBAPPNAME}
+DBAPPNAME=${DBOAUTHNAME}
+DBAPPUSER=${DBOAUTHUSER}
+DBAPPPASWORD=${DBOAUTHPASSWORD}
+create_database
+
+DBAPPNAME=${DBCUSTOMERNAME}
+DBAPPUSER=${DBCUSTOMERUSER}
+DBAPPPASWORD=${DBCUSTOMERPASSWORD}
+create_database
+
