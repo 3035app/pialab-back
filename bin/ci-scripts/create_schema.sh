@@ -15,5 +15,9 @@ fi
 bin/console doctrine:database:create --connection=default --if-not-exists --no-interaction 
 bin/console doctrine:database:create --connection=customer --if-not-exists --no-interaction 
 
-bin/console doctrine:schema:update --force --no-interaction
-bin/console doctrine:schema:validate  --no-interaction 
+
+bin/console doctrine:schema:update --em=default --force --no-interaction
+bin/console doctrine:schema:update --em=customer --force --no-interaction
+
+bin/console doctrine:schema:validate  --em=default --no-interaction 
+bin/console doctrine:schema:validate  --em=customer --no-interaction
