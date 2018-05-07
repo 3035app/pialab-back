@@ -13,6 +13,7 @@ namespace PiaApi\Entity\Pia;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use DateTime;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
 use PiaApi\Entity\Pia\Traits\HasPiaTrait;
@@ -29,11 +30,12 @@ class Evaluation implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="Pia", inversedBy="evaluations")
+     * @JMS\Exclude()
      *
      * @var Pia
      */
     protected $pia;
-    
+
     /**
      * @ORM\Column(type="smallint")
      *
