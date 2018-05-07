@@ -14,6 +14,9 @@ composer install
 bin/console do:da:cr --connection=default
 bin/console do:da:cr --connection=customer
 
+bin/console do:sc:cr --em=default
+bin/console do:sc:cr --em=customer
+
 bin/console se:start
 ```
 
@@ -65,7 +68,7 @@ bin/console pia:user:create --email=api@pia.io --password=pia
 
 Note: You can create this user in the backend admin UI.
 
-### Request a token 
+### Request a token
 
 ```http
 GET http://localhost:8000/oauth/v2/token
@@ -76,7 +79,7 @@ GET http://localhost:8000/oauth/v2/token
     &password=pia
 ```
 
-Should response something like 
+Should response something like
 
 ```json
 {
@@ -103,7 +106,7 @@ GET http://localhost:8000/oauth/v2/token
     &refresh_token=NzhhOWZkMmViYzczYjcyMTBkNjY0OTE5NjcyM2RiZjlhZmIxYzA3MmVmZDVmMGM0ZGMwODU2MWI1MWExZDI5OQ
     &grant_type=refresh_token
 
-Should response something like 
+Should response something like
 
 ```json
 {

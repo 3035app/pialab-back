@@ -17,8 +17,7 @@ use PiaApi\Entity\Pia\Comment;
 
 class CommentController extends PiaSubController
 {
-    protected static $DATA_KEY = 'comment';
-
+    
     /**
      * @FOSRest\Get("/pias/{piaId}/comments")
      */

@@ -17,8 +17,7 @@ use PiaApi\Entity\Pia\Attachment;
 
 class AttachmentController extends PiaSubController
 {
-    protected static $DATA_KEY = 'attachment';
-
+  
     /**
      * @FOSRest\Get("/pias/{piaId}/attachments")
      */

@@ -17,8 +17,7 @@ use PiaApi\Entity\Pia\Measure;
 
 class MeasureController extends PiaSubController
 {
-    protected static $DATA_KEY = 'measure';
-
+    
     /**
      * @FOSRest\Get("/pias/{piaId}/measures")
      */

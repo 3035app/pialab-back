@@ -17,8 +17,7 @@ use PiaApi\Entity\Pia\Answer;
 
 class AnswerController extends PiaSubController
 {
-    protected static $DATA_KEY = 'answer';
-
+    
     /**
      * @FOSRest\Get("/pias/{piaId}/answers")
      */

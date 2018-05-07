@@ -18,8 +18,7 @@ use PiaApi\Entity\Pia\Pia;
 
 class PiaController extends RestController
 {
-    protected static $DATA_KEY = 'pia';
-
+    
     /**
      * @FOSRest\Get("/pias/example")
      *
@@ -101,7 +100,7 @@ class PiaController extends RestController
     public function deleteAction(Request $request, $id)
     {
         $this->canAccessResourceOr304();
-        
+
         $pia = $this->getRepository()->find($id);
         $this->remove($pia);
 
