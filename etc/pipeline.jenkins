@@ -39,7 +39,7 @@ pipeline {
 
         stage ('Add User') {
             steps {
-                sh "echo waiting for branch back-oauth to be merged"
+                sh "bin/ci-scripts/create_user.sh"
             }
         }
 
