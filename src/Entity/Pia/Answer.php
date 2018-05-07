@@ -29,7 +29,7 @@ class Answer implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="Pia", inversedBy="answers")
-     *
+     * @JMS\Exclude()
      * @var Pia
      */
     protected $pia;

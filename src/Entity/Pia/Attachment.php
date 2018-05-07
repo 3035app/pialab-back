@@ -29,6 +29,7 @@ class Attachment implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="Pia", inversedBy="attachments")
+     * @JMS\Exclude()
      *
      * @var Pia
      */
