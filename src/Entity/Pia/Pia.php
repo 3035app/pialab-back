@@ -61,13 +61,13 @@ class Pia implements Timestampable
      */
     protected $dpoStatus = 0;
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      *
      * @var string
      */
     protected $dpoOpinion = '';
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      *
      * @var string
      */
@@ -79,13 +79,25 @@ class Pia implements Timestampable
      */
     protected $concernedPeopleStatus = 0;
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="boolean", nullable=true)
+     *
+     * @var bool
+     */
+    protected $concernedPeopleSearchedOpinion;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     *
+     * @var string
+     */
+    protected $concerned_people_searched_content;
+    /**
+     * @ORM\Column(type="text", nullable=true)
      *
      * @var string
      */
     protected $rejectionReason = '';
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      *
      * @var string
      */
@@ -128,7 +140,7 @@ class Pia implements Timestampable
      */
     protected $dposNames = '';
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string
      */
