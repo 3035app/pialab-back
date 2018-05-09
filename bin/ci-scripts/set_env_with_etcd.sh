@@ -11,7 +11,7 @@ fi
 
 #RND may contain branch with '-' or upper case char which may not work as database name for postgre
 suffix=$(echo $RND|sed -e s/-/_/g|tr '[:upper:]' '[:lower:]')$(echo -n $(cat shuf.nbr ))
-prefix="/platform/build/$suffix"
+prefix="/pia/build/$suffix"
 
 if [ -z "$ETCDHOST" ]
 then
