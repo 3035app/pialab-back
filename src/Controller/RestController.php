@@ -62,7 +62,7 @@ abstract class RestController extends FOSRestController
     {
         $query = $request->query->all();
         if (empty($query)) {
-            return [];
+            return $default;
         }
         $criteria = array_merge(...array_map(function ($key, $value) {
             return [Inflector::camelize($key) => $value];
