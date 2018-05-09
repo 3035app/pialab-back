@@ -36,9 +36,6 @@ then
     SYMFONYENV="dev"
 fi
 
-# check
-$ETCDCTLCMD get  --Prefix '/default' $ETCDENDPOINT
-
 # get postgres default
 postgreshost=$($ETCDCTLCMD get /default/postgres/hostname --print-value-only $ETCDENDPOINT)
 postgresuser=$($ETCDCTLCMD get /default/postgres/root/username --print-value-only $ETCDENDPOINT)
