@@ -55,8 +55,7 @@
     "scripts": {
         "git-hook": [
             "ln -f -s ../../bin/git-scripts/pre-commit.sh .git/hooks/pre-commit",
-            "git config branch.master.rebase true",
-            "git config branch.back-oauth.rebase true"
+            "git config branch.master.rebase true"
         ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
