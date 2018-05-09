@@ -9,9 +9,16 @@ then
     shuf -i 200-600 -n 1 > shuf.nbr
 fi
 
-#RND may contain branch with '-' or upper case char which may not work as database name for postgre
-suffix=$(echo $RND|sed -e s/-/_/g|tr '[:upper:]' '[:lower:]')$(echo -n $(cat shuf.nbr ))
-prefix="/pia/build/$suffix"
+if [ -z "$Suffix" ]
+   then
+       #RND may contain branch with '-' or upper case char which may not work as database name for postgre
+       Suffix=$(echo $RND|sed -e s/-/_/g|tr '[:upper:]' '[:lower:]')$(echo -n $(cat shuf.nbr ))
+fi
+
+if [ -z "$Prefix" ]
+then
+    Prefix="/pia/build/$suffix"
+fi
 
 if [ -z "$ETCDHOST" ]
 then
@@ -30,7 +37,7 @@ then
 fi
 
 # check
-$ETCDCTLCMD get  --prefix '/default' $ETCDENDPOINT
+$ETCDCTLCMD get  --Prefix '/default' $ETCDENDPOINT
 
 # get postgres default
 postgreshost=$($ETCDCTLCMD get /default/postgres/hostname --print-value-only $ETCDENDPOINT)
@@ -39,21 +46,21 @@ postgrespass=$($ETCDCTLCMD get /default/postgres/root/password --print-value-onl
 # TODO add a check default cnx with psql
 
 # set postgres env
-$ETCDCTLCMD put $prefix/postgres/hostname $postgreshost $ETCDENDPOINT
-$ETCDCTLCMD put $prefix/postgres/root/username $postgresuser $ETCDENDPOINT
-$ETCDCTLCMD put $prefix/postgres/root/password $postgrespass $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/hostname $postgreshost $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/root/username $postgresuser $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/root/password $postgrespass $ETCDENDPOINT
 
-$ETCDCTLCMD put $prefix/postgres/oauth/dbname pia_oauth_db_$suffix $ETCDENDPOINT
-$ETCDCTLCMD put $prefix/postgres/oauth/username pia_oauth_user_$suffix $ETCDENDPOINT
-$ETCDCTLCMD put $prefix/postgres/oauth/password pia_oauth_pass_$suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/oauth/dbname pia_oauth_db_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/oauth/username pia_oauth_user_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/oauth/password pia_oauth_pass_$Suffix $ETCDENDPOINT
 
-$ETCDCTLCMD put $prefix/postgres/customer/dbname pia_cust_db_$suffix $ETCDENDPOINT
-$ETCDCTLCMD put $prefix/postgres/customer/username pia_cust_user_$suffix $ETCDENDPOINT
-$ETCDCTLCMD put $prefix/postgres/customer/password pia_cust_pass_$suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/customer/dbname pia_cust_db_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/customer/username pia_cust_user_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/customer/password pia_cust_pass_$Suffix $ETCDENDPOINT
 
 # set symfony env
-$ETCDCTLCMD put $prefix/symfony/env $SYMFONYENV $ETCDENDPOINT 
+$ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT 
 
-$ETCDCTLCMD get --prefix $prefix $ETCDENDPOINT
+$ETCDCTLCMD get --prefix $Prefix $ETCDENDPOINT
 
-confd -onetime -backend etcdv3 -node http://${ETCDHOST}:2379 -confdir ./etc/confd -log-level debug -prefix $prefix
+confd -onetime -backend etcdv3 -node http://${ETCDHOST}:2379 -confdir ./etc/confd -log-level debug -Prefix $Prefix
