@@ -17,7 +17,7 @@ fi
 
 if [ -z "$Prefix" ]
 then
-    Prefix="/pia/build/$suffix"
+    Prefix="/pia/build/$Suffix"
 fi
 
 if [ -z "$ETCDHOST" ]
