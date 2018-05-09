@@ -18,7 +18,7 @@ use PiaApi\Entity\Pia\Pia;
 
 class PiaController extends RestController
 {
-    
+
     /**
      * @FOSRest\Get("/pias/example")
      *
@@ -85,9 +85,8 @@ class PiaController extends RestController
     {
         $this->canAccessResourceOr304();
 
-        $pia = $this->getRepository()->find($id);
-
-        $this->update($pia);
+        $entity = $this->newFromRequest($request);
+        $this->update($entity);
 
         return $this->view($entity, Response::HTTP_OK);
     }

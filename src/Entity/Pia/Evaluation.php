@@ -49,13 +49,13 @@ class Evaluation implements Timestampable
      */
     protected $referenceTo;
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      *
      * @var string
      */
     protected $actionPlanComment;
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      *
      * @var string
      */
@@ -68,19 +68,20 @@ class Evaluation implements Timestampable
     protected $evaluationDate;
     /**
      * @ORM\Column(type="json")
+     * @JMS\Type("array")
      *
      * @var array
      */
     protected $gauges;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      *
      * @var DateTime
      */
     protected $estimatedImplementationDate;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string
      */
