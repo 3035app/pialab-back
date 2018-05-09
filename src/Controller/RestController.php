@@ -13,7 +13,8 @@ namespace PiaApi\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Util\Inflector as Inflector;
-use PiaApi\Entity\Pia;
+use PiaApi\Entity\Pia\Pia;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 abstract class RestController extends FOSRestController
 {
@@ -37,12 +38,12 @@ abstract class RestController extends FOSRestController
 
     protected function getEntityManager()
     {
-        return $this->getDoctrine()->getManager();
+        return $this->getDoctrine()->getManager('customer');
     }
 
     protected function getRepository()
     {
-        return $this->getDoctrine()->getRepository($this->getEntityClass());
+        return $this->getDoctrine()->getRepository($this->getEntityClass(), 'customer');
     }
 
     protected function extractData(Request $request, $key = null)
@@ -92,12 +93,19 @@ abstract class RestController extends FOSRestController
 
     protected function newFromRequest(Request $request, $piaId = null)
     {
-        $entity = $this->get('jms_serializer')->deserialize($request->getContent(), $this->getEntityClass(),'json');
+        $entity = $this->get('jms_serializer')->deserialize($request->getContent(), $this->getEntityClass(), 'json');
         if ($piaId !== null) {
             $entity->setPia($this->getEntityManager()->getReference(Pia::class, $piaId));
         }
 
         return $entity;
+    }
+
+    public function canAccessResourceOr304()
+    {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw new AccessDeniedHttpException();
+        }
     }
 
     abstract protected function getEntityClass();

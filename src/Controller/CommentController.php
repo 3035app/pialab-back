@@ -13,12 +13,11 @@ namespace PiaApi\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use PiaApi\Entity\Comment;
+use PiaApi\Entity\Pia\Comment;
 
 class CommentController extends PiaSubController
 {
-    protected static $DATA_KEY = 'comment';
-
+    
     /**
      * @FOSRest\Get("/pias/{piaId}/comments")
      */

@@ -1,0 +1,11 @@
+{% macro boolLabel(value) %}
+    {% if value == true %}
+        <span class="ui green label">
+            <i class="check icon"></i> Oui
+        </span>
+    {% else %}
+        <span class="ui red label">
+            <i class="times icon"></i> Non
+        </span>
+    {% endif %}
+{% endmacro %}

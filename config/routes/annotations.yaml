@@ -1,3 +1,10 @@
 api_controllers:
     resource: ../../src/Controller/
     type: annotation
+
+home:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: /manageUsers
+        permanent: true

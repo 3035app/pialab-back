@@ -14,11 +14,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use PiaApi\Entity\Pia;
+use PiaApi\Entity\Pia\Pia;
 
 class PiaController extends RestController
 {
-    protected static $DATA_KEY = 'pia';
 
     /**
      * @FOSRest\Get("/pias/example")
@@ -27,6 +26,7 @@ class PiaController extends RestController
      */
     public function exampleAction(Request $request)
     {
+        $this->canAccessResourceOr304();
     }
 
     /**
@@ -36,6 +36,8 @@ class PiaController extends RestController
      */
     public function listAction(Request $request)
     {
+        $this->canAccessResourceOr304();
+
         $criteria = $this->extractCriteria($request);
         $collection = $this->getRepository()->findBy($criteria);
 
@@ -49,6 +51,8 @@ class PiaController extends RestController
      */
     public function showAction(Request $request, $id)
     {
+        $this->canAccessResourceOr304();
+
         $pia = $this->getRepository()->find($id);
         if ($pia === null) {
             return $this->view($pia, Response::HTTP_NOT_FOUND);
@@ -63,6 +67,8 @@ class PiaController extends RestController
      */
     public function createAction(Request $request)
     {
+        $this->canAccessResourceOr304();
+
         $entity = $this->newFromRequest($request);
         $this->persist($entity);
 
@@ -77,6 +83,8 @@ class PiaController extends RestController
      */
     public function updateAction(Request $request, $id)
     {
+        $this->canAccessResourceOr304();
+
         $entity = $this->newFromRequest($request);
         $this->update($entity);
 
@@ -90,6 +98,8 @@ class PiaController extends RestController
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->canAccessResourceOr304();
+
         $pia = $this->getRepository()->find($id);
         $this->remove($pia);
 

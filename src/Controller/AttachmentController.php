@@ -13,12 +13,11 @@ namespace PiaApi\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use PiaApi\Entity\Attachment;
+use PiaApi\Entity\Pia\Attachment;
 
 class AttachmentController extends PiaSubController
 {
-    protected static $DATA_KEY = 'attachment';
-
+  
     /**
      * @FOSRest\Get("/pias/{piaId}/attachments")
      */

@@ -13,12 +13,11 @@ namespace PiaApi\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use PiaApi\Entity\Answer;
+use PiaApi\Entity\Pia\Answer;
 
 class AnswerController extends PiaSubController
 {
-    protected static $DATA_KEY = 'answer';
-
+    
     /**
      * @FOSRest\Get("/pias/{piaId}/answers")
      */
@@ -50,7 +49,6 @@ class AnswerController extends PiaSubController
      */
     public function updateAction(Request $request, $piaId, $id)
     {
-
         return parent::updateAction($request, $piaId, $id);
     }
 

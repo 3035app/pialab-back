@@ -1,0 +1,32 @@
+{{ form_start(form) }}
+
+{{ form_row(form.name) }}
+
+{{ form_row(form.allowedGrantTypes) }}
+
+<div class="required field">
+    <a href="#" class="ui tiny primary button application-form-add-uri" data-list=".uri-fields-list" style="float:right;">
+        <i class="plus icon"></i>
+        add
+    </a>
+    {{ form_label(form.redirectUris) }}
+
+    <ul class="ui list uri-fields-list" data-prototype="{{ form_widget(form.redirectUris.vars.prototype)|e }}" data-widget-tags="{{ '<li class=" item"=" item""="item" ""></li>'|e }}">
+    {% for uri in form.redirectUris %}
+        <li class="item">
+            {{ form_errors(uri) }}
+            {{ form_widget(uri) }}
+        </li>
+    {% endfor %}
+</ul>
+
+</div>
+
+{% do form.redirectUris.setRendered %}
+
+<div class="ui divider"></div>
+
+{{ form_rest(form) }}
+{{ form_row(form.submit) }}
+
+{{ form_end(form) }}

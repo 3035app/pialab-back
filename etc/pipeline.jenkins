@@ -33,13 +33,13 @@ pipeline {
         stage ('Create Database') {
             steps {
                 sh "bin/ci-scripts/create_database.sh"
-                sh "bin/console doctrine:schema:update --force --no-interaction"
+                sh "bin/ci-scripts/create_schema.sh"
             }
         }
 
         stage ('Add User') {
             steps {
-                sh "echo waiting for branch back-oauth to be merged"
+                sh "bin/ci-scripts/create_user.sh"
             }
         }
 
@@ -57,15 +57,20 @@ pipeline {
 
         stage ('Create Archive') {
             steps {
-                sh "echo waiting for something smart to add in archive"
+                sh 'Branch=${BRANCH_NAME} ./bin/ci-scripts/gen_archive.sh'
+                archiveArtifacts artifacts: "*.tar.gz*", fingerprint: true
+                build job: 'Copy Artifact', parameters: [string(name: 'Job', value: "${JOB_NAME}"), string(name: 'Project', value: "Pialab-back"), string(name: 'Branch', value: "${BRANCH_NAME}"), string(name: 'DoDeploy', value: "false")], wait: false
+
             }
         }
 
     }
+
 
     post {
         always {
             cleanWs()
         }
     }
+
 }

@@ -18,7 +18,8 @@ then
     touch $HOME/.pgpass $HOME/pgpass.tmp
     cp $HOME/.pgpass $HOME/pgpass.tmp
     echo ${DBHOST}:5432:*:${DBROOTUSER}:${DBROOTPASSWORD} >> $HOME/pgpass.tmp
-    echo ${DBHOST}:5432:*:${DBAPPUSER}:${DBAPPPASSWORD} >> $HOME/pgpass.tmp
+    echo ${DBHOST}:5432:*:${DBOAUTHUSER}:${DBOAUTHPASSWORD} >> $HOME/pgpass.tmp
+    echo ${DBHOST}:5432:*:${DBCUSTOMERUSER}:${DBCUSTOMERPASSWORD} >> $HOME/pgpass.tmp
     sort -u $HOME/pgpass.tmp > $HOME/.pgpass
     chmod 600 $HOME/.pgpass
     cat  $HOME/.pgpass

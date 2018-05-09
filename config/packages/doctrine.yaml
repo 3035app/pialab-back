@@ -6,30 +6,46 @@ parameters:
     env(DATABASE_URL): ''
     
 doctrine:
-    dbal: 
-        # configure these for your database server
-        driver:           '%env(resolve:DBDRIVER)%'
-        dbname:           '%env(resolve:DBAPPNAME)%'
-        user:             '%env(resolve:DBAPPUSER)%'
-        password:         '%env(resolve:DBAPPPASSWORD)%'
-        host:             '%env(resolve:DBHOST)%'
-        port:             '%env(resolve:DBPORT)%'
-        url:              '%env(resolve:DATABASE_URL)%'
-        #server_version:   '%env(resolve:DBVERSION)%'
-        charset: utf8
-        default_table_options:
-            charset: utf8mb4
-            collate: utf8mb4_unicode_ci
-
+    dbal:
+        connections:
+            default:
+                charset:  UTF8
+                url:      '%env(resolve:DATABASE_URL)%'
+                server_version: '5.7'
+                default_table_options:
+                    charset: utf8mb4
+                    collate: utf8mb4_unicode_ci
+            customer:
+                charset:  UTF8
+                url:      '%env(resolve:CUSTOMER_DATABASE_URL)%'
+                server_version: '5.7'
+                default_table_options:
+                    charset: utf8mb4
+                    collate: utf8mb4_unicode_ci
 
     orm:
+        default_entity_manager: default
         auto_generate_proxy_classes: '%kernel.debug%'
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
-        mappings:
-            PiaApi:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'PiaApi\Entity'
-                alias: PiaApi
+        entity_managers:
+            default:
+                auto_mapping: true
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                connection: default
+                mappings:
+                    PiaOauth:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity/Oauth'
+                        prefix: 'PiaApi\Entity\Oauth'
+                        alias: PiaOauth
+            customer:
+                auto_mapping: false
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                connection: customer
+                mappings:
+                    PiaApi:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity/Pia'
+                        prefix: 'PiaApi\Entity\Pia'
+                        alias: PiaApi

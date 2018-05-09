@@ -1,0 +1,54 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        PiaApi\Entity\Oauth\User:
+            algorithm: bcrypt
+            cost: 12
+    providers:
+        PiaApi\Auth\UserProvider:
+            entity:
+                class: PiaApi\Entity\Oauth\User
+                property: username
+    firewalls:
+        oauth_token:
+            pattern:    ^/oauth/v2/token
+            security:   false
+
+        oauth_authorize:
+            pattern:    ^/oauth/v2/auth
+            form_login:
+                login_path: login
+                check_path: login
+                provider: PiaApi\Auth\UserProvider
+
+        api:
+            pattern:    ^/pias
+            fos_oauth:  true
+            stateless:  true
+            anonymous:  true # can be omitted as its default value
+
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            anonymous: true
+            form_login:
+                login_path: login
+                check_path: login
+                provider: PiaApi\Auth\UserProvider
+
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
