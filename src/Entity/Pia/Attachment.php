@@ -28,6 +28,20 @@ class Attachment implements Timestampable
         TimestampableEntity;
 
     /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    protected $mimeType;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Pia", inversedBy="attachments")
      * @JMS\Exclude()
      *
@@ -36,9 +50,9 @@ class Attachment implements Timestampable
     protected $pia;
 
     /**
-     * @ORM\Column(type="blob")
+     * @ORM\Column(type="text")
      * @JMS\SerializedName("file")
-     * @JMS\Accessor(getter="getFileToBase64", setter="setFileFromBase64")
+     * @JMS\Accessor(setter="setFileFromBase64")
      *
      * @var string
      */
@@ -49,16 +63,6 @@ class Attachment implements Timestampable
      * @var bool
      */
     protected $piaSigned = false;
-
-    public function getFileToBase64()
-    {
-        if (is_string($this->attachmentFile)) {
-            return $this->attachmentFile;
-        }
-        $string = \stream_get_contents($this->attachmentFile);
-
-        return \base64_encode($string);
-    }
 
     public function setFileFromBase64(string $base64)
     {

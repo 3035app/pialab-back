@@ -29,6 +29,6 @@ lid=$(psql -qt --no-align -w -h ${DBHOST} -c 'select max(id) from oauth_client;'
 clientid=$(psql -qt --no-align -w -h ${DBHOST} -c "select id||'_'||random_id from oauth_client where id=$lid;" -U ${DBOAUTHUSER} -d ${DBOAUTHNAME}  )
 clientsecret=$(psql -qt --no-align -w -h ${DBHOST} -c "select secret from oauth_client where id=$lid;" -U ${DBOAUTHUSER} -d ${DBOAUTHNAME}  )
 
-echo "ID:$clientid"
-echo "SECRET:$clientsecret"
+echo "APICLIENTID=$clientid" > .api.env
+echo "APICLIENTSECRET=$clientsecret" >> .api.env
 

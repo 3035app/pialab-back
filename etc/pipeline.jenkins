@@ -6,8 +6,10 @@ pipeline {
             args '--network=ci.network'
         }
     }
-
-
+    
+    environment {
+        RND = "${BUILD_NUMBER}"
+    }    
     options {
         timeout(time: 1, unit: 'HOURS')
         timestamps()
@@ -22,11 +24,19 @@ pipeline {
                 sh "php -v"
             }
         }
+        
+        stage ('Set Env') {
+            steps {
+                sh './bin/ci-scripts/set_env_with_etcd.sh'
+                sh './bin/ci-scripts/set_pgpass.sh'                
+                sh 'cat ./.env'
+                sh 'cat $HOME/.pgpass'
+            }
+        }
 
         stage ('Composer Install') {
             steps {
-                sh "composer install --no-interaction # Install Generate the .env"
-                sh "bin/ci-scripts/set_pgpass.sh"
+                sh "composer install --no-interaction"
             }
         }
 
