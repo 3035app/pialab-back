@@ -9,7 +9,8 @@ pipeline {
     
     environment {
         RND = "${BUILD_NUMBER}"
-    }    
+    }
+    
     options {
         timeout(time: 1, unit: 'HOURS')
         timestamps()
@@ -82,7 +83,6 @@ pipeline {
         }
 
     }
-
 
     post {
         always {
