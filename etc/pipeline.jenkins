@@ -50,6 +50,7 @@ pipeline {
         stage ('Add User') {
             steps {
                 sh "bin/ci-scripts/create_user.sh"
+                sh "bin/ci-scripts/create_client_secret.sh"
             }
         }
 
