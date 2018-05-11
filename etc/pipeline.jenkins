@@ -37,7 +37,7 @@ pipeline {
 
         stage ('Composer Install') {
             steps {
-                sh "composer install --no-interaction --no-scripts"
+                sh "./bin/ci-scripts/install.sh"
             }
         }
 
@@ -57,19 +57,19 @@ pipeline {
 
         stage ('Install Assets ') {
             steps {
-                sh "bin/console assets:install"
+                sh "./bin/ci-scripts/post_install.sh"
             }
         }
 
         stage ('Start ') {
             steps {
-                sh "bin/console server:start --no-interaction"
+                sh "./bin/ci-scripts/server_start.sh"
             }
         }
 
         stage ('Run Test') {
             steps {
-                sh "echo waiting for test creation"
+                sh "./bin/ci-scripts/run_test.sh"
             }
         }
 
