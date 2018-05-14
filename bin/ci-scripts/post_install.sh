@@ -13,5 +13,6 @@ else
 fi
 
 bin/console assets:install --no-interaction
+bin/console cache:clear --no-interaction
 
 
