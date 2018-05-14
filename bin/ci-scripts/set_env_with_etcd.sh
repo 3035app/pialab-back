@@ -38,14 +38,9 @@ then
     BUILDENV="dev"
 fi
 
-if [ "${BUILDENV}" = "prod" ]
-then
-    SYMFONYENV="prod"
-fi
-
 if [ -z "$SYMFONYENV" ]
 then
-    SYMFONYENV="dev"
+    SYMFONYENV=${BUILDENV}
 fi
 
 
