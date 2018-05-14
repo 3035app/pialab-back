@@ -84,6 +84,13 @@ class User implements AdvancedUserInterface, \Serializable
      */
     protected $locked = false;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="users")
+     *
+     * @var Client
+     */
+    protected $application;
+
     public function __construct(?string $email = null, ?string $password)
     {
         $this->email = $email;
@@ -196,6 +203,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->expirationDate,
             $this->enabled,
             $this->locked,
+            $this->application,
         ));
     }
 
@@ -211,7 +219,8 @@ class User implements AdvancedUserInterface, \Serializable
             $this->creationDate,
             $this->expirationDate,
             $this->enabled,
-            $this->locked) = unserialize($serialized);
+            $this->locked,
+            $this->application) = unserialize($serialized);
     }
 
     /**
@@ -294,5 +303,21 @@ class User implements AdvancedUserInterface, \Serializable
     public function isCredentialsNonExpired(): bool
     {
         return true;
+    }
+
+    /**
+     * @return Client
+     */
+    public function getApplication(): ?Client
+    {
+        return $this->application;
+    }
+
+    /**
+     * @param Client $application
+     */
+    public function setApplication(?Client $application): void
+    {
+        $this->application = $application;
     }
 }

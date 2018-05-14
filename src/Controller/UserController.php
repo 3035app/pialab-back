@@ -156,6 +156,8 @@ class UserController extends Controller
             $encoder = $this->encoderFactory->getEncoder($user);
             $user->setPassword($encoder->encodePassword($userData['password'], $user->getSalt()));
 
+            $user->setApplication($userData['application']);
+
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
             

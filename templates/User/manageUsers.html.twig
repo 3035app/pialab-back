@@ -39,6 +39,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Application</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Roles</th>
@@ -56,6 +57,15 @@
                         {% for user in users %}
                             <tr>
                                 <td>{{ user.id }}</td>
+                                <td>
+                                    {% if user.application is not null %}
+                                        <a href="{{ path('manage_applications') }}">
+                                            {{ user.application.name }}
+                                        </a>
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
                                 <td>{{ user.username }}</td>
                                 <td>{{ user.email }}</td>
                                 <td>
@@ -136,6 +146,7 @@
                     modal.find('.actions').remove();
 
                     $('.ui.checkbox').checkbox();
+                    $('.ui.dropdown').dropdown();
 
                     modal.modal('show');
                 }
