@@ -15,6 +15,8 @@ if [ -z "$Suffix" ]
        Suffix=$(echo $RND|sed -e s/-/_/g|tr '[:upper:]' '[:lower:]')$(echo -n $(cat shuf.nbr ))
 fi
 
+Suffix=$(echo $Suffix | sed s/'\W'//g | tr '[:upper:]' '[:lower:]')
+
 if [ -z "$Prefix" ]
 then
     Prefix="/pialabback/build/$Suffix"
