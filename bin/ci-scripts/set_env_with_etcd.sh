@@ -33,10 +33,23 @@ then
     ETCDCTLCMD="etcdctl"
 fi
 
+if [ -z "${BUILDENV}" ]
+then 
+    BUILDENV="dev"
+fi
+
+if [ "${BUILDENV}" = "prod" ]
+then
+    SYMFONYENV="prod"
+fi
+
 if [ -z "$SYMFONYENV" ]
 then
     SYMFONYENV="dev"
 fi
+
+
+
 
 # get postgres default
 postgreshost=$($ETCDCTLCMD get /default/postgres/hostname --print-value-only $ETCDENDPOINT)
