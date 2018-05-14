@@ -5,10 +5,8 @@ security:
             algorithm: bcrypt
             cost: 12
     providers:
-        PiaApi\Auth\UserProvider:
-            entity:
-                class: PiaApi\Entity\Oauth\User
-                property: username
+        default:
+            id: PiaApi\Auth\UserProvider
     firewalls:
         oauth_token:
             pattern:    ^/oauth/v2/token
@@ -19,7 +17,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login
-                provider: PiaApi\Auth\UserProvider
+                provider: default
 
         api:
             pattern:    ^/pias
@@ -36,18 +34,8 @@ security:
             form_login:
                 login_path: login
                 check_path: login
-                provider: PiaApi\Auth\UserProvider
+                provider: default
 
-            # activate different ways to authenticate
-
-            # http_basic: true
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: true
-            # https://symfony.com/doc/current/security/form_login_setup.html
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

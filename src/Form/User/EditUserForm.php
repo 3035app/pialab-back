@@ -3,6 +3,7 @@
 namespace PiaApi\Form\User;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -21,6 +22,7 @@ class EditUserForm extends CreateUserForm
             ->remove('password')
             ->remove('submit')
 
+            ->add('username', TextType::class)
             ->add('roles', ChoiceType::class, [
                 'required' => false,
                 'multiple' => true,

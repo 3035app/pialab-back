@@ -1,12 +1,20 @@
 <?php
 
+/*
+ * Copyright (C) 2015-2018 Libre Informatique
+ *
+ * This file is licenced under the GNU LGPL v3.
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace PiaApi\Entity\Oauth;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="PiaApi\Repository\UserRepository")
  * @ORM\Table(name="pia_user")
  */
 class User implements AdvancedUserInterface, \Serializable
@@ -116,6 +124,9 @@ class User implements AdvancedUserInterface, \Serializable
     public function setEmail(string $email): void
     {
         $this->email = $email;
+        if ($this->username === null) {
+            $this->username = $email;
+        }
     }
 
     /**
@@ -160,7 +171,12 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function getUsername()
     {
-        return $this->email;
+        return $this->username;
+    }
+
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
     }
 
     public function eraseCredentials()
@@ -195,8 +211,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->creationDate,
             $this->expirationDate,
             $this->enabled,
-            $this->locked,
-        ) = unserialize($serialized);
+            $this->locked) = unserialize($serialized);
     }
 
     /**
@@ -224,7 +239,7 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Set the value of locked
+     * Set the value of locked.
      *
      * @param bool $locked
      */
@@ -272,7 +287,7 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->expirationDate > new \DateTime();
     }
-    
+
     /**
      * {@inheritdoc}
      */
