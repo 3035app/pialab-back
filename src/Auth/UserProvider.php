@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * Copyright (C) 2015-2018 Libre Informatique
+ *
+ * This file is licenced under the GNU LGPL v3.
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace PiaApi\Auth;
 
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,12 +29,12 @@ class UserProvider implements UserProviderInterface
 
     public function loadUserByUsername($usernameOrEmail)
     {
-        return $this->doctrine->getRepository(User::class)->findUserByUsernameOrEmail($usernameOrEmail);
+        return $this->doctrine->getRepository(User::class, 'oauth')->findUserByUsernameOrEmail($usernameOrEmail);
     }
 
     public function refreshUser(UserInterface $user): UserInterface
     {
-        return $this->doctrine->getRepository(User::class)->find($user->getId());
+        return $this->doctrine->getRepository(User::class, 'oauth')->find($user->getId());
     }
 
     public function supportsClass($class)

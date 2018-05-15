@@ -66,13 +66,15 @@ class PromoteUserCommand extends Command
 
         if ($email === null) {
             $this->io->error('You must set an email');
+
             return;
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+        $user = $this->entityManager->getRepository(User::class, 'oauth')->findOneBy(['email' => $email]);
 
         if ($user === null) {
             $this->io->error(sprintf('There is no user with email « %s »', $email));
+
             return;
         }
 

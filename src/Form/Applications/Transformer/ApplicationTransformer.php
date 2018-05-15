@@ -37,6 +37,6 @@ class ApplicationTransformer implements DataTransformerInterface
 
     public function reverseTransform($value)
     {
-        return $this->doctrine->getManager('default')->getRepository(Client::class)->find($value);
+        return $this->doctrine->getManager('oauth')->getRepository(Client::class)->find($value);
     }
 }
