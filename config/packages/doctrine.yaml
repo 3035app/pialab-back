@@ -7,18 +7,17 @@ parameters:
     
 doctrine:
     dbal:
+        default_connection: oauth
         connections:
             oauth:
                 charset:  UTF8
                 url:      '%env(resolve:OAUTH_DATABASE_URL)%'
-                server_version: '5.7'
                 default_table_options:
                     charset: utf8mb4
                     collate: utf8mb4_unicode_ci
             pia:
                 charset:  UTF8
                 url:      '%env(resolve:PIA_DATABASE_URL)%'
-                server_version: '5.7'
                 default_table_options:
                     charset: utf8mb4
                     collate: utf8mb4_unicode_ci
