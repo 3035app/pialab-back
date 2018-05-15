@@ -13,14 +13,13 @@ else
 fi
 
 
-if [ -n "${DBHOST}" ]
-then
-    touch $HOME/.pgpass $HOME/pgpass.tmp
-    cp $HOME/.pgpass $HOME/pgpass.tmp
-    echo ${DBHOST}:5432:*:${DBROOTUSER}:${DBROOTPASSWORD} >> $HOME/pgpass.tmp
-    echo ${DBHOST}:5432:*:${DBOAUTHUSER}:${DBOAUTHPASSWORD} >> $HOME/pgpass.tmp
-    echo ${DBHOST}:5432:*:${DBCUSTOMERUSER}:${DBCUSTOMERPASSWORD} >> $HOME/pgpass.tmp
-    sort -u $HOME/pgpass.tmp > $HOME/.pgpass
-    chmod 600 $HOME/.pgpass
-    cat  $HOME/.pgpass
-fi
+touch $HOME/.pgpass $HOME/pgpass.tmp
+cp $HOME/.pgpass $HOME/pgpass.tmp
+echo ${DBOAUTHHOST}:${DBOAUTHPORT}:*:${DBOAUTHROOTUSER}:${DBOAUTHROOTPASSWORD} >> $HOME/pgpass.tmp
+echo ${DBOAUTHHOST}:${DBOAUTHPORT}:*:${DBOAUTHUSER}:${DBOAUTHPASSWORD} >> $HOME/pgpass.tmp
+echo ${DBPIAHOST}:${DBOPIAPORT}:*:${DBPIAROOTUSER}:${DBPIAROOTPASSWORD} >> $HOME/pgpass.tmp
+echo ${DBPIAHOST}:${DBOPIAPORT}:*:${DBPIAUSER}:${DBPIAPASSWORD} >> $HOME/pgpass.tmp
+sort -u $HOME/pgpass.tmp > $HOME/.pgpass
+chmod 600 $HOME/.pgpass
+cat  $HOME/.pgpass
+

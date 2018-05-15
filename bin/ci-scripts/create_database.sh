@@ -14,11 +14,6 @@ else
     exit 42
 fi
 
-if [ -z "${DBHOST}" ]
-then
-    echo "Please add DBHOST in .env file as it is mandatory"
-    exit 42
-fi
 
 # Check if database exist before drop and re-create
 #psql -w -h ${DBHOST} -U ${DBROOTUSER} -lqt | grep -w ${DBAPPUSER} | grep -w ${DBAPPNAME}
@@ -30,32 +25,36 @@ fi
 
 function create_database {
     # todo: remove this two line:
-    #psql -w -h ${DBHOST} -c "DROP DATABASE IF EXISTS ${DBAPPNAME};" -U ${DBROOTUSER}
-    #psql -w -h ${DBHOST} -c "DROP ROLE IF EXISTS ${DBAPPUSER};" -U ${DBROOTUSER}
+    #psql -w -h ${DBAPPHOST} -c "DROP DATABASE IF EXISTS ${DBAPPNAME};" -U ${DBROOTUSER}
+    #psql -w -h ${DBAPPHOST} -c "DROP ROLE IF EXISTS ${DBAPPUSER};" -U ${DBROOTUSER}
     
-    userexist=$(psql -qt -w -h ${DBHOST} -U ${DBROOTUSER} -c "SELECT rolname FROM pg_catalog.pg_roles WHERE rolname = '${DBAPPUSER}';"|sed -e s/' '//g)
+    userexist=$(psql -qt -w -h ${DBAPPHOST} -U ${DBROOTUSER} -c "SELECT rolname FROM pg_catalog.pg_roles WHERE rolname = '${DBAPPUSER}';"|sed -e s/' '//g)
     if [ -z ${userexist} ]
     then
-        psql -w -h ${DBHOST} -c "CREATE USER ${DBAPPUSER} WITH PASSWORD '${DBAPPPASSWORD}';" -U ${DBROOTUSER}
+        psql -w -h ${DBAPPHOST} -c "CREATE USER ${DBAPPUSER} WITH PASSWORD '${DBAPPPASSWORD}';" -U ${DBROOTUSER}
     fi
-    psql -w -h ${DBHOST} -c "ALTER ROLE ${DBAPPUSER} WITH CREATEDB;" -U ${DBROOTUSER}
+    psql -w -h ${DBAPPHOST} -c "ALTER ROLE ${DBAPPUSER} WITH CREATEDB;" -U ${DBROOTUSER}
     
-    dbexist=$(psql -qt -w -h ${DBHOST} -U ${DBROOTUSER} -c "SELECT datname FROM pg_catalog.pg_database WHERE datname = '${DBAPPNAME}';"|sed -e s/' '//g)
+    dbexist=$(psql -qt -w -h ${DBAPPHOST} -U ${DBROOTUSER} -c "SELECT datname FROM pg_catalog.pg_database WHERE datname = '${DBAPPNAME}';"|sed -e s/' '//g)
     if [ -z ${dbexist} ]
     then
-        psql -w -h ${DBHOST} -c "CREATE DATABASE ${DBAPPNAME};" -U ${DBROOTUSER}
+        psql -w -h ${DBAPPHOST} -c "CREATE DATABASE ${DBAPPNAME};" -U ${DBROOTUSER}
     fi
-    psql -w -h ${DBHOST} -c "ALTER DATABASE ${DBAPPNAME} OWNER TO ${DBAPPUSER};" -U ${DBROOTUSER}
+    psql -w -h ${DBAPPHOST} -c "ALTER DATABASE ${DBAPPNAME} OWNER TO ${DBAPPUSER};" -U ${DBROOTUSER}
     
-    #psql -w -h ${DBHOST} -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' -U ${DBROOTUSER} -d ${DBAPPNAME}    
+    #psql -w -h ${DBAPPHOST} -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' -U ${DBROOTUSER} -d ${DBAPPNAME}    
 }
 
 
+DPAPPHOST=${DBOAUTHHOST}
+DPAPPROOTUSER=${DBOAUTHHOST}
 DBAPPNAME=${DBOAUTHNAME}
 DBAPPUSER=${DBOAUTHUSER}
 DBAPPPASSWORD=${DBOAUTHPASSWORD}
 create_database
 
+DPAPPHOST=${DBPIAHOST}
+DPAPPROOTUSER=${DBPIAHOST}
 DBAPPNAME=${DBCUSTOMERNAME}
 DBAPPUSER=${DBCUSTOMERUSER}
 DBAPPPASSWORD=${DBCUSTOMERPASSWORD}
