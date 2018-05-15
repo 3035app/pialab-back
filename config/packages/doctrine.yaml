@@ -24,13 +24,13 @@ doctrine:
                     collate: utf8mb4_unicode_ci
 
     orm:
-        default_entity_manager: default
+        default_entity_manager: oauth
         auto_generate_proxy_classes: '%kernel.debug%'
         entity_managers:
             oauth:
                 auto_mapping: true
                 naming_strategy: doctrine.orm.naming_strategy.underscore
-                connection: default
+                connection: oauth
                 mappings:
                     PiaOauth:
                         is_bundle: false
@@ -41,7 +41,7 @@ doctrine:
             pia:
                 auto_mapping: false
                 naming_strategy: doctrine.orm.naming_strategy.underscore
-                connection: customer
+                connection: pia
                 mappings:
                     PiaApi:
                         is_bundle: false
