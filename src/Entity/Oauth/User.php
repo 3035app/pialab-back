@@ -12,12 +12,13 @@ namespace PiaApi\Entity\Oauth;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * @ORM\Entity(repositoryClass="PiaApi\Repository\UserRepository")
  * @ORM\Table(name="pia_user")
  */
-class User implements AdvancedUserInterface, \Serializable
+class User extends BaseUser implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var int
@@ -27,34 +28,6 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\Id()
      */
     protected $id;
-
-    /**
-     * @ORM\Column(name="username", type="string", nullable=false, unique=true)
-     *
-     * @var string
-     */
-    protected $username;
-
-    /**
-     * @ORM\Column(name="email", type="string", nullable=false, unique=true)
-     *
-     * @var string
-     */
-    protected $email;
-
-    /**
-     * @ORM\Column(name="password", type="string", nullable=false)
-     *
-     * @var string
-     */
-    protected $password;
-
-    /**
-     * @ORM\Column(name="roles", type="array", nullable=false)
-     *
-     * @var array
-     */
-    protected $roles;
 
     /**
      * @ORM\Column(name="creationDate", type="datetime")
@@ -69,13 +42,6 @@ class User implements AdvancedUserInterface, \Serializable
      * @var \DateTime
      */
     protected $expirationDate;
-
-    /**
-     * @ORM\Column(name="enabled", type="boolean")
-     *
-     * @var bool
-     */
-    protected $enabled = true;
 
     /**
      * @ORM\Column(name="locked", type="boolean")
@@ -99,6 +65,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->roles = ['ROLE_USER'];
         $this->creationDate = new \DateTime();
         $this->expirationDate = new \DateTimeImmutable('+1 Year');
+        $this->enabled = true;
     }
 
     /**
@@ -128,7 +95,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @param string $email
      */
-    public function setEmail(string $email): void
+    public function setEmail($email)
     {
         $this->email = $email;
         if ($this->username === null) {
@@ -147,7 +114,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @param string $password
      */
-    public function setPassword(string $password): void
+    public function setPassword($password)
     {
         $this->password = $password;
     }
@@ -162,14 +129,14 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->roles;
     }
 
-    public function addRole(string $role): void
+    public function addRole($role)
     {
         if (!in_array($role, $this->roles)) {
             $this->roles[] = $role;
         }
     }
 
-    public function removeRole(string $role): void
+    public function removeRole($role)
     {
         if (in_array($role, $this->roles)) {
             $this->roles[] = $role;
@@ -181,7 +148,7 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->username;
     }
 
-    public function setUsername(string $username): void
+    public function setUsername($username)
     {
         $this->username = $username;
     }
@@ -242,7 +209,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @param bool $enabled
      */
-    public function setEnabled(bool $enabled): void
+    public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
     }

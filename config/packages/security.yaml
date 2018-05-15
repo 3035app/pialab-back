@@ -1,42 +1,44 @@
 security:
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
     encoders:
-        PiaApi\Entity\Oauth\User:
+        FOS\UserBundle\Model\UserInterface:
             algorithm: bcrypt
             cost: 12
     providers:
-        default:
-            id: PiaApi\Auth\UserProvider
+        fos_userbundle:
+            id: fos_user.user_provider.username_email
     firewalls:
         oauth_token:
             pattern:    ^/oauth/v2/token
             security:   false
 
-        oauth_authorize:
-            pattern:    ^/oauth/v2/auth
-            form_login:
-                login_path: login
-                check_path: login
-                provider: default
+        # oauth_authorize:
+        #     pattern:    ^/oauth/v2/auth
+        #     form_login:
+        #         # login_path: /login
+        #         # check_path: /login_check
+        #         provider: fos_userbundle
 
         api:
             pattern:    ^/pias
             fos_oauth:  true
             stateless:  true
-            anonymous:  true # can be omitted as its default value
+            anonymous:  false # can be omitted as its default value
 
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         main:
-            anonymous: true
             form_login:
-                login_path: login
-                check_path: login
-                provider: default
+                login_path: /login
+                check_path: /login_check
+                provider: fos_userbundle
+            anonymous: true
+            logout: true
 
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }

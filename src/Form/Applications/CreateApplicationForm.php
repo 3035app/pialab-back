@@ -1,10 +1,19 @@
 <?php
 
+/*
+ * Copyright (C) 2015-2018 Libre Informatique
+ *
+ * This file is licenced under the GNU LGPL v3.
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace PiaApi\Form\Applications;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -20,21 +29,22 @@ class CreateApplicationForm extends AbstractType
         OAuth2::GRANT_TYPE_REFRESH_TOKEN      => OAuth2::GRANT_TYPE_REFRESH_TOKEN,
         OAuth2::GRANT_TYPE_EXTENSIONS         => OAuth2::GRANT_TYPE_EXTENSIONS,
     ];
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', TextType::class)
+            ->add('url', UrlType::class)
             ->add('allowedGrantTypes', ChoiceType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
-                'choices'  => $this->grantTypes
+                'choices'  => $this->grantTypes,
             ])
             ->add('redirectUris', CollectionType::class, [
                 'entry_type'    => TextType::class,
                 'entry_options' => [
-                    'required' => false
+                    'required' => false,
                 ],
                 'allow_add'     => true,
                 'allow_delete'  => true,
@@ -43,9 +53,9 @@ class CreateApplicationForm extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
-                    'class' => 'fluid'
+                    'class' => 'fluid',
                 ],
-                'label' => 'Créer l\'application'
+                'label' => 'Créer l\'application',
             ])
         ;
     }

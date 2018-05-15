@@ -24,6 +24,10 @@ services:
     sensio_framework_extra.view.listener:
         alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
 
+    PiaApi\Auth\PasswordResettingListener:
+        tags:
+            - { name: kernel.event_subscriber }
+
     # serializer.datetime_hander:
     #   class: PiaApi\Serializer\Handler\DateTimeHandler
     #   tags:

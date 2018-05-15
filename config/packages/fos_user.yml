@@ -1,0 +1,8 @@
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: PiaApi\Entity\Oauth\User
+    from_email: 
+        address: "accounts@pialab.io"
+        sender_name: PiaLab Account Manager
+    use_flash_notifications: false
