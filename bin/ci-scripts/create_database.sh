@@ -25,24 +25,24 @@ fi
 
 function create_database {
     # todo: remove this two line:
-    #psql -w -h ${DBAPPHOST} -c "DROP DATABASE IF EXISTS ${DBAPPNAME};" -U ${DBROOTUSER}
-    #psql -w -h ${DBAPPHOST} -c "DROP ROLE IF EXISTS ${DBAPPUSER};" -U ${DBROOTUSER}
+    #psql -w -h ${DBAPPHOST} -c "DROP DATABASE IF EXISTS ${DBAPPNAME};" -U ${DBAPPROOTUSER}
+    #psql -w -h ${DBAPPHOST} -c "DROP ROLE IF EXISTS ${DBAPPUSER};" -U ${DBAPPROOTUSER}
     
-    userexist=$(psql -qt -w -h ${DBAPPHOST} -U ${DBROOTUSER} -c "SELECT rolname FROM pg_catalog.pg_roles WHERE rolname = '${DBAPPUSER}';"|sed -e s/' '//g)
+    userexist=$(psql -qt -w -h ${DBAPPHOST} -U ${DBAPPROOTUSER} -c "SELECT rolname FROM pg_catalog.pg_roles WHERE rolname = '${DBAPPUSER}';"|sed -e s/' '//g)
     if [ -z ${userexist} ]
     then
-        psql -w -h ${DBAPPHOST} -c "CREATE USER ${DBAPPUSER} WITH PASSWORD '${DBAPPPASSWORD}';" -U ${DBROOTUSER}
+        psql -w -h ${DBAPPHOST} -c "CREATE USER ${DBAPPUSER} WITH PASSWORD '${DBAPPPASSWORD}';" -U ${DBAPPROOTUSER}
     fi
-    psql -w -h ${DBAPPHOST} -c "ALTER ROLE ${DBAPPUSER} WITH CREATEDB;" -U ${DBROOTUSER}
+    psql -w -h ${DBAPPHOST} -c "ALTER ROLE ${DBAPPUSER} WITH CREATEDB;" -U ${DBAPPROOTUSER}
     
-    dbexist=$(psql -qt -w -h ${DBAPPHOST} -U ${DBROOTUSER} -c "SELECT datname FROM pg_catalog.pg_database WHERE datname = '${DBAPPNAME}';"|sed -e s/' '//g)
+    dbexist=$(psql -qt -w -h ${DBAPPHOST} -U ${DBAPPROOTUSER} -c "SELECT datname FROM pg_catalog.pg_database WHERE datname = '${DBAPPNAME}';"|sed -e s/' '//g)
     if [ -z ${dbexist} ]
     then
-        psql -w -h ${DBAPPHOST} -c "CREATE DATABASE ${DBAPPNAME};" -U ${DBROOTUSER}
+        psql -w -h ${DBAPPHOST} -c "CREATE DATABASE ${DBAPPNAME};" -U ${DBAPPROOTUSER}
     fi
-    psql -w -h ${DBAPPHOST} -c "ALTER DATABASE ${DBAPPNAME} OWNER TO ${DBAPPUSER};" -U ${DBROOTUSER}
+    psql -w -h ${DBAPPHOST} -c "ALTER DATABASE ${DBAPPNAME} OWNER TO ${DBAPPUSER};" -U ${DBAPPROOTUSER}
     
-    #psql -w -h ${DBAPPHOST} -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' -U ${DBROOTUSER} -d ${DBAPPNAME}    
+    #psql -w -h ${DBAPPHOST} -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' -U ${DBAPPROOTUSER} -d ${DBAPPNAME}    
 }
 
 
