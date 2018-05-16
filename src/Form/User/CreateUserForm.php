@@ -79,6 +79,6 @@ class CreateUserForm extends AbstractType
             $applications[$application->getId()] = $application->getName();
         }
 
-        return array_flip($applications);
+        return count($applications) > 0 ? array_flip($applications) : [];
     }
 }
