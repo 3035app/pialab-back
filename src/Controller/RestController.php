@@ -38,12 +38,12 @@ abstract class RestController extends FOSRestController
 
     protected function getEntityManager()
     {
-        return $this->getDoctrine()->getManager('customer');
+        return $this->getDoctrine()->getManager();
     }
 
     protected function getRepository()
     {
-        return $this->getDoctrine()->getRepository($this->getEntityClass(), 'customer');
+        return $this->getDoctrine()->getRepository($this->getEntityClass());
     }
 
     protected function extractData(Request $request, $key = null)
