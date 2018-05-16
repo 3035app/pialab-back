@@ -54,7 +54,7 @@ class Client extends BaseClient
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -62,7 +62,7 @@ class Client extends BaseClient
     /**
      * @param string $name
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
