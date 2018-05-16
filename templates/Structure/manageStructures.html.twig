@@ -7,13 +7,13 @@
 {% block navbar %}
     <div class="ui inverted menu">
         <div class="menu">
-            <a class="active item" href="{{ path('manage_users') }}">
+            <a class="item" href="{{ path('manage_users') }}">
                 <i class="user icon"></i>Utilisateurs
             </a>
             <a class="item" href="{{ path('manage_applications') }}">
                 <i class="database icon"></i>Applications
             </a>
-            <a class="item" href="{{ path('manage_structures') }}">
+            <a class="active item" href="{{ path('manage_structures') }}">
                 <i class="building icon"></i>Structures
             </a>
         </div>
@@ -35,22 +35,16 @@
 
                 <h2>
                     <a href="?limit=1000" class="ui tiny button" style="float:right;">Voir 1000</a>
-                    Liste des utilisateurs
+                    Liste des structures
                 </h2>
 
                 <table class="ui compact striped table">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Application</th>
-                            <th>Structure</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Roles</th>
-                            <th>Actif</th>
-                            <th>Verrouillé</th>
+                            <th>Nom</th>
+                            <th>Nombre d'utilisateurs</th>
                             <th>Créé le</th>
-                            <th>Expire le</th>
                             <th class="right aligned">
                                 <i class="cog icon"></i>
                             </th>
@@ -58,48 +52,18 @@
                     </thead>
                     <tbody>
 
-                        {% for user in users %}
+                        {% for structure in structures %}
                             <tr>
-                                <td>{{ user.id }}</td>
+                                <td>{{ structure.id }}</td>
+                                <td>{{ structure.name }}</td>
                                 <td>
-                                    {% if user.application is not null %}
-                                        <a href="{{ path('manage_applications') }}">
-                                            {{ user.application.name }}
-                                        </a>
-                                    {% else %}
-                                        N/A
-                                    {% endif %}
+                                    <span class="ui label">{{ structure.users|length }}</span>
                                 </td>
                                 <td>
-                                    {% if user.structure is not null %}
-                                        <a href="{{ path('manage_structures') }}">
-                                            {{ user.structure.name }}
-                                        </a>
-                                    {% else %}
-                                        N/A
-                                    {% endif %}
-                                </td>
-                                <td>{{ user.username }}</td>
-                                <td>{{ user.email }}</td>
-                                <td>
-                                    {% for role in user.roles if role != 'ROLE_USER' %}
-                                        <span class="ui label">{{ role }}</span>
-                                    {% endfor %}
-                                </td>
-                                <td>
-                                    {{ macro.boolLabel(user.enabled) }}
-                                </td>
-                                <td>
-                                    {{ macro.boolLabel(user.locked) }}
-                                </td>
-                                <td>
-                                    {{ user.creationDate|date('d/m/Y')}}
-                                </td>
-                                <td>
-                                    {{ user.expirationDate|date('d/m/Y')}}
+                                    {{ structure.createdAt|date('d/m/Y')}}
                                 </td>
                                 <td class="right aligned">
-                                    <a class="ui green tiny icon button" data-modal="data-modal" href="{{ path('manage_users_edit_user', {'userId':user.id}) }}">
+                                    <a class="ui green tiny icon button" data-modal="data-modal" href="{{ path('manage_structures_edit_structure', {'structureId':structure.id}) }}">
                                         <i class="pencil icon"></i>
                                     </a>
                                 </td>
@@ -109,16 +73,16 @@
                     </tbody>
                 </table>
 
-                {{ pagerfanta(users, 'semantic_ui') }}
+                {{ pagerfanta(structures, 'semantic_ui') }}
             </div>
         </div>
 
         <div class="four wide column">
             <div class="ui segment">
 
-                <h2>Ajouter un utilisateur</h2>
+                <h2>Ajouter une structure</h2>
 
-                {{ render(controller('PiaApi\\Controller\\UserController:addUserAction')) }}
+                {{ render(controller('PiaApi\\Controller\\StructureController:addStructureAction')) }}
 
             </div>
         </div>
@@ -145,7 +109,7 @@
                 success: (html) => {
                     let modal = $('.ui.modal');
 
-                    modal.find('.header').html('Modifier un utilisateur');
+                    modal.find('.header').html('Modifier une structure');
 
                     modal
                         .find('.content')
