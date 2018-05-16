@@ -16,8 +16,8 @@ bin/console doctrine:database:create --connection=default --if-not-exists --no-i
 bin/console doctrine:database:create --connection=customer --if-not-exists --no-interaction 
 
 
-bin/console doctrine:migration:migrate --em=oauth --force --no-interaction
-bin/console doctrine:migration:migrate --em=api --force --no-interaction
+bin/console doctrine:migration:migrate --em=oauth --no-interaction
+bin/console doctrine:migration:migrate --em=api --no-interaction
 
 bin/console doctrine:schema:validate  --em=default --no-interaction 
 bin/console doctrine:schema:validate  --em=customer --no-interaction
