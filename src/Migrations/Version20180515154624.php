@@ -22,10 +22,9 @@ class Version20180515154624 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        if (!$schema->getTable('pia_user') || $schema->getTable('pia_user')->hasColumn('username_canonical')) {
+        if (!$schema->hasTable('pia_user') || $schema->getTable('pia_user')->hasColumn('username_canonical')) {
             return;
         }
 
@@ -54,12 +53,11 @@ class Version20180515154624 extends AbstractMigration
 
     public function down(Schema $schema)
     {
-        if (!$schema->getTable('pia_user') || !$schema->getTable('pia_user')->hasColumn('username_canonical')) {
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
+
+        if (!$schema->hasTable('pia_user') || !$schema->getTable('pia_user')->hasColumn('username_canonical')) {
             return;
         }
-
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('ALTER TABLE oauth_client DROP url');
         $this->addSql('DROP INDEX UNIQ_260CA7F92FC23A8');

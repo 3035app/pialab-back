@@ -15,7 +15,6 @@ fi
 bin/console doctrine:database:create --connection=default --if-not-exists --no-interaction 
 bin/console doctrine:database:create --connection=customer --if-not-exists --no-interaction 
 
-
 bin/console doctrine:migration:migrate --em=default --no-interaction
 bin/console doctrine:migration:migrate --em=customer --no-interaction
 
