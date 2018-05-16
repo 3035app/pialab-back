@@ -6,3 +6,8 @@ fos_user:
         address: "accounts@pialab.io"
         sender_name: PiaLab Account Manager
     use_flash_notifications: false
+    service:
+        mailer: fos_user.mailer.twig_swift
+    resetting:
+        email:
+            template:   Email/password_resetting.email.twig

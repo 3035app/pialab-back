@@ -17,6 +17,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use FOS\UserBundle\Event\FormEvent;
 use PiaApi\Entity\Oauth\User;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class PasswordResettingListener implements EventSubscriberInterface
 {
@@ -25,9 +26,15 @@ class PasswordResettingListener implements EventSubscriberInterface
      */
     protected $router;
 
-    public function __construct(UrlGeneratorInterface $router)
+    /**
+     * @var Environment
+     */
+    protected $twig;
+
+    public function __construct(UrlGeneratorInterface $router, Environment $twig)
     {
         $this->router = $router;
+        $this->twig = $twig;
     }
 
     /**
@@ -49,7 +56,9 @@ class PasswordResettingListener implements EventSubscriberInterface
 
         if ($url === null || $url === '') {
             // This case should never happen
-            $event->setResponse(new Response('Password changed'));
+            $response = new Response('', 200);
+            $response->setContent($this->twig->render('User/resetting_success.html.twig'));
+            $event->setResponse($response);
 
             return;
         }

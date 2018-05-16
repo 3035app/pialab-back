@@ -1,0 +1,27 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/semantic-librinfo.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assets/css/styles-public.css') }}"/>
+{% endblock %}
+
+{% block body %}
+
+    <div class="ui middle aligned center aligned grid">
+        <div class="column" style="transform: translateY(75%); max-width:400px">
+            <h2 class="ui image">
+                <img src="{{ asset('assets/img/pia-logo-small.png') }}" class="image">
+            </h2>
+
+            <div class="ui segments">
+                <div class="ui segment">
+                    <span class="ui teal header">Mot de passe oublié</span>
+                </div>
+                <div class="ui teal segment">
+                    <p>Votre mot de passe à été modifié avec succès.</p>
+                    <p>Vous pouvez retourner sur l'application pour vous connecter</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
