@@ -25,7 +25,7 @@ class Version20180515154624 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        if ($schema->getTable('pia_user')->hasColumn('username_canonical')) {
+        if (!$schema->getTable('pia_user') || $schema->getTable('pia_user')->hasColumn('username_canonical')) {
             return;
         }
 
@@ -54,7 +54,7 @@ class Version20180515154624 extends AbstractMigration
 
     public function down(Schema $schema)
     {
-        if (!$schema->getTable('pia_user')->hasColumn('username_canonical')) {
+        if (!$schema->getTable('pia_user') || !$schema->getTable('pia_user')->hasColumn('username_canonical')) {
             return;
         }
 
