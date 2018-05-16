@@ -25,9 +25,9 @@ bin/console fos:oauth-server:create-client \
 
 
 # we do not want to parse the output of the fos:oauth-server command
-lid=$(psql -qt --no-align -w -h ${DBHOST} -c 'select max(id) from oauth_client;' -U ${DBOAUTHUSER} -d ${DBOAUTHNAME}  )
-clientid=$(psql -qt --no-align -w -h ${DBHOST} -c "select id||'_'||random_id from oauth_client where id=$lid;" -U ${DBOAUTHUSER} -d ${DBOAUTHNAME}  )
-clientsecret=$(psql -qt --no-align -w -h ${DBHOST} -c "select secret from oauth_client where id=$lid;" -U ${DBOAUTHUSER} -d ${DBOAUTHNAME}  )
+lid=$(psql -qt --no-align -w -h ${DBHOST} -c 'select max(id) from oauth_client;' -U ${DBUSER} -d ${DBNAME}  )
+clientid=$(psql -qt --no-align -w -h ${DBHOST} -c "select id||'_'||random_id from oauth_client where id=$lid;" -U ${DBUSER} -d ${DBNAME}  )
+clientsecret=$(psql -qt --no-align -w -h ${DBHOST} -c "select secret from oauth_client where id=$lid;" -U ${DBUSER} -d ${DBNAME}  )
 
 echo "APICLIENTID=$clientid" > .api.env
 echo "APICLIENTSECRET=$clientsecret" >> .api.env

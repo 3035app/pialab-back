@@ -57,13 +57,9 @@ $ETCDCTLCMD put $Prefix/postgres/hostname $postgreshost $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/root/username $postgresuser $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/root/password $postgrespass $ETCDENDPOINT
 
-$ETCDCTLCMD put $Prefix/postgres/oauth/dbname pia_oauth_db_$Suffix $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/postgres/oauth/username pia_oauth_user_$Suffix $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/postgres/oauth/password pia_oauth_pass_$Suffix $ETCDENDPOINT
-
-$ETCDCTLCMD put $Prefix/postgres/customer/dbname pia_cust_db_$Suffix $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/postgres/customer/username pia_cust_user_$Suffix $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/postgres/customer/password pia_cust_pass_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/default/dbname pia_db_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/default/username pia_user_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/default/password pia_pass_$Suffix $ETCDENDPOINT
 
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT 

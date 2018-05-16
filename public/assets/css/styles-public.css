@@ -1,0 +1,8 @@
+html {
+    background: transparent url('/assets/img/pia-logo-bg.png') no-repeat scroll 50% 50%;
+    background-size: cover;
+}
+
+body {
+    background: rgba(255,255,255,0.9);
+}

@@ -1,10 +1,3 @@
-parameters:
-    # Adds a fallback DATABASE_URL if the env var is not set.
-    # This allows you to run cache:warmup even if your
-    # environment variables are not available yet.
-    # You should not need to change this value.
-    env(DATABASE_URL): ''
-    
 doctrine:
     dbal:
         connections:
@@ -15,14 +8,6 @@ doctrine:
                 default_table_options:
                     charset: utf8mb4
                     collate: utf8mb4_unicode_ci
-            customer:
-                charset:  UTF8
-                url:      '%env(resolve:CUSTOMER_DATABASE_URL)%'
-                server_version: '5.7'
-                default_table_options:
-                    charset: utf8mb4
-                    collate: utf8mb4_unicode_ci
-
     orm:
         default_entity_manager: default
         auto_generate_proxy_classes: '%kernel.debug%'
@@ -30,7 +15,6 @@ doctrine:
             default:
                 auto_mapping: true
                 naming_strategy: doctrine.orm.naming_strategy.underscore
-                connection: default
                 mappings:
                     PiaOauth:
                         is_bundle: false
@@ -38,14 +22,10 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Entity/Oauth'
                         prefix: 'PiaApi\Entity\Oauth'
                         alias: PiaOauth
-            customer:
-                auto_mapping: false
-                naming_strategy: doctrine.orm.naming_strategy.underscore
-                connection: customer
-                mappings:
                     PiaApi:
                         is_bundle: false
                         type: annotation
                         dir: '%kernel.project_dir%/src/Entity/Pia'
                         prefix: 'PiaApi\Entity\Pia'
                         alias: PiaApi
+                    

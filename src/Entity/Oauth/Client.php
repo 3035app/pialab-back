@@ -38,6 +38,13 @@ class Client extends BaseClient
     protected $name;
 
     /**
+     * @ORM\Column(name="url", type="string", nullable=true)
+     *
+     * @var string
+     */
+    protected $url;
+
+    /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="application")
      *
      * @var Collection
@@ -65,5 +72,21 @@ class Client extends BaseClient
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl(?string $url): void
+    {
+        $this->url = $url;
     }
 }

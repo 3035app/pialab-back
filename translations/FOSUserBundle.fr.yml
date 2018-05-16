@@ -1,0 +1,16 @@
+resetting:
+    email:
+        message: |
+            Bonjour %username% !
+
+            Pour réinitialiser votre mot de passe, merci de vous rendre sur %confirmationUrl%
+
+            Cordialement,
+            L'équipe PiaLab
+        message_html: >
+            <p>Bonjour <b>%username%</b> !</p>
+
+            <p>Pour réinitialiser votre mot de passe, merci de vous rendre sur <a href="%confirmationUrl%">%confirmationUrl%</a></p>
+
+            <p>Cordialement,<br />
+            L'équipe PiaLab</p>

@@ -1,0 +1,36 @@
+<div class="ui middle aligned center aligned grid">
+    <div class="column" style="transform: translateY(75%); max-width:400px">
+        <h2 class="ui image">
+            <img src="{{ asset('assets/img/pia-logo.png') }}" class="image">
+        </h2>
+
+        {% if error %}
+            <div class="ui error message">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <form class="ui large form" action="{{ path('fos_user_security_check') }}" method="post">
+            <div class="ui stacked segment">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="_username" placeholder="E-mail address">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" name="_password" placeholder="Password">
+                    </div>
+                </div>
+                {% if csrf_token %}
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+                {% endif %}
+
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                <label for="remember_me">Rester connecté</label>
+
+                <button type="submit" name="_submit" class="ui fluid large blue submit button" onclick="this.closest('form').submit()">Login</button>
+            </div>
+        </form>
+    </div>
+</div>
