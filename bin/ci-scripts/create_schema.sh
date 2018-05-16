@@ -12,12 +12,12 @@ else
     exit 42
 fi
 
-bin/console doctrine:database:create --connection=default --if-not-exists --no-interaction 
-bin/console doctrine:database:create --connection=customer --if-not-exists --no-interaction 
+bin/console doctrine:database:create --connection=oauth --if-not-exists --no-interaction 
+bin/console doctrine:database:create --connection=pia --if-not-exists --no-interaction 
 
 
-bin/console doctrine:schema:update --em=default --force --no-interaction
-bin/console doctrine:schema:update --em=customer --force --no-interaction
+bin/console doctrine:schema:update --em=oauth --force --no-interaction
+bin/console doctrine:schema:update --em=pia --force --no-interaction
 
-bin/console doctrine:schema:validate  --em=default --no-interaction 
-bin/console doctrine:schema:validate  --em=customer --no-interaction
+bin/console doctrine:schema:validate  --em=oauth --no-interaction 
+bin/console doctrine:schema:validate  --em=pia --no-interaction

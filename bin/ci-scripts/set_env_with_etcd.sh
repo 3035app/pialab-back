@@ -53,17 +53,21 @@ postgrespass=$($ETCDCTLCMD get /default/postgres/root/password --print-value-onl
 # TODO add a check default cnx with psql
 
 # set postgres env
-$ETCDCTLCMD put $Prefix/postgres/hostname $postgreshost $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/postgres/root/username $postgresuser $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/postgres/root/password $postgrespass $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/oauth/hostname $postgreshost $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/oauth/root/username $postgresuser $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/oauth/root/password $postgrespass $ETCDENDPOINT
+
+$ETCDCTLCMD put $Prefix/postgres/pia/hostname $postgreshost $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/pia/root/username $postgresuser $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/pia/root/password $postgrespass $ETCDENDPOINT
 
 $ETCDCTLCMD put $Prefix/postgres/oauth/dbname pia_oauth_db_$Suffix $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/oauth/username pia_oauth_user_$Suffix $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/oauth/password pia_oauth_pass_$Suffix $ETCDENDPOINT
 
-$ETCDCTLCMD put $Prefix/postgres/customer/dbname pia_cust_db_$Suffix $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/postgres/customer/username pia_cust_user_$Suffix $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/postgres/customer/password pia_cust_pass_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/pia/dbname pia_pia_db_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/pia/username pia_pia_user_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/pia/password pia_pia_pass_$Suffix $ETCDENDPOINT
 
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT 

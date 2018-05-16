@@ -17,13 +17,12 @@ use PiaApi\Entity\Pia\Pia;
 
 abstract class PiaSubController extends RestController
 {
-
     public function listAction(Request $request, $piaId)
     {
         $this->canAccessResourceOr304();
 
         $criteria = $this->extractCriteria($request, ['pia' => $piaId]);
-        $collection = $this->getRepository()->findBy($criteria);
+        $collection = $this->getRepository(Pia::class, 'pia')->findBy($criteria);
 
         return $this->view($collection, Response::HTTP_OK);
     }
@@ -32,10 +31,11 @@ abstract class PiaSubController extends RestController
     {
         $this->canAccessResourceOr304();
 
-        $entity = $this->getRepository()->find($id);
+        $entity = $this->getRepository(Pia::class, 'pia')->find($id);
         if ($entity === null) {
             return $this->view($entity, Response::HTTP_NOT_FOUND);
         }
+
         return $this->view($entity, Response::HTTP_OK);
     }
 
@@ -63,7 +63,7 @@ abstract class PiaSubController extends RestController
     {
         $this->canAccessResourceOr304();
 
-        $entity = $this->getRepository()->find($id);
+        $entity = $this->getRepository(Pia::class, 'pia')->find($id);
         $this->remove($entity);
 
         return $this->view($entity, Response::HTTP_OK);

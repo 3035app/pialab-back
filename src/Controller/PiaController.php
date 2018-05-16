@@ -18,7 +18,6 @@ use PiaApi\Entity\Pia\Pia;
 
 class PiaController extends RestController
 {
-
     /**
      * @FOSRest\Get("/pias/example")
      *
@@ -39,7 +38,7 @@ class PiaController extends RestController
         $this->canAccessResourceOr304();
 
         $criteria = $this->extractCriteria($request);
-        $collection = $this->getRepository()->findBy($criteria);
+        $collection = $this->getRepository($this->getEntityClass(), 'pia')->findBy($criteria);
 
         return $this->view($collection, Response::HTTP_OK);
     }
@@ -53,10 +52,11 @@ class PiaController extends RestController
     {
         $this->canAccessResourceOr304();
 
-        $pia = $this->getRepository()->find($id);
+        $pia = $this->getRepository($this->getEntityClass(), 'pia')->find($id);
         if ($pia === null) {
             return $this->view($pia, Response::HTTP_NOT_FOUND);
         }
+
         return $this->view($pia, Response::HTTP_OK);
     }
 
@@ -100,7 +100,7 @@ class PiaController extends RestController
     {
         $this->canAccessResourceOr304();
 
-        $pia = $this->getRepository()->find($id);
+        $pia = $this->getRepository($this->getEntityClass(), 'pia')->find($id);
         $this->remove($pia);
 
         return $this->view($pia, Response::HTTP_OK);
