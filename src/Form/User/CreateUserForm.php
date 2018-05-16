@@ -76,9 +76,9 @@ class CreateUserForm extends AbstractType
         $applications = [];
 
         foreach ($this->doctrine->getManager('default')->getRepository(Client::class)->findAll() as $application) {
-            $applications[$application->getId()] = $application->getName();
+            $applications[$application->getId()] = $application->getName() ?? $application->getId();
         }
 
-        return count($applications) > 0 ? array_flip($applications) : [];
+        return array_flip($applications);
     }
 }
