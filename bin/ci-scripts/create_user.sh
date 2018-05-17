@@ -12,7 +12,7 @@ else
     exit 42
 fi
 
-userexist=$(psql -qt --no-align -w -h ${DBHOST} -c 'select count(*) from pia_user where username="lici@pialab.io";' -U ${DBUSER} -d ${DBNAME}  )
+userexist=$(psql -qt --no-align -w -h ${DBHOST} -c "select count(*) from pia_user where email='lici@pialab.io';" -U ${DBUSER} -d ${DBNAME}  )
 
 if [ $userexist -eq 0 ]
 then
