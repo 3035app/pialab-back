@@ -10,4 +10,4 @@ fos_user:
         mailer: fos_user.mailer.twig_swift
     resetting:
         email:
-            template:   Email/password_resetting.email.twig
+            template:   pia/Email/password_resetting.email.twig

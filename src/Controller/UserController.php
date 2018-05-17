@@ -23,6 +23,10 @@ use PiaApi\Form\User\CreateUserForm;
 use PiaApi\Form\User\EditUserForm;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use PiaApi\Form\User\RemoveUserForm;
+use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
+use PiaApi\Form\User\SendResetPasswordEmailForm;
+use FOS\UserBundle\Util\TokenGeneratorInterface;
 
 class UserController extends Controller
 {
@@ -36,10 +40,34 @@ class UserController extends Controller
      */
     private $tokenStorage;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory, TokenStorageInterface $tokenStorage)
+    /**
+     * @var int
+     */
+    private $retryTtl;
+
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
+    /**
+     * @var UserManagerInterface
+     */
+    private $userManager;
+
+    /**
+     * @var TokenGeneratorInterface
+     */
+    private $tokenGenerator;
+
+    public function __construct(EncoderFactoryInterface $encoderFactory, TokenStorageInterface $tokenStorage, MailerInterface $mailer, int $FOSUserResettingRetryTTL, UserManagerInterface $userManager, TokenGeneratorInterface $tokenGenerator)
     {
         $this->encoderFactory = $encoderFactory;
         $this->tokenStorage = $tokenStorage;
+        $this->retryTtl = $FOSUserResettingRetryTTL;
+        $this->mailer = $mailer;
+        $this->userManager = $userManager;
+        $this->tokenGenerator = $tokenGenerator;
     }
 
     /**
@@ -180,6 +208,51 @@ class UserController extends Controller
         }
 
         return $this->render('pia/User/removeUser.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/manageUsers/sendResetPasswordEmail/{userId}", name="manage_users_send_reset_password_email")
+     *
+     * @param string $username
+     */
+    public function sendResetPasswordEmailAction(Request $request, $userId)
+    {
+        $this->canAccess();
+
+        $user = $this->userManager->findUserBy(['id' => $userId]);
+
+        if ($user === null) {
+            throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
+        }
+
+        $form = $this->createForm(SendResetPasswordEmailForm::class, $user, [
+            'action' => $this->generateUrl('manage_users_send_reset_password_email', ['userId' => $user->getId()]),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+
+            // Uncomment this « if / endif » to apply the TTL between to email sending
+            // if (!$user->isPasswordRequestNonExpired($this->retryTtl)) {
+
+            if (null === $user->getConfirmationToken()) {
+                $user->setConfirmationToken($this->tokenGenerator->generateToken());
+            }
+            $this->mailer->sendResettingEmailMessage($user);
+            $user->setPasswordRequestedAt(new \DateTime());
+            $this->userManager->updateUser($user);
+
+            return $this->redirect($this->generateUrl('manage_users'));
+
+            // « endif »
+            // }
+        }
+
+        return $this->render('pia/User/sendResetPasswordEmail.html.twig', [
             'form' => $form->createView(),
         ]);
     }
