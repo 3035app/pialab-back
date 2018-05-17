@@ -1,0 +1,21 @@
+{% extends 'pia/Layout/base.html.twig' %}
+
+{% block body %}
+    <div class="ui middle aligned center aligned grid">
+        <div class="column" style="transform: translateY(75%); max-width:400px">
+            <h2 class="ui image">
+                <img src="{{ asset('assets/img/pia-logo.png') }}" class="image">
+            </h2>
+
+            <div class="ui huge statistic">
+                <div class="value">
+                    <i class="server icon"></i>
+                    {{ status_code }}
+                </div>
+                <div class="label">
+                    {{ status_text }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
