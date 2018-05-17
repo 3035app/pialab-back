@@ -22,6 +22,7 @@ use Pagerfanta\Pagerfanta;
 use PiaApi\Form\User\CreateUserForm;
 use PiaApi\Form\User\EditUserForm;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use PiaApi\Form\User\RemoveUserForm;
 
 class UserController extends Controller
 {
@@ -66,7 +67,7 @@ class UserController extends Controller
         $pagerfanta->setMaxPerPage($limit);
         $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
 
-        return $this->render('User/manageUsers.html.twig', [
+        return $this->render('pia/User/manageUsers.html.twig', [
             'users' => $pagerfanta,
         ]);
     }
@@ -106,7 +107,7 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('manage_users'));
         }
 
-        return $this->render('form.html.twig', [
+        return $this->render('pia/Layout/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -142,7 +143,43 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('manage_users'));
         }
 
-        return $this->render('User/createForm.html.twig', [
+        return $this->render('pia/User/createForm.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/manageUsers/removeUser/{userId}", name="manage_users_remove_user")
+     *
+     * @param Request $request
+     */
+    public function removeUserAction(Request $request)
+    {
+        $this->canAccess();
+
+        $userId = $request->get('userId');
+        $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
+
+        if ($user === null) {
+            throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
+        }
+
+        $form = $this->createForm(RemoveUserForm::class, $user, [
+            'action' => $this->generateUrl('manage_users_remove_user', ['userId' => $user->getId()]),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+
+            $this->getDoctrine()->getManager()->remove($user);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirect($this->generateUrl('manage_users'));
+        }
+
+        return $this->render('pia/User/removeUser.html.twig', [
             'form' => $form->createView(),
         ]);
     }

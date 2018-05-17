@@ -18,9 +18,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Entity\Oauth\Client;
-use PiaApi\Form\Applications\Transformer\ApplicationTransformer;
-use PiaApi\Entity\Pia\Structure;
+use PiaApi\Form\Application\Transformer\ApplicationTransformer;
 use PiaApi\Form\Structure\Transformer\StructureTransformer;
+use PiaApi\Entity\Pia\Structure;
 
 class CreateUserForm extends AbstractType
 {
@@ -33,6 +33,11 @@ class CreateUserForm extends AbstractType
      * @var ApplicationTransformer
      */
     protected $applicationTransformer;
+
+    /**
+     * @var StructureTransformer
+     */
+    protected $structureTransformer;
 
     protected $userRoles = [
         'ROLE_USER'        => 'ROLE_USER',

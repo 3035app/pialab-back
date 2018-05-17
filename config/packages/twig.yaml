@@ -3,4 +3,4 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     form_themes:
-        - 'Form/theme.html.twig'
+        - 'pia/Form/theme.html.twig'

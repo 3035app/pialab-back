@@ -1,28 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'pia/Layout/base.html.twig' %}
 
-{% import '_macros.html.twig' as macro %}
+{% import 'pia/Layout/_macros.html.twig' as macro %}
 
 {% block title %}PIA User Management{% endblock title %}
 
 {% block navbar %}
-    <div class="ui inverted menu">
-        <div class="menu">
-            <a class="item" href="{{ path('manage_users') }}">
-                <i class="user icon"></i>Utilisateurs
-            </a>
-            <a class="item" href="{{ path('manage_applications') }}">
-                <i class="database icon"></i>Applications
-            </a>
-            <a class="active item" href="{{ path('manage_structures') }}">
-                <i class="building icon"></i>Structures
-            </a>
-        </div>
-        <div class="right menu">
-            <a class="active item" href="{{ path('fos_user_security_logout') }}">
-                Logout
-            </a>
-        </div>
-    </div>
+    {% include 'pia/Layout/navbar.html.twig' with {'activeItem': 'structures'} %}
 {% endblock navbar %}
 
 {% block body %}
@@ -63,9 +46,14 @@
                                     {{ structure.createdAt|date('d/m/Y')}}
                                 </td>
                                 <td class="right aligned">
-                                    <a class="ui green tiny icon button" data-modal="data-modal" href="{{ path('manage_structures_edit_structure', {'structureId':structure.id}) }}">
-                                        <i class="pencil icon"></i>
-                                    </a>
+                                    <div class="ui small buttons">
+                                        <a class="ui green tiny icon button" title="Modifier la structure" data-modal="data-modal" href="{{ path('manage_structures_edit_structure', {'structureId':structure.id}) }}">
+                                            <i class="pencil icon"></i>
+                                        </a>
+                                        <a class="ui red tiny icon button" title="Supprimer la structure" data-modal="data-modal" href="{{ path('manage_structures_remove_structure', {'structureId':structure.id}) }}">
+                                            <i class="trash icon"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -99,7 +87,8 @@
             e.stopPropagation();
             e.stopImmediatePropagation();
 
-            let url = $(e.currentTarget).attr('href');
+            let button = $(e.currentTarget);
+            let url = button.attr('href');
 
             let modal = $('.ui.modal');
             modal.hide();
@@ -109,16 +98,15 @@
                 success: (html) => {
                     let modal = $('.ui.modal');
 
-                    modal.find('.header').html('Modifier une structure');
+                    modal.find('.header').html(button.attr('title'));
 
                     modal
                         .find('.content')
                         .html(html);
 
-                    modal
-                        .find('.content .negative, .content .deny, .content .cancel').on('click', (e) => {
-                            $(e.currentTarget).closest('.ui.modal').modal('hide');
-                        });
+                    modal.find('.content .negative, .content .deny, .content .cancel').on('click', (e) => {
+                        $(e.currentTarget).closest('.ui.modal').modal('hide');
+                    });
 
                     modal.find('.actions').remove();
 

@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Form\Applications\Transformer;
+namespace PiaApi\Form\Application\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use PiaApi\Entity\Oauth\Client;

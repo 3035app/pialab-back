@@ -20,6 +20,7 @@ use PiaApi\Form\Structure\CreateStructureForm;
 use PiaApi\Form\Structure\EditStructureForm;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Form\Structure\RemoveStructureForm;
 
 class StructureController extends Controller
 {
@@ -48,7 +49,7 @@ class StructureController extends Controller
         $pagerfanta->setMaxPerPage($limit);
         $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
 
-        return $this->render('Structure/manageStructures.html.twig', [
+        return $this->render('pia/Structure/manageStructures.html.twig', [
             'structures' => $pagerfanta,
         ]);
     }
@@ -79,7 +80,7 @@ class StructureController extends Controller
             return $this->redirect($this->generateUrl('manage_structures'));
         }
 
-        return $this->render('form.html.twig', [
+        return $this->render('pia/Layout/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -115,7 +116,47 @@ class StructureController extends Controller
             return $this->redirect($this->generateUrl('manage_structures'));
         }
 
-        return $this->render('form.html.twig', [
+        return $this->render('pia/Layout/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/manageStructures/removeStructure/{structureId}", name="manage_structures_remove_structure")
+     *
+     * @param Request $request
+     */
+    public function removeStructureAction(Request $request)
+    {
+        $this->canAccess();
+
+        $structureId = $request->get('structureId');
+        $user = $this->getDoctrine()->getRepository(Structure::class)->find($structureId);
+
+        if ($user === null) {
+            throw new NotFoundHttpException(sprintf('Structure « %s » does not exist', $structureId));
+        }
+
+        $form = $this->createForm(RemoveStructureForm::class, $user, [
+            'action' => $this->generateUrl('manage_structures_remove_structure', ['structureId' => $user->getId()]),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $structure = $form->getData();
+
+            foreach ($structure->getUsers() as $user) {
+                $user->setStructure(null);
+            }
+
+            $this->getDoctrine()->getManager()->remove($structure);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirect($this->generateUrl('manage_structures'));
+        }
+
+        return $this->render('pia/Structure/removeStructure.html.twig', [
             'form' => $form->createView(),
         ]);
     }

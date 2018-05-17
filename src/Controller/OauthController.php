@@ -16,12 +16,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
-use PiaApi\Form\Applications\CreateApplicationForm;
-use PiaApi\Form\Applications\EditApplicationForm;
+use PiaApi\Form\Application\CreateApplicationForm;
+use PiaApi\Form\Application\EditApplicationForm;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use PiaApi\Entity\Oauth\Client;
 use FOS\OAuthServerBundle\Model\ClientManagerInterface;
 use OAuth2\OAuth2;
+use PiaApi\Form\Application\RemoveApplicationForm;
 
 class OauthController extends Controller
 {
@@ -60,13 +61,13 @@ class OauthController extends Controller
         $pagerfanta->setMaxPerPage($limit);
         $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
 
-        return $this->render('Applications/manageApplications.html.twig', [
+        return $this->render('pia/Application/manageApplications.html.twig', [
             'applications' => $pagerfanta,
         ]);
     }
 
     /**
-     * @Route("/manageApplications/addApplication", name="manage_applications_add_application")
+     * @Route("/manageApplication/addApplication", name="manage_applications_add_application")
      *
      * @param Request $request
      */
@@ -101,7 +102,7 @@ class OauthController extends Controller
             return $this->redirect($this->generateUrl('manage_applications'));
         }
 
-        return $this->render('Applications/createForm.html.twig', [
+        return $this->render('pia/Application/createForm.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -137,7 +138,47 @@ class OauthController extends Controller
             return $this->redirect($this->generateUrl('manage_applications'));
         }
 
-        return $this->render('Applications/createForm.html.twig', [
+        return $this->render('pia/Application/createForm.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/manageApplication/removeApplication/{applicationId}", name="manage_applications_remove_application")
+     *
+     * @param Request $request
+     */
+    public function removeApplicationAction(Request $request)
+    {
+        $this->canAccess();
+
+        $applicationId = $request->get('applicationId');
+        $user = $this->getDoctrine()->getRepository(Client::class)->find($applicationId);
+
+        if ($user === null) {
+            throw new NotFoundHttpException(sprintf('Appllication « %s » does not exist', $applicationId));
+        }
+
+        $form = $this->createForm(RemoveApplicationForm::class, $user, [
+            'action' => $this->generateUrl('manage_applications_remove_application', ['applicationId' => $user->getId()]),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $application = $form->getData();
+
+            foreach ($application->getUsers() as $user) {
+                $user->setApplication(null);
+            }
+
+            $this->getDoctrine()->getManager()->remove($application);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirect($this->generateUrl('manage_applications'));
+        }
+
+        return $this->render('pia/Application/removeApplication.html.twig', [
             'form' => $form->createView(),
         ]);
     }

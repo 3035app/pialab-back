@@ -1,0 +1,28 @@
+{% import _self as menu %}
+
+{% if activeItem is not defined %}
+    {% set activeItem = null %}
+{% endif %}
+
+<div class="ui inverted menu">
+    <div class="menu">
+        <a class="{{ menu.activeMenu(activeItem, 'users') }} item" href="{{ path('manage_users') }}">
+            <i class="user icon"></i>Utilisateurs
+        </a>
+        <a class="{{ menu.activeMenu(activeItem, 'applications') }} item" href="{{ path('manage_applications') }}">
+            <i class="database icon"></i>Applications
+        </a>
+        <a class="{{ menu.activeMenu(activeItem, 'structures') }} item" href="{{ path('manage_structures') }}">
+            <i class="building icon"></i>Structures
+        </a>
+    </div>
+    <div class="right menu">
+        <a class="active item" href="{{ path('fos_user_security_logout') }}">
+            Logout
+        </a>
+    </div>
+</div>
+
+{% macro activeMenu(activeItem, menuName) %}
+    {% if activeItem == menuName %}active{% endif %}
+{% endmacro %}
