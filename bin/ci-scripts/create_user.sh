@@ -12,8 +12,10 @@ else
     exit 42
 fi
 
-bin/console pia:user:create --email=lici@pialab.io --password=pia42
-bin/console pia:user:promote lici@pialab.io --role=ROLE_SUPER_ADMIN
+userexist=$(psql -qt --no-align -w -h ${DBHOST} -c 'select count(*) from pia_user where username="lici@pialab.io";' -U ${DBUSER} -d ${DBNAME}  )
 
-bin/console pia:user:create --email=api@pialab.io --password=pia
-
+if [ $userexist -eq 0 ]
+then
+    bin/console pia:user:create --email=lici@pialab.io --password=pia42
+    bin/console pia:user:promote lici@pialab.io --role=ROLE_SUPER_ADMIN
+fi
