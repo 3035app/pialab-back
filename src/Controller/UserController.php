@@ -98,6 +98,7 @@ class UserController extends Controller
             $user->setPassword($encoder->encodePassword($userData['password'], $user->getSalt()));
 
             $user->setApplication($userData['application']);
+            $user->setStructure($userData['structure']);
 
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();

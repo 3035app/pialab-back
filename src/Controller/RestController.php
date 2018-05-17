@@ -101,11 +101,16 @@ abstract class RestController extends FOSRestController
         return $entity;
     }
 
-    public function canAccessResourceOr304()
+    public function canAccessRouteOr304()
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw new AccessDeniedHttpException();
         }
+    }
+
+    public function canAccessResourceOr304($resource): void
+    {
+        // Each controllers should define this method to perform a fine access control
     }
 
     abstract protected function getEntityClass();

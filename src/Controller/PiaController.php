@@ -15,10 +15,10 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Pia;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class PiaController extends RestController
 {
-
     /**
      * @FOSRest\Get("/pias/example")
      *
@@ -26,7 +26,7 @@ class PiaController extends RestController
      */
     public function exampleAction(Request $request)
     {
-        $this->canAccessResourceOr304();
+        $this->canAccessRouteOr304();
     }
 
     /**
@@ -36,9 +36,11 @@ class PiaController extends RestController
      */
     public function listAction(Request $request)
     {
-        $this->canAccessResourceOr304();
+        $this->canAccessRouteOr304();
 
-        $criteria = $this->extractCriteria($request);
+        $structure = $this->getUser()->getStructure();
+
+        $criteria = array_merge($this->extractCriteria($request), ['structure' => $structure]);
         $collection = $this->getRepository()->findBy($criteria);
 
         return $this->view($collection, Response::HTTP_OK);
@@ -51,12 +53,15 @@ class PiaController extends RestController
      */
     public function showAction(Request $request, $id)
     {
-        $this->canAccessResourceOr304();
+        $this->canAccessRouteOr304();
 
         $pia = $this->getRepository()->find($id);
         if ($pia === null) {
             return $this->view($pia, Response::HTTP_NOT_FOUND);
         }
+
+        $this->canAccessResourceOr304($pia);
+
         return $this->view($pia, Response::HTTP_OK);
     }
 
@@ -67,12 +72,13 @@ class PiaController extends RestController
      */
     public function createAction(Request $request)
     {
-        $this->canAccessResourceOr304();
+        $this->canAccessRouteOr304();
 
-        $entity = $this->newFromRequest($request);
-        $this->persist($entity);
+        $pia = $this->newFromRequest($request);
+        $pia->setStructure($this->getUser()->getStructure());
+        $this->persist($pia);
 
-        return $this->view($entity, Response::HTTP_OK);
+        return $this->view($pia, Response::HTTP_OK);
     }
 
     /**
@@ -83,12 +89,13 @@ class PiaController extends RestController
      */
     public function updateAction(Request $request, $id)
     {
-        $this->canAccessResourceOr304();
+        $this->canAccessRouteOr304();
 
-        $entity = $this->newFromRequest($request);
-        $this->update($entity);
+        $pia = $this->newFromRequest($request);
+        $this->canAccessResourceOr304($pia);
+        $this->update($pia);
 
-        return $this->view($entity, Response::HTTP_OK);
+        return $this->view($pia, Response::HTTP_OK);
     }
 
     /**
@@ -98,9 +105,10 @@ class PiaController extends RestController
      */
     public function deleteAction(Request $request, $id)
     {
-        $this->canAccessResourceOr304();
+        $this->canAccessRouteOr304();
 
         $pia = $this->getRepository()->find($id);
+        $this->canAccessResourceOr304($pia);
         $this->remove($pia);
 
         return $this->view($pia, Response::HTTP_OK);
@@ -109,5 +117,16 @@ class PiaController extends RestController
     protected function getEntityClass()
     {
         return Pia::class;
+    }
+
+    public function canAccessResourceOr304($resource): void
+    {
+        if (!$resource instanceof Pia) {
+            throw new AccessDeniedHttpException();
+        }
+
+        if ($resource->getStructure() !== $this->getUser()->getStructure()) {
+            throw new AccessDeniedHttpException();
+        }
     }
 }
