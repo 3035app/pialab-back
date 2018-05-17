@@ -57,7 +57,7 @@ class CreateUserForm extends AbstractType
                 'choices'  => $this->getApplications(),
             ])
             ->add('structure', ChoiceType::class, [
-                'required' => true,
+                'required' => false,
                 'multiple' => false,
                 'expanded' => false,
                 'choices'  => $this->getStructures(),
