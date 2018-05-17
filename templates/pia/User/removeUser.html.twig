@@ -1,0 +1,95 @@
+{% set user = form.vars.value %}
+
+<div class="ui negative message">
+    <div class="ui clearing basic segment">
+        <div class="header">
+            Êtes vous certain de vouloir supprimer cet utilisateur ?
+        </div>
+        <i style="float:right;">(cliquez sur ce message pour annuler)</i>
+    </div>
+</div>
+
+<table class="ui single line table">
+    <thead>
+        <tr>
+            <th colspan="100%">
+                Utilisateur
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="collapsing">
+                <i class="user circle icon"></i>
+                <b>Nom d'utilisateur</b>
+            </td>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="envelope icon"></i>
+                <b>Email</b>
+            </td>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="calendar alternate outline icon"></i>
+                <b>Créé le</b>
+            </td>
+            <td>{{ user.creationDate|date('d/m/Y H:i') }}</td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="calendar alternate outline icon"></i>
+                <b>Expire le</b>
+            </td>
+            <td>{{ user.expirationDate|date('d/m/Y H:i') }}</td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="database icon"></i>
+                <b>Application</b>
+            </td>
+            <td>
+                {% if user.application is not null %}
+                    {{ user.application.name }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="building icon"></i>
+                <b>Structure</b>
+            </td>
+            <td>
+                {% if user.structure is not null %}
+                    {{ user.structure.name }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="users icon"></i>
+                <b>Roles</b>
+            </td>
+            <td>
+                {% for role in user.roles if role != 'ROLE_USER' %}
+                    <span class="ui label">{{ role }}</span>
+                {% endfor %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+{{ form_start(form) }}
+
+{% do form.submit.setRendered() %}
+
+<input type="submit" class="ui fluid red button" value="Supprimer l'utilisateur"/>
+
+{{ form_end(form) }}

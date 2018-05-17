@@ -51,11 +51,19 @@ class Client extends BaseClient
      */
     protected $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="PiaApi\Entity\Oauth\AccessToken", mappedBy="client", cascade={"remove"})
+     *
+     * @var Collection
+     */
+    protected $tokens;
+
     public function __construct()
     {
         parent::__construct();
 
         $this->users = new ArrayCollection();
+        $this->tokens = new ArrayCollection();
     }
 
     /**
@@ -88,5 +96,44 @@ class Client extends BaseClient
     public function setUrl(?string $url): void
     {
         $this->url = $url;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param Collection $users
+     */
+    public function setUsers(Collection $users): void
+    {
+        $this->users = $users;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTokens(): Collection
+    {
+        return $this->tokens;
+    }
+
+    /**
+     * @param Collection $tokens
+     */
+    public function setTokens(Collection $tokens): void
+    {
+        $this->tokens = $tokens;
+    }
+
+    public function getNotExpiredTokens()
+    {
+        return $this->tokens->filter(function (AccessToken $item) {
+            return $item->getExpiresAt() >= (new \DateTime())->getTimestamp();
+        });
     }
 }

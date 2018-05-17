@@ -1,0 +1,45 @@
+{% set structureType = form.vars.value %}
+
+<div class="ui negative message">
+    <div class="ui clearing basic segment">
+        <div class="header">
+            Êtes vous certain de vouloir supprimer ce type de structure ?
+        </div>
+        <i style="float:right;">(cliquez sur ce message pour annuler)</i>
+    </div>
+</div>
+
+<table class="ui single line table">
+    <thead>
+        <tr>
+            <th colspan="100%">
+                Type de structure
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="collapsing">
+                <i class="chevron right icon"></i>
+                <b>Nom</b>
+            </td>
+            <td>{{ structureType.name }}</td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="building icon"></i>
+                <b>Nombre de structures associées</b>
+            </td>
+            <td>{{ structureType.structures|length }}</td>
+        </tr>
+    </tbody>
+</table>
+
+{{ form_start(form) }}
+
+{% do 
+    form.submit.setRendered() %}
+
+<input type="submit" class="ui fluid red button" value="Supprimer le type de structure"/>
+
+{{ form_end(form) }}

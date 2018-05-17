@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}PIA User Management{% endblock %}
+        </title>
+        {# <link rel="stylesheet" href="{{ asset('assets/css/semantic-librinfo.min.css') }}"/> #}
+        
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('assets/css/semantic-superhero.min.css') }}"/>
+            <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}"/>
+        {% endblock %}
+
+        <script src="{{ asset('assets/js/jquery.min.js') }}"></script> {# included in HEAD because of inline jQuery scripts #}
+    </head>
+    <body>
+        {% block navbar %}{% endblock navbar %}
+
+        {% block body %}{% endblock %}
+
+        {% include 'pia/Layout/modal.html.twig' %}
+
+        {% block javascripts %}
+            <script src="{{ asset('assets/js/semantic.min.js') }}"></script>
+            <script src="{{ asset('assets/js/semantic-custom.min.js') }}"></script>
+            <script>
+                $(document).ready(function () {
+                    $('.ui.checkbox').checkbox();
+                    $('.ui.dropdown').dropdown();
+                    $('[data-popup]').popup({
+                        on: 'click'
+                    });
+                })
+            </script>
+        {% endblock %}
+    </body>
+</html>

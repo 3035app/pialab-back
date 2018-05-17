@@ -1,0 +1,76 @@
+{% set application = form.vars.value %}
+
+<div class="ui negative message">
+    <div class="ui clearing basic segment">
+        <div class="header">
+            Êtes vous certain de vouloir supprimer cette application ?
+        </div>
+        <i style="float:right;">(cliquez sur ce message pour annuler)</i>
+    </div>
+</div>
+
+<table class="ui single line table">
+    <thead>
+        <tr>
+            <th colspan="100%">
+                Application
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="collapsing">
+                <i class="user circle icon"></i>
+                <b>Nom</b>
+            </td>
+            <td>{{ application.name }}</td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="globe icon"></i>
+                <b>URL</b>
+            </td>
+            <td>{{ application.url }}</td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="share square outline icon"></i>
+                <b>URLs de redirection</b>
+            </td>
+            <td>
+                {% for redirectUri in application.redirectUris %}
+                    <span class="ui label">{{ redirectUri }}</span>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="envelope icon"></i>
+                <b>Nombre d'utilisateurs associés</b>
+            </td>
+            <td>{{ application.users|length }}</td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="envelope icon"></i>
+                <b>Jetons de connexion</b>
+            </td>
+            <td>
+                <span class="ui label">{{ application.tokens|length }}</span>
+                {% set validtokens = application.getNotExpiredTokens()|length %}
+                {% if validtokens > 0 %}
+                    <span class="ui red label">{{ validtokens }} en cours de validité</span>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+{{ form_start(form) }}
+
+{% do 
+    form.submit.setRendered() %}
+
+<input type="submit" class="ui fluid red button" value="Supprimer l'application"/>
+
+{{ form_end(form) }}

@@ -57,7 +57,7 @@ class PasswordResettingListener implements EventSubscriberInterface
         if ($url === null || $url === '') {
             // This case should never happen
             $response = new Response('', 200);
-            $response->setContent($this->twig->render('User/resetting_success.html.twig'));
+            $response->setContent($this->twig->render('pia/User/resetting_success.html.twig'));
             $event->setResponse($response);
 
             return;

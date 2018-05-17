@@ -18,7 +18,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Entity\Oauth\Client;
-use PiaApi\Form\Applications\Transformer\ApplicationTransformer;
+use PiaApi\Form\Application\Transformer\ApplicationTransformer;
+use PiaApi\Form\Structure\Transformer\StructureTransformer;
+use PiaApi\Entity\Pia\Structure;
 
 class CreateUserForm extends AbstractType
 {
@@ -32,15 +34,22 @@ class CreateUserForm extends AbstractType
      */
     protected $applicationTransformer;
 
+    /**
+     * @var StructureTransformer
+     */
+    protected $structureTransformer;
+
     protected $userRoles = [
         'ROLE_USER'        => 'ROLE_USER',
+        'ROLE_ADMIN'       => 'ROLE_ADMIN',
         'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
     ];
 
-    public function __construct(RegistryInterface $doctrine, ApplicationTransformer $applicationTransformer)
+    public function __construct(RegistryInterface $doctrine, ApplicationTransformer $applicationTransformer, StructureTransformer $structureTransformer)
     {
         $this->doctrine = $doctrine;
         $this->applicationTransformer = $applicationTransformer;
+        $this->structureTransformer = $structureTransformer;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -51,14 +60,27 @@ class CreateUserForm extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'choices'  => $this->getApplications(),
+                'label'    => 'Application',
             ])
-            ->add('email', EmailType::class)
-            ->add('password', PasswordType::class)
+            ->add('structure', ChoiceType::class, [
+                'required' => false,
+                'multiple' => false,
+                'expanded' => false,
+                'choices'  => $this->getStructures(),
+                'label'    => 'Structure',
+            ])
+            ->add('email', EmailType::class, [
+                'label'    => 'Adresse email',
+            ])
+            ->add('password', PasswordType::class, [
+                'label'    => 'Mot de passe',
+            ])
             ->add('roles', ChoiceType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
                 'choices'  => $this->userRoles,
+                'label'    => 'Rôles',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
@@ -69,16 +91,28 @@ class CreateUserForm extends AbstractType
         ;
 
         $builder->get('application')->addModelTransformer($this->applicationTransformer);
+        $builder->get('structure')->addModelTransformer($this->structureTransformer);
     }
 
     private function getApplications(): array
     {
         $applications = [];
 
-        foreach ($this->doctrine->getManager('default')->getRepository(Client::class)->findAll() as $application) {
+        foreach ($this->doctrine->getManager()->getRepository(Client::class)->findAll() as $application) {
             $applications[$application->getId()] = $application->getName() ?? $application->getId();
         }
 
         return array_flip($applications);
+    }
+
+    private function getStructures(): array
+    {
+        $structures = [];
+
+        foreach ($this->doctrine->getManager()->getRepository(Structure::class)->findAll() as $structure) {
+            $structures[$structure->getId()] = $structure->getName() ?? $structure->getId();
+        }
+
+        return array_flip($structures);
     }
 }

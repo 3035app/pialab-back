@@ -1,0 +1,18 @@
+{{ form_start(form) }}
+
+{{ form_row(form.username) }}
+{{ form_row(form.email) }}
+{{ form_row(form.application) }}
+{{ form_row(form.structure) }}
+{{ form_row(form.roles) }}
+{{ form_row(form.expirationDate) }}
+{{ form_row(form.enabled) }}
+{{ form_row(form.locked) }}
+
+<div class="ui divider"></div>
+
+{{ form_rest(form) }}
+
+{{ form_row(form.submit) }}
+
+{{ form_end(form) }}

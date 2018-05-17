@@ -13,6 +13,7 @@ namespace PiaApi\Entity\Oauth;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use FOS\UserBundle\Model\User as BaseUser;
+use PiaApi\Entity\Pia\Structure;
 
 /**
  * @ORM\Entity(repositoryClass="PiaApi\Repository\UserRepository")
@@ -56,6 +57,13 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
      * @var Client
      */
     protected $application;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="PiaApi\Entity\Pia\Structure", inversedBy="users")
+     *
+     * @var Structure
+     */
+    protected $structure;
 
     public function __construct(?string $email = null, ?string $password)
     {
@@ -286,5 +294,21 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     public function setApplication(?Client $application): void
     {
         $this->application = $application;
+    }
+
+    /**
+     * @return Structure
+     */
+    public function getStructure(): ?Structure
+    {
+        return $this->structure;
+    }
+
+    /**
+     * @param Structure $structure
+     */
+    public function setStructure(?Structure $structure): void
+    {
+        $this->structure = $structure;
     }
 }

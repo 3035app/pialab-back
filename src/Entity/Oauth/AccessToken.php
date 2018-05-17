@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * Copyright (C) 2015-2018 Libre Informatique
+ *
+ * This file is licenced under the GNU LGPL v3.
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace PiaApi\Entity\Oauth;
 
 use FOS\OAuthServerBundle\Entity\AccessToken as BaseAccessToken;
@@ -21,7 +29,7 @@ class AccessToken extends BaseAccessToken
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PiaApi\Entity\Oauth\Client")
+     * @ORM\ManyToOne(targetEntity="PiaApi\Entity\Oauth\Client", inversedBy="tokens")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $client;
