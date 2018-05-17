@@ -181,7 +181,7 @@ class Pia implements Timestampable
     /**
      * @return Structure
      */
-    public function getStructure(): Structure
+    public function getStructure(): ?Structure
     {
         return $this->structure;
     }
@@ -189,7 +189,7 @@ class Pia implements Timestampable
     /**
      * @param Structure $structure
      */
-    public function setStructure(Structure $structure): void
+    public function setStructure(?Structure $structure): void
     {
         $this->structure = $structure;
     }
