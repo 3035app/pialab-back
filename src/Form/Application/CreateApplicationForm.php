@@ -33,13 +33,18 @@ class CreateApplicationForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
-            ->add('url', UrlType::class)
+            ->add('name', TextType::class, [
+                'label' => 'Nom',
+            ])
+            ->add('url', UrlType::class, [
+                'label' => 'URL',
+            ])
             ->add('allowedGrantTypes', ChoiceType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
                 'choices'  => $this->grantTypes,
+                'label'    => 'Types d\'autorisations',
             ])
             ->add('redirectUris', CollectionType::class, [
                 'entry_type'    => TextType::class,
@@ -50,6 +55,7 @@ class CreateApplicationForm extends AbstractType
                 'allow_delete'  => true,
                 'delete_empty'  => true,
                 'prototype'     => true,
+                'label'         => 'URIs de redirection',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

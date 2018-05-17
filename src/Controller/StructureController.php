@@ -21,6 +21,10 @@ use PiaApi\Form\Structure\EditStructureForm;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use PiaApi\Entity\Pia\Structure;
 use PiaApi\Form\Structure\RemoveStructureForm;
+use PiaApi\Form\Structure\CreateStructureTypeForm;
+use PiaApi\Entity\Pia\StructureType;
+use PiaApi\Form\Structure\EditStructureTypeForm;
+use PiaApi\Form\Structure\RemoveStructureTypeForm;
 
 class StructureController extends Controller
 {
@@ -34,6 +38,8 @@ class StructureController extends Controller
         }
 
         $this->canAccess();
+
+        // STRUCTURES
 
         $queryBuilder = $this->getDoctrine()->getRepository(Structure::class)->createQueryBuilder('s');
 
@@ -49,8 +55,25 @@ class StructureController extends Controller
         $pagerfanta->setMaxPerPage($limit);
         $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
 
+        // STRUCTURES TYPES
+
+        $queryBuilderSt = $this->getDoctrine()->getRepository(StructureType::class)->createQueryBuilder('st');
+
+        $queryBuilderSt
+            ->orderBy('st.id', 'DESC');
+
+        $adapterSt = new DoctrineORMAdapter($queryBuilderSt);
+
+        $pageSt = $request->get('pageSt', 1);
+        $limitSt = $request->get('limitSt', 20);
+
+        $pagerfantaSt = new Pagerfanta($adapterSt);
+        $pagerfantaSt->setMaxPerPage($limitSt);
+        $pagerfantaSt->setCurrentPage($pagerfantaSt->getNbPages() < $pageSt ? $pagerfantaSt->getNbPages() : $pageSt);
+
         return $this->render('pia/Structure/manageStructures.html.twig', [
-            'structures' => $pagerfanta,
+            'structures'     => $pagerfanta,
+            'structureTypes' => $pagerfantaSt,
         ]);
     }
 
@@ -74,7 +97,40 @@ class StructureController extends Controller
 
             $structure = new Structure($structureData['name']);
 
+            $structure->setType($structureData['type']);
+
             $this->getDoctrine()->getManager()->persist($structure);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirect($this->generateUrl('manage_structures'));
+        }
+
+        return $this->render('pia/Layout/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/manageStructures/addStructureType", name="manage_structures_add_structure_type")
+     *
+     * @param Request $request
+     */
+    public function addStructureTypeAction(Request $request)
+    {
+        $this->canAccess();
+
+        $form = $this->createForm(CreateStructureTypeForm::class, [], [
+            'action' => $this->generateUrl('manage_structures_add_structure_type'),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $structureTypeData = $form->getData();
+
+            $structureType = new StructureType($structureTypeData['name']);
+
+            $this->getDoctrine()->getManager()->persist($structureType);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirect($this->generateUrl('manage_structures'));
@@ -122,6 +178,42 @@ class StructureController extends Controller
     }
 
     /**
+     * @Route("/manageStructures/editStructureType/{structureTypeId}", name="manage_structures_edit_structure_type")
+     *
+     * @param Request $request
+     */
+    public function editStructureTypeAction(Request $request)
+    {
+        $this->canAccess();
+
+        $structureTypeId = $request->get('structureTypeId');
+        $structureType = $this->getDoctrine()->getRepository(StructureType::class)->find($structureTypeId);
+
+        if ($structureType === null) {
+            throw new NotFoundHttpException(sprintf('StructureType « %s » does not exist', $structureTypeId));
+        }
+
+        $form = $this->createForm(EditStructureTypeForm::class, $structureType, [
+            'action' => $this->generateUrl('manage_structures_edit_structure_type', ['structureTypeId' => $structureType->getId()]),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $structureType = $form->getData();
+
+            $this->getDoctrine()->getManager()->persist($structureType);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirect($this->generateUrl('manage_structures'));
+        }
+
+        return $this->render('pia/Layout/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/manageStructures/removeStructure/{structureId}", name="manage_structures_remove_structure")
      *
      * @param Request $request
@@ -131,14 +223,14 @@ class StructureController extends Controller
         $this->canAccess();
 
         $structureId = $request->get('structureId');
-        $user = $this->getDoctrine()->getRepository(Structure::class)->find($structureId);
+        $structure = $this->getDoctrine()->getRepository(Structure::class)->find($structureId);
 
-        if ($user === null) {
+        if ($structure === null) {
             throw new NotFoundHttpException(sprintf('Structure « %s » does not exist', $structureId));
         }
 
-        $form = $this->createForm(RemoveStructureForm::class, $user, [
-            'action' => $this->generateUrl('manage_structures_remove_structure', ['structureId' => $user->getId()]),
+        $form = $this->createForm(RemoveStructureForm::class, $structure, [
+            'action' => $this->generateUrl('manage_structures_remove_structure', ['structureId' => $structure->getId()]),
         ]);
 
         $form->handleRequest($request);
@@ -157,6 +249,46 @@ class StructureController extends Controller
         }
 
         return $this->render('pia/Structure/removeStructure.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/manageStructures/removeStructureType/{structureTypeId}", name="manage_structures_remove_structure_type")
+     *
+     * @param Request $request
+     */
+    public function removeStructureTypeAction(Request $request)
+    {
+        $this->canAccess();
+
+        $structureTypeId = $request->get('structureTypeId');
+        $structureType = $this->getDoctrine()->getRepository(StructureType::class)->find($structureTypeId);
+
+        if ($structureType === null) {
+            throw new NotFoundHttpException(sprintf('StructureType « %s » does not exist', $structureTypeId));
+        }
+
+        $form = $this->createForm(RemoveStructureTypeForm::class, $structureType, [
+            'action' => $this->generateUrl('manage_structures_remove_structure_type', ['structureTypeId' => $structureType->getId()]),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $structureType = $form->getData();
+
+            foreach ($structureType->getStructures() as $structure) {
+                $structure->setType(null);
+            }
+
+            $this->getDoctrine()->getManager()->remove($structureType);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirect($this->generateUrl('manage_structures'));
+        }
+
+        return $this->render('pia/Structure/removeStructureType.html.twig', [
             'form' => $form->createView(),
         ]);
     }

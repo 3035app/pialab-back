@@ -35,6 +35,13 @@ class Structure implements Timestampable
     protected $name;
 
     /**
+     * @ORM\ManyToOne(targetEntity="StructureType", inversedBy="structures")
+     *
+     * @var StructureType
+     */
+    protected $type;
+
+    /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="structure")
      * @JMS\Exclude()
      *
@@ -104,5 +111,21 @@ class Structure implements Timestampable
     public function setUsers(Collection $users): void
     {
         $this->users = $users;
+    }
+
+    /**
+     * @return StructureType
+     */
+    public function getType(): ?StructureType
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param StructureType $type
+     */
+    public function setType(?StructureType $type): void
+    {
+        $this->type = $type;
     }
 }

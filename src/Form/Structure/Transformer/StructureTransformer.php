@@ -41,6 +41,6 @@ class StructureTransformer implements DataTransformerInterface
             return null;
         }
 
-        return $this->doctrine->getManager('default')->getRepository(Structure::class)->find($value);
+        return $this->doctrine->getManager()->getRepository(Structure::class)->find($value);
     }
 }

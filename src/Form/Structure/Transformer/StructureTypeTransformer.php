@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Form\Application\Transformer;
+namespace PiaApi\Form\Structure\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
-use PiaApi\Entity\Oauth\Client;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use PiaApi\Entity\Pia\StructureType;
 
-class ApplicationTransformer implements DataTransformerInterface
+class StructureTypeTransformer implements DataTransformerInterface
 {
     /**
      * @var RegistryInterface
@@ -28,7 +28,7 @@ class ApplicationTransformer implements DataTransformerInterface
 
     public function transform($value)
     {
-        if ($value instanceof Client) {
+        if ($value instanceof StructureType) {
             return $value->getId();
         }
 
@@ -41,6 +41,6 @@ class ApplicationTransformer implements DataTransformerInterface
             return null;
         }
 
-        return $this->doctrine->getManager()->getRepository(Client::class)->find($value);
+        return $this->doctrine->getManager()->getRepository(StructureType::class)->find($value);
     }
 }

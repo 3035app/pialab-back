@@ -60,20 +60,27 @@ class CreateUserForm extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'choices'  => $this->getApplications(),
+                'label'    => 'Application',
             ])
             ->add('structure', ChoiceType::class, [
                 'required' => false,
                 'multiple' => false,
                 'expanded' => false,
                 'choices'  => $this->getStructures(),
+                'label'    => 'Structure',
             ])
-            ->add('email', EmailType::class)
-            ->add('password', PasswordType::class)
+            ->add('email', EmailType::class, [
+                'label'    => 'Adresse email',
+            ])
+            ->add('password', PasswordType::class, [
+                'label'    => 'Mot de passe',
+            ])
             ->add('roles', ChoiceType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
                 'choices'  => $this->userRoles,
+                'label'    => 'Rôles',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
