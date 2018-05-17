@@ -8,23 +8,20 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Controller;
+namespace PiaApi\Controller\BackOffice;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Pagerfanta;
-use PiaApi\Form\Application\CreateApplicationForm;
-use PiaApi\Form\Application\EditApplicationForm;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use PiaApi\Entity\Oauth\Client;
 use FOS\OAuthServerBundle\Model\ClientManagerInterface;
 use OAuth2\OAuth2;
+use PiaApi\Entity\Oauth\Client;
+use PiaApi\Form\Application\CreateApplicationForm;
+use PiaApi\Form\Application\EditApplicationForm;
 use PiaApi\Form\Application\RemoveApplicationForm;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class OauthController extends Controller
+class OauthController extends BackOfficeAbstractController
 {
     /**
      * @var ClientManagerInterface
@@ -47,19 +44,7 @@ class OauthController extends Controller
 
         $this->canAccess();
 
-        $queryBuilder = $this->getDoctrine()->getRepository(Client::class)->createQueryBuilder('c');
-
-        $queryBuilder
-            ->orderBy('c.id', 'DESC');
-
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-
-        $page = $request->get('page', 1);
-        $limit = $request->get('limit', 20);
-
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($limit);
-        $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
+        $pagerfanta = $this->buildPager($request, Client::class);
 
         return $this->render('pia/Application/manageApplications.html.twig', [
             'applications' => $pagerfanta,

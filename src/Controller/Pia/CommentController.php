@@ -8,18 +8,18 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Controller;
+namespace PiaApi\Controller\Pia;
 
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use PiaApi\Entity\Pia\Answer;
+use PiaApi\Entity\Pia\Comment;
 
-class AnswerController extends PiaSubController
+class CommentController extends PiaSubController
 {
     
     /**
-     * @FOSRest\Get("/pias/{piaId}/answers")
+     * @FOSRest\Get("/pias/{piaId}/comments")
      */
     public function listAction(Request $request, $piaId)
     {
@@ -27,7 +27,7 @@ class AnswerController extends PiaSubController
     }
 
     /**
-     * @FOSRest\Get("/pias/{piaId}/answers/{id}")
+     * @FOSRest\Get("/pias/{piaId}/comments/{id}")
      */
     public function showAction(Request $request, $piaId, $id)
     {
@@ -35,7 +35,7 @@ class AnswerController extends PiaSubController
     }
 
     /**
-     * @FOSRest\Post("/pias/{piaId}/answers")
+     * @FOSRest\Post("/pias/{piaId}/comments")
      */
     public function createAction(Request $request, $piaId)
     {
@@ -43,9 +43,9 @@ class AnswerController extends PiaSubController
     }
 
     /**
-     * @FOSRest\Put("/pias/{piaId}/answers/{id}")
-     * @FOSRest\Patch("/pias/{piaId}/answers/{id}")
-     * @FOSRest\Post("/pias/{piaId}/answers/{id}")
+     * @FOSRest\Put("/pias/{piaId}/comments/{id}")
+     * @FOSRest\Patch("/pias/{piaId}/comments/{id}")
+     * @FOSRest\Post("/pias/{piaId}/comments/{id}")
      */
     public function updateAction(Request $request, $piaId, $id)
     {
@@ -53,7 +53,7 @@ class AnswerController extends PiaSubController
     }
 
     /**
-     * @FOSRest\Delete("pias/{piaId}/answers/{id}")
+     * @FOSRest\Delete("pias/{piaId}/comments/{id}")
      *
      * @return array
      */
@@ -64,6 +64,6 @@ class AnswerController extends PiaSubController
 
     protected function getEntityClass()
     {
-        return Answer::class;
+        return Comment::class;
     }
 }

@@ -8,14 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Controller;
+namespace PiaApi\Controller\BackOffice;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Pagerfanta;
 use PiaApi\Form\Structure\CreateStructureForm;
 use PiaApi\Form\Structure\EditStructureForm;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,7 +23,7 @@ use PiaApi\Entity\Pia\StructureType;
 use PiaApi\Form\Structure\EditStructureTypeForm;
 use PiaApi\Form\Structure\RemoveStructureTypeForm;
 
-class StructureController extends Controller
+class StructureController extends BackOfficeAbstractController
 {
     /**
      * @Route("/manageStructures", name="manage_structures")
@@ -39,37 +36,8 @@ class StructureController extends Controller
 
         $this->canAccess();
 
-        // STRUCTURES
-
-        $queryBuilder = $this->getDoctrine()->getRepository(Structure::class)->createQueryBuilder('s');
-
-        $queryBuilder
-            ->orderBy('s.id', 'DESC');
-
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-
-        $page = $request->get('page', 1);
-        $limit = $request->get('limit', 20);
-
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($limit);
-        $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
-
-        // STRUCTURES TYPES
-
-        $queryBuilderSt = $this->getDoctrine()->getRepository(StructureType::class)->createQueryBuilder('st');
-
-        $queryBuilderSt
-            ->orderBy('st.id', 'DESC');
-
-        $adapterSt = new DoctrineORMAdapter($queryBuilderSt);
-
-        $pageSt = $request->get('pageSt', 1);
-        $limitSt = $request->get('limitSt', 20);
-
-        $pagerfantaSt = new Pagerfanta($adapterSt);
-        $pagerfantaSt->setMaxPerPage($limitSt);
-        $pagerfantaSt->setCurrentPage($pagerfantaSt->getNbPages() < $pageSt ? $pagerfantaSt->getNbPages() : $pageSt);
+        $pagerfanta = $this->buildPager($request, Structure::class);
+        $pagerfantaSt = $this->buildPager($request, StructureType::class, 20, 'pageSt', 'limitSt');
 
         return $this->render('pia/Structure/manageStructures.html.twig', [
             'structures'     => $pagerfanta,

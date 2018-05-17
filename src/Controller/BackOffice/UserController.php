@@ -8,27 +8,24 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Controller;
+namespace PiaApi\Controller\BackOffice;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use PiaApi\Entity\Oauth\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Pagerfanta;
-use PiaApi\Form\User\CreateUserForm;
-use PiaApi\Form\User\EditUserForm;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use PiaApi\Form\User\RemoveUserForm;
 use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
-use PiaApi\Form\User\SendResetPasswordEmailForm;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
+use PiaApi\Entity\Oauth\User;
+use PiaApi\Form\User\CreateUserForm;
+use PiaApi\Form\User\EditUserForm;
+use PiaApi\Form\User\RemoveUserForm;
+use PiaApi\Form\User\SendResetPasswordEmailForm;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
-class UserController extends Controller
+class UserController extends BackOfficeAbstractController
 {
     /**
      * @var EncoderFactoryInterface
@@ -81,19 +78,7 @@ class UserController extends Controller
 
         $this->canAccess();
 
-        $queryBuilder = $this->getDoctrine()->getRepository(User::class)->createQueryBuilder('u');
-
-        $queryBuilder
-            ->orderBy('u.id', 'DESC');
-
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-
-        $page = $request->get('page', 1);
-        $limit = $request->get('limit', 20);
-
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($limit);
-        $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
+        $pagerfanta = $this->buildPager($request, User::class);
 
         return $this->render('pia/User/manageUsers.html.twig', [
             'users' => $pagerfanta,
