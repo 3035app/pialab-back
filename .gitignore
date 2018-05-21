@@ -16,3 +16,20 @@
 
 /composer.lock
 .php_cs.cache
+
+###> phpunit/phpunit ###
+/phpunit.xml
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> codeception/codeception ###
+tests/*.suite.yml
+tests/_output/*
+!tests/_output/.gitkeep
+tests/_support/_generated/*
+!tests/_support/_generated/.gitkeep
+###< codeception/codeception ###
