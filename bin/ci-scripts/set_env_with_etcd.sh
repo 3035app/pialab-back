@@ -54,7 +54,7 @@ postgrespass=$($ETCDCTLCMD get /default/postgres/root/password --print-value-onl
 
 # get selenium default
 SeleniumHost=$($ETCDCTLCMD get /default/selenium/hostname --print-value-only $ETCDENDPOINT)
-$ETCDCTLCMD put $prefix/selenium/hostname $SeleniumHost $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/selenium/hostname $SeleniumHost $ETCDENDPOINT
 
 # set postgres env
 $ETCDCTLCMD put $Prefix/postgres/hostname $postgreshost $ETCDENDPOINT
@@ -68,7 +68,7 @@ $ETCDCTLCMD put $Prefix/postgres/default/password pia_pass_$Suffix $ETCDENDPOINT
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT 
 
-$ETCDCTLCMD put $prefix/url/addr 127.0.0.1:8000 $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/url/addr 127.0.0.1:8000 $ETCDENDPOINT
 
 $ETCDCTLCMD get --prefix $Prefix $ETCDENDPOINT
 
