@@ -56,6 +56,7 @@ class UsersCest
         // Changing from « selenium@pialab.io » to « edited-selenium@pialab.io »
 
         $I->click('//td[contains(text(), "' . $this->email . '")]/ancestor::tr/descendant::a[contains(@href,"/manageUsers/editUser/")]');
+        $I->waitForElementVisible($formName . ' input[name="edit_user_form[email]"]');
         $I->fillField('edit_user_form[email]', 'edited-' . $this->email);
         $I->click($formName . ' [type="submit"]');
 
@@ -64,6 +65,7 @@ class UsersCest
         // Changing from « edited-selenium@pialab.io » to « selenium@pialab.io »
 
         $I->click('//td[contains(text(), "edited-' . $this->email . '")]/ancestor::tr/descendant::a[contains(@href,"/manageUsers/editUser/")]');
+        $I->waitForElementVisible($formName . ' input[name="edit_user_form[email]"]');
         $I->fillField('edit_user_form[email]', $this->email);
         $I->click($formName . ' [type="submit"]');
     }
@@ -77,10 +79,10 @@ class UsersCest
 
         $formName = 'form[name="remove_user_form"]';
 
-        $I->waitForElementVisible($formName);
+        $I->waitForElementVisible($formName . ' input[type="submit"]');
 
         $I->canSeeNumberOfElements('//table[@class="ui single line table"]/descendant-or-self::b[contains(text(), "Email")]/ancestor::tr/descendant::td[contains(text(), "' . $this->email . '")]', 1);
 
-        $I->click($formName . ' [type="submit"]');
+        $I->click($formName . ' input[type="submit"]');
     }
 }
