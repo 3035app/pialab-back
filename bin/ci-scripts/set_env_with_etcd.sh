@@ -68,7 +68,7 @@ $ETCDCTLCMD put $Prefix/postgres/default/password pia_pass_$Suffix $ETCDENDPOINT
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT 
 
-$ETCDCTLCMD put $Prefix/url/addr 127.0.0.1:8000 $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/url/addr http://127.0.0.1:8000 $ETCDENDPOINT
 
 $ETCDCTLCMD get --prefix $Prefix $ETCDENDPOINT
 
