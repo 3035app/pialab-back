@@ -12,5 +12,8 @@ else
     exit 42
 fi
 
-bin/console server:start --no-interaction
+# get ip
+currentip=$(hostname -i) # works only if the host name can be resolved
+
+bin/console server:start $currentip:8000 --no-interaction
 
