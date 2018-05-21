@@ -52,6 +52,10 @@ postgresuser=$($ETCDCTLCMD get /default/postgres/root/username --print-value-onl
 postgrespass=$($ETCDCTLCMD get /default/postgres/root/password --print-value-only $ETCDENDPOINT)
 # TODO add a check default cnx with psql
 
+# get selenium default
+SeleniumHost=$($ETCDCTLCMD get /default/selenium/hostname --print-value-only $ETCDENDPOINT)
+$ETCDCTLCMD put $prefix/selenium/hostname $SeleniumHost $ETCDENDPOINT
+
 # set postgres env
 $ETCDCTLCMD put $Prefix/postgres/hostname $postgreshost $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/root/username $postgresuser $ETCDENDPOINT
@@ -63,6 +67,8 @@ $ETCDCTLCMD put $Prefix/postgres/default/password pia_pass_$Suffix $ETCDENDPOINT
 
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT 
+
+$ETCDCTLCMD put $prefix/url/addr 127.0.0.1:8000 $ETCDENDPOINT
 
 $ETCDCTLCMD get --prefix $Prefix $ETCDENDPOINT
 
