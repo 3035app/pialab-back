@@ -12,5 +12,24 @@ else
     exit 42
 fi
 
-echo "waiting for test creation"
+export CODECEPTCMD
+
+export TEST_SERVER_URL
+export TEST_URL
+export TEST_USER
+export TEST_PASSWORD
+
+if [ -n "$CODECEPTCMD" ]
+then
+    CODECEPTGROUP=$@
+    if [ $# -eq 0 ]
+    then
+        CODECEPTGROUP="all" #"login" # all"
+    fi
+
+    for i in $CODECEPTGROUP
+    do
+        $CODECEPTCMD -g $i #--env=$CODECEPTENV
+    done
+fi
 

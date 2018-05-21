@@ -19,6 +19,12 @@
         </a>
     </div>
     <div class="right menu">
+        {% if app.user %}
+            <div class="item">
+                Connecté en tant que : <span class="current username">{{ app.user.email }}</span>
+            </div>
+        {% endif %}
+        
         <a class="active item" href="{{ path('fos_user_security_logout') }}">
             <i class="sign out icon"></i> Logout
         </a>
