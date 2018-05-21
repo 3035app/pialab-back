@@ -4,7 +4,7 @@ modules:
         - WebDriver:
             host: {{getv "/selenium/hostname"}}
             port: 4444
-            url: '{{getv "/url/addr"}}'
+            url: 'http://127.0.0.1:8000'
             wait: 5
             browser: 'firefox'
         - \Helper\Acceptance
