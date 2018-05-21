@@ -69,7 +69,7 @@ $ETCDCTLCMD put $Prefix/postgres/default/password pia_pass_$Suffix $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT 
 # get ip
 currentip=$(hostname -i) # works only if the host name can be resolved
-$ETCDCTLCMD put $prefix/url/addr $currentip':8000' $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/url/addr $currentip':8000' $ETCDENDPOINT
 
 $ETCDCTLCMD get --prefix $Prefix $ETCDENDPOINT
 
