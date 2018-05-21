@@ -9,3 +9,7 @@ body ul.ui.list li::before {
     content: '';
     display: none;
 }
+
+body .table.responsive.wrapper {
+    overflow-y: auto;
+}

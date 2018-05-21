@@ -38,7 +38,9 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
  */
 class WebGuy extends \Codeception\Actor
 {
-    use _generated\WebGuyActions;
+    use _generated\WebGuyActions {
+        click as protected clickOriginal;
+    }
 
     /**
      * Define custom actions here.
@@ -89,8 +91,8 @@ class WebGuy extends \Codeception\Actor
         if (!$this->isLoggedIn) {
             $this->wantTo('Access_login');
             $this->amOnPage($this->getBaseUrl() . '/login');
-            $this->fillField('[name="_username"]', $username ?? $this->getUser());
-            $this->fillField('[name="_password"]', $password ?? $this->getPassword());
+            $this->fillField('_username', $username ?? $this->getUser());
+            $this->fillField('_password', $password ?? $this->getPassword());
             $this->click('[type="submit"]');
             $this->waitForText('Connecté en tant que :');
             $this->isLoggedIn = true;
@@ -102,7 +104,7 @@ class WebGuy extends \Codeception\Actor
         if ($this->isLoggedIn) {
             $this->wantTo('Access_logout');
             $this->amOnPage($this->getBaseUrl() . '/logout');
-            $this->waitForElement('[name="_username"]');
+            $this->waitForElement('input[name="_username"]');
             $this->isLoggedIn = false;
         }
     }
@@ -122,7 +124,7 @@ class WebGuy extends \Codeception\Actor
         return $this->executeJS('$("' . str_replace('"', '\\"', $selector) . '").parent().find(\'label\').click()');
     }
 
-    public function elementIsVisible($element): bool
+    public function isElementVisible($element): bool
     {
         $value = false;
         $this->executeInSelenium(function (RemoteWebDriver $webDriver) use ($element, &$value) {
@@ -135,5 +137,15 @@ class WebGuy extends \Codeception\Actor
         });
 
         return $value;
+    }
+
+    public function click($element)
+    {
+        // Scroll to element if it is not visible before clicking it
+        if (!$this->isElementVisible($element)) {
+            $this->scrollTo($element);
+        }
+
+        return $this->clickOriginal($element);
     }
 }
