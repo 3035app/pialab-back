@@ -46,7 +46,7 @@ class UsersCest
         $I->logout();
     }
 
-    public function edit_newly_created_user(Webguy $I)
+    public function edit_newly_created_user_test(Webguy $I)
     {
         $I->login();
         $I->amOnPage('/manageUsers');
@@ -68,9 +68,11 @@ class UsersCest
         $I->waitForElementVisible($formName . ' input[name="edit_user_form[email]"]');
         $I->fillField('edit_user_form[email]', $this->email);
         $I->click($formName . ' [type="submit"]');
+
+        $I->canSeeNumberOfElements('//td[contains(text(), "' . $this->email . '")]', 1);
     }
 
-    public function remove_newly_created_user(Webguy $I)
+    public function remove_newly_created_user_test(Webguy $I)
     {
         $I->login();
         $I->amOnPage('/manageUsers');

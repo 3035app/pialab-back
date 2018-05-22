@@ -144,7 +144,7 @@ class WebGuy extends \Codeception\Actor
         // Scroll to element if it is not visible before clicking it
         if (!$this->isElementVisible($element)) {
             // $this->scrollTo($element); // This does not work with Firefox 52 ESR (It works with firefox 60 ESR)
-            $this->executeJS('document.evaluate(arguments[0], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollIntoView(true);', [$element]);
+            $this->executeJS('let elem = document.evaluate(arguments[0], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue; if (elem !== null) elem.scrollIntoView(true);', [$element]);
         }
 
         return $this->clickOriginal($element);

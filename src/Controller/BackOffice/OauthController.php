@@ -52,7 +52,7 @@ class OauthController extends BackOfficeAbstractController
     }
 
     /**
-     * @Route("/manageApplication/addApplication", name="manage_applications_add_application")
+     * @Route("/manageApplications/addApplication", name="manage_applications_add_application")
      *
      * @param Request $request
      */
@@ -79,6 +79,7 @@ class OauthController extends BackOfficeAbstractController
                 $client = $this->fosOauthClientManager->createClient();
                 /* @var Client $client */
                 $client->setName($applicationData['name']);
+                $client->setUrl($applicationData['url']);
                 $client->setRedirectUris($applicationData['redirectUris']);
                 $client->setAllowedGrantTypes($applicationData['allowedGrantTypes']);
                 $this->fosOauthClientManager->updateClient($client);
@@ -93,7 +94,7 @@ class OauthController extends BackOfficeAbstractController
     }
 
     /**
-     * @Route("/manageUsers/addApplication/{applicationId}", name="manage_applications_edit_application")
+     * @Route("/manageApplications/editApplication/{applicationId}", name="manage_applications_edit_application")
      *
      * @param Request $request
      */
@@ -129,7 +130,7 @@ class OauthController extends BackOfficeAbstractController
     }
 
     /**
-     * @Route("/manageApplication/removeApplication/{applicationId}", name="manage_applications_remove_application")
+     * @Route("/manageApplications/removeApplication/{applicationId}", name="manage_applications_remove_application")
      *
      * @param Request $request
      */
