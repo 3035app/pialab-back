@@ -86,8 +86,8 @@ pipeline {
 
     post {
         always {
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: false, reportDir: 'tests/_output/', reportFiles: 'report.html', reportName: 'Codeception Report', reportTitles: ''])
-            // cleanWs()
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'tests/_output/', reportFiles: 'report.html', reportName: 'Codeception Report', reportTitles: ''])
+            cleanWs()
         }
     }
 
