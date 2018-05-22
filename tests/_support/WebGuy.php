@@ -143,7 +143,10 @@ class WebGuy extends \Codeception\Actor
     {
         // Scroll to element if it is not visible before clicking it
         if (!$this->isElementVisible($element)) {
-            $this->scrollTo($element);
+            codecept_debug('CLICK: Element is not visible, so scrolling to...');
+            // $this->scrollTo($element); // This does not work with selenium embedded in Docker (https://hub.docker.com/r/selenium/standalone-firefox/tags/)
+            $this->executeJS('document.evaluate(arguments[0], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollIntoView(true);', [$element]);
+            codecept_debug('CLICK: Element is ' . ($this->isElementVisible($element) ? '' : 'still not ') . 'visible,');
         }
 
         return $this->clickOriginal($element);
