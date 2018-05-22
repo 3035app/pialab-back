@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}" />
         <title>
             {% block title %}PIA User Management{% endblock %}
         </title>
@@ -15,7 +16,7 @@
 
         <script src="{{ asset('assets/js/jquery.min.js') }}"></script> {# included in HEAD because of inline jQuery scripts #}
     </head>
-    <body>
+    <body {% block body_attributes %}{% endblock body_attributes %}>
         {% block navbar %}{% endblock navbar %}
 
         {% block body %}{% endblock %}

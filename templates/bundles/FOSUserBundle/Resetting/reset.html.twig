@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="{{ asset('assets/css/styles-public.css') }}"/>
 {% endblock %}
 
+{% block body_attributes %}style="margin-top: 1em;"{% endblock body_attributes %}
+
 {% block body %}
 
-    <div class="ui middle aligned center aligned grid">
-        <div class="column" style="transform: translateY(75%); max-width:400px">
+    <div class="ui middle aligned center aligned grid" style="height:100%;">
+        <div class="column" style="max-width:400px">
             <h2 class="ui image">
-                <img src="{{ asset('assets/img/pia-logo-small.png') }}" class="image">
+                <img src="{{ asset('assets/img/pia-lab.png') }}" class="image">
             </h2>
 
             <div class="ui segments">

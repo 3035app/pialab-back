@@ -20,28 +20,31 @@ class UsersCest
     public function create_new_super_admin_user_test(Webguy $I)
     {
         $I->login();
+
+        $I->wantTo('Create a new user');
         $I->amOnPage('/manageUsers');
 
         $formName = 'form[name="create_user_form"]';
 
         // Select Application
-        $application = $I->grabTextFrom($formName . ' select[name="create_user_form[application]"] option:nth-child(1)');
-        $I->selectOption($formName . ' select[name="create_user_form[application]"]', $application);
+        $application = $I->grabTextFrom('//select[@name="create_user_form[application]"]/ancestor::div[contains(@class,"ui dropdown")]/div[contains(@class, "menu")]/div[contains(@class,"item")][1]');
+        $I->selectOptionFromSUISelect('create_user_form[application]', $application);
 
         // Select Structure
-        $structure = $I->grabTextFrom($formName . ' select[name="create_user_form[structure]"] option:nth-child(1)');
-        $I->selectOption($formName . ' select[name="create_user_form[structure]"]', $structure);
+        $structure = $I->grabTextFrom('//select[@name="create_user_form[structure]"]/ancestor::div[contains(@class,"ui dropdown")]/div[contains(@class, "menu")]/div[contains(@class,"item")][1]');
+        $I->selectOptionFromSUISelect('create_user_form[structure]', $structure);
 
-        $I->fillField($formName . ' input[name="create_user_form[email]"]', $this->email);
-        $I->fillField($formName . ' input[name="create_user_form[password]"]', $this->password);
+        $I->fillField('input[name="create_user_form[email]"]', $this->email);
+        $I->fillField('input[name="create_user_form[password]"]', $this->password);
 
-        $I->checkSUIOption($formName . ' input[name="create_user_form[roles][]"][value="ROLE_SUPER_ADMIN"]');
+        $I->checkSUIOption('input[name="create_user_form[roles][]"][value="ROLE_SUPER_ADMIN"]');
 
-        $I->click($formName . ' [type="submit"]');
+        $I->click($formName . ' input[type="submit"]');
     }
 
     public function login_with_newly_created_user(Webguy $I)
     {
+        $I->wantTo('Log-in with newly created user');
         $I->login($this->email, $this->password);
         $I->logout();
     }
@@ -49,6 +52,8 @@ class UsersCest
     public function edit_newly_created_user_test(Webguy $I)
     {
         $I->login();
+
+        $I->wantTo('Edit newly created user');
         $I->amOnPage('/manageUsers');
 
         $formName = 'form[name="edit_user_form"]';
@@ -75,6 +80,8 @@ class UsersCest
     public function remove_newly_created_user_test(Webguy $I)
     {
         $I->login();
+
+        $I->wantTo('Remove newly created user');
         $I->amOnPage('/manageUsers');
 
         $I->click('//td[contains(text(), "' . $this->email . '")]/ancestor::tr/descendant::a[contains(@href,"/manageUsers/removeUser/")]');

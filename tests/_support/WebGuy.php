@@ -94,7 +94,7 @@ class WebGuy extends \Codeception\Actor
             $this->fillField('_username', $username ?? $this->getUser());
             $this->fillField('_password', $password ?? $this->getPassword());
             $this->click('[type="submit"]');
-            $this->waitForText('Connecté en tant que :');
+            $this->waitForElement('.current.username');
             $this->isLoggedIn = true;
         }
     }
@@ -148,5 +148,11 @@ class WebGuy extends \Codeception\Actor
         }
 
         return $this->clickOriginal($element);
+    }
+
+    public function selectOptionFromSUISelect($selectName, $optionLabel)
+    {
+        $this->click('//select[@name="' . $selectName . '"]/ancestor::div[contains(@class,"ui dropdown")]');
+        $this->click('//select[@name="' . $selectName . '"]/ancestor::div[contains(@class,"ui dropdown")]/div[contains(@class, "menu")]/div[contains(@class, "item")][contains(text(), "' . str_replace('"', '\"', $optionLabel) . '")]');
     }
 }

@@ -20,36 +20,38 @@ class ApplicationsCest
     public function create_new_application_test(Webguy $I)
     {
         $I->login();
+
+        $I->wantTo('Crate new application');
         $I->amOnPage('/manageApplications');
 
-        $formName = 'form[name="create_application_form"]';
-
-        $I->fillField($formName . ' input[name="create_application_form[name]"]', $this->application);
-        $I->fillField($formName . ' input[name="create_application_form[url]"]', $this->applicationUrl);
+        $I->fillField('input[name="create_application_form[name]"]', $this->application);
+        $I->fillField('input[name="create_application_form[url]"]', $this->applicationUrl);
 
         $I->click('.application-form-add-uri');
 
-        $I->fillField($formName . ' input[name="create_application_form[redirectUris][0]"]', $this->applicationUrl);
+        $I->fillField('input[name="create_application_form[redirectUris][0]"]', $this->applicationUrl);
 
-        $I->click($formName . ' [type="submit"]');
+        $I->click('form[name="create_application_form"] [type="submit"]');
     }
 
     public function edit_newly_created_application_test(Webguy $I)
     {
         $I->login();
+
+        $I->wantTo('Edit newly created application');
         $I->amOnPage('/manageApplications');
 
         $formName = 'form[name="edit_application_form"]';
 
         $I->click('//td[contains(text(), "' . $this->application . '")]/ancestor::tr/descendant::a[contains(@href,"/manageApplications/editApplication/")]');
-        $I->waitForElementVisible($formName . ' input[name="edit_application_form[name]"]');
+        $I->waitForElementVisible('input[name="edit_application_form[name]"]');
         $I->fillField('edit_application_form[name]', 'edited-' . $this->application);
         $I->click($formName . ' [type="submit"]');
 
         $I->canSeeNumberOfElements('//td[contains(text(), "edited-' . $this->application . '")]', 1);
 
         $I->click('//td[contains(text(), "edited-' . $this->application . '")]/ancestor::tr/descendant::a[contains(@href,"/manageApplications/editApplication/")]');
-        $I->waitForElementVisible($formName . ' input[name="edit_application_form[name]"]');
+        $I->waitForElementVisible('input[name="edit_application_form[name]"]');
         $I->fillField('edit_application_form[name]', $this->application);
         $I->click($formName . ' [type="submit"]');
 
@@ -59,6 +61,8 @@ class ApplicationsCest
     public function remove_newly_created_application_test(Webguy $I)
     {
         $I->login();
+
+        $I->wantTo('Remove newly created application');
         $I->amOnPage('/manageApplications');
 
         $I->click('//td[contains(text(), "' . $this->application . '")]/ancestor::tr/descendant::a[contains(@href,"/manageApplications/removeApplication/")]');

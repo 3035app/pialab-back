@@ -1,24 +1,36 @@
 {% extends 'pia/Layout/base.html.twig' %}
 
 {% block body %}
-    <div class="ui middle aligned center aligned grid">
-        <div class="column" style="transform: translateY(75%); max-width:400px">
-            <h2 class="ui image">
-                <img src="{{ asset('assets/img/pia-logo.png') }}" class="image">
-            </h2>
 
-            <h3 class="ui header">Une erreur est survenue</h3>
+    {% set icons = {
+        503: 'wrench',
+        500: 'cogs',
+        404: 'search',
+        403: 'shield alternate',
+        401: 'user outline'
+    } %}
 
+    {% set icon = 'exclamation circle' %}
+    {% if status_code in icons | keys %}
+        {% set icon = icons[status_code] %}
+    {% endif %}
+
+    <div class="ui middle aligned center aligned grid" style="height:100%;">
+        <div class="column" style="position:relative;max-width:400px">
             <div class="ui huge statistic">
                 <div class="value">
-                    <i class="server icon"></i>
+                    <i class="{{ icon }} icon"></i>
                     {{ status_code }}
                 </div>
                 <div class="label">
-                    <br />
+                    <br/>
                     {{ status_text }}
                 </div>
             </div>
+
+            <h2 class="ui image" style="opacity:0.2">
+                <img src="{{ asset('assets/img/pia-lab.png') }}" class="image">
+            </h2>
         </div>
     </div>
 {% endblock %}

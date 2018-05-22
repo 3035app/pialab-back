@@ -18,6 +18,7 @@ use FOS\UserBundle\Event\FormEvent;
 use PiaApi\Entity\Oauth\User;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class PasswordResettingListener implements EventSubscriberInterface
 {
@@ -31,10 +32,16 @@ class PasswordResettingListener implements EventSubscriberInterface
      */
     protected $twig;
 
-    public function __construct(UrlGeneratorInterface $router, Environment $twig)
+    /**
+     * @var TokenStorageInterface
+     */
+    protected $tokenStorage;
+
+    public function __construct(UrlGeneratorInterface $router, Environment $twig, TokenStorageInterface $tokenStorage)
     {
         $this->router = $router;
         $this->twig = $twig;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -43,7 +50,7 @@ class PasswordResettingListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            FOSUserEvents::RESETTING_RESET_SUCCESS => 'onPasswordResettingSuccess',
+            FOSUserEvents::RESETTING_RESET_SUCCESS => ['onPasswordResettingSuccess', -10],
         );
     }
 
@@ -53,6 +60,9 @@ class PasswordResettingListener implements EventSubscriberInterface
         $user = $event->getForm()->getData();
 
         $url = $user->getApplication()->getUrl();
+
+        $this->tokenStorage->setToken(null);
+        $event->getRequest()->getSession()->invalidate(); // This does not work. Maybe because of FOSUser original event listener...
 
         if ($url === null || $url === '') {
             // This case should never happen
