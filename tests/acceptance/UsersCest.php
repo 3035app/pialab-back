@@ -24,22 +24,24 @@ class UsersCest
         $I->wantTo('Create a new user');
         $I->amOnPage('/manageUsers');
 
-        $formName = 'form[name="create_user_form"]';
-
         // Select Application
         $application = $I->grabTextFrom('//select[@name="create_user_form[application]"]/ancestor::div[contains(@class,"ui dropdown")]/div[contains(@class, "menu")]/div[contains(@class,"item")][1]');
         $I->selectOptionFromSUISelect('create_user_form[application]', $application);
 
-        // Select Structure
-        $structure = $I->grabTextFrom('//select[@name="create_user_form[structure]"]/ancestor::div[contains(@class,"ui dropdown")]/div[contains(@class, "menu")]/div[contains(@class,"item")][1]');
-        $I->selectOptionFromSUISelect('create_user_form[structure]', $structure);
+        try {
+            // Select Structure
+            $structure = $I->grabTextFrom('//select[@name="create_user_form[structure]"]/ancestor::div[contains(@class,"ui dropdown")]/div[contains(@class, "menu")]/div[contains(@class,"item")][1]');
+            $I->selectOptionFromSUISelect('create_user_form[structure]', $structure);
+        } catch (\Exception $e) {
+            // This part is optionnal
+        }
 
         $I->fillField('input[name="create_user_form[email]"]', $this->email);
         $I->fillField('input[name="create_user_form[password]"]', $this->password);
 
         $I->checkSUIOption('input[name="create_user_form[roles][]"][value="ROLE_SUPER_ADMIN"]');
 
-        $I->click($formName . ' input[type="submit"]');
+        $I->click('[name="create_user_form[submit]"]');
     }
 
     public function login_with_newly_created_user(Webguy $I)
@@ -63,18 +65,14 @@ class UsersCest
         $I->click('//td[contains(text(), "' . $this->email . '")]/ancestor::tr/descendant::a[contains(@href,"/manageUsers/editUser/")]');
         $I->waitForElementVisible($formName . ' input[name="edit_user_form[email]"]');
         $I->fillField('edit_user_form[email]', 'edited-' . $this->email);
-        $I->click($formName . ' [type="submit"]');
-
-        $I->canSeeNumberOfElements('//td[contains(text(), "edited-' . $this->email . '")]', 1);
+        $I->click('[name="edit_user_form[submit]"]');
 
         // Changing from « edited-selenium@pialab.io » to « selenium@pialab.io »
 
         $I->click('//td[contains(text(), "edited-' . $this->email . '")]/ancestor::tr/descendant::a[contains(@href,"/manageUsers/editUser/")]');
         $I->waitForElementVisible($formName . ' input[name="edit_user_form[email]"]');
         $I->fillField('edit_user_form[email]', $this->email);
-        $I->click($formName . ' [type="submit"]');
-
-        $I->canSeeNumberOfElements('//td[contains(text(), "' . $this->email . '")]', 1);
+        $I->click('[name="edit_user_form[submit]"]');
     }
 
     public function remove_newly_created_user_test(Webguy $I)
