@@ -11,15 +11,18 @@
 namespace PiaApi\Controller\Pia;
 
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Measure;
 
 class MeasureController extends PiaSubController
 {
-    
+
     /**
      * @FOSRest\Get("/pias/{piaId}/measures")
+     * @Security("is_granted('ROLE_MEASURE_LIST')")
      */
     public function listAction(Request $request, $piaId)
     {
@@ -28,6 +31,7 @@ class MeasureController extends PiaSubController
 
     /**
      * @FOSRest\Get("/pias/{piaId}/measures/{id}")
+     * @Security("is_granted('ROLE_MEASURE_VIEW')")
      */
     public function showAction(Request $request, $piaId, $id)
     {
@@ -36,6 +40,7 @@ class MeasureController extends PiaSubController
 
     /**
      * @FOSRest\Post("/pias/{piaId}/measures")
+     * @Security("is_granted('ROLE_MEASURE_CREATE')")
      */
     public function createAction(Request $request, $piaId)
     {
@@ -46,6 +51,7 @@ class MeasureController extends PiaSubController
      * @FOSRest\Put("/pias/{piaId}/measures/{id}")
      * @FOSRest\Patch("/pias/{piaId}/measures/{id}")
      * @FOSRest\Post("/pias/{piaId}/measures/{id}")
+     * @Security("is_granted('ROLE_MEASURE_EDIT')")
      */
     public function updateAction(Request $request, $piaId, $id)
     {
@@ -54,6 +60,7 @@ class MeasureController extends PiaSubController
 
     /**
      * @FOSRest\Delete("pias/{piaId}/measures/{id}")
+     * @Security("is_granted('ROLE_MEASURE_DELETE')")
      *
      * @return array
      */

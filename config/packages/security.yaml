@@ -1,8 +1,38 @@
 security:
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_VIEWER:
+            - ROLE_PIA_LIST
+            - ROLE_PIA_VIEW
+            - ROLE_MEASURE_LIST
+            - ROLE_MEASURE_VIEW
+            - ROLE_EVALUATION_LIST
+            - ROLE_EVALUATION_VIEW
+            - ROLE_ANSWER_LIST
+            - ROLE_ANSWER_VIEW
+        ROLE_DPO:
+            - ROLE_VIEWER
+            - ROLE_PIA_CREATE
+            - ROLE_PIA_EDIT
+            - ROLE_PIA_DELETE
+            - ROLE_MEASURE_DELETE
+            - ROLE_EVALUATION_CREATE
+            - ROLE_EVALUATION_EDIT
+            - ROLE_EVALUATION_DELETE
+            - ROLE_ANSWER_DELETE
+        ROLE_CONTROLLER:
+            - ROLE_VIEWER
+            - ROLE_PIA_EDIT
+            - ROLE_MEASURE_CREATE
+            - ROLE_MEASURE_EDIT
+            - ROLE_ANSWER_CREATE
+            - ROLE_ANSWER_EDIT
+            - ROLE_ANSWER_DELETE
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN:
+            - ROLE_ADMIN
+            - ROLE_DPO
+            - ROLE_CONTROLLER
 
     encoders:
         FOS\UserBundle\Model\UserInterface:
@@ -22,7 +52,11 @@ security:
         #         # login_path: /login
         #         # check_path: /login_check
         #         provider: fos_userbundle
-
+        profile:
+            pattern:    ^/profile
+            fos_oauth:  true
+            stateless:  true
+            anonymous:  false # can be omitted as its default value
         api:
             pattern:    ^/pias
             fos_oauth:  true

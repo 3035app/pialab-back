@@ -12,10 +12,12 @@ namespace PiaApi\Controller\Pia;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Pia;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class PiaController extends RestController
 {
@@ -31,6 +33,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Get("/pias")
+     * @Security("is_granted('ROLE_PIA_LIST')")
      *
      * @return array
      */
@@ -48,6 +51,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Get("/pias/{id}")
+     * @Security("is_granted('ROLE_PIA_VIEW')")
      *
      * @return array
      */
@@ -67,6 +71,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Post("/pias")
+     * @Security("is_granted('ROLE_PIA_CREATE')")
      *
      * @return array
      */
@@ -84,6 +89,7 @@ class PiaController extends RestController
     /**
      * @FOSRest\Put("/pias/{id}")
      * @FOSRest\Post("/pias/{id}")
+     * @Security("is_granted('ROLE_PIA_EDIT')")
      *
      * @return array
      */
@@ -100,6 +106,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Delete("/pias/{id}")
+     * @Security("is_granted('ROLE_PIA_DELETE')")
      *
      * @return array
      */

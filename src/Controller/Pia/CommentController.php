@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
@@ -17,7 +16,7 @@ use PiaApi\Entity\Pia\Comment;
 
 class CommentController extends PiaSubController
 {
-    
+
     /**
      * @FOSRest\Get("/pias/{piaId}/comments")
      */

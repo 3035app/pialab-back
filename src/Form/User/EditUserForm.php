@@ -17,9 +17,29 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use PiaApi\Form\Application\Transformer\ApplicationTransformer;
+use PiaApi\Form\Structure\Transformer\StructureTransformer;
+use PiaApi\Form\User\UserProfileForm;
+use PiaApi\Form\User\Transformer\UserProfileTransformer;
 
 class EditUserForm extends CreateUserForm
 {
+    /**
+     * @var UserProfileTransformer
+     */
+    protected $profileTransformer;
+
+    public function __construct(RegistryInterface $doctrine,
+        UserProfileTransformer $profileTransformer,
+        ApplicationTransformer $applicationTransformer,
+        StructureTransformer $structureTransformer
+    )
+    {
+        parent::__construct($doctrine, $applicationTransformer, $structureTransformer);
+        $this->profileTransformer = $profileTransformer;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
@@ -58,6 +78,9 @@ class EditUserForm extends CreateUserForm
                 ],
                 'label' => 'Annuler',
             ])
+            ->add('profile', UserProfileForm::class, [
+                'label'   => false
+            ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => '',
@@ -66,5 +89,7 @@ class EditUserForm extends CreateUserForm
                 'label' => 'Enregistrer l\'utilisateur',
             ])
         ;
+
+        $builder->get('profile')->addModelTransformer($this->profileTransformer);
     }
 }

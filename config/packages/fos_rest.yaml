@@ -2,6 +2,7 @@
 fos_rest:
     zone:
         - { path: ^/pias }
+        - { path: ^/profile }
     body_converter:
         enabled: true
     body_listener:

@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Pia\UserProfile;
 
 /**
  * @ORM\Entity(repositoryClass="PiaApi\Repository\UserRepository")
@@ -50,6 +51,13 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
      * @var bool
      */
     protected $locked = false;
+
+    /**
+     * @ORM\OneToOne(targetEntity="PiaApi\Entity\Pia\UserProfile", mappedBy="user", cascade={"persist", "remove"})
+     *
+     * @var bool
+     */
+    protected $profile;
 
     /**
      * @ORM\ManyToOne(targetEntity="Client", inversedBy="users")
@@ -310,5 +318,21 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     public function setStructure(?Structure $structure): void
     {
         $this->structure = $structure;
+    }
+
+    /**
+     * @return UserProfile
+     */
+    public function getProfile(): ?UserProfile
+    {
+        return $this->profile;
+    }
+
+    /**
+     * @param UserProfile $profile
+     */
+    public function setProfile(?UserProfile $profile): void
+    {
+        $this->profile = $profile;
     }
 }

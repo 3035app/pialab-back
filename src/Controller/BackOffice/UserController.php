@@ -24,6 +24,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use PiaApi\Entity\Pia\UserProfile;
 
 class UserController extends BackOfficeAbstractController
 {
@@ -141,6 +142,12 @@ class UserController extends BackOfficeAbstractController
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
         }
 
+        if($user->getProfile() === null) {
+          $profile = new UserProfile();
+          $user->setProfile($profile);
+          $profile->setUser($user);
+        }
+
         $form = $this->createForm(EditUserForm::class, $user, [
             'action' => $this->generateUrl('manage_users_edit_user', ['userId' => $user->getId()]),
         ]);
@@ -156,7 +163,7 @@ class UserController extends BackOfficeAbstractController
             return $this->redirect($this->generateUrl('manage_users'));
         }
 
-        return $this->render('pia/User/createForm.html.twig', [
+        return $this->render('pia/User/editForm.html.twig', [
             'form' => $form->createView(),
         ]);
     }
