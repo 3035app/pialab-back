@@ -177,6 +177,10 @@ class UserController extends BackOfficeAbstractController
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
         }
 
+        if ($user === $this->getUser()) {
+            throw new NotFoundHttpException('You cannot delete yourself !');
+        }
+
         $form = $this->createForm(RemoveUserForm::class, $user, [
             'action' => $this->generateUrl('manage_users_remove_user', ['userId' => $user->getId()]),
         ]);

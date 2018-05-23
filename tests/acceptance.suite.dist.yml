@@ -1,0 +1,16 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: WebGuy
+modules:
+    enabled:
+        - WebDriver:
+            host: 127.0.0.1
+            port: 4444
+            url: '%TEST_SERVER_URL%'
+            wait: 5
+            browser: 'firefox'
+        - \Helper\Acceptance

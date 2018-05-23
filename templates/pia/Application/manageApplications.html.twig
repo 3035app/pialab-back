@@ -5,7 +5,9 @@
 {% block title %}PIA User Management{% endblock title %}
 
 {% block navbar %}
-   {% include 'pia/Layout/navbar.html.twig' with {'activeItem': 'applications'} %}
+    {% include 'pia/Layout/navbar.html.twig' with {
+        'activeItem' : 'applications'
+    } %}
 {% endblock navbar %}
 
 {% block body %}
@@ -18,92 +20,93 @@
 
                 <h2>
                     <a href="?limit=1000" class="ui tiny button" style="float:right;">Voir 1000</a>
-                    Liste des applications
+                    Applications
                 </h2>
 
-                <table class="ui compact striped table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>URL</th>
-                            <th>URLs</th>
-                            <th>Grant types</th>
-                            <th class="right aligned">
-                                <i class="cog icon"></i>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        {% for application in applications %}
-
-                            {% set applicationInfos %}
-                            <table class="ui striped table">
-                                <tbody>
-                                    <tr>
-                                        <td class="right aligned">
-                                            <b>Client_id:</b>
-                                        </td>
-                                        <td>
-                                            <span class="ui teal large label" style="font-family: Mono;">
-                                                {{ application.id }}_{{ application.randomId }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right aligned">
-                                            <b>Client_secret:</b>
-                                        </td>
-                                        <td>
-                                            <span class="ui teal large label" style="font-family: Mono;">
-                                                {{ application.secret }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            {% endset %}
-
+                <div class="table responsive wrapper">
+                    <table class="ui compact striped table">
+                        <thead>
                             <tr>
-                                <td>{{ application.id }}</td>
-                                <td>{{ application.name }}</td>
-                                <td>
-                                    {% if application.url %}
-                                        <a class="ui label" href="{{ application.url }}">
-                                            {{ application.url }}
-                                        </a>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% for url in application.redirectUris %}
-                                        <span class="ui label">{{ url }}</span>
-                                    {% endfor %}
-                                </td>
-                                <td>
-                                    {% for grantType in application.allowedGrantTypes %}
-                                        <span class="ui label">{{ grantType }}</span>
-                                    {% endfor %}
-                                </td>
-                                <td class="right aligned">
-                                    <div class="ui small buttons">
-                                        <a class="ui blue tiny icon button" data-popup="data-popup" data-html="{{ applicationInfos|e }}">
-                                            <i class="key icon"></i>
-                                        </a>
-                                        <a class="ui green tiny icon button" title="Modifier l'application" data-modal="data-modal" href="{{ path('manage_applications_edit_application', {'applicationId':application.id}) }}">
-                                            <i class="pencil icon"></i>
-                                        </a>
-                                        <a class="ui red tiny icon button" title="Supprimer l'application" data-modal="data-modal" href="{{ path('manage_applications_remove_application', {'applicationId':application.id}) }}">
-                                            <i class="trash icon"></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>URL</th>
+                                <th>URLs</th>
+                                <th>Grant types</th>
+                                <th class="right aligned">
+                                    <i class="cog icon"></i>
+                                </th>
                             </tr>
-                        {% endfor %}
+                        </thead>
+                        <tbody>
 
-                    </tbody>
-                </table>
+                            {% for application in applications %}
 
+                                {% set applicationInfos %}
+                                <table class="ui striped table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="right aligned">
+                                                <b>Client_id:</b>
+                                            </td>
+                                            <td>
+                                                <span class="ui teal large label" style="font-family: Mono;">
+                                                    {{ application.id }}_{{ application.randomId }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right aligned">
+                                                <b>Client_secret:</b>
+                                            </td>
+                                            <td>
+                                                <span class="ui teal large label" style="font-family: Mono;">
+                                                    {{ application.secret }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                {% endset %}
+
+                                <tr>
+                                    <td>{{ application.id }}</td>
+                                    <td>{{ application.name }}</td>
+                                    <td>
+                                        {% if application.url %}
+                                            <a class="ui label" href="{{ application.url }}">
+                                                {{ application.url }}
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% for url in application.redirectUris %}
+                                            <span class="ui label">{{ url }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% for grantType in application.allowedGrantTypes %}
+                                            <span class="ui label">{{ grantType }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td class="right aligned">
+                                        <div class="ui small buttons">
+                                            <a class="ui blue tiny icon button" data-popup="data-popup" data-html="{{ applicationInfos|e }}">
+                                                <i class="key icon"></i>
+                                            </a>
+                                            <a class="ui green tiny icon button" title="Modifier l'application" data-modal="data-modal" href="{{ path('manage_applications_edit_application', {'applicationId':application.id}) }}">
+                                                <i class="pencil icon"></i>
+                                            </a>
+                                            <a class="ui red tiny icon button" title="Supprimer l'application" data-modal="data-modal" href="{{ path('manage_applications_remove_application', {'applicationId':application.id}) }}">
+                                                <i class="trash icon"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
                 {{ pagerfanta(applications, 'semantic_ui') }}
             </div>
         </div>

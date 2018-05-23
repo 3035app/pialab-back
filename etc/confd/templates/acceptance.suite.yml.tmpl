@@ -1,0 +1,10 @@
+class_name: WebGuy
+modules:
+    enabled:
+        - WebDriver:
+            host: {{getv "/selenium/hostname"}}
+            port: 4444
+            url: 'http://{{getv "/url/addr"}}'
+            wait: 5
+            browser: 'firefox'
+        - \Helper\Acceptance

@@ -4,9 +4,8 @@
     {% set activeItem = null %}
 {% endif %}
 
-<div class="ui inverted menu">
-    <div class="item" style="padding:0;width:130px;background:transparent url({{ asset('assets/img/pia-logo-small-white.png') }}) no-repeat scroll 50% 50%;background-size:contain;">
-    </div>
+<div class="ui menu">
+    <div class="item" style="padding:0;width:130px;background:#2B3E50 url({{ asset('assets/img/pia-lab-small.png') }}) no-repeat scroll 50% 50%;background-size:contain;"></div>
     <div class="menu">
         <a class="{{ menu.activeMenu(activeItem, 'users') }} item" href="{{ path('manage_users') }}">
             <i class="user icon"></i>Utilisateurs
@@ -19,8 +18,16 @@
         </a>
     </div>
     <div class="right menu">
+        {% if app.user %}
+            <div class="item">
+                Connecté en tant que :
+                <span class="current username">{{ app.user.email }}</span>
+            </div>
+        {% endif %}
+
         <a class="active item" href="{{ path('fos_user_security_logout') }}">
-            <i class="sign out icon"></i> Logout
+            <i class="sign out icon"></i>
+            Logout
         </a>
     </div>
 </div>
