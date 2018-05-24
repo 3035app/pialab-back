@@ -15,7 +15,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
-use PiaApi\Entity\Pia\Traits\HasPiaTrait;
 use PiaApi\Entity\Oauth\User;
 
 /**
@@ -30,16 +29,17 @@ class UserProfile implements Timestampable
     /**
      * @ORM\OneToOne(targetEntity="PiaApi\Entity\Oauth\User", inversedBy="profile")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *
      * @var User
      */
     protected $user;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string
      */
-    protected $name = '';
+    protected $name;
 
     /**
      * @ORM\Column(type="json")
@@ -68,7 +68,7 @@ class UserProfile implements Timestampable
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -76,7 +76,7 @@ class UserProfile implements Timestampable
     /**
      * @param string $name
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }

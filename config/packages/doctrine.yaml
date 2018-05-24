@@ -3,7 +3,7 @@ doctrine:
         connections:
             default:
                 charset:  UTF8
-                url:      '%env(resolve:DATABASE_URL)%'
+                url:      '%env(DATABASE_URL)%'
                 server_version: '5.7'
                 default_table_options:
                     charset: utf8mb4
