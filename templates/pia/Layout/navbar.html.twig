@@ -16,6 +16,9 @@
         <a class="{{ menu.activeMenu(activeItem, 'structures') }} item" href="{{ path('manage_structures') }}">
             <i class="building icon"></i>Structures
         </a>
+        <a class="{{ menu.activeMenu(activeItem, 'pia_templates') }} item" href="{{ path('manage_pia_templates') }}">
+            <i class="building icon"></i>Gabarits
+        </a>
     </div>
     <div class="right menu">
         {% if app.user %}
