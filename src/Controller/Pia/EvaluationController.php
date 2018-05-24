@@ -12,17 +12,15 @@ namespace PiaApi\Controller\Pia;
 
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Evaluation;
 
 class EvaluationController extends PiaSubController
 {
-
     /**
      * @FOSRest\Get("/pias/{piaId}/evaluations")
-     * @Security("is_granted('ROLE_EVALUATION_LIST')")
+     *%%Security("is_granted('ROLE_EVALUATION_LIST')")
      */
     public function listAction(Request $request, $piaId)
     {
@@ -31,7 +29,7 @@ class EvaluationController extends PiaSubController
 
     /**
      * @FOSRest\Get("/pias/{piaId}/evaluations/{id}")
-     * @Security("is_granted('ROLE_EVALUATION_VIEW')")
+     *%%Security("is_granted('ROLE_EVALUATION_VIEW')")
      */
     public function showAction(Request $request, $piaId, $id)
     {
@@ -40,7 +38,7 @@ class EvaluationController extends PiaSubController
 
     /**
      * @FOSRest\Post("/pias/{piaId}/evaluations")
-     * @Security("is_granted('ROLE_EVALUATION_CREATE')")
+     *%%Security("is_granted('ROLE_EVALUATION_CREATE')")
      */
     public function createAction(Request $request, $piaId)
     {
@@ -51,7 +49,7 @@ class EvaluationController extends PiaSubController
      * @FOSRest\Put("/pias/{piaId}/evaluations/{id}")
      * @FOSRest\Patch("/pias/{piaId}/evaluations/{id}")
      * @FOSRest\Post("/pias/{piaId}/evaluations/{id}")
-     * @Security("is_granted('ROLE_EVALUATION_EDIT')")
+     *%%Security("is_granted('ROLE_EVALUATION_EDIT')")
      */
     public function updateAction(Request $request, $piaId, $id)
     {
@@ -60,7 +58,7 @@ class EvaluationController extends PiaSubController
 
     /**
      * @FOSRest\Delete("pias/{piaId}/evaluations/{id}")
-     * @Security("is_granted('ROLE_EVALUATION_DELETE')")
+     *%%Security("is_granted('ROLE_EVALUATION_DELETE')")
      *
      * @return array
      */
