@@ -173,6 +173,13 @@ class Pia implements Timestampable
      */
     protected $structure;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="PiaTemplate", inversedBy="pias")
+     *
+     * @var PiaTemplate
+     */
+    protected $template;
+
     public function getAnswers()
     {
         return $this->answers->getValues();
@@ -192,5 +199,21 @@ class Pia implements Timestampable
     public function setStructure(?Structure $structure): void
     {
         $this->structure = $structure;
+    }
+
+    /**
+     * @return PiaTemplate
+     */
+    public function getTemplate(): ?PiaTemplate
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param PiaTemplate $template
+     */
+    public function setTemplate(?PiaTemplate $template): void
+    {
+        $this->template = $template;
     }
 }
