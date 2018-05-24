@@ -154,8 +154,10 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
 
     public function removeRole($role)
     {
-        if (in_array($role, $this->roles)) {
-            $this->roles[] = $role;
+        $key = array_search($role, $this->roles);
+
+        if ($key !== false) {
+            unset($this->roles[$key]);
         }
     }
 

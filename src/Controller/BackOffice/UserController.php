@@ -144,8 +144,8 @@ class UserController extends BackOfficeAbstractController
 
         if($user->getProfile() === null) {
           $profile = new UserProfile();
-          $user->setProfile($profile);
           $profile->setUser($user);
+          $user->setProfile($profile);
         }
 
         $form = $this->createForm(EditUserForm::class, $user, [

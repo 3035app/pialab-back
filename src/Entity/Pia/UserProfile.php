@@ -40,7 +40,7 @@ class UserProfile implements Timestampable
      *
      * @var string
      */
-    protected $name;
+    protected $firstName = '';
 
     /**
      * @ORM\Column(type="json")
@@ -48,9 +48,9 @@ class UserProfile implements Timestampable
      * @JMS\Type("array<string>")
      * @JMS\SerializedName("roles")
      *
-     * @var array
+     * @var string
      */
-    protected $piaRoles = [];
+    protected $lastName = '';
 
     /**
      * @return User
@@ -71,33 +71,33 @@ class UserProfile implements Timestampable
     /**
      * @return string
      */
-    public function getName(): ?string
+    public function getFirstName(): string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
     /**
-     * @param string $name
+     * @param string $firstName
      */
-    public function setName(?string $name): void
+    public function setFirstName(string $firstName): void
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getPiaRoles(): array
+    public function getLastName(): string
     {
-        return $this->piaRoles;
+        return $this->lastName;
     }
 
     /**
-     * @param array $piaRoles
+     * @param string $lastName
      */
-    public function setPiaRoles(array $piaRoles): void
+    public function setLastName(string $lastName): void
     {
-        $this->piaRoles = $piaRoles;
+        $this->lastName = $lastName;
     }
 
     /**

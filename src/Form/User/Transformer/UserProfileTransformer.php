@@ -43,8 +43,8 @@ class UserProfileTransformer implements DataTransformerInterface
           $array = [
             'id'       => $profile->getId(),
             'user'     => $profile->getUser()->getId(),
-            'name'     => $profile->getName(),
-            'piaRoles' => $profile->getPiaRoles()
+            'firstName'     => $profile->getFirstName(),
+            'lastName'     => $profile->getLastName()
           ];
 
           return $array;
@@ -70,10 +70,16 @@ class UserProfileTransformer implements DataTransformerInterface
           $profile = $profileRepository->find($value['id']);
         }
 
-        $profile->setName($value['name']);
-        $profile->setPiaRoles($value['piaRoles']);
-        $profile->setUser($user);
+        if(isset($value['firstName'])) {
+          $profile->setFirstName($value['firstName']);
+        }
+
+        if(isset($value['lastName'])) {
+          $profile->setLastName($value['lastName']);
+        }
+
         $user->setProfile($profile);
+        $profile->setUser($user);
 
         return $profile;
     }

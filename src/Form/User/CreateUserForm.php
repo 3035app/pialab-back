@@ -43,6 +43,8 @@ class CreateUserForm extends AbstractType
         'ROLE_USER'        => 'ROLE_USER',
         'ROLE_ADMIN'       => 'ROLE_ADMIN',
         'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
+        'DPO'              => 'ROLE_DPO',
+        'Data controller'  => 'ROLE_CONTROLLER'
     ];
 
     public function __construct(RegistryInterface $doctrine, ApplicationTransformer $applicationTransformer, StructureTransformer $structureTransformer)
