@@ -43,7 +43,7 @@ class UserProfile implements Timestampable
 
     /**
      * @ORM\Column(type="json")
-     * @JMS\Type("array")
+     * @JMS\Type("array<string>")
      *
      * @var array
      */
