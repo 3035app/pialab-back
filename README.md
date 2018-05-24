@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/pia-lab/pialab/master/src/assets/images/pia-lab.png">
+
 # Pialab-backend
 
 ## Installation
