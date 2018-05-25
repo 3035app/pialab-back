@@ -150,6 +150,8 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         if (!in_array($role, $this->roles)) {
             $this->roles[] = $role;
         }
+
+        $this->roles = array_values($this->roles);
     }
 
     public function removeRole($role)
@@ -159,6 +161,8 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         if ($key !== false) {
             unset($this->roles[$key]);
         }
+
+        $this->roles = array_values($this->roles);
     }
 
     public function getUsername()
