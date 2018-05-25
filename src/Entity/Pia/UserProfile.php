@@ -20,6 +20,7 @@ use PiaApi\Entity\Oauth\User;
 /**
  * @ORM\Entity
  * @ORM\Table(name="pia_profile")
+ * @JMS\ExclusionPolicy("all")
  */
 class UserProfile implements Timestampable
 {
@@ -43,7 +44,9 @@ class UserProfile implements Timestampable
 
     /**
      * @ORM\Column(type="json")
+     * @JMS\Expose
      * @JMS\Type("array<string>")
+     * @JMS\SerializedName("roles")
      *
      * @var array
      */
@@ -95,5 +98,29 @@ class UserProfile implements Timestampable
     public function setPiaRoles(array $piaRoles): void
     {
         $this->piaRoles = $piaRoles;
+    }
+
+    /**
+     * @JMS\Expose
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("username")
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->user->getUsername();
+    }
+
+    /**
+     * @JMS\Expose
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("email")
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->user->getEmail();
     }
 }
