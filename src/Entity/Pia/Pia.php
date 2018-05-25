@@ -90,7 +90,7 @@ class Pia implements Timestampable
      *
      * @var string
      */
-    protected $concerned_people_searched_content;
+    protected $concernedPeopleSearchedContent;
     /**
      * @ORM\Column(type="text", nullable=true)
      *
@@ -193,5 +193,16 @@ class Pia implements Timestampable
     public function setStructure(?Structure $structure): void
     {
         $this->structure = $structure;
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("progress")
+     *
+     * @return int
+     */
+    public function computeProgress(): int
+    {
+        return round((100 / 36) * count($this->answers));
     }
 }
