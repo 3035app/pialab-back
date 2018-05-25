@@ -13,6 +13,7 @@ namespace PiaApi\Entity\Pia;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
 
@@ -203,6 +204,6 @@ class Pia implements Timestampable
      */
     public function computeProgress(): int
     {
-        return round((100 / 36) * count($this->answers));
+        return round((100 / 36) * count($this->answers ?? []));
     }
 }
