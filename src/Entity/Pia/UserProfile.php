@@ -37,16 +37,15 @@ class UserProfile implements Timestampable
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @JMS\Expose
      *
      * @var string
      */
     protected $firstName = '';
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="string")
      * @JMS\Expose
-     * @JMS\Type("array<string>")
-     * @JMS\SerializedName("roles")
      *
      * @var string
      */
@@ -122,5 +121,17 @@ class UserProfile implements Timestampable
     public function getEmail()
     {
         return $this->user->getEmail();
+    }
+
+    /**
+     * @JMS\Expose
+     * @JMS\VirtualProperty
+     * @JMS\Type("array<string>")
+     * @JMS\SerializedName("roles")
+     *
+     * @return array
+     */
+     public function getRoles() {
+       return $this->user->getRoles();
     }
 }
