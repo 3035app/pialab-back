@@ -168,6 +168,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="Structure", inversedBy="pias")
+     * @JMS\Exclude()
      *
      * @var Structure
      */
