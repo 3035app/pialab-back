@@ -12,6 +12,7 @@ namespace PiaApi\DataExchange\Validator;
 
 use PiaApi\Entity\Pia\Pia;
 use JMS\Serializer\SerializerBuilder;
+use PiaApi\DataExchange\DataExchangeDescriptor;
 
 class JsonValidator
 {
@@ -32,6 +33,8 @@ class JsonValidator
         }
 
         $this->checkRootKeys($objectAsArray);
+        $this->removeDates($objectAsArray);
+        $this->removeIDs($objectAsArray);
 
         return $objectAsArray;
     }
@@ -43,10 +46,39 @@ class JsonValidator
      */
     private function checkRootKeys(array $objectAsArray)
     {
-        if (count(array_diff_key($objectAsArray, $this->mandatoryKeys)) > 0) {
-            $mandatoryKeys = array_keys($this->mandatoryKeys);
+        if (count(array_diff_key($objectAsArray, DataExchangeDescriptor::STRUCTURE)) > 0) {
+            $mandatoryKeys = array_keys(DataExchangeDescriptor::STRUCTURE);
             $currentKeys = array_keys($objectAsArray);
             throw new \InvalidArgumentException(sprintf('Missing mandatory key, got %s, expected %s', implode(', ', $currentKeys), implode(', ', $mandatoryKeys)));
         }
+    }
+
+    /**
+     * Removes udpated_at, created_at ans *_date fields.
+     *
+     * @param array $data
+     */
+    private function removeDates(array &$data)
+    {
+        array_walk_recursive($data, function (&$element, $key) {
+            if ($key === 'created_at' || $key === 'updated_at' || preg_match('/.*_date$/', $key)) {
+                $dateObject = new \DateTime($element);
+                $element = $dateObject->format(\DateTime::ISO8601);
+            }
+        });
+    }
+
+    /**
+     * Removes exported IDs.
+     *
+     * @param array $data
+     */
+    private function removeIDs(array &$data)
+    {
+        array_walk_recursive($data, function (&$element, $key) {
+            if ($key == 'id' || substr($key, -3) == '_id') {
+                $element = null;
+            }
+        });
     }
 }

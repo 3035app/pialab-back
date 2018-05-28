@@ -19,7 +19,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PiaApi\Repository\StructureRepository")
  * @ORM\Table(name="pia_structure")
  */
 class Structure implements Timestampable

@@ -12,7 +12,7 @@ namespace PiaApi\DataExchange;
 
 class DataExchangeDescriptor
 {
-    public static $structure = [
+    const STRUCTURE = [
         'pia'         => [
             'status',
             'is_example',
@@ -31,19 +31,61 @@ class DataExchangeDescriptor
             'applied_adjustements',
             'dpos_names',
             'people_names',
-            'id',
             'created_at',
             'updated_at',
         ],
         'answers'     => [
+            'pia_id',
+            'reference_to',
+            'data'    => [
+                'text',
+                'gauge',
+                'list',
+            ],
+            'created_at',
+            'updated_at',
         ],
         'measures'    => [
+            'pia_id',
+            'title',
+            'content',
+            'placeholder',
+            'created_at',
+            'updated_at',
         ],
         'evaluations' => [
+            'status',
+            'gauges'  => [
+                'x',
+                'y',
+            ],
+            'global_status',
+            'pia_id',
+            'reference_to',
+            'action_plan_comment',
+            'evaluation_comment',
+            'evaluation_date',
+            'estimated_implementation_date',
+            'person_in_charge',
+            'created_at',
+            'updated_at',
         ],
         'comments'    => [
+            'pia_id',
+            'description',
+            'reference_to',
+            'for_measure',
+            'created_at',
+            'updated_at',
         ],
         'attachments' => [
+            'pia_signed',
+            'pia_id',
+            'name',
+            'mime_type',
+            'file',
+            'created_at',
+            'updated_at',
         ],
     ];
 }

@@ -11,11 +11,12 @@
 namespace PiaApi\Entity\Pia;
 
 use Gedmo\Timestampable\Timestampable;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -106,7 +107,7 @@ class Pia implements Timestampable
     protected $appliedAdjustements = '';
 
     /**
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="pia", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="pia", cascade={"persist","remove"})
      * @JMS\Exclude()
      *
      * @var Collection|Answer[]
@@ -114,7 +115,7 @@ class Pia implements Timestampable
     protected $answers;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="pia", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="pia", cascade={"persist","remove"})
      * @JMS\Exclude()
      *
      * @var Collection|Comment[]
@@ -122,7 +123,7 @@ class Pia implements Timestampable
     protected $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="pia", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="pia", cascade={"persist","remove"})
      * @JMS\Exclude()
      *
      * @var Collection|Evaluation[]
@@ -130,7 +131,7 @@ class Pia implements Timestampable
     protected $evaluations;
 
     /**
-     * @ORM\OneToMany(targetEntity="Measure", mappedBy="pia", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Measure", mappedBy="pia", cascade={"persist","remove"})
      * @JMS\Exclude()
      *
      * @var Collection|Measure[]
@@ -138,7 +139,7 @@ class Pia implements Timestampable
     protected $measures;
 
     /**
-     * @ORM\OneToMany(targetEntity="Attachment", mappedBy="pia", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Attachment", mappedBy="pia", cascade={"persist","remove"})
      * @JMS\Exclude()
      *
      * @var Collection|Attachment[]
@@ -168,7 +169,8 @@ class Pia implements Timestampable
     protected $isExample = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Structure", inversedBy="pias")
+     * @ORM\ManyToOne(targetEntity="Structure", inversedBy="pias").
+     * @JMS\Exclude()
      *
      * @var Structure
      */
@@ -181,9 +183,13 @@ class Pia implements Timestampable
      */
     protected $template;
 
-    public function getAnswers()
+    public function __construct()
     {
-        return $this->answers->getValues();
+        $this->answers = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->evaluations = new ArrayCollection();
+        $this->measures = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
     }
 
     /**
@@ -216,5 +222,101 @@ class Pia implements Timestampable
     public function setTemplate(?PiaTemplate $template): void
     {
         $this->template = $template;
+    }
+
+    /**
+     * @return Collection|Answer[]
+     */
+    public function getAnswers(): Collection
+    {
+        return $this->answers;
+    }
+
+    /**
+     * @param Collection|Answer[] $answers
+     */
+    public function setAnswers(Collection $answers): void
+    {
+        $this->answers = $answers;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param Collection|Comment[] $comments
+     */
+    public function setComments(Collection $comments): void
+    {
+        $this->comments = $comments;
+    }
+
+    /**
+     * @return Collection|Evaluation[]
+     */
+    public function getEvaluations(): Collection
+    {
+        return $this->evaluations;
+    }
+
+    /**
+     * @param Collection|Evaluation[] $evaluations
+     */
+    public function setEvaluations(Collection $evaluations): void
+    {
+        $this->evaluations = $evaluations;
+    }
+
+    /**
+     * @return Collection|Measure[]
+     */
+    public function getMeasures(): Collection
+    {
+        return $this->measures;
+    }
+
+    /**
+     * @param Collection|Measure[] $measures
+     */
+    public function setMeasures(Collection $measures): void
+    {
+        $this->measures = $measures;
+    }
+
+    /**
+     * @return Collection|Attachment[]
+     */
+    public function getAttachments(): Collection
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param Collection|Attachment[] $attachments
+     */
+    public function setAttachments(Collection $attachments): void
+    {
+        $this->attachments = $attachments;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 }

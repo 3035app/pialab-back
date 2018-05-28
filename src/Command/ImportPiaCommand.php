@@ -18,6 +18,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
+use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Pia\Pia;
 
 class ImportPiaCommand extends Command
 {
@@ -51,6 +53,7 @@ class ImportPiaCommand extends Command
             ->setDescription('Imports a Pia from a json file.')
             ->setHelp('This command allows you to import a Pia from a json file')
             ->addArgument('jsonFile', InputArgument::REQUIRED, 'The target json file to import. Could be an Url')
+            ->addOption('structure', null, InputOption::VALUE_OPTIONAL, 'The target structure (name or ID) where the PIA will be created')
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Do the import without persisting values in database')
         ;
     }
@@ -61,26 +64,89 @@ class ImportPiaCommand extends Command
 
         $file = $input->getArgument('jsonFile');
         $dryRun = $input->getOption('dry-run');
+        $structureNameOrId = $input->getOption('structure');
+
+        // Structure
+
+        $structure = $this->fetchStructure($structureNameOrId);
+
+        if ($structureNameOrId !== null && $structure === null) {
+            $this->io->error(sprintf('Cannot find structure with name or id « %s », aborting', $structureNameOrId));
+
+            return;
+        }
 
         // Fetch file
 
-        $fileContent = '';
+        $fileContent = $this->fetchImportFile($file);
 
+        if ($fileContent === null) {
+            return;
+        }
+
+        // Transforming from json to entities
+
+        $pia = $this->fetchDataAsEntites($fileContent, $structure);
+
+        // Applying changes (or not if dry-run)
+
+        if (!$dryRun && $this->io->confirm('confirm importing datas ?')) {
+            $this->entityManager->persist($pia);
+            $this->entityManager->flush($pia);
+
+            $this->io->success(sprintf('Pia « %s » successfully imported !', $pia->getName()));
+        }
+    }
+
+    private function fetchDataAsEntites($data, $structure)
+    {
+        /** @var Pia $pia */
+        $pia = $this->jsonToEntityTransformer->transform($data);
+
+        $pia->setStructure($structure);
+
+        $this->io->table(
+            [
+                'Entity', 'Desccription', 'Number',
+            ],
+            [
+                ['Pia', '"' . $pia->getName() . '", Structure #' . ($structure !== null ? $structure->getId() : 'N/A')],
+                ['Comment', 'Pia\'s comments', $pia->getComments()->count()],
+                ['Answer', 'Pia\'s answers', $pia->getAnswers()->count()],
+                ['Evaluation', 'Pia\'s evaluations', $pia->getEvaluations()->count()],
+                ['Measure', 'Pia\'s measures', $pia->getMeasures()->count()],
+                ['Attachment', 'Pia\'s attachments', $pia->getAttachments()->count()],
+            ]
+        );
+
+        return $pia;
+    }
+
+    private function fetchImportFile(string $file): ?string
+    {
+        $fileContent = '';
         try {
             $this->io->text(sprintf('Fetching file %s', $file));
             $fileContent = file_get_contents($file);
 
             if ($fileContent === false) {
                 $this->io->error(sprintf('Cannot fetch file\'s content located under %s', $file));
+
+                return null;
             }
         } catch (\Exception $e) {
             $this->io->error(sprintf('Cannot fetch file located under %s', $file));
+
+            return null;
         }
 
-        // Transforming form json to entity
+        $this->io->text(sprintf('Transforming serialized datas to entities'));
 
-        $pia = $this->jsonToEntityTransformer->transform($fileContent);
+        return $fileContent;
+    }
 
-        dump($pia);
+    private function fetchStructure($nameOrId): ?Structure
+    {
+        return $this->entityManager->getRepository(Structure::class)->findOneByNameOrId($nameOrId);
     }
 }

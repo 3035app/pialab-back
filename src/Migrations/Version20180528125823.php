@@ -18,16 +18,14 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20180524074718 extends AbstractMigration
+final class Version20180528125823 extends AbstractMigration
 {
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_profile ADD last_name VARCHAR(255) NOT NULL');
-        $this->addSql('ALTER TABLE pia_profile DROP pia_roles');
-        $this->addSql('ALTER TABLE pia_profile RENAME COLUMN name TO first_name');
+        $this->addSql('ALTER TABLE pia_profile ALTER last_name DROP NOT NULL');
     }
 
     public function down(Schema $schema): void
@@ -35,10 +33,6 @@ final class Version20180524074718 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_profile ADD name VARCHAR(255) NOT NULL');
-        $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NOT NULL');
-        $this->addSql('ALTER TABLE pia_profile DROP first_name');
-        $this->addSql('ALTER TABLE pia_profile DROP last_name');
-        $this->addSql('COMMENT ON COLUMN pia_profile.pia_roles IS \'(DC2Type:json)\'');
+        $this->addSql('ALTER TABLE pia_profile ALTER last_name SET NOT NULL');
     }
 }

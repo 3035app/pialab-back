@@ -44,7 +44,7 @@ class UserProfile implements Timestampable
     protected $firstName = '';
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @JMS\Expose
      *
      * @var string
