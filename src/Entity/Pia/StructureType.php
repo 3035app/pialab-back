@@ -39,11 +39,20 @@ class StructureType
      */
     protected $structures;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="PiaTemplate", mappedBy="structureTypes")
+     * @JMS\Exclude()
+     *
+     * @var Collection
+     */
+    protected $templates;
+
     public function __construct(string $name)
     {
         $this->name = $name;
 
         $this->users = new ArrayCollection();
+        $this->templates = new ArrayCollection();
     }
 
     /**
@@ -76,5 +85,21 @@ class StructureType
     public function setStructures(Collection $structures): void
     {
         $this->structures = $structures;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTemplates(): Collection
+    {
+        return $this->templates;
+    }
+
+    /**
+     * @param Collection $templates
+     */
+    public function setTemplates(Collection $templates): void
+    {
+        $this->templates = $templates;
     }
 }

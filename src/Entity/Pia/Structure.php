@@ -57,12 +57,21 @@ class Structure implements Timestampable
      */
     protected $users;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="PiaTemplate", mappedBy="structures")
+     * @JMS\Exclude()
+     *
+     * @var Collection
+     */
+    protected $templates;
+
     public function __construct(string $name)
     {
         $this->name = $name;
 
         $this->pias = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->templates = new ArrayCollection();
     }
 
     /**
@@ -127,5 +136,21 @@ class Structure implements Timestampable
     public function setType(?StructureType $type): void
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTemplates(): Collection
+    {
+        return $this->templates;
+    }
+
+    /**
+     * @param Collection $templates
+     */
+    public function setTemplates(Collection $templates): void
+    {
+        $this->templates = $templates;
     }
 }

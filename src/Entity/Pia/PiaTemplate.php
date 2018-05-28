@@ -20,7 +20,7 @@ use PiaApi\Entity\Pia\Traits\ResourceTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PiaApi\Repository\PiaTemplateRepository")
  * @ORM\Table(name="pia_template")
  */
 class PiaTemplate implements Timestampable
@@ -71,10 +71,40 @@ class PiaTemplate implements Timestampable
      */
     protected $pias;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Structure", inversedBy="templates")
+     * @ORM\JoinTable(
+     *      name="pia_templates__structures",
+     *      joinColumns={@ORM\JoinColumn(name="structure_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="structure_pia_template_id", referencedColumnName="id")}
+     * )
+     *
+     * @JMS\Exclude()
+     *
+     * @var Collection
+     */
+    protected $structures;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="StructureType", inversedBy="templates")
+     * @ORM\JoinTable(
+     *      name="pia_templates__structure_types",
+     *      joinColumns={@ORM\JoinColumn(name="structure_type_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="structure_type_pia_template_id", referencedColumnName="id")}
+     * )
+     *
+     * @JMS\Exclude()
+     *
+     * @var Collection
+     */
+    protected $structureTypes;
+
     public function __construct(string $name)
     {
         $this->name = $name;
         $this->pias = new ArrayCollection();
+        $this->structures = new ArrayCollection();
+        $this->structureTypes = new ArrayCollection();
     }
 
     public function isEnabled(): bool
@@ -172,5 +202,37 @@ class PiaTemplate implements Timestampable
         $content = file_get_contents($file->getPathname());
         $this->setData($content);
         $this->setImportedFileName($file->getClientOriginalName());
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getStructures(): Collection
+    {
+        return $this->structures;
+    }
+
+    /**
+     * @param Collection $structures
+     */
+    public function setStructures(Collection $structures): void
+    {
+        $this->structures = $structures;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getStructureTypes(): Collection
+    {
+        return $this->structureTypes;
+    }
+
+    /**
+     * @param Collection $structureTypes
+     */
+    public function setStructureTypes(Collection $structureTypes): void
+    {
+        $this->structureTypes = $structureTypes;
     }
 }
