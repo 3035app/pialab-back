@@ -205,19 +205,37 @@ class PiaTemplate implements Timestampable
     }
 
     /**
-     * @return Collection
+     * @return array|Structure[]
      */
-    public function getStructures(): Collection
+    public function getStructures(): array
     {
-        return $this->structures;
+        return $this->structures->getValues();
     }
 
     /**
-     * @param Collection $structures
+     * @param Structure $structure
+     *
+     * @throws InvalidArgumentException
      */
-    public function setStructures(Collection $structures): void
+    public function addStructure(Structure $structure): void
     {
-        $this->structures = $structures;
+        if ($this->structures->contains($structure)) {
+            throw new InvalidArgumentException(sprintf('Structure « %s » is already in THIS', $structure));
+        }
+        $this->structures->add($structure);
+    }
+
+    /**
+     * @param Structure $structure
+     *
+     * @throws InvalidArgumentException
+     */
+    public function removeStructure(Structure $structure): void
+    {
+        if (!$this->structures->contains($structure)) {
+            throw new InvalidArgumentException(sprintf('Structure « %s » is not in THIS', $structure));
+        }
+        $this->structures->removeElement($structure);
     }
 
     /**

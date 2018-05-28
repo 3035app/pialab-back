@@ -32,10 +32,13 @@ class EditPiaTemplateForm extends CreatePiaTemplateForm
             ])
 
             ->add('newData', FileType::class, [
-                'mapped'     => false,
-                'label'      => 'Nouveau fichier d\'export (Laissez vide si vous n\'avez pas besoin de changer de fichier)',
-                'required'   => false,
-                'data_class' => null,
+                'mapped'       => false,
+                'required'     => false,
+                'data_class'   => null,
+                'label'        => 'Nouveau fichier d\'export',
+                'label_attr'   => [
+                    'title' => 'Laissez ce champ vide si vous n\'avez pas besoin de changer de fichier',
+                ],
             ])
 
             ->add('cancel', ButtonType::class, [

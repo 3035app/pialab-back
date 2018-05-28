@@ -88,11 +88,11 @@ class StructureType
     }
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getTemplates(): Collection
+    public function getTemplates(): array
     {
-        return $this->templates;
+        return $this->templates->toArray();
     }
 
     /**
