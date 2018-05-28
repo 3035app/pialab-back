@@ -220,7 +220,7 @@ class PiaTemplate implements Timestampable
     public function addStructure(Structure $structure): void
     {
         if ($this->structures->contains($structure)) {
-            throw new InvalidArgumentException(sprintf('Structure « %s » is already in THIS', $structure));
+            throw new InvalidArgumentException(sprintf('Structure « %s » is already in PiaTemplate', $structure));
         }
         $this->structures->add($structure);
     }
@@ -233,24 +233,42 @@ class PiaTemplate implements Timestampable
     public function removeStructure(Structure $structure): void
     {
         if (!$this->structures->contains($structure)) {
-            throw new InvalidArgumentException(sprintf('Structure « %s » is not in THIS', $structure));
+            throw new InvalidArgumentException(sprintf('Structure « %s » is not in PiaTemplate', $structure));
         }
         $this->structures->removeElement($structure);
     }
 
     /**
-     * @return Collection
+     * @return array|StructureType[]
      */
-    public function getStructureTypes(): Collection
+    public function getStructureTypes(): array
     {
-        return $this->structureTypes;
+        return $this->structureTypes->getValues();
     }
 
     /**
-     * @param Collection $structureTypes
+     * @param StructureType $structureType
+     *
+     * @throws InvalidArgumentException
      */
-    public function setStructureTypes(Collection $structureTypes): void
+    public function addStructureType(StructureType $structureType): void
     {
-        $this->structureTypes = $structureTypes;
+        if ($this->structureTypes->contains($structureType)) {
+            throw new \InvalidArgumentException(sprintf('StructureType « %s » is already in PiaTemplate', $structureType));
+        }
+        $this->structureTypes->add($structureType);
+    }
+
+    /**
+     * @param StructureType $structureType
+     *
+     * @throws InvalidArgumentException
+     */
+    public function removeStructureType(StructureType $structureType): void
+    {
+        if (!$this->structureTypes->contains($structureType)) {
+            throw new \InvalidArgumentException(sprintf('StructureType « %s » is not in PiaTemplate', $structureType));
+        }
+        $this->structureTypes->removeElement($structureType);
     }
 }

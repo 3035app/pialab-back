@@ -88,18 +88,38 @@ class StructureType
     }
 
     /**
-     * @return array
+     * @return array|PiaTemplate[]
      */
     public function getTemplates(): array
     {
-        return $this->templates->toArray();
+        return $this->templates->getValues();
     }
 
     /**
-     * @param Collection $templates
+     * @param PiaTemplate $template
+     *
+     * @throws InvalidArgumentException
      */
-    public function setTemplates(Collection $templates): void
+    public function addTemplate(PiaTemplate $template): void
     {
-        $this->templates = $templates;
+        if ($this->templates->contains($template)) {
+            throw new \InvalidArgumentException(sprintf('Template « %s » is already in StructureType', $template));
+        }
+        $template->addStructureType($this);
+        $this->templates->add($template);
+    }
+
+    /**
+     * @param PiaTemplate $template
+     *
+     * @throws InvalidArgumentException
+     */
+    public function removeTemplate(PiaTemplate $template): void
+    {
+        if (!$this->templates->contains($template)) {
+            throw new \InvalidArgumentException(sprintf('Template « %s » is not in StructureType', $template));
+        }
+        $template->removeStructureType($this);
+        $this->templates->removeElement($template);
     }
 }
