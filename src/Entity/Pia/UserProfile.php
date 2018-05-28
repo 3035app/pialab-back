@@ -20,6 +20,7 @@ use PiaApi\Entity\Oauth\User;
 /**
  * @ORM\Entity
  * @ORM\Table(name="pia_profile")
+ * @JMS\ExclusionPolicy("all")
  */
 class UserProfile implements Timestampable
 {
@@ -36,18 +37,19 @@ class UserProfile implements Timestampable
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @JMS\Expose
      *
      * @var string
      */
-    protected $name;
+    protected $firstName = '';
 
     /**
-     * @ORM\Column(type="json")
-     * @JMS\Type("array")
+     * @ORM\Column(type="string")
+     * @JMS\Expose
      *
-     * @var array
+     * @var string
      */
-    protected $piaRoles = [];
+    protected $lastName = '';
 
     /**
      * @return User
@@ -68,32 +70,69 @@ class UserProfile implements Timestampable
     /**
      * @return string
      */
-    public function getName(): ?string
+    public function getFirstName(): string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
     /**
-     * @param string $name
+     * @param string $firstName
      */
-    public function setName(?string $name): void
+    public function setFirstName(string $firstName): void
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
     }
 
     /**
+     * @return string
+     */
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $lastName
+     */
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @JMS\Expose
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("username")
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->user->getUsername();
+    }
+
+    /**
+     * @JMS\Expose
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("email")
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->user->getEmail();
+    }
+
+    /**
+     * @JMS\Expose
+     * @JMS\VirtualProperty
+     * @JMS\Type("array<string>")
+     * @JMS\SerializedName("roles")
+     *
      * @return array
      */
-    public function getPiaRoles(): array
+    public function getRoles()
     {
-        return $this->piaRoles;
-    }
-
-    /**
-     * @param array $piaRoles
-     */
-    public function setPiaRoles(array $piaRoles): void
-    {
-        $this->piaRoles = $piaRoles;
+        return $this->user->getRoles();
     }
 }

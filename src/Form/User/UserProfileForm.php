@@ -12,32 +12,24 @@ namespace PiaApi\Form\User;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class UserProfileForm extends AbstractType
 {
-    protected $userRoles = [
-        'DPO'             => 'ROLE_DPO',
-        'Data controller' => 'ROLE_CONTROLLER',
-        'Admin'           => 'ROLE_ADMIN',
-    ];
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('user', HiddenType::class)
-            ->add('name', TextType::class, [
+
+            ->add('firstName', TextType::class, [
                 'required' => false,
-                'label'    => 'Nom',
+                'label'    => 'FirstName',
             ])
-            ->add('piaRoles', ChoiceType::class, [
+
+            ->add('lastName', TextType::class, [
                 'required' => false,
-                'multiple' => true,
-                'expanded' => true,
-                'choices'  => $this->userRoles,
-                'label'    => 'Rôles Pialab',
+                'label'    => 'LastName',
             ])
         ;
     }

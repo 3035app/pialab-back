@@ -2,6 +2,7 @@ security:
 
     role_hierarchy:
         ROLE_VIEWER:
+            - ROLE_USER
             - ROLE_PIA_LIST
             - ROLE_PIA_VIEW
             - ROLE_MEASURE_LIST
@@ -28,11 +29,11 @@ security:
             - ROLE_ANSWER_CREATE
             - ROLE_ANSWER_EDIT
             - ROLE_ANSWER_DELETE
-        ROLE_ADMIN: ROLE_USER
-        ROLE_SUPER_ADMIN:
-            - ROLE_ADMIN
+        ROLE_ADMIN:
             - ROLE_DPO
             - ROLE_CONTROLLER
+        ROLE_SUPER_ADMIN:
+            - ROLE_ADMIN
 
     encoders:
         FOS\UserBundle\Model\UserInterface:

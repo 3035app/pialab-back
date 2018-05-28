@@ -13,6 +13,7 @@ namespace PiaApi\Entity\Pia;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
 
@@ -90,7 +91,7 @@ class Pia implements Timestampable
      *
      * @var string
      */
-    protected $concerned_people_searched_content;
+    protected $concernedPeopleSearchedContent;
     /**
      * @ORM\Column(type="text", nullable=true)
      *
