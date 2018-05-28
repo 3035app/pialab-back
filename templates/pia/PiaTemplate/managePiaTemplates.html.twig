@@ -29,7 +29,11 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nom</th>
+                                <th>Description</th>
+                                <th>Taille des données</th>
+                                <th>Nom du fichier</th>
                                 <th>Créé le</th>
+                                <th>Mis à jour le</th>
                                 <th class="right aligned">
                                     <i class="cog icon"></i>
                                 </th>
@@ -42,7 +46,20 @@
                                     <td>{{ piaTemplate.id }}</td>
                                     <td>{{ piaTemplate.name }}</td>
                                     <td>
-                                        {{ piaTemplate.createdAt|date('d/m/Y')}}
+                                        {% set hyphen = '' %}
+                                        {% if piaTemplate.description|length > 64 %}
+                                            {% set hyphen = ' <i>[...]</i>' %}
+                                        {% endif %}
+                                        
+                                        {{ (piaTemplate.description[:64] ~ hyphen)|raw }}
+                                    </td>
+                                    <td>{{ macro.getOctets(piaTemplate.data) }}</td>
+                                    <td>{{ piaTemplate.importedFileName }}</td>
+                                    <td>
+                                        {{ piaTemplate.createdAt|date('d/m/Y H:i')}}
+                                    </td>
+                                    <td>
+                                        {{ piaTemplate.updatedAt|date('d/m/Y H:i')}}
                                     </td>
                                     <td class="right aligned">
                                         <div class="ui small buttons">

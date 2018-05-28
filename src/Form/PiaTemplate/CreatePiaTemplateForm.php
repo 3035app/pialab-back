@@ -15,6 +15,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class CreatePiaTemplateForm extends AbstractType
 {
@@ -30,11 +32,19 @@ class CreatePiaTemplateForm extends AbstractType
                 'required' => true,
                 'label'    => 'Nom',
             ])
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'label'    => 'Description',
+            ])
+            ->add('data', FileType::class, [
+                'label'    => 'Fichier d\'export',
+                'required' => true,
+            ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'fluid',
                 ],
-                'label' => 'Créer la structure',
+                'label' => 'Créer le gabarit',
             ])
         ;
     }

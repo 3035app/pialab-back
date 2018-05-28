@@ -13,6 +13,8 @@ namespace PiaApi\Form\PiaTemplate;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class EditPiaTemplateForm extends CreatePiaTemplateForm
 {
@@ -21,6 +23,20 @@ class EditPiaTemplateForm extends CreatePiaTemplateForm
         parent::buildForm($builder, $options);
         $builder
             ->remove('submit')
+            ->remove('data')
+
+            ->add('importedFileName', TextType::class, [
+                'label'      => 'Nom du fichier actuel',
+                'required'   => false,
+                'disabled'   => true,
+            ])
+
+            ->add('newData', FileType::class, [
+                'mapped'     => false,
+                'label'      => 'Nouveau fichier d\'export (Laissez vide si vous n\'avez pas besoin de changer de fichier)',
+                'required'   => false,
+                'data_class' => null,
+            ])
 
             ->add('cancel', ButtonType::class, [
                 'attr' => [

@@ -18,6 +18,7 @@ use PiaApi\Form\PiaTemplate\EditPiaTemplateForm;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\Form\PiaTemplate\RemovePiaTemplateForm;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PiaTemplateController extends BackOfficeAbstractController
 {
@@ -58,7 +59,13 @@ class PiaTemplateController extends BackOfficeAbstractController
             $piaTemplateData = $form->getData();
 
             $piaTemplate = new PiaTemplate($piaTemplateData['name']);
-            $piaTemplate->setData(['test']);
+
+            /** @var UploadedFile $file */
+            $file = $piaTemplateData['data'];
+
+            if ($file) {
+                $piaTemplate->addFile($file);
+            }
 
             $this->getDoctrine()->getManager()->persist($piaTemplate);
             $this->getDoctrine()->getManager()->flush();
@@ -95,6 +102,12 @@ class PiaTemplateController extends BackOfficeAbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $piaTemplate = $form->getData();
+
+            $hasFile = $request->files->get('edit_pia_template_form');
+
+            if ($hasFile && $file = $hasFile['newData']) {
+                $piaTemplate->addFile($file);
+            }
 
             $this->getDoctrine()->getManager()->persist($piaTemplate);
             $this->getDoctrine()->getManager()->flush();

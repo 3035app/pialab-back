@@ -10,13 +10,14 @@
 
 namespace PiaApi\Entity\Pia;
 
-use Gedmo\Timestampable\Timestampable;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
-use PiaApi\Entity\Pia\Traits\ResourceTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Timestampable;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JMS\Serializer\Annotation as JMS;
+use PiaApi\Entity\Pia\Traits\ResourceTrait;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity
@@ -42,18 +43,25 @@ class PiaTemplate implements Timestampable
     protected $name;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      *
      * @var string
      */
     protected $description;
 
     /**
-     * @ORM\Column(type="json_array")
+     * @ORM\Column(type="json")
      *
-     * @var array
+     * @var string
      */
     protected $data;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    protected $importedFileName;
 
     /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="template")
@@ -75,17 +83,17 @@ class PiaTemplate implements Timestampable
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getData(): array
+    public function getData(): string
     {
         return $this->data;
     }
 
     /**
-     * @param array $data
+     * @param string $data
      */
-    public function setData(array $data): void
+    public function setData(string $data): void
     {
         $this->data = $data;
     }
@@ -109,7 +117,7 @@ class PiaTemplate implements Timestampable
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -117,7 +125,7 @@ class PiaTemplate implements Timestampable
     /**
      * @param string $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -136,5 +144,33 @@ class PiaTemplate implements Timestampable
     public function setPias(Collection $pias): void
     {
         $this->pias = $pias;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImportedFileName(): string
+    {
+        return $this->importedFileName;
+    }
+
+    /**
+     * @param string $importedFileName
+     */
+    public function setImportedFileName(string $importedFileName): void
+    {
+        $this->importedFileName = $importedFileName;
+    }
+
+    /**
+     * Add file to the pia_template.
+     *
+     * @param UploadedFile $file
+     */
+    public function addFile(UploadedFile $file): void
+    {
+        $content = file_get_contents($file->getPathname());
+        $this->setData($content);
+        $this->setImportedFileName($file->getClientOriginalName());
     }
 }
