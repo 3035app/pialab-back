@@ -33,7 +33,7 @@ class JsonValidator
         }
 
         $this->checkRootKeys($objectAsArray);
-        $this->removeDates($objectAsArray);
+        $this->convertDates($objectAsArray);
         $this->removeIDs($objectAsArray);
 
         return $objectAsArray;
@@ -58,7 +58,7 @@ class JsonValidator
      *
      * @param array $data
      */
-    private function removeDates(array &$data)
+    private function convertDates(array &$data)
     {
         array_walk_recursive($data, function (&$element, $key) {
             if ($key === 'created_at' || $key === 'updated_at' || preg_match('/.*_date$/', $key)) {
