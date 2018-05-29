@@ -10,8 +10,10 @@ jms_serializer:
     default_context:
         serialization:
             serialize_null: true
+            groups: ['Default']
         deserialization:
             serialize_null: true
+            groups: ['Default']
 #    metadata:
 #        auto_detection: false
 #        directories:

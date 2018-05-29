@@ -17,22 +17,23 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Pia;
+use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 
 class PiaController extends RestController
 {
     /**
-     * @FOSRest\Get("/pias/example")
-     *
-     * @return array
+     * @var jsonToEntityTransformer
      */
-    public function exampleAction(Request $request)
+    protected $jsonToEntityTransformer;
+
+    public function __construct(JsonToEntityTransformer $jsonToEntityTransformer)
     {
-        $this->canAccessRouteOr304();
+        $this->jsonToEntityTransformer = $jsonToEntityTransformer;
     }
 
     /**
      * @FOSRest\Get("/pias")
-     *%%Security("is_granted('ROLE_PIA_LIST')")
+     * @Security("is_granted('ROLE_PIA_LIST')")
      *
      * @return array
      */
@@ -50,7 +51,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Get("/pias/{id}")
-     *%%Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('ROLE_PIA_VIEW')")
      *
      * @return array
      */
@@ -70,7 +71,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Post("/pias")
-     *%%Security("is_granted('ROLE_PIA_CREATE')")
+     * @Security("is_granted('ROLE_PIA_CREATE')")
      *
      * @return array
      */
@@ -88,7 +89,7 @@ class PiaController extends RestController
     /**
      * @FOSRest\Put("/pias/{id}")
      * @FOSRest\Post("/pias/{id}")
-     *%%Security("is_granted('ROLE_PIA_EDIT')")
+     * @Security("is_granted('ROLE_PIA_EDIT')")
      *
      * @return array
      */
@@ -105,7 +106,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Delete("/pias/{id}")
-     *%%Security("is_granted('ROLE_PIA_DELETE')")
+     * @Security("is_granted('ROLE_PIA_DELETE')")
      *
      * @return array
      */
@@ -116,6 +117,27 @@ class PiaController extends RestController
         $pia = $this->getRepository()->find($id);
         $this->canAccessResourceOr304($pia);
         $this->remove($pia);
+
+        return $this->view($pia, Response::HTTP_OK);
+    }
+
+    /**
+     * @FOSRest\Post("/pias/import")
+     * @Security("is_granted('ROLE_PIA_CREATE')")
+     *
+     * @return array
+     */
+    public function importAction(Request $request)
+    {
+        $this->canAccessRouteOr304();
+
+        $importData = $request->get('data', null);
+        if ($importData === null) {
+            return $this->view($importData, Response::HTTP_BAD_REQUEST);
+        }
+
+        $pia = $this->jsonToEntityTransformer->transform($importData);
+        $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
     }

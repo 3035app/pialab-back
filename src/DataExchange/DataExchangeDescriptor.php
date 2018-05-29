@@ -10,6 +10,8 @@
 
 namespace PiaApi\DataExchange;
 
+use JMS\Serializer\Annotation as JMS;
+
 class DataExchangeDescriptor
 {
     const STRUCTURE = [
@@ -88,4 +90,46 @@ class DataExchangeDescriptor
             'updated_at',
         ],
     ];
+
+    /**
+     * @JMS\Groups({"Export"})
+     *
+     * @var mixed
+     */
+    public $pia;
+
+    /**
+     * @JMS\Groups({"Export"})
+     *
+     * @var array
+     */
+    public $answers;
+
+    /**
+     * @JMS\Groups({"Export"})
+     *
+     * @var array
+     */
+    public $measures;
+
+    /**
+     * @JMS\Groups({"Export"})
+     *
+     * @var array
+     */
+    public $evaluations;
+
+    /**
+     * @JMS\Groups({"Export"})
+     *
+     * @var array
+     */
+    public $comments;
+
+    /**
+     * @JMS\Groups({"Export"})
+     *
+     * @var array
+     */
+    public $attachments;
 }

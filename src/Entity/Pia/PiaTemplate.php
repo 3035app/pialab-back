@@ -30,6 +30,7 @@ class PiaTemplate implements Timestampable
 
     /**
      * @ORM\Column(type="boolean")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var bool
      */
@@ -37,6 +38,7 @@ class PiaTemplate implements Timestampable
 
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -44,6 +46,7 @@ class PiaTemplate implements Timestampable
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -59,6 +62,7 @@ class PiaTemplate implements Timestampable
 
     /**
      * @ORM\Column(type="string")
+     * @JMS\Exclude()
      *
      * @var string
      */
@@ -79,7 +83,6 @@ class PiaTemplate implements Timestampable
      *      joinColumns={@ORM\JoinColumn(name="structure_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="structure_pia_template_id", referencedColumnName="id")}
      * )
-     *
      * @JMS\Exclude()
      *
      * @var Collection
@@ -93,7 +96,6 @@ class PiaTemplate implements Timestampable
      *      joinColumns={@ORM\JoinColumn(name="structure_type_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="structure_type_pia_template_id", referencedColumnName="id")}
      * )
-     *
      * @JMS\Exclude()
      *
      * @var Collection

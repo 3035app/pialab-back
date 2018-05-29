@@ -29,78 +29,91 @@ class Pia implements Timestampable
 
     /**
      * @ORM\Column(type="smallint")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var int
      */
     protected $status = 0;
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $name;
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $authorName = '';
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $evaluatorName = '';
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $validatorName = '';
     /**
      * @ORM\Column(type="smallint")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var int
      */
     protected $dpoStatus = 0;
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $dpoOpinion = '';
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $concernedPeopleOpinion = '';
     /**
      * @ORM\Column(type="smallint")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var int
      */
     protected $concernedPeopleStatus = 0;
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var bool
      */
     protected $concernedPeopleSearchedOpinion;
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $concernedPeopleSearchedContent;
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $rejectionReason = '';
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -108,7 +121,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Exclude()
+     * @JMS\Groups({"Full"})
      *
      * @var Collection|Answer[]
      */
@@ -116,7 +129,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Exclude()
+     * @JMS\Groups({"Full"})
      *
      * @var Collection|Comment[]
      */
@@ -124,7 +137,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Exclude()
+     * @JMS\Groups({"Full"})
      *
      * @var Collection|Evaluation[]
      */
@@ -132,7 +145,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Measure", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Exclude()
+     * @JMS\Groups({"Full"})
      *
      * @var Collection|Measure[]
      */
@@ -140,7 +153,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Attachment", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Exclude()
+     * @JMS\Groups({"Full"})
      *
      * @var Collection|Attachment[]
      */
@@ -148,6 +161,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -155,6 +169,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -163,6 +178,7 @@ class Pia implements Timestampable
     /**
      * @ORM\Column(type="boolean")
      * @JMS\Type("boolean")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var bool
      */
@@ -170,7 +186,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="Structure", inversedBy="pias").
-     * @JMS\Exclude()
+     * @JMS\Groups({"Full"})
      *
      * @var Structure
      */
@@ -178,6 +194,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="PiaTemplate", inversedBy="pias")
+     * @JMS\Groups({"Full"})
      *
      * @var PiaTemplate
      */

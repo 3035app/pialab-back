@@ -26,6 +26,7 @@ class StructureType
 
     /**
      * @ORM\Column(name="name", type="string", nullable=false)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */

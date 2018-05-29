@@ -19,6 +19,8 @@ use PiaApi\Entity\Pia\Pia;
 use PiaApi\Entity\Pia\Evaluation;
 use PiaApi\Entity\Pia\Measure;
 use PiaApi\Entity\Pia\Attachment;
+use JMS\Serializer\SerializationContext;
+use PiaApi\DataExchange\DataExchangeDescriptor;
 
 class JsonToEntityTransformer
 {
@@ -111,6 +113,36 @@ class JsonToEntityTransformer
             $pia->getAttachments()->add($piaAttachment);
         }
 
+        $pia->setCreatedAt(new \DateTime());
+        $pia->setUpdatedAt(new \DateTime());
+
         return $pia;
+    }
+
+    public function reverseTransform(Pia $pia): string
+    {
+        $exportObject = new DataExchangeDescriptor();
+
+        /** @var SerializationContext $context */
+        $context = SerializationContext::create();
+        $context->setGroups(['Export']);
+
+        // Trigger Doctrine lazy-load
+        $pia->getAnswers()->count();
+        $pia->getAttachments()->count();
+        $pia->getComments()->count();
+        $pia->getEvaluations()->count();
+        $pia->getMeasures()->count();
+
+        $exportObject->pia = $pia;
+        $exportObject->answers = $pia->getAnswers();
+        $exportObject->attachments = $pia->getAttachments();
+        $exportObject->comments = $pia->getComments();
+        $exportObject->evaluations = $pia->getEvaluations();
+        $exportObject->measures = $pia->getMeasures();
+
+        $serializedPia = $this->serializer->serialize($exportObject, 'json', $context);
+
+        return $serializedPia;
     }
 }

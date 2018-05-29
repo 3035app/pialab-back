@@ -17,12 +17,23 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\PiaTemplate;
+use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 
 class PiaTemplateController extends RestController
 {
     /**
+     * @var JsonToEntityTransformer
+     */
+    protected $jsonToEntityTransformer;
+
+    public function __construct(JsonToEntityTransformer $jsonToEntityTransformer)
+    {
+        $this->jsonToEntityTransformer = $jsonToEntityTransformer;
+    }
+
+    /**
      * @FOSRest\Get("/pias_templates")
-     *%%Security("is_granted('ROLE_PIA_LIST')")
+     * @Security("is_granted('ROLE_PIA_LIST')")
      *
      * @return array
      */
@@ -38,7 +49,7 @@ class PiaTemplateController extends RestController
 
     /**
      * @FOSRest\Get("/pias_templates/{id}")
-     *%%Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('ROLE_PIA_VIEW')")
      *
      * @return array
      */
@@ -46,12 +57,36 @@ class PiaTemplateController extends RestController
     {
         $this->canAccessRouteOr304();
 
-        $pia = $this->getRepository()->find($id);
-        if ($pia === null) {
-            return $this->view($pia, Response::HTTP_NOT_FOUND);
+        $piaTemplate = $this->getRepository()->find($id);
+        if ($piaTemplate === null) {
+            return $this->view($piaTemplate, Response::HTTP_NOT_FOUND);
         }
 
-        $this->canAccessResourceOr304($pia);
+        $this->canAccessResourceOr304($piaTemplate);
+
+        return $this->view($piaTemplate, Response::HTTP_OK);
+    }
+
+    /**
+     * @FOSRest\Post("/pias/newFromTemplate/{id}")
+     * @Security("is_granted('ROLE_PIA_VIEW')")
+     *
+     * @return array
+     */
+    public function createFromTemplateAction(Request $request, $id)
+    {
+        $this->canAccessRouteOr304();
+
+        /** @var PiaTemplate $piaTemplate */
+        $piaTemplate = $this->getRepository()->find($id);
+        if ($piaTemplate === null) {
+            return $this->view($piaTemplate, Response::HTTP_NOT_FOUND);
+        }
+
+        $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
+        $pia->setName($request->get('name', $pia->getName()));
+        $pia->setStructure($this->getUser()->getStructure());
+        $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
     }

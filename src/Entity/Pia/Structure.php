@@ -29,6 +29,7 @@ class Structure implements Timestampable
 
     /**
      * @ORM\Column(name="name", type="string", nullable=false)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -36,13 +37,14 @@ class Structure implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="StructureType", inversedBy="structures")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var StructureType
      */
     protected $type;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pia", mappedBy="structure")
+     * @ORM\OneToMany(targetEntity="Pia", mappedBy="structure", cascade={"remove"})
      * @JMS\Exclude()
      *
      * @var Collection
