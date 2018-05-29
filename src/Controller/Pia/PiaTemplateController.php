@@ -32,7 +32,7 @@ class PiaTemplateController extends RestController
     }
 
     /**
-     * @FOSRest\Get("/pias_templates")
+     * @FOSRest\Get("/pias/templates")
      * @Security("is_granted('ROLE_PIA_LIST')")
      *
      * @return array
@@ -48,7 +48,7 @@ class PiaTemplateController extends RestController
     }
 
     /**
-     * @FOSRest\Get("/pias_templates/{id}")
+     * @FOSRest\Get("/pias/templates/{id}")
      * @Security("is_granted('ROLE_PIA_VIEW')")
      *
      * @return array
