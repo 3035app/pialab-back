@@ -43,13 +43,17 @@ class JsonToEntityTransformer
     /**
      * Transforms a json representation of a Pia to Pia entity.
      *
-     * @param string $json
+     * @param string|array $jsonOrArray
      *
      * @return Pia
      */
-    public function transform(string $json): Pia
+    public function transform($jsonOrArray): Pia
     {
-        $objectAsArray = $this->validator->parseAndValidate($json);
+        if (is_array($jsonOrArray)) {
+            $objectAsArray = $this->validator->validate($jsonOrArray);
+        } else {
+            $objectAsArray = $this->validator->parseAndValidate($jsonOrArray);
+        }
 
         // dump($objectAsArray);
 

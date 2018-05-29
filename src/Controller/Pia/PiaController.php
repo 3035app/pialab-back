@@ -137,6 +137,7 @@ class PiaController extends RestController
         }
 
         $pia = $this->jsonToEntityTransformer->transform($importData);
+        $pia->setStructure($this->getUser()->getStructure());
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
@@ -157,7 +158,7 @@ class PiaController extends RestController
 
         $serializedPia = $this->jsonToEntityTransformer->reverseTransform($pia);
 
-        return $this->view($serializedPia, Response::HTTP_OK);
+        return new Response($serializedPia, Response::HTTP_OK);
     }
 
     protected function getEntityClass()

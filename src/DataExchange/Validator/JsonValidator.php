@@ -32,6 +32,18 @@ class JsonValidator
             throw new \InvalidArgumentException(sprintf('Cannot deserialize json, reason : %s', $e->getMessage()));
         }
 
+        return $this->validate($objectAsArray);
+    }
+
+    /**
+     * Validate object consistency.
+     *
+     * @param array $objectAsArray
+     *
+     * @return array
+     */
+    public function validate(array $objectAsArray): array
+    {
         $this->checkRootKeys($objectAsArray);
         $this->convertDates($objectAsArray);
         $this->removeIDs($objectAsArray);
