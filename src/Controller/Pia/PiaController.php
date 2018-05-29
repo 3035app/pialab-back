@@ -50,7 +50,7 @@ class PiaController extends RestController
     }
 
     /**
-     * @FOSRest\Get("/pias/{id}")
+     * @FOSRest\Get("/pias/{id}", requirements={"id"="\d+"})
      * @Security("is_granted('ROLE_PIA_VIEW')")
      *
      * @return array
@@ -87,8 +87,8 @@ class PiaController extends RestController
     }
 
     /**
-     * @FOSRest\Put("/pias/{id}")
-     * @FOSRest\Post("/pias/{id}")
+     * @FOSRest\Put("/pias/{id}", requirements={"id"="\d+"})
+     * @FOSRest\Post("/pias/{id}", requirements={"id"="\d+"})
      * @Security("is_granted('ROLE_PIA_EDIT')")
      *
      * @return array
@@ -105,7 +105,7 @@ class PiaController extends RestController
     }
 
     /**
-     * @FOSRest\Delete("/pias/{id}")
+     * @FOSRest\Delete("/pias/{id}", requirements={"id"="\d+"})
      * @Security("is_granted('ROLE_PIA_DELETE')")
      *
      * @return array
@@ -140,6 +140,24 @@ class PiaController extends RestController
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
+    }
+
+    /**
+     * @FOSRest\Get("/pias/export/{id}", requirements={"id"="\d+"})
+     * @Security("is_granted('ROLE_PIA_VIEW')")
+     *
+     * @return array
+     */
+    public function exportAction(Request $request, $id)
+    {
+        $this->canAccessRouteOr304();
+
+        $pia = $this->getRepository()->find($id);
+        $this->canAccessResourceOr304($pia);
+
+        $serializedPia = $this->jsonToEntityTransformer->reverseTransform($pia);
+
+        return $this->view($serializedPia, Response::HTTP_OK);
     }
 
     protected function getEntityClass()
