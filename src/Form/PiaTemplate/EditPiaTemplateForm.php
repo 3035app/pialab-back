@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class EditPiaTemplateForm extends CreatePiaTemplateForm
 {
@@ -24,6 +25,14 @@ class EditPiaTemplateForm extends CreatePiaTemplateForm
         $builder
             ->remove('submit')
             ->remove('data')
+
+            ->add('enabled', CheckboxType::class, [
+                'required'   => false,
+                'label'      => 'Actif',
+                'label_attr' => [
+                    'title' => 'Un gabarit inactif ne sera visible de personne.',
+                ],
+            ])
 
             ->add('importedFileName', TextType::class, [
                 'label'      => 'Nom du fichier actuel',
@@ -37,7 +46,7 @@ class EditPiaTemplateForm extends CreatePiaTemplateForm
                 'data_class'   => null,
                 'label'        => 'Nouveau fichier d\'export',
                 'label_attr'   => [
-                    'title' => 'Laissez ce champ vide si vous n\'avez pas besoin de changer de fichier',
+                    'title' => 'Laissez ce champ vide si vous n\'avez pas besoin de changer les données du gabarit',
                 ],
             ])
 

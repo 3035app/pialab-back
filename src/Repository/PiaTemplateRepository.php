@@ -22,8 +22,10 @@ class PiaTemplateRepository extends EntityRepository
         $qb
             ->leftJoin('pt.structures', 'structures')
             ->leftJoin('pt.structureTypes', 'structureTypes')
+            ->set('pt.enabled', true)
             ->where($qb->expr()->in('structures', ':structure'))
             ->orWhere($qb->expr()->in('structureTypes', ':structureType'))
+            // ->andWhere($qb->expr()->in('pt.enabled', $qb->true))
         ;
 
         $qb->setParameters([

@@ -51,6 +51,7 @@ class PiaTemplate implements Timestampable
 
     /**
      * @ORM\Column(type="json")
+     * @JMS\Exclude()
      *
      * @var string
      */
@@ -110,6 +111,14 @@ class PiaTemplate implements Timestampable
     public function isEnabled(): bool
     {
         return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     */
+    public function setEnabled(bool $enabled): void
+    {
+        $this->enabled = $enabled;
     }
 
     /**

@@ -30,10 +30,13 @@
                                 <th>#</th>
                                 <th>Nom</th>
                                 <th>Description</th>
+                                <th>Actif ?</th>
                                 <th>Taille des données</th>
                                 <th>Nom du fichier</th>
                                 <th>Créé le</th>
                                 <th>Mis à jour le</th>
+                                <th><i class="building icon" title="Nombre de structures"></i></th>
+                                <th><i class="building outline icon" title="Nombre de types de Structures"></i></th>
                                 <th class="right aligned">
                                     <i class="cog icon"></i>
                                 </th>
@@ -47,12 +50,13 @@
                                     <td>{{ piaTemplate.name }}</td>
                                     <td>
                                         {% set hyphen = '' %}
-                                        {% if piaTemplate.description|length > 64 %}
+                                        {% if piaTemplate.description|length > 32 %}
                                             {% set hyphen = ' <i>[...]</i>' %}
                                         {% endif %}
                                         
-                                        {{ (piaTemplate.description[:64] ~ hyphen)|raw }}
+                                        {{ (piaTemplate.description[:32] ~ hyphen)|raw }}
                                     </td>
+                                    <td>{{ piaTemplate.isEnabled() ? '<span class="ui green label">Oui</span>' : '<span class="ui red label">Non</span>' }}</td>
                                     <td>{{ macro.getOctets(piaTemplate.data) }}</td>
                                     <td>{{ piaTemplate.importedFileName }}</td>
                                     <td>
@@ -60,6 +64,16 @@
                                     </td>
                                     <td>
                                         {{ piaTemplate.updatedAt|date('d/m/Y H:i')}}
+                                    </td>
+                                    <td>
+                                        <div class="ui teal label" {% if piaTemplate.structures|length == 0 %}style="opacity:0.3;"{% endif %}>
+                                            {{ piaTemplate.structures|length }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui blue label" {% if piaTemplate.structureTypes|length == 0 %}style="opacity:0.3;"{% endif %}>
+                                            {{ piaTemplate.structureTypes|length }}
+                                        </div>
                                     </td>
                                     <td class="right aligned">
                                         <div class="ui small buttons">
