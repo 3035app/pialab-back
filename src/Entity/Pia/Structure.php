@@ -67,6 +67,14 @@ class Structure implements Timestampable
      */
     protected $templates;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Folder", mappedBy="structure").
+     * @JMS\Groups({"Full"})
+     *
+     * @var Collection
+     */
+    protected $folders;
+
     public function __construct(string $name)
     {
         $this->name = $name;
@@ -74,6 +82,7 @@ class Structure implements Timestampable
         $this->pias = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->templates = new ArrayCollection();
+        $this->folders = new ArrayCollection();
     }
 
     /**
@@ -174,5 +183,37 @@ class Structure implements Timestampable
         }
         $template->removeStructure($this);
         $this->templates->removeElement($template);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getFolders(): Collection
+    {
+        return $this->folders;
+    }
+
+    /**
+     * @param Collection $folders
+     */
+    public function setFolders(Collection $folders): void
+    {
+        $this->folders = $folders;
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("rootFolder")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return Folder
+     */
+    public function getRootFolder(): ?Folder
+    {
+        $roots = $this->folders->filter(function (Folder $folder) {
+            return $folder->isRoot();
+        });
+
+        return $roots->count() > 0 ? $roots->first() : null;
     }
 }

@@ -120,6 +120,31 @@ class Pia implements Timestampable
     protected $appliedAdjustements = '';
 
     /**
+     * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string
+     */
+    protected $dposNames = '';
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string
+     */
+    protected $peopleNames = '';
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @JMS\Type("boolean")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var bool
+     */
+    protected $isExample = false;
+
+    /**
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="pia", cascade={"persist","remove"})
      * @JMS\Groups({"Full"})
      *
@@ -160,31 +185,6 @@ class Pia implements Timestampable
     protected $attachments;
 
     /**
-     * @ORM\Column(type="string")
-     * @JMS\Groups({"Default", "Export"})
-     *
-     * @var string
-     */
-    protected $dposNames = '';
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @JMS\Groups({"Default", "Export"})
-     *
-     * @var string
-     */
-    protected $peopleNames = '';
-
-    /**
-     * @ORM\Column(type="boolean")
-     * @JMS\Type("boolean")
-     * @JMS\Groups({"Default", "Export"})
-     *
-     * @var bool
-     */
-    protected $isExample = false;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Structure", inversedBy="pias").
      * @JMS\Groups({"Full"})
      *
@@ -199,6 +199,14 @@ class Pia implements Timestampable
      * @var PiaTemplate
      */
     protected $template;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Folder", inversedBy="pias")
+     * @JMS\Groups({"Full"})
+     *
+     * @var Folder
+     */
+    protected $folder;
 
     public function __construct()
     {
