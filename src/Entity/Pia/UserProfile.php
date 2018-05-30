@@ -19,7 +19,7 @@ use PiaApi\Entity\Oauth\User;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="pia_profile")
+ * @ORM\Table(name="user_profile")
  * @JMS\ExclusionPolicy("all")
  */
 class UserProfile implements Timestampable
@@ -131,7 +131,8 @@ class UserProfile implements Timestampable
      *
      * @return array
      */
-     public function getRoles() {
-       return $this->user->getRoles();
+    public function getRoles()
+    {
+        return $this->user->getRoles();
     }
 }
