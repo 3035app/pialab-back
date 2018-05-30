@@ -22,6 +22,11 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 class CreateStructureForm extends AbstractType
 {
     /**
+     * @var RegistryInterface
+     */
+    protected $doctrine;
+
+    /**
      * @var StructureTypeTransformer
      */
     protected $structureTypeTransformer;

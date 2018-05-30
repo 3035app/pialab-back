@@ -20,7 +20,6 @@ use PiaApi\Entity\Oauth\User;
 /**
  * @ORM\Entity
  * @ORM\Table(name="user_profile")
- * @JMS\ExclusionPolicy("all")
  */
 class UserProfile implements Timestampable
 {
@@ -30,6 +29,7 @@ class UserProfile implements Timestampable
     /**
      * @ORM\OneToOne(targetEntity="PiaApi\Entity\Oauth\User", inversedBy="profile")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @JMS\Exclude()
      *
      * @var User
      */
@@ -37,15 +37,15 @@ class UserProfile implements Timestampable
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @JMS\Expose
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $firstName = '';
 
     /**
-     * @ORM\Column(type="string")
-     * @JMS\Expose
+     * @ORM\Column(type="string", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -100,9 +100,9 @@ class UserProfile implements Timestampable
     }
 
     /**
-     * @JMS\Expose
      * @JMS\VirtualProperty
      * @JMS\SerializedName("username")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @return string
      */
@@ -112,9 +112,9 @@ class UserProfile implements Timestampable
     }
 
     /**
-     * @JMS\Expose
      * @JMS\VirtualProperty
      * @JMS\SerializedName("email")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @return string
      */
@@ -124,10 +124,10 @@ class UserProfile implements Timestampable
     }
 
     /**
-     * @JMS\Expose
      * @JMS\VirtualProperty
      * @JMS\Type("array<string>")
      * @JMS\SerializedName("roles")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @return array
      */

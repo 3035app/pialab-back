@@ -30,19 +30,23 @@ class Answer implements Timestampable
     /**
      * @ORM\ManyToOne(targetEntity="Pia", inversedBy="answers")
      * @JMS\Exclude()
+     *
      * @var Pia
      */
     protected $pia;
 
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $referenceTo = '';
+
     /**
      * @ORM\Column(type="json")
      * @JMS\Type("array")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var array
      */

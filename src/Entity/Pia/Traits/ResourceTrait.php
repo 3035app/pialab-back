@@ -11,6 +11,7 @@
 namespace PiaApi\Entity\Pia\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 trait ResourceTrait
 {
@@ -18,8 +19,9 @@ trait ResourceTrait
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
+     * @JMS\Groups({"Default", "Export", "Full"})
      *
-     * @var string
+     * @var int
      */
     protected $id;
 

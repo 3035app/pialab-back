@@ -11,11 +11,12 @@
 namespace PiaApi\Entity\Pia;
 
 use Gedmo\Timestampable\Timestampable;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -28,118 +29,131 @@ class Pia implements Timestampable
 
     /**
      * @ORM\Column(type="smallint")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var int
      */
     protected $status = 0;
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $name;
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $authorName = '';
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $evaluatorName = '';
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $validatorName = '';
     /**
      * @ORM\Column(type="smallint")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var int
      */
     protected $dpoStatus = 0;
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $dpoOpinion = '';
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $concernedPeopleOpinion = '';
     /**
      * @ORM\Column(type="smallint")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var int
      */
     protected $concernedPeopleStatus = 0;
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var bool
      */
     protected $concernedPeopleSearchedOpinion;
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $concernedPeopleSearchedContent;
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $rejectionReason = '';
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $appliedAdjustements = '';
 
     /**
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="pia", cascade={"remove"})
-     * @JMS\Exclude()
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="pia", cascade={"persist","remove"})
+     * @JMS\Groups({"Full"})
      *
      * @var Collection|Answer[]
      */
     protected $answers;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="pia", cascade={"remove"})
-     * @JMS\Exclude()
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="pia", cascade={"persist","remove"})
+     * @JMS\Groups({"Full"})
      *
      * @var Collection|Comment[]
      */
     protected $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="pia", cascade={"remove"})
-     * @JMS\Exclude()
+     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="pia", cascade={"persist","remove"})
+     * @JMS\Groups({"Full"})
      *
      * @var Collection|Evaluation[]
      */
     protected $evaluations;
 
     /**
-     * @ORM\OneToMany(targetEntity="Measure", mappedBy="pia", cascade={"remove"})
-     * @JMS\Exclude()
+     * @ORM\OneToMany(targetEntity="Measure", mappedBy="pia", cascade={"persist","remove"})
+     * @JMS\Groups({"Full"})
      *
      * @var Collection|Measure[]
      */
     protected $measures;
 
     /**
-     * @ORM\OneToMany(targetEntity="Attachment", mappedBy="pia", cascade={"remove"})
-     * @JMS\Exclude()
+     * @ORM\OneToMany(targetEntity="Attachment", mappedBy="pia", cascade={"persist","remove"})
+     * @JMS\Groups({"Full"})
      *
      * @var Collection|Attachment[]
      */
@@ -147,6 +161,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -154,6 +169,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -162,22 +178,47 @@ class Pia implements Timestampable
     /**
      * @ORM\Column(type="boolean")
      * @JMS\Type("boolean")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var bool
      */
     protected $isExample = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Structure", inversedBy="pias")
-     * @JMS\Exclude()
+     * @ORM\ManyToOne(targetEntity="Structure", inversedBy="pias").
+     * @JMS\Groups({"Full"})
      *
      * @var Structure
      */
     protected $structure;
 
-    public function getAnswers()
+    /**
+     * @ORM\ManyToOne(targetEntity="PiaTemplate", inversedBy="pias")
+     * @JMS\Groups({"Full"})
+     *
+     * @var PiaTemplate
+     */
+    protected $template;
+
+    public function __construct()
     {
-        return $this->answers->getValues();
+        $this->answers = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->evaluations = new ArrayCollection();
+        $this->measures = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("progress")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return int
+     */
+    public function computeProgress(): int
+    {
+        return round((100 / 36) * count($this->answers ?? []));
     }
 
     /**
@@ -197,13 +238,114 @@ class Pia implements Timestampable
     }
 
     /**
-     * @JMS\VirtualProperty
-     * @JMS\SerializedName("progress")
-     *
-     * @return int
+     * @return PiaTemplate
      */
-    public function computeProgress(): int
+    public function getTemplate(): ?PiaTemplate
     {
-        return round((100 / 36) * count($this->answers ?? []));
+        return $this->template;
+    }
+
+    /**
+     * @param PiaTemplate $template
+     */
+    public function setTemplate(?PiaTemplate $template): void
+    {
+        $this->template = $template;
+    }
+
+    /**
+     * @return Collection|Answer[]
+     */
+    public function getAnswers(): Collection
+    {
+        return $this->answers;
+    }
+
+    /**
+     * @param Collection|Answer[] $answers
+     */
+    public function setAnswers(Collection $answers): void
+    {
+        $this->answers = $answers;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param Collection|Comment[] $comments
+     */
+    public function setComments(Collection $comments): void
+    {
+        $this->comments = $comments;
+    }
+
+    /**
+     * @return Collection|Evaluation[]
+     */
+    public function getEvaluations(): Collection
+    {
+        return $this->evaluations;
+    }
+
+    /**
+     * @param Collection|Evaluation[] $evaluations
+     */
+    public function setEvaluations(Collection $evaluations): void
+    {
+        $this->evaluations = $evaluations;
+    }
+
+    /**
+     * @return Collection|Measure[]
+     */
+    public function getMeasures(): Collection
+    {
+        return $this->measures;
+    }
+
+    /**
+     * @param Collection|Measure[] $measures
+     */
+    public function setMeasures(Collection $measures): void
+    {
+        $this->measures = $measures;
+    }
+
+    /**
+     * @return Collection|Attachment[]
+     */
+    public function getAttachments(): Collection
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param Collection|Attachment[] $attachments
+     */
+    public function setAttachments(Collection $attachments): void
+    {
+        $this->attachments = $attachments;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 }

@@ -19,7 +19,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PiaApi\Repository\StructureRepository")
  * @ORM\Table(name="pia_structure")
  */
 class Structure implements Timestampable
@@ -29,6 +29,7 @@ class Structure implements Timestampable
 
     /**
      * @ORM\Column(name="name", type="string", nullable=false)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -36,13 +37,14 @@ class Structure implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="StructureType", inversedBy="structures")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var StructureType
      */
     protected $type;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pia", mappedBy="structure")
+     * @ORM\OneToMany(targetEntity="Pia", mappedBy="structure", cascade={"remove"})
      * @JMS\Exclude()
      *
      * @var Collection
@@ -57,12 +59,21 @@ class Structure implements Timestampable
      */
     protected $users;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="PiaTemplate", mappedBy="structures")
+     * @JMS\Exclude()
+     *
+     * @var Collection
+     */
+    protected $templates;
+
     public function __construct(string $name)
     {
         $this->name = $name;
 
         $this->pias = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->templates = new ArrayCollection();
     }
 
     /**
@@ -127,5 +138,41 @@ class Structure implements Timestampable
     public function setType(?StructureType $type): void
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return array|PiaTemplate[]
+     */
+    public function getTemplates(): array
+    {
+        return $this->templates->getValues();
+    }
+
+    /**
+     * @param PiaTemplate $template
+     *
+     * @throws InvalidArgumentException
+     */
+    public function addTemplate(PiaTemplate $template): void
+    {
+        if ($this->templates->contains($template)) {
+            throw new InvalidArgumentException(sprintf('Template « %s » is already in THIS', $template));
+        }
+        $template->addStructure($this);
+        $this->templates->add($template);
+    }
+
+    /**
+     * @param PiaTemplate $template
+     *
+     * @throws InvalidArgumentException
+     */
+    public function removeTemplate(PiaTemplate $template): void
+    {
+        if (!$this->templates->contains($template)) {
+            throw new InvalidArgumentException(sprintf('Template « %s » is not in THIS', $template));
+        }
+        $template->removeStructure($this);
+        $this->templates->removeElement($template);
     }
 }

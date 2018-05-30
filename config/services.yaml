@@ -9,7 +9,11 @@ services:
         autoconfigure: true
         public: false
         bind:
+            # Parameters
             $FOSUserResettingRetryTTL: '%fos_user.resetting.retry_ttl%'
+            # $SecurityRoleHierarchyRoles: '%security.role_hierarchy.roles%'
+
+            # Services
             FOS\UserBundle\Mailer\MailerInterface: '@fos_user.mailer.twig_swift'
         
     PiaApi\:

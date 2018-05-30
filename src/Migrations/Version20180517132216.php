@@ -43,7 +43,6 @@ class Version20180517132216 extends AbstractMigration
 
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE pia_structure DROP CONSTRAINT FK_5036DBE6C54C8C93');
         $this->addSql('DROP SEQUENCE pia_structure_type_id_seq CASCADE');
         $this->addSql('DROP TABLE pia_structure_type');

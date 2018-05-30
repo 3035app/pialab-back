@@ -12,14 +12,12 @@ namespace PiaApi\Controller\Pia;
 
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Answer;
 
 class AnswerController extends PiaSubController
 {
-
     /**
      * @FOSRest\Get("/pias/{piaId}/answers")
      * @Security("is_granted('ROLE_ANSWER_LIST')")

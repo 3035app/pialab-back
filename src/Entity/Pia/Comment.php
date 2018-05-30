@@ -37,18 +37,23 @@ class Comment implements Timestampable
 
     /**
      * @ORM\Column(type="text")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $description;
+
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $referenceTo;
+
     /**
      * @ORM\Column(type="boolean")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var bool
      */
