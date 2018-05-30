@@ -72,6 +72,7 @@ class Folder implements Timestampable
      * @ORM\ManyToOne(targetEntity="Folder")
      * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
      * @JMS\Groups({"Default"})
+     * @JMS\MaxDepth(1)
      *
      * @var Folder
      */
@@ -82,6 +83,7 @@ class Folder implements Timestampable
      * @ORM\ManyToOne(targetEntity="Folder", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      * @JMS\Groups({"Default"})
+     * @JMS\MaxDepth(1)
      *
      * @var Folder
      */
@@ -91,6 +93,7 @@ class Folder implements Timestampable
      * @ORM\OneToMany(targetEntity="Folder", mappedBy="parent")
      * @ORM\OrderBy({"lft" = "ASC"})
      * @JMS\Groups({"Default"})
+     * @JMS\MaxDepth(2)
      *
      * @var Collection
      */
