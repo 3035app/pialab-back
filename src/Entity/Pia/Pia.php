@@ -210,6 +210,18 @@ class Pia implements Timestampable
     }
 
     /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("progress")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return int
+     */
+    public function computeProgress(): int
+    {
+        return round((100 / 36) * count($this->answers ?? []));
+    }
+
+    /**
      * @return Structure
      */
     public function getStructure(): ?Structure
