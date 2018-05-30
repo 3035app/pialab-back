@@ -11,7 +11,6 @@
 namespace PiaApi\Form\User\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
-use PiaApi\Entity\Oauth\Client;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Entity\Pia\UserProfile;
 use PiaApi\Entity\Oauth\User;
@@ -32,29 +31,31 @@ class UserProfileTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param  UserProfile $profile
+     * @param UserProfile $profile
+     *
      * @return array
      */
     public function transform($profile)
     {
-        if($profile instanceof UserProfile) {
-          $user = $profile->getUser();
+        if ($profile instanceof UserProfile) {
+            $user = $profile->getUser();
 
-          $array = [
-            'id'       => $profile->getId(),
-            'user'     => $profile->getUser()->getId(),
+            $array = [
+            'id'            => $profile->getId(),
+            'user'          => $profile->getUser()->getId(),
             'firstName'     => $profile->getFirstName(),
-            'lastName'     => $profile->getLastName()
+            'lastName'      => $profile->getLastName(),
           ];
 
-          return $array;
+            return $array;
         }
 
         return $profile;
     }
 
     /**
-     * @param  string $value
+     * @param string $value
+     *
      * @return UserProfile
      */
     public function reverseTransform($value)
@@ -66,16 +67,16 @@ class UserProfileTransformer implements DataTransformerInterface
 
         $profileRepository = $this->doctrine->getRepository(UserProfile::class);
 
-        if($value['id']) {
-          $profile = $profileRepository->find($value['id']);
+        if ($value['id']) {
+            $profile = $profileRepository->find($value['id']);
         }
 
-        if(isset($value['firstName'])) {
-          $profile->setFirstName($value['firstName']);
+        if (isset($value['firstName'])) {
+            $profile->setFirstName($value['firstName']);
         }
 
-        if(isset($value['lastName'])) {
-          $profile->setLastName($value['lastName']);
+        if (isset($value['lastName'])) {
+            $profile->setLastName($value['lastName']);
         }
 
         $user->setProfile($profile);

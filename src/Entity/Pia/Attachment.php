@@ -29,6 +29,7 @@ class Attachment implements Timestampable
 
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -36,6 +37,7 @@ class Attachment implements Timestampable
 
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -53,12 +55,15 @@ class Attachment implements Timestampable
      * @ORM\Column(type="text")
      * @JMS\SerializedName("file")
      * @JMS\Accessor(setter="setFileFromBase64")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $attachmentFile;
+
     /**
      * @ORM\Column(type="boolean")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var bool
      */

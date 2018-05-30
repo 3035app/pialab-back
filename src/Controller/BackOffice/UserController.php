@@ -142,10 +142,10 @@ class UserController extends BackOfficeAbstractController
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
         }
 
-        if($user->getProfile() === null) {
-          $profile = new UserProfile();
-          $profile->setUser($user);
-          $user->setProfile($profile);
+        if ($user->getProfile() === null) {
+            $profile = new UserProfile();
+            $profile->setUser($user);
+            $user->setProfile($profile);
         }
 
         $form = $this->createForm(EditUserForm::class, $user, [

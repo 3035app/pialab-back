@@ -38,43 +38,56 @@ class Evaluation implements Timestampable
 
     /**
      * @ORM\Column(type="smallint")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var int
      */
     protected $status = 0;
+
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $referenceTo;
+
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $actionPlanComment;
+
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $evaluationComment;
+
     /**
      * @ORM\Column(type="datetime")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var DateTime
      */
     protected $evaluationDate;
+
     /**
      * @ORM\Column(type="json")
      * @JMS\Type("array")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var array
      */
     protected $gauges;
+
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var DateTime
      */
@@ -82,6 +95,7 @@ class Evaluation implements Timestampable
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
@@ -89,6 +103,7 @@ class Evaluation implements Timestampable
 
     /**
      * @ORM\Column(type="smallint")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var int
      */

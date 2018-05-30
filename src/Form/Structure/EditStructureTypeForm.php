@@ -13,6 +13,8 @@ namespace PiaApi\Form\Structure;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use PiaApi\Entity\Pia\PiaTemplate;
 
 class EditStructureTypeForm extends CreateStructureTypeForm
 {
@@ -21,6 +23,18 @@ class EditStructureTypeForm extends CreateStructureTypeForm
         parent::buildForm($builder, $options);
         $builder
             ->remove('submit')
+
+            ->add('templates', EntityType::class, [
+                'class'        => PiaTemplate::class,
+                'choice_label' => 'name',
+                'multiple'     => true,
+                'expanded'     => true,
+                'by_reference' => false,
+                'label'        => 'Gabarits de PIA disponibles',
+                'label_attr'   => [
+                    'title' => 'Les gabarits sélectionnés seront accessibles à toutes les structures de ce type de structure',
+                ],
+            ])
 
             ->add('cancel', ButtonType::class, [
                 'attr' => [

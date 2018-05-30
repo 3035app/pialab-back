@@ -30,25 +30,30 @@ class Measure implements Timestampable
     /**
      * @ORM\ManyToOne(targetEntity="Pia", inversedBy="measures")
      * @JMS\Exclude()
-     * 
+     *
      * @var Pia
      */
     protected $pia;
 
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $title;
+
     /**
      * @ORM\Column(type="text")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
     protected $content;
+
     /**
      * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */

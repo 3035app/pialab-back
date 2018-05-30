@@ -9,3 +9,27 @@
         </span>
     {% endif %}
 {% endmacro %}
+
+{% macro getOctets(octets) %}
+
+    {% set size = octets|length %}
+
+    {% spaceless %}
+        {% set kilobyte = 1024 %}
+        {% set megabyte = kilobyte * 1024 %}
+        {% set gigabyte = megabyte * 1024 %}
+        {% set terabyte = gigabyte * 1024 %}
+
+        {% if size < kilobyte %}
+            {{ size ~ ' o' }}
+        {% elseif size < megabyte %}
+            {{ (size / kilobyte)|number_format(2, '.') ~ ' Ko' }}
+        {% elseif size < gigabyte %}
+            {{ (size / megabyte)|number_format(2, '.') ~ ' Mo' }}
+        {% elseif size < terabyte %}
+            {{ (size / gigabyte)|number_format(2, '.') ~ ' Go' }}
+        {% else %}
+            {{ (size / terabyte)|number_format(2, '.') ~ ' To' }}
+        {% endif %}
+    {% endspaceless %}
+{% endmacro %}

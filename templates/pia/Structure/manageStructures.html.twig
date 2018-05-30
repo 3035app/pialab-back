@@ -34,7 +34,8 @@
                                         <th>#</th>
                                         <th>Nom</th>
                                         <th>Type</th>
-                                        <th>Nombre d'utilisateurs</th>
+                                        <th>Nb d'utilisateurs</th>
+                                        <th>Nb de PIAs</th>
                                         <th>Créé le</th>
                                         <th class="right aligned">
                                             <i class="cog icon"></i>
@@ -55,7 +56,10 @@
                                                 {% endif %}
                                             </td>
                                             <td>
-                                                <span class="ui label">{{ structure.users|length }}</span>
+                                                <span class="ui green label" {% if structure.users|length == 0 %}style="opacity:0.3"{% endif %}>{{ structure.users|length }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="ui red label" {% if structure.pias|length == 0 %}style="opacity:0.3"{% endif %}>{{ structure.pias|length }}</span>
                                             </td>
                                             <td>
                                                 {{ structure.createdAt|date('d/m/Y')}}
