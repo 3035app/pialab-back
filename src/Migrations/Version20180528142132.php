@@ -24,13 +24,13 @@ final class Version20180528142132 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_profile RENAME user_profile;');
+        $this->addSql('ALTER TABLE pia_profile RENAME user_profile');
     }
 
     public function down(Schema $schema): void
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE user_profile RENAME pia_profile;');
+        $this->addSql('ALTER TABLE user_profile RENAME pia_profile');
     }
 }
