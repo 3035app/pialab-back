@@ -25,6 +25,8 @@ final class Version20180528142132 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('ALTER TABLE pia_profile RENAME TO user_profile');
+        $this->addSql('CREATE SEQUENCE user_profile_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('ALTER INDEX uniq_6372cd59a76ed395 RENAME TO UNIQ_D95AB405A76ED395');
     }
 
     public function down(Schema $schema): void
@@ -32,5 +34,7 @@ final class Version20180528142132 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('ALTER TABLE user_profile RENAME TO pia_profile');
+        $this->addSql('ALTER INDEX UNIQ_D95AB405A76ED395 RENAME TO uniq_6372cd59a76ed395');
+        $this->addSql('DROP SEQUENCE user_profile_id_seq');
     }
 }
