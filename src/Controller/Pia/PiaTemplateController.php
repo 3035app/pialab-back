@@ -85,6 +85,9 @@ class PiaTemplateController extends RestController
 
         $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
         $pia->setName($request->get('name', $pia->getName()));
+        $pia->setAuthorName($request->get('author_name', $pia->getAuthorName()));
+        $pia->setEvaluatorName($request->get('evaluator_name', $pia->getEvaluatorName()));
+        $pia->setValidatorName($request->get('validator_name', $pia->getValidatorName()));
         $pia->setStructure($this->getUser()->getStructure());
         $this->persist($pia);
 
