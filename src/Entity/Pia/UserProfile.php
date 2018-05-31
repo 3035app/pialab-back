@@ -19,7 +19,7 @@ use PiaApi\Entity\Oauth\User;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="pia_profile")
+ * @ORM\Table(name="user_profile")
  */
 class UserProfile implements Timestampable
 {

@@ -356,4 +356,52 @@ class Pia implements Timestampable
     {
         $this->name = $name;
     }
+
+    /**
+     * @return string
+     */
+    public function getAuthorName(): string
+    {
+        return $this->authorName;
+    }
+
+    /**
+     * @param string $authorName
+     */
+    public function setAuthorName(string $authorName): void
+    {
+        $this->authorName = $authorName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEvaluatorName(): string
+    {
+        return $this->evaluatorName;
+    }
+
+    /**
+     * @param string $evaluatorName
+     */
+    public function setEvaluatorName(string $evaluatorName): void
+    {
+        $this->evaluatorName = $evaluatorName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValidatorName(): string
+    {
+        return $this->validatorName;
+    }
+
+    /**
+     * @param string $validatorName
+     */
+    public function setValidatorName(string $validatorName): void
+    {
+        $this->validatorName = $validatorName;
+    }
 }

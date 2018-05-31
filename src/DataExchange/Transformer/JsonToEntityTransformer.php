@@ -110,11 +110,13 @@ class JsonToEntityTransformer
 
         $pia->setAttachments(new ArrayCollection());
 
-        foreach ($objectAsArray['attachments'] as $attachment) {
-            /** @var Attachment $piaAttachment */
-            $piaAttachment = $this->serializer->fromArray($attachment, Attachment::class);
-            $piaAttachment->setPia($pia);
-            $pia->getAttachments()->add($piaAttachment);
+        if(isset($objectAsArray['attachments'])) {
+            foreach ($objectAsArray['attachments'] as $attachment) {
+                /** @var Attachment $piaAttachment */
+                $piaAttachment = $this->serializer->fromArray($attachment, Attachment::class);
+                $piaAttachment->setPia($pia);
+                $pia->getAttachments()->add($piaAttachment);
+            }
         }
 
         $pia->setCreatedAt(new \DateTime());
