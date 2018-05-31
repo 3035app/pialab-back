@@ -6,14 +6,22 @@ jms_serializer:
     handlers:
         datetime:
             default_format: 'Y-m-d\TH:i:sO' #ISO 8601
+        array_collection:
+            initialize_excluded: false
 
     default_context:
         serialization:
             serialize_null: true
             groups: ['Default']
+            enable_max_depth_checks: true
         deserialization:
             serialize_null: true
             groups: ['Default']
+    
+    object_constructors:
+        doctrine:
+            fallback_strategy: "null"
+
 #    metadata:
 #        auto_detection: false
 #        directories:

@@ -18,6 +18,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
+use PiaApi\Entity\Pia\PiaTemplate;
 
 class PiaController extends RestController
 {
@@ -80,6 +81,30 @@ class PiaController extends RestController
         $this->canAccessRouteOr304();
 
         $pia = $this->newFromRequest($request);
+        $pia->setStructure($this->getUser()->getStructure());
+        $this->persist($pia);
+
+        return $this->view($pia, Response::HTTP_OK);
+    }
+
+    /**
+     * @FOSRest\Post("/pias/new-from-template/{id}")
+     * @Security("is_granted('ROLE_PIA_VIEW')")
+     *
+     * @return array
+     */
+    public function createFromTemplateAction(Request $request, $id)
+    {
+        $this->canAccessRouteOr304();
+
+        /** @var PiaTemplate $piaTemplate */
+        $piaTemplate = $this->getDoctrine()->getRepository(PiaTemplate::class)->find($id);
+        if ($piaTemplate === null) {
+            return $this->view($piaTemplate, Response::HTTP_NOT_FOUND);
+        }
+
+        $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
+        $pia->setName($request->get('name', $pia->getName()));
         $pia->setStructure($this->getUser()->getStructure());
         $this->persist($pia);
 

@@ -53,13 +53,9 @@ security:
         #         # login_path: /login
         #         # check_path: /login_check
         #         provider: fos_userbundle
-        profile:
-            pattern:    ^/profile
-            fos_oauth:  true
-            stateless:  true
-            anonymous:  false # can be omitted as its default value
+        
         api:
-            pattern:    ^/pias
+            pattern:    ^/(pias|profile|pia-templates|folders)
             fos_oauth:  true
             stateless:  true
             anonymous:  false # can be omitted as its default value

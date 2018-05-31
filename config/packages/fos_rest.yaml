@@ -3,6 +3,8 @@ fos_rest:
     zone:
         - { path: ^/pias }
         - { path: ^/profile }
+        - { path: ^/pia-templates }
+        - { path: ^/folders }
     body_converter:
         enabled: true
     body_listener:
