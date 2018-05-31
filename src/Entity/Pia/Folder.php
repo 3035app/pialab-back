@@ -102,7 +102,7 @@ class Folder implements Timestampable
     /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="folder")
      * @JMS\Groups({"Default", "Export"})
-     * @JMS\MaxDepth(1)
+     * @JMS\MaxDepth(2)
      *
      * @var Collection
      */
@@ -120,6 +120,8 @@ class Folder implements Timestampable
     {
         $this->name = $name;
         $this->structure = $structure;
+
+        $structure->getFolders()->add($this);
 
         $this->pias = new ArrayCollection();
         $this->children = new ArrayCollection();

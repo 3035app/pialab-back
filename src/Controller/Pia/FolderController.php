@@ -31,7 +31,7 @@ class FolderController extends RestController
         $this->canAccessRouteOr304();
 
         $structure = $this->getUser()->getStructure();
-        $collection = $this->getRepository()->findBy(['structure' => $structure]);
+        $collection = $this->getRepository()->findBy(['structure' => $structure, 'parent' => null]);
 
         return $this->view($collection, Response::HTTP_OK);
     }

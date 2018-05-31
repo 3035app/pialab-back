@@ -68,7 +68,7 @@ class Structure implements Timestampable
     protected $templates;
 
     /**
-     * @ORM\OneToMany(targetEntity="Folder", mappedBy="structure").
+     * @ORM\OneToMany(targetEntity="Folder", mappedBy="structure", cascade={"persist","remove"})
      * @JMS\Groups({"Full"})
      *
      * @var Collection

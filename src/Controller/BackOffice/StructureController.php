@@ -22,6 +22,7 @@ use PiaApi\Form\Structure\CreateStructureTypeForm;
 use PiaApi\Entity\Pia\StructureType;
 use PiaApi\Form\Structure\EditStructureTypeForm;
 use PiaApi\Form\Structure\RemoveStructureTypeForm;
+use PiaApi\Entity\Pia\Folder;
 
 class StructureController extends BackOfficeAbstractController
 {
@@ -66,6 +67,8 @@ class StructureController extends BackOfficeAbstractController
             $structure = new Structure($structureData['name']);
 
             $structure->setType($structureData['type']);
+
+            $rootFolder = new Folder('root', $structure);
 
             $this->getDoctrine()->getManager()->persist($structure);
             $this->getDoctrine()->getManager()->flush();
