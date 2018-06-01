@@ -21,18 +21,44 @@ class PiaTemplateRepository extends EntityRepository
 
         $qb
             ->leftJoin('pt.structures', 'structures')
-            ->leftJoin('pt.structureTypes', 'structureTypes')
-            ->set('pt.enabled', true);
+            ->leftJoin('pt.structureTypes', 'structureTypes');
 
         if ($structure !== null) {
-            $qb
-                ->where($qb->expr()->in('structures', ':structure'))
-                ->orWhere($qb->expr()->in('structureTypes', ':structureType'));
+            $or = $qb
+                ->expr()->orX(
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('pt.enabled', ':enabled'),
+                        $qb->expr()->in('structures', ':structure')
+                    ),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('pt.enabled', ':enabled'),
+                        $qb->expr()->in('structureTypes', ':structureType')
+                    )
+                )
+            ;
 
-            $qb->setParameters([
-                'structure'     => $structure,
-                'structureType' => $structure->getType(),
-            ]);
+            $qb->where($or);
+
+            $qb->setParameter('structure', $structure);
+            $qb->setParameter('structureType', $structure->getType());
+            $qb->setParameter('enabled', true);
+        } else {
+            $or = $qb
+                ->expr()->orX(
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('pt.enabled', ':enabled'),
+                        $qb->expr()->isNull('structures')
+                    ),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('pt.enabled', ':enabled'),
+                        $qb->expr()->isNull('structureType')
+                    )
+                )
+            ;
+
+            $qb->where($or);
+
+            $qb->setParameter('enabled', true);
         }
 
         return $qb->getQuery()->getResult();
