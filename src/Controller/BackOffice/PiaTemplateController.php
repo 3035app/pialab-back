@@ -66,6 +66,9 @@ class PiaTemplateController extends BackOfficeAbstractController
             if ($file) {
                 $piaTemplate->addFile($file);
             }
+            if (isset($piaTemplateData['description'])) {
+                $piaTemplate->setDescription($piaTemplateData['description']);
+            }
 
             $this->getDoctrine()->getManager()->persist($piaTemplate);
             $this->getDoctrine()->getManager()->flush();
