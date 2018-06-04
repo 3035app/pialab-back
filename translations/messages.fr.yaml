@@ -1,7 +1,7 @@
 ROLE_USER : Invité
-ROLE_CONTROLLER : Responsable de traitement
+ROLE_CONTROLLER : Responsable de Traitement
 ROLE_DPO : DPO
 ROLE_ADMIN : Administrateur Fonctionnel
 
 ROLE_TECHNICAL_ADMIN  : Administrateur Technique
-ROLE_SUPER_ADMIN  : Super Admin
+ROLE_SUPER_ADMIN  : Super Administrateur

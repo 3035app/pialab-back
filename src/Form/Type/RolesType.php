@@ -13,29 +13,15 @@ namespace PiaApi\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Security\Core\Role\Role;
-use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use PiaApi\Security\Role\RoleHierarchy;
 
 class RolesType extends AbstractType
 {
     private $roles = [];
 
-    public function __construct(TokenStorageInterface $tokenStorage, array $roles, RoleHierarchyInterface $roleHierarchy)
+    public function __construct(RoleHierarchy $roleHierarchy)
     {
-        $userRoleNames = $tokenStorage->getToken()->getUser()->getRoles();
-        $userRoles = array_map(function ($roleName) {
-            return new Role($roleName);
-        }, $userRoleNames);
-
-        $reachableRoleNames = array_map(function ($role) {
-            return $role->getRole();
-        }, $roleHierarchy->getReachableRoles($userRoles));
-
-        $roleNames = array_filter(array_keys($roles), function ($roleName) use ($reachableRoleNames) {
-            return in_array($roleName, $reachableRoleNames);
-        });
-
+        $roleNames = $roleHierarchy->getUserAccessibleRoles();
         $this->roles = array_combine($roleNames, $roleNames);
     }
 

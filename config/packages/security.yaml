@@ -4,32 +4,116 @@ security:
         allow_if_all_abstain: false
 
     role_hierarchy:
+
+        #PERMISSONS
+        CAN_MANAGE_FOLDERS:
+          - CAN_SHOW_FOLDER
+          - CAN_CREATE_FOLDER
+          - CAN_EDIT_FOLDER
+          - CAN_DELETE_FOLDER
+
+        CAN_MANAGE_STRUCTURES:
+          - CAN_SHOW_STRUCTURE
+          - CAN_CREATE_STRUCTURE
+          - CAN_EDIT_STRUCTURE
+          - CAN_DELETE_STRUCTURE
+
+        CAN_MANAGE_STRUCTURE_TYPES:
+          - CAN_SHOW_STRUCTURE_TYPE
+          - CAN_CREATE_STRUCTURE_TYPE
+          - CAN_EDIT_STRUCTURE_TYPE
+          - CAN_DELETE_STRUCTURE_TYPE
+
+        CAN_MANAGE_APPLICATIONS:
+          - CAN_SHOW_APPLICATION
+          - CAN_CREATE_APPLICATION
+          - CAN_EDIT_APPLICATION
+          - CAN_DELETE_APPLICATION
+
+        CAN_MANAGE_PIA_TEMPLATES:
+          - CAN_SHOW_PIA_TEMPLATE
+          - CAN_CREATE_PIA_TEMPLATE
+          - CAN_EDIT_PIA_TEMPLATE
+          - CAN_DELETE_PIA_TEMPLATE
+
+        CAN_EXPLORE_PIAS:
+          - CAN_SHOW_PIA
+          - CAN_SHOW_FOLDER
+          - CAN_SHOW_MEASURE
+          - CAN_SHOW_EVALUATION
+          - CAN_SHOW_ANSWER
+          - CAN_SHOW_COMMENT
+
+        CAN_MANAGE_PIAS:
+          - CAN_SHOW_PIA
+          - CAN_CREATE_PIA
+          - CAN_EDIT_PIA
+          - CAN_DELETE_PIA
+
+        CAN_MANAGE_ANSWERS:
+          - CAN_SHOW_ANSWER
+          - CAN_CREATE_ANSWER
+          - CAN_EDIT_ANSWER
+          - CAN_DELETE_ANSWER
+
+        CAN_MANAGE_EVALUATIONS:
+          - CAN_SHOW_EVALUATION
+          - CAN_CREATE_EVALUATION
+          - CAN_EDIT_EVALUATION
+          - CAN_DELETE_EVALUATION
+
+        CAN_MANAGE_MEASURES:
+          - CAN_SHOW_MEASURE
+          - CAN_CREATE_MEASURE
+          - CAN_EDIT_MEASURE
+          - CAN_DELETE_MEASURE
+
+        CAN_MANAGE_COMMENTS:
+          - CAN_SHOW_COMMENT
+          - CAN_CREATE_COMMENT
+          - CAN_EDIT_COMMENT
+          - CAN_DELETE_COMMENT
+
+        CAN_MANAGE_ATTACHMENTS:
+          - CAN_SHOW_ATTACHMENT
+          - CAN_CREATE_ATTACHMENT
+          - CAN_EDIT_ATTACHMENT
+          - CAN_DELETE_ATTACHMENT
+
+
+        CAN_MANAGE_USERS:
+          - CAN_SHOW_USER
+          - CAN_CREATE_USER
+          - CAN_EDIT_USER
+          - CAN_DELETE_USER
+
+        #Special permission which limit to owned users  (from the same structure)
+        CAN_MANAGE_OWNED_USERS:
+          - CAN_SHOW_USER
+          - CAN_CREATE_USER
+          - CAN_EDIT_USER
+          - CAN_DELETE_USER
+
+        #ROLE DEFINITIONS
         ROLE_USER:
-            - CAN_SHOW_PIA
-            - CAN_SHOW_MEASURE
-            - CAN_SHOW_EVALUATION
-            - CAN_SHOW_ANSWER
+            - CAN_EXPLORE_PIAS
+
         ROLE_CONTROLLER:
             - ROLE_USER
-            - CAN_EDIT_PIA
-            - CAN_CREATE_MEASURE
-            - CAN_EDIT_MEASURE
-            - CAN_CREATE_ANSWER
-            - CAN_EDIT_ANSWER
-            - CAN_DELETE_ANSWER
+            - CAN_MANAGE_MEASURES
+            - CAN_MANAGE_ANSWERS
+            - CAN_MANAGE_COMMENTS
+            - CAN_MANAGE_ATTACHMENTS
+            - CAN_MANAGE_EVALUATONS
+
         ROLE_DPO:
-            - ROLE_USER
-            - CAN_CREATE_PIA
-            - CAN_EDIT_PIA
-            - CAN_DELETE_PIA
-            - CAN_IMPORT_PIA
-            - CAN_DELETE_MEASURE
-            - CAN_CREATE_EVALUATION
-            - CAN_EDIT_EVALUATION
-            - CAN_DELETE_EVALUATION
-            - CAN_DELETE_ANSWER
-        ROLE_ADMIN:
             - ROLE_CONTROLLER
+            - CAN_MANAGE_PIAS
+            - CAN_SHOW_PIA_TEMPLATE
+            - CAN_IMPORT_PIA
+            - CAN_MANAGE_EVALUATIONS
+
+        ROLE_ADMIN:
             - ROLE_DPO
             - CAN_MANAGE_OWNED_USERS
 
@@ -37,8 +121,9 @@ security:
             - ROLE_ADMIN
             - CAN_EXPORT_PIA
             - CAN_MANAGE_STRUCTURES
+            - CAN_MANAGE_STRUCTURE_TYPES
             - CAN_MANAGE_PIA_TEMPLATES
-            - CAN_MANAGE_ALL_USERS
+            - CAN_MANAGE_USERS
             - CAN_MANAGE_APPLICATIONS
         ROLE_SUPER_ADMIN:
             - ROLE_ADMIN

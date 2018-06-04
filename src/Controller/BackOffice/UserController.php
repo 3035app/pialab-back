@@ -20,7 +20,7 @@ use PiaApi\Form\User\RemoveUserForm;
 use PiaApi\Form\User\SendResetPasswordEmailForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -70,16 +70,11 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers", name="manage_users")
+     * @Security("is_granted('CAN_SHOW_USER')")
      */
     public function manageUsersAction(Request $request)
     {
-        if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return $this->redirect($this->generateUrl('fos_user_security_login'));
-        }
-
-        $this->canAccess();
-
-        if (!$this->isGranted('CAN_MANAGE_ALL_USERS')) {
+        if (!$this->isGranted('CAN_MANAGE_USERS') && $this->isGranted('CAN_MANAGE_OWNED_USERS')) {
             $structure = $this->getUser()->getStructure();
             $pagerfanta = $this->buildUserPagerByStructure($request, $structure);
         } else {
@@ -93,13 +88,12 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/addUser", name="manage_users_add_user")
+     * @Security("is_granted('CAN_CREATE_USER')")
      *
      * @param Request $request
      */
     public function addUserAction(Request $request)
     {
-        $this->canAccess();
-
         $form = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
             'action'      => $this->generateUrl('manage_users_add_user'),
             'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') ? false : $this->getUser()->getStructure(),
@@ -143,13 +137,12 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/editUser/{userId}", name="manage_users_edit_user")
+     * @Security("is_granted('CAN_EDIT_USER')")
      *
      * @param Request $request
      */
     public function editUserAction(Request $request)
     {
-        $this->canAccess();
-
         $userId = $request->get('userId');
         $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
 
@@ -187,13 +180,12 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/removeUser/{userId}", name="manage_users_remove_user")
+     * @Security("is_granted('CAN_DELETE_USER')")
      *
      * @param Request $request
      */
     public function removeUserAction(Request $request)
     {
-        $this->canAccess();
-
         $userId = $request->get('userId');
         $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
 
@@ -227,6 +219,7 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/sendResetPasswordEmail/{userId}", name="manage_users_send_reset_password_email")
+     * @Security("is_granted('CAN_SHOW_USER')")
      *
      * @param string $username
      */
@@ -268,13 +261,6 @@ class UserController extends BackOfficeAbstractController
         return $this->render('pia/User/sendResetPasswordEmail.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-    protected function canAccess()
-    {
-        if (!$this->isGranted('CAN_MANAGE_OWNED_USERS') && !$this->isGranted('CAN_MANAGE_ALL_USERS')) {
-            throw new AccessDeniedHttpException();
-        }
     }
 
     protected function generateUsername(User $user)

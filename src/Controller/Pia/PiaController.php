@@ -34,7 +34,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Get("/pias")
-     * @Security("is_granted('ROLE_PIA_LIST')")
+     * @Security("is_granted('CAN_SHOW_PIA')")
      *
      * @return array
      */
@@ -52,7 +52,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Get("/pias/{id}", requirements={"id"="\d+"})
-     * @Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('CAN_SHOW_PIA')")
      *
      * @return array
      */
@@ -72,7 +72,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Post("/pias")
-     * @Security("is_granted('ROLE_PIA_CREATE')")
+     * @Security("is_granted('CAN_CREATE_PIA')")
      *
      * @return array
      */
@@ -89,7 +89,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Post("/pias/new-from-template/{id}")
-     * @Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('CAN_CREATE_PIA')")
      *
      * @return array
      */
@@ -116,7 +116,7 @@ class PiaController extends RestController
     /**
      * @FOSRest\Put("/pias/{id}", requirements={"id"="\d+"})
      * @FOSRest\Post("/pias/{id}", requirements={"id"="\d+"})
-     * @Security("is_granted('ROLE_PIA_EDIT')")
+     * @Security("is_granted('CAN_EDIT_PIA')")
      *
      * @return array
      */
@@ -133,7 +133,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Delete("/pias/{id}", requirements={"id"="\d+"})
-     * @Security("is_granted('ROLE_PIA_DELETE')")
+     * @Security("is_granted('CAN_EDIT_PIA')")
      *
      * @return array
      */
@@ -150,7 +150,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Post("/pias/import")
-     * @Security("is_granted('ROLE_PIA_CREATE')")
+     * @Security("is_granted('CAN_IMPORT_PIA')")
      *
      * @return array
      */
@@ -172,7 +172,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Get("/pias/export/{id}", requirements={"id"="\d+"})
-     * @Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('CAN_EXPORT_PIA')")
      *
      * @return array
      */

@@ -13,12 +13,12 @@ namespace PiaApi\Controller\BackOffice;
 use FOS\OAuthServerBundle\Model\ClientManagerInterface;
 use OAuth2\OAuth2;
 use PiaApi\Entity\Oauth\Client;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use PiaApi\Form\Application\CreateApplicationForm;
 use PiaApi\Form\Application\EditApplicationForm;
 use PiaApi\Form\Application\RemoveApplicationForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OauthController extends BackOfficeAbstractController
@@ -35,15 +35,10 @@ class OauthController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageApplications", name="manage_applications")
+     * @Security("is_granted('CAN_SHOW_APPLICATION')")
      */
     public function manageApplicationsAction(Request $request)
     {
-        if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return $this->redirect($this->generateUrl('fos_user_security_login'));
-        }
-
-        $this->canAccess();
-
         $pagerfanta = $this->buildPager($request, Client::class);
 
         return $this->render('pia/Application/manageApplications.html.twig', [
@@ -53,13 +48,12 @@ class OauthController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageApplications/addApplication", name="manage_applications_add_application")
+     * @Security("is_granted('CAN_CREATE_APPLICATION')")
      *
      * @param Request $request
      */
     public function addApplicationAction(Request $request)
     {
-        $this->canAccess();
-
         $form = $this->createForm(CreateApplicationForm::class, [
             'allowedGrantTypes' => [
                 OAuth2::GRANT_TYPE_IMPLICIT         => OAuth2::GRANT_TYPE_IMPLICIT,
@@ -95,13 +89,12 @@ class OauthController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageApplications/editApplication/{applicationId}", name="manage_applications_edit_application")
+     * @Security("is_granted('CAN_EDIT_APPLICATION')")
      *
      * @param Request $request
      */
     public function editApplicationAction(Request $request)
     {
-        $this->canAccess();
-
         $userId = $request->get('applicationId');
         $user = $this->getDoctrine()->getRepository(Client::class)->find($userId);
 
@@ -131,13 +124,12 @@ class OauthController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageApplications/removeApplication/{applicationId}", name="manage_applications_remove_application")
+     * @Security("is_granted('CAN_DELETE_APPLICATION')")
      *
      * @param Request $request
      */
     public function removeApplicationAction(Request $request)
     {
-        $this->canAccess();
-
         $applicationId = $request->get('applicationId');
         $user = $this->getDoctrine()->getRepository(Client::class)->find($applicationId);
 
@@ -167,12 +159,5 @@ class OauthController extends BackOfficeAbstractController
         return $this->render('pia/Application/removeApplication.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-    protected function canAccess()
-    {
-        if (!$this->isGranted('CAN_MANAGE_APPLICATIONS')) {
-            throw new AccessDeniedHttpException();
-        }
     }
 }

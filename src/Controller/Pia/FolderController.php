@@ -22,7 +22,7 @@ class FolderController extends RestController
 {
     /**
      * @FOSRest\Get("/folders")
-     * @Security("is_granted('ROLE_PIA_LIST')")
+     * @Security("is_granted('CAN_SHOW_FOLDER')")
      *
      * @return array
      */
@@ -38,7 +38,7 @@ class FolderController extends RestController
 
     /**
      * @FOSRest\Get("/folders/{id}")
-     * @Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('CAN_SHOW_FOLDER')")
      *
      * @return array
      */
@@ -58,7 +58,7 @@ class FolderController extends RestController
 
     /**
      * @FOSRest\Post("/folders")
-     * @Security("is_granted('ROLE_PIA_CREATE')")
+     * @Security("is_granted('CAN_CREATE_FOLDER')")
      *
      * @return array
      */
@@ -83,7 +83,7 @@ class FolderController extends RestController
     /**
      * @FOSRest\Put("/folders/{id}", requirements={"id"="\d+"})
      * @FOSRest\Post("/folders/{id}", requirements={"id"="\d+"})
-     * @Security("is_granted('ROLE_PIA_EDIT')")
+     * @Security("is_granted('CAN_EDIT_FOLDER')")
      *
      * @return array
      */
@@ -100,7 +100,7 @@ class FolderController extends RestController
 
     /**
      * @FOSRest\Delete("/folders/{id}", requirements={"id"="\d+"})
-     * @Security("is_granted('ROLE_PIA_DELETE')")
+     * @Security("is_granted('CAN_DELETE_FOLDER')")
      *
      * @return array
      */

@@ -11,7 +11,7 @@
     <table class="ui compact stackable striped table">
       <thead>
         <tr>
-          {% if is_granted('CAN_MANAGE_ALL_USERS') %}
+          {% if is_granted('CAN_MANAGE_USERS') %}
             <th>Application</th>
             <th>Structure</th>
           {% endif %}
@@ -31,7 +31,7 @@
 
         {% for user in users %}
           <tr>
-            {% if is_granted('CAN_MANAGE_ALL_USERS') %}
+            {% if is_granted('CAN_MANAGE_USERS') %}
               <td>
                 {% if user.application is not null %}
                   <a href="{{ path('manage_applications') }}">
