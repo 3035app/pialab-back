@@ -39,10 +39,14 @@ class PiaTemplateController extends RestController
      */
     public function listAction(Request $request)
     {
-        $this->canAccessRouteOr304();
-
         $structure = $this->getUser()->getStructure();
-        $collection = $this->getRepository()->findAvailablePiaTemplatesForStructure($structure);
+        if ($structure !== null) {
+            $collection = $this->getRepository()->findAvailablePiaTemplatesForStructure($structure);
+        } elseif ($this->isGranted('ROLE_TECHNICAL_ADMIN')) {
+            $collection = $this->getRepository()->findAll();
+        } else {
+            $collection = [];
+        }
 
         return $this->view($collection, Response::HTTP_OK);
     }
