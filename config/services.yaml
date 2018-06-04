@@ -1,7 +1,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+imports:
+    - { resource: pialab/parameters.yaml }
+
 parameters:
-    locale: 'en'
+    locale: 'fr'
 
 services:
     _defaults:
@@ -15,7 +18,7 @@ services:
 
             # Services
             FOS\UserBundle\Mailer\MailerInterface: '@fos_user.mailer.twig_swift'
-        
+
     PiaApi\:
         resource: '../src/*'
         exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
@@ -35,3 +38,11 @@ services:
     jms_serializer.object_constructor:
         alias: jms_serializer.doctrine_object_constructor
         public: false
+
+    PiaApi\Form\Type\RolesType:
+        arguments: ['@security.token_storage', '%security.role_hierarchy.roles%', '@security.role_hierarchy']
+        tags: [form.type]
+
+    PiaApi\Security\Voter\PermissionVoter:
+        arguments: ['@security.role_hierarchy']
+        tags: [security.voter]

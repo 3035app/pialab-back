@@ -13,15 +13,15 @@ namespace PiaApi\Form\User;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Form\Application\Transformer\ApplicationTransformer;
 use PiaApi\Form\Structure\Transformer\StructureTransformer;
-use PiaApi\Form\User\UserProfileForm;
 use PiaApi\Form\User\Transformer\UserProfileTransformer;
+use PiaApi\Form\Type\RolesType;
+use Symfony\Component\Security\Core\Security;
 
 class EditUserForm extends CreateUserForm
 {
@@ -33,10 +33,10 @@ class EditUserForm extends CreateUserForm
     public function __construct(RegistryInterface $doctrine,
         UserProfileTransformer $profileTransformer,
         ApplicationTransformer $applicationTransformer,
-        StructureTransformer $structureTransformer
-    )
-    {
-        parent::__construct($doctrine, $applicationTransformer, $structureTransformer);
+        StructureTransformer $structureTransformer,
+        Security $security
+    ) {
+        parent::__construct($doctrine, $applicationTransformer, $structureTransformer, $security);
         $this->profileTransformer = $profileTransformer;
     }
 
@@ -49,13 +49,12 @@ class EditUserForm extends CreateUserForm
             ->remove('submit')
 
             ->add('username', TextType::class, [
-                'label'    => 'Nom d\'utilisateur',
+                'label'    => 'Alias de l\'utilisateur',
             ])
-            ->add('roles', ChoiceType::class, [
+            ->add('roles', RolesType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
-                'choices'  => $this->userRoles,
                 'label'    => 'Rôles',
             ])
 
@@ -79,7 +78,7 @@ class EditUserForm extends CreateUserForm
                 'label' => 'Annuler',
             ])
             ->add('profile', UserProfileForm::class, [
-                'label'   => false
+                'label'   => false,
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

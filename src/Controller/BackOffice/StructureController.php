@@ -13,16 +13,17 @@ namespace PiaApi\Controller\BackOffice;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use PiaApi\Form\Structure\CreateStructureForm;
-use PiaApi\Form\Structure\EditStructureForm;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Pia\Folder;
+use PiaApi\Entity\Pia\StructureType;
+use PiaApi\Form\Structure\CreateStructureForm;
+use PiaApi\Form\Structure\EditStructureForm;
 use PiaApi\Form\Structure\RemoveStructureForm;
 use PiaApi\Form\Structure\CreateStructureTypeForm;
-use PiaApi\Entity\Pia\StructureType;
 use PiaApi\Form\Structure\EditStructureTypeForm;
 use PiaApi\Form\Structure\RemoveStructureTypeForm;
-use PiaApi\Entity\Pia\Folder;
+use PiaApi\Form\User\CreateUserForm;
 
 class StructureController extends BackOfficeAbstractController
 {
@@ -43,6 +44,34 @@ class StructureController extends BackOfficeAbstractController
         return $this->render('pia/Structure/manageStructures.html.twig', [
             'structures'     => $pagerfanta,
             'structureTypes' => $pagerfantaSt,
+        ]);
+    }
+
+    /**
+     * @Route("/showStructure/{structureId}", name="manage_structures_show_structure")
+     */
+    public function showStructureAction(Request $request)
+    {
+        $this->canAccess();
+
+        $structureId = $request->get('structureId');
+        $structure = $this->getDoctrine()->getRepository(Structure::class)->find($structureId);
+
+        if ($structure === null) {
+            throw new NotFoundHttpException(sprintf('Structure « %s » does not exist', $structureId));
+        }
+
+        $pagerfantaUsers = $this->buildUserPagerByStructure($request, $structure);
+
+        $userForm = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
+            'action'      => $this->generateUrl('manage_users_add_user'),
+            'structure'   => $structure,
+        ]);
+
+        return $this->render('pia/Structure/showStructure.html.twig', [
+            'structure'     => $structure,
+            'users'         => $pagerfantaUsers,
+            'userForm'      => $userForm->createView(),
         ]);
     }
 
@@ -266,7 +295,7 @@ class StructureController extends BackOfficeAbstractController
 
     protected function canAccess()
     {
-        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedHttpException();
         }
     }

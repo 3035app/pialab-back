@@ -79,7 +79,12 @@ class UserController extends BackOfficeAbstractController
 
         $this->canAccess();
 
-        $pagerfanta = $this->buildPager($request, User::class);
+        if (!$this->isGranted('CAN_MANAGE_ALL_USERS')) {
+            $structure = $this->getUser()->getStructure();
+            $pagerfanta = $this->buildUserPagerByStructure($request, $structure);
+        } else {
+            $pagerfanta = $this->buildPager($request, User::class);
+        }
 
         return $this->render('pia/User/manageUsers.html.twig', [
             'users' => $pagerfanta,
@@ -96,7 +101,9 @@ class UserController extends BackOfficeAbstractController
         $this->canAccess();
 
         $form = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
-            'action' => $this->generateUrl('manage_users_add_user'),
+            'action'      => $this->generateUrl('manage_users_add_user'),
+            'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') ? false : $this->getUser()->getStructure(),
+            'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') ? false : $this->getUser()->getApplication(),
         ]);
 
         $form->handleRequest($request);
@@ -108,6 +115,14 @@ class UserController extends BackOfficeAbstractController
             foreach ($userData['roles'] as $role) {
                 $user->addRole($role);
             }
+
+            $profile = new UserProfile();
+            $profile->setUser($user);
+            $user->setProfile($profile);
+            $profile->setFirstName($userData['profile']['firstName']);
+            $profile->setLastName($userData['profile']['lastName']);
+
+            $user->setUsername($this->generateUsername($user));
 
             $encoder = $this->encoderFactory->getEncoder($user);
             $user->setPassword($encoder->encodePassword($userData['password'], $user->getSalt()));
@@ -149,7 +164,9 @@ class UserController extends BackOfficeAbstractController
         }
 
         $form = $this->createForm(EditUserForm::class, $user, [
-            'action' => $this->generateUrl('manage_users_edit_user', ['userId' => $user->getId()]),
+            'action'      => $this->generateUrl('manage_users_edit_user', ['userId' => $user->getId()]),
+            'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') ? false : $this->getUser()->getStructure(),
+            'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') ? false : $this->getUser()->getApplication(),
         ]);
 
         $form->handleRequest($request);
@@ -255,8 +272,16 @@ class UserController extends BackOfficeAbstractController
 
     protected function canAccess()
     {
-        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->isGranted('CAN_MANAGE_OWNED_USERS') && !$this->isGranted('CAN_MANAGE_ALL_USERS')) {
             throw new AccessDeniedHttpException();
         }
+    }
+
+    protected function generateUsername(User $user)
+    {
+        $emailParts = explode('@', $user->getEmail());
+        $str = preg_replace('/[^a-z0-9]+/i', ' ', $emailParts[0]);
+
+        return '@' . str_replace(' ', '', ucwords($str));
     }
 }

@@ -171,7 +171,7 @@ class OauthController extends BackOfficeAbstractController
 
     protected function canAccess()
     {
-        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->isGranted('CAN_MANAGE_APPLICATIONS')) {
             throw new AccessDeniedHttpException();
         }
     }

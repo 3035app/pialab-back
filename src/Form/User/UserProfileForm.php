@@ -23,13 +23,13 @@ class UserProfileForm extends AbstractType
             ->add('user', HiddenType::class)
 
             ->add('firstName', TextType::class, [
-                'required' => false,
-                'label'    => 'FirstName',
+                'required' => true,
+                'label'    => 'Nom',
             ])
 
             ->add('lastName', TextType::class, [
-                'required' => false,
-                'label'    => 'LastName',
+                'required' => true,
+                'label'    => 'Prénom',
             ])
         ;
     }

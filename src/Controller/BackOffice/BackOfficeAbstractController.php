@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
+use PiaApi\Entity\OAuth\User;
+use PiaApi\Entity\Pia\Structure;
 
 class BackOfficeAbstractController extends Controller
 {
@@ -29,6 +31,32 @@ class BackOfficeAbstractController extends Controller
 
         $queryBuilder
             ->orderBy('e.id', 'DESC');
+
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+
+        $page = $request->get($pageParameter, 1);
+        $limit = $request->get($limitParameter, $defaultLimit);
+
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($limit);
+        $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
+
+        return $pagerfanta;
+    }
+
+    protected function buildUserPagerByStructure(
+          Request $request,
+            Structure $structure,
+            ?int $defaultLimit = 20,
+            ?string $pageParameter = 'page',
+            ?string $limitParameter = 'limit'
+        ): PagerfantaInterface {
+        $queryBuilder = $this->getDoctrine()->getRepository(User::class)->createQueryBuilder('e');
+
+        $queryBuilder
+                ->orderBy('e.id', 'DESC')
+                ->where('e.structure = :structure')
+                ->setParameter('structure', $structure);
 
         $adapter = new DoctrineORMAdapter($queryBuilder);
 

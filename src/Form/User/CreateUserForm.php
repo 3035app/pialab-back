@@ -10,17 +10,21 @@
 
 namespace PiaApi\Form\User;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use PiaApi\Entity\Oauth\Client;
 use PiaApi\Form\Application\Transformer\ApplicationTransformer;
 use PiaApi\Form\Structure\Transformer\StructureTransformer;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Oauth\Client;
+use PiaApi\Form\Type\RolesType;
+use Symfony\Component\Security\Core\Security;
 
 class CreateUserForm extends AbstractType
 {
@@ -39,37 +43,62 @@ class CreateUserForm extends AbstractType
      */
     protected $structureTransformer;
 
-    protected $userRoles = [
-        'ROLE_USER'        => 'ROLE_USER',
-        'ROLE_ADMIN'       => 'ROLE_ADMIN',
-        'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
-        'DPO'              => 'ROLE_DPO',
-        'Data controller'  => 'ROLE_CONTROLLER',
-    ];
+    /**
+     * @var Security
+     */
+    protected $security;
 
-    public function __construct(RegistryInterface $doctrine, ApplicationTransformer $applicationTransformer, StructureTransformer $structureTransformer)
+    public function __construct(
+      RegistryInterface $doctrine,
+       ApplicationTransformer $applicationTransformer,
+       StructureTransformer $structureTransformer,
+       Security $security)
     {
         $this->doctrine = $doctrine;
         $this->applicationTransformer = $applicationTransformer;
         $this->structureTransformer = $structureTransformer;
+        $this->security = $security;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
+        if (!$options['application']) {
+            $builder
             ->add('application', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
                 'expanded' => false,
-                'choices'  => $this->getApplications(),
+                'choices'  => $this->getApplications($options),
                 'label'    => 'Application',
-            ])
+            ]);
+        } else {
+            $builder
+                ->add('application', HiddenType::class, [
+                    'required'   => true,
+                    'data'       => $options['application'],
+                    'data_class' => null,
+                ]);
+        }
+        if (!$options['structure']) {
+            $builder
             ->add('structure', ChoiceType::class, [
                 'required' => false,
                 'multiple' => false,
                 'expanded' => false,
-                'choices'  => $this->getStructures(),
+                'choices'  => $this->getStructures($options),
                 'label'    => 'Structure',
+            ]);
+        } else {
+            $builder
+                  ->add('structure', HiddenType::class, [
+                      'required'   => true,
+                      'data'       => $options['structure'],
+                      'data_class' => null,
+                  ]);
+        }
+        $builder
+            ->add('profile', UserProfileForm::class, [
+                'label'   => false,
             ])
             ->add('email', EmailType::class, [
                 'label'    => 'Adresse email',
@@ -77,11 +106,10 @@ class CreateUserForm extends AbstractType
             ->add('password', PasswordType::class, [
                 'label'    => 'Mot de passe',
             ])
-            ->add('roles', ChoiceType::class, [
+            ->add('roles', RolesType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
-                'choices'  => $this->userRoles,
                 'label'    => 'Rôles',
             ])
             ->add('submit', SubmitType::class, [
@@ -96,25 +124,41 @@ class CreateUserForm extends AbstractType
         $builder->get('structure')->addModelTransformer($this->structureTransformer);
     }
 
-    private function getApplications(): array
+    private function getApplications(array $options): array
     {
         $applications = [];
-
-        foreach ($this->doctrine->getManager()->getRepository(Client::class)->findAll() as $application) {
-            $applications[$application->getId()] = $application->getName() ?? $application->getId();
+        if (!$options['application']) {
+            foreach ($this->doctrine->getManager()->getRepository(Client::class)->findAll() as $application) {
+                $applications[$application->getId()] = $application->getName() ?? $application->getId();
+            }
+        } else {
+            $app = $options['application'];
+            $applications[$app->getId()] = $app->getName();
         }
 
         return array_flip($applications);
     }
 
-    private function getStructures(): array
+    private function getStructures(array $options): array
     {
         $structures = [];
-
-        foreach ($this->doctrine->getManager()->getRepository(Structure::class)->findAll() as $structure) {
-            $structures[$structure->getId()] = $structure->getName() ?? $structure->getId();
+        if (!$options['structure']) {
+            foreach ($this->doctrine->getManager()->getRepository(Structure::class)->findAll() as $structure) {
+                $structures[$structure->getId()] = $structure->getName() ?? $structure->getId();
+            }
+        } else {
+            $struct = $options['structure'];
+            $structures[$struct->getId()] = $struct->getName();
         }
 
         return array_flip($structures);
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'application' => false,
+            'structure'   => false,
+        ]);
     }
 }
