@@ -269,4 +269,24 @@ class Folder implements Timestampable
     {
         return ($this->getParent() !== null ? $this->getParent()->getPath() : '') . '/' . $this->getName();
     }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("hierarchy")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return array
+     */
+    public function getHierarchy(): array
+    {
+        $ancestorHierarchy = $this->getParent() !== null ? $this->getParent()->getHierarchy() : [];
+
+        $ancestorHierarchy[$this->getLvl()] = [
+            'id'   => $this->getId(),
+            'lvl'  => $this->getLvl(),
+            'name' => $this->getName(),
+        ];
+
+        return $ancestorHierarchy;
+    }
 }
