@@ -66,15 +66,18 @@ class FolderController extends RestController
     {
         $this->canAccessRouteOr304();
 
-        if (($parentId = $request->get('parent_id')) === null) {
-            return $this->view('Missing parent id', Response::HTTP_BAD_REQUEST);
+        if ($request->get('parent_id') === null && $request->get('parent') === null) {
+            return $this->view('Missing parent identification', Response::HTTP_BAD_REQUEST);
         }
+
+        $parentId = $request->get('parent_id', $request->get('parent')['id']);
 
         $parent = $this->getRepository()->find($parentId);
 
         $folder = $this->newFromRequest($request);
         $folder->setStructure($this->getUser()->getStructure());
         $folder->setParent($parent);
+
         $this->persist($folder);
 
         return $this->view($folder, Response::HTTP_OK);

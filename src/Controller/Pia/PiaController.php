@@ -20,6 +20,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\Entity\Pia\PiaTemplate;
+use PiaApi\Entity\Pia\Folder;
 
 class PiaController extends RestController
 {
@@ -83,6 +84,14 @@ class PiaController extends RestController
         $this->canAccessRouteOr304();
 
         $pia = $this->newFromRequest($request);
+
+        if ($request->get('folder_id') !== null || $request->get('folder') !== null) {
+            $folderId = $request->get('folder_id', $request->get('folder')['id']);
+
+            $folder = $this->getResource($folderId, Folder::class);
+            $pia->setFolder($folder);
+        }
+
         $pia->setStructure($this->getUser()->getStructure());
         $this->persist($pia);
 
