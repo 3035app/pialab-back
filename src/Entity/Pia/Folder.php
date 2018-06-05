@@ -71,8 +71,7 @@ class Folder implements Timestampable
      * @Gedmo\TreeRoot
      * @ORM\ManyToOne(targetEntity="Folder")
      * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
-     * @JMS\Groups({"Default"})
-     * @JMS\MaxDepth(1)
+     * @JMS\Exclude()
      *
      * @var Folder
      */
@@ -184,19 +183,15 @@ class Folder implements Timestampable
     }
 
     /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("isRoot")
+     * @JMS\Groups({"Default", "Export"})
+     *
      * @return bool
      */
     public function isRoot(): bool
     {
         return $this->root === null || $this->root === $this;
-    }
-
-    /**
-     * @param Folder $root
-     */
-    public function setRoot(?self $root): void
-    {
-        $this->root = $root;
     }
 
     /**

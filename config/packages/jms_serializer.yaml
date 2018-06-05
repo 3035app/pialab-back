@@ -18,9 +18,9 @@ jms_serializer:
             serialize_null: true
             groups: ['Default']
     
-    object_constructors:
-        doctrine:
-            fallback_strategy: "null"
+    # object_constructors:
+    #     doctrine:
+    #         fallback_strategy: 'fallback'
 
 #    metadata:
 #        auto_detection: false

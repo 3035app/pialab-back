@@ -15,38 +15,121 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Util\Inflector as Inflector;
 use PiaApi\Entity\Pia\Pia;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
 
 abstract class RestController extends FOSRestController
 {
+    /**
+     * @var PropertyAccessorInterface
+     */
+    protected $propertyAccessor;
+
+    private static $entityClasses = null;
+
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
+    {
+        $this->propertyAccessor = $propertyAccessor;
+    }
+
+    /**
+     * Persists resource.
+     *
+     * @param mixed $entity
+     */
     protected function persist($entity)
     {
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Updates resource.
+     *
+     * @param mixed $entity
+     */
     protected function update($entity)
     {
         $this->getEntityManager()->merge($entity);
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Removes resource.
+     *
+     * @param mixed $entity
+     */
     protected function remove($entity)
     {
         $this->getEntityManager()->remove($entity);
         $this->getEntityManager()->flush();
     }
 
-    protected function getEntityManager()
+    /**
+     * Gest resource entity manager.
+     *
+     * @return EntityManager
+     */
+    protected function getEntityManager(): EntityManager
     {
         return $this->getDoctrine()->getManager();
     }
 
-    protected function getRepository()
+    /**
+     * Gets current resource entity repository.
+     *
+     * @return EntityRepository
+     */
+    protected function getRepository(): EntityRepository
     {
         return $this->getDoctrine()->getRepository($this->getEntityClass());
     }
 
-    protected function extractData(Request $request, $key = null)
+    /**
+     * Gives a resource for specific ID for the given class.
+     *
+     * @param int         $id
+     * @param string|null $entityclass
+     */
+    protected function getResource(int $id, ?string $entityclass = null)
+    {
+        $repo = $this->getRepository();
+        if ($entityclass !== null) {
+            $repo = $this->getDoctrine()->getRepository($entityclass);
+        }
+
+        return $repo->find($id);
+    }
+
+    /**
+     * Merge a resource with its representation served in request.
+     *
+     * @param mixed   $entity
+     * @param array   $attributesToMerge
+     * @param Request $request
+     */
+    protected function mergeFromRequest($entity, array $attributesToMerge, Request $request): void
+    {
+        foreach ($attributesToMerge as $attributeToMerge => $attributeType) {
+            $attributeData = $request->get($attributeToMerge);
+            if ($this->isTypeADoctrineEntity($attributeType) && isset($attributeData['id'])) {
+                $attributeData = $this->getResource($attributeData['id'], $attributeType);
+            }
+
+            $this->propertyAccessor->setValue($entity, $attributeToMerge, $attributeData);
+        }
+    }
+
+    /**
+     * Extracts data from request.
+     *
+     * @param Request $request
+     * @param string  $key
+     *
+     * @return array
+     */
+    protected function extractData(Request $request, $key = null): array
     {
         $data = $request->request->all();
         //if ($key !== null) {
@@ -101,7 +184,12 @@ abstract class RestController extends FOSRestController
         return $entity;
     }
 
-    public function canAccessRouteOr304()
+    /**
+     * Check that current User can access resource.
+     *
+     * @throws AccessDeniedHttpException
+     */
+    public function canAccessRouteOr304(): void
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw new AccessDeniedHttpException();
@@ -111,6 +199,26 @@ abstract class RestController extends FOSRestController
     public function canAccessResourceOr304($resource): void
     {
         // Each controllers should define this method to perform a fine access control
+    }
+
+    /**
+     * Check if $type is an object managed by Doctrine.
+     *
+     * @param string $type
+     *
+     * @return bool
+     */
+    private function isTypeADoctrineEntity(string $type): bool
+    {
+        if (self::$entityClasses === null) {
+            // Kind of cached list
+            self::$entityClasses = [];
+            foreach ($this->getDoctrine()->getManager()->getMetadataFactory()->getAllMetadata() as $meta) {
+                self::$entityClasses[] = $meta->getName();
+            }
+        }
+
+        return in_array($type, self::$entityClasses);
     }
 
     abstract protected function getEntityClass();
