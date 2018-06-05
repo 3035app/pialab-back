@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\Entity\Pia\PiaTemplate;
@@ -27,9 +28,10 @@ class PiaController extends RestController
      */
     protected $jsonToEntityTransformer;
 
-    public function __construct(JsonToEntityTransformer $jsonToEntityTransformer)
+    public function __construct(JsonToEntityTransformer $jsonToEntityTransformer, PropertyAccessorInterface $propertyAccessor)
     {
         $this->jsonToEntityTransformer = $jsonToEntityTransformer;
+        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
@@ -121,11 +123,21 @@ class PiaController extends RestController
      * @return array
      */
     public function updateAction(Request $request, $id)
-    {
+    {    
         $this->canAccessRouteOr304();
 
-        $pia = $this->newFromRequest($request);
+        $pia = $this->getResource($id);
         $this->canAccessResourceOr304($pia);
+
+        $updatableAttributes = [
+            'name'   => 'string',
+            'author_name' => 'string',
+            'evaluator_name' => 'string',
+            'validator_name' => 'string'
+        ];
+
+        $this->mergeFromRequest($pia, $updatableAttributes, $request);
+
         $this->update($pia);
 
         return $this->view($pia, Response::HTTP_OK);
