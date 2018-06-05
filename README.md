@@ -16,7 +16,7 @@ composer install
 bin/console doctrine:database:create
 bin/console doctrine:migrations:migrate --no-interaction
 
-bin/console sercer:start
+bin/console server:start
 ```
 
 ## User creation
