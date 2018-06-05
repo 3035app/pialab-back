@@ -404,4 +404,20 @@ class Pia implements Timestampable
     {
         $this->validatorName = $validatorName;
     }
+
+    /**
+     * @return Folder
+     */
+    public function getFolder(): ?Folder
+    {
+        return $this->folder;
+    }
+
+    /**
+     * @param Folder $folder
+     */
+    public function setFolder(?Folder $folder): void
+    {
+        $this->folder = $folder;
+    }
 }

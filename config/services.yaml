@@ -34,11 +34,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    # Used to fix bug when updating and entity througth REST api
-    jms_serializer.object_constructor:
-        alias: jms_serializer.doctrine_object_constructor
-        public: false
-
     PiaApi\Form\Type\RolesType:
         tags: [form.type]
 
@@ -48,3 +43,8 @@ services:
 
     PiaApi\Security\Role\RoleHierarchy:
         arguments: ['@security.token_storage', '%security.role_hierarchy.roles%', '@security.role_hierarchy']
+
+    # Used to fix bug when updating and entity througth REST api
+    # jms_serializer.object_constructor:
+    #     alias: jms_serializer.doctrine_object_constructor
+    #     public: false

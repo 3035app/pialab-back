@@ -46,7 +46,7 @@ class FolderController extends RestController
     {
         $this->canAccessRouteOr304();
 
-        $folder = $this->getRepository()->find($id);
+        $folder = $this->getResource($id);
         if ($folder === null) {
             return $this->view($folder, Response::HTTP_NOT_FOUND);
         }
@@ -91,8 +91,16 @@ class FolderController extends RestController
     {
         $this->canAccessRouteOr304();
 
-        $folder = $this->newFromRequest($request);
+        $folder = $this->getResource($id);
         $this->canAccessResourceOr304($folder);
+
+        $updatableAttributes = [
+            'name'   => 'string',
+            'parent' => Folder::class,
+        ];
+
+        $this->mergeFromRequest($folder, $updatableAttributes, $request);
+
         $this->update($folder);
 
         return $this->view($folder, Response::HTTP_OK);
