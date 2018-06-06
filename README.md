@@ -4,7 +4,7 @@
 
 ## Installation
 
-Installation process :
+Installation process (not for production environments) :
 
 ```bash
 git clone https://github.com/pia-lab/pialab-back
@@ -13,13 +13,10 @@ cd pialab-back
 
 composer install
 
-bin/console do:da:cr --connection=default
-bin/console do:da:cr --connection=customer
+bin/console doctrine:database:create
+bin/console doctrine:migrations:migrate --no-interaction
 
-bin/console do:sc:cr --em=default
-bin/console do:sc:cr --em=customer
-
-bin/console se:start
+bin/console server:start
 ```
 
 ## User creation

@@ -11,6 +11,8 @@ set_time_limit(0);
 
 require __DIR__.'/../vendor/autoload.php';
 
+umask(0000);
+
 if (!class_exists(Application::class)) {
     throw new \RuntimeException('You need to add "symfony/framework-bundle" as a Composer dependency.');
 }
