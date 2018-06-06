@@ -24,7 +24,7 @@ class FolderController extends RestController
      * @FOSRest\Get("/folders")
      * @Security("is_granted('ROLE_PIA_LIST')")
      *
-     * @return array
+     * @return View
      */
     public function listAction(Request $request)
     {
@@ -40,7 +40,7 @@ class FolderController extends RestController
      * @FOSRest\Get("/folders/{id}")
      * @Security("is_granted('ROLE_PIA_VIEW')")
      *
-     * @return array
+     * @return View
      */
     public function showAction(Request $request, $id)
     {
@@ -60,7 +60,7 @@ class FolderController extends RestController
      * @FOSRest\Post("/folders")
      * @Security("is_granted('ROLE_PIA_CREATE')")
      *
-     * @return array
+     * @return View
      */
     public function createAction(Request $request)
     {
@@ -88,7 +88,7 @@ class FolderController extends RestController
      * @FOSRest\Post("/folders/{id}", requirements={"id"="\d+"})
      * @Security("is_granted('ROLE_PIA_EDIT')")
      *
-     * @return array
+     * @return View
      */
     public function updateAction(Request $request, $id)
     {
@@ -113,13 +113,13 @@ class FolderController extends RestController
      * @FOSRest\Delete("/folders/{id}", requirements={"id"="\d+"})
      * @Security("is_granted('ROLE_PIA_DELETE')")
      *
-     * @return array
+     * @return View
      */
     public function deleteAction(Request $request, $id)
     {
         $this->canAccessRouteOr304();
 
-        $folder = $this->getRepository()->find($id);
+        $folder = $this->getResource($id);
         $this->canAccessResourceOr304($folder);
         $this->remove($folder);
 
