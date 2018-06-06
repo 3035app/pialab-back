@@ -121,7 +121,7 @@ class UserController extends BackOfficeAbstractController
             return $this->redirect($this->generateUrl('manage_users'));
         }
 
-        return $this->render('pia/Layout/form.html.twig', [
+        return $this->render('pia/User/createForm.html.twig', [
             'form' => $form->createView(),
         ]);
     }
