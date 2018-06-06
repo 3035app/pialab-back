@@ -39,7 +39,7 @@ class UsersCest
         $I->fillField('input[name="create_user_form[email]"]', $this->email);
         $I->fillField('input[name="create_user_form[password]"]', $this->password);
 
-        $I->checkSUIOption('input[name="create_user_form[roles][]"][value="ROLE_SUPER_ADMIN"]');
+        $I->checkSUIOption('input[name="create_user_form[roles]"][value="ROLE_SUPER_ADMIN"]');
 
         $I->click('[name="create_user_form[submit]"]');
     }
