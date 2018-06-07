@@ -112,6 +112,12 @@ class PiaController extends RestController
         }
 
         $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
+        if (($folderId = $request->get('folder_id')) !== null) {
+            $folder = $this->getResource($request->get('folder_id'), Folder::class);
+        } else {
+            $folder = $this->getUser()->getStructure()->getRootFolder();
+        }
+        $pia->setFolder($folder);
         $pia->setName($request->get('name', $pia->getName()));
         $pia->setAuthorName($request->get('author_name', $pia->getAuthorName()));
         $pia->setEvaluatorName($request->get('evaluator_name', $pia->getEvaluatorName()));
