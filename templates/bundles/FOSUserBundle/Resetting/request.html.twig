@@ -27,9 +27,13 @@
                             <label for="username" class="ui teal header">{{ 'resetting.request.username'|trans }}</label>
                             <input type="text" id="username" name="username" required="required"/>
                         </div>
-                        
+
                         <div>
-                            <input class="ui fluid button teal" type="submit" value="{{ 'resetting.request.submit'|trans }}"/>
+                            <div class="ui fluid buttons">
+                                <button class="ui positive button" type="submit">{{ 'resetting.request.submit'|trans }}</button>
+                                <div class="or" data-text="ou"></div>
+                                <a class="ui teal button" onclick="javascript:window.history.go(-1);">{{ 'resetting.request.cancel'|trans }}</a>
+                            </div>
                         </div>
                     </form>
                 </div>
