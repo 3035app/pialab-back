@@ -1,4 +1,5 @@
 pia:
+    app_name: PiaLab
 
     http_error:
         503: >
@@ -11,3 +12,14 @@ pia:
             Cet accès est restreint, vous ne possedez pas les privilièges suffisant pour accéder à cette page.
         401: >
             Les identifiants sont invalides. Veuillez recommencer
+
+    layout:
+        title: "Interface d'Administration"
+
+        navbar:
+            users: Utilisateurs
+            applications: Applications
+            structures: Structures
+            templates: Gabarits
+            logged_in_as: Connecté en tant que
+            logout: Déconnexion

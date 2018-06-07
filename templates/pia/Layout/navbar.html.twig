@@ -1,3 +1,5 @@
+{% trans_default_domain 'Pia' %}
+
 {% import _self as menu %}
 
 {% if activeItem is not defined %}
@@ -8,29 +10,29 @@
     <div class="item" style="padding:0;width:130px;background:#2B3E50 url({{ asset('assets/img/pia-lab-small.png') }}) no-repeat scroll 50% 50%;background-size:contain;"></div>
     <div class="menu">
         <a class="{{ menu.activeMenu(activeItem, 'users') }} item" href="{{ path('manage_users') }}">
-            <i class="user icon"></i>Utilisateurs
+            <i class="user icon"></i>{{ 'pia.layout.navbar.users'|trans }}
         </a>
         <a class="{{ menu.activeMenu(activeItem, 'applications') }} item" href="{{ path('manage_applications') }}">
-            <i class="database icon"></i>Applications
+            <i class="database icon"></i>{{ 'pia.layout.navbar.applications'|trans }}
         </a>
         <a class="{{ menu.activeMenu(activeItem, 'structures') }} item" href="{{ path('manage_structures') }}">
-            <i class="building icon"></i>Structures
+            <i class="building icon"></i>{{ 'pia.layout.navbar.structures'|trans }}
         </a>
         <a class="{{ menu.activeMenu(activeItem, 'pia_templates') }} item" href="{{ path('manage_pia_templates') }}">
-            <i class="building icon"></i>Gabarits
+            <i class="building icon"></i>{{ 'pia.layout.navbar.templates'|trans }}
         </a>
     </div>
     <div class="right menu">
         {% if app.user %}
             <div class="item">
-                Connecté en tant que :
+                {{ 'pia.layout.navbar.logged_in_as'|trans }} :
                 <span class="current username">{{ app.user.email }}</span>
             </div>
         {% endif %}
 
         <a class="active item" href="{{ path('fos_user_security_logout') }}">
             <i class="sign out icon"></i>
-            Logout
+            {{ 'pia.layout.navbar.logout'|trans }}
         </a>
     </div>
 </div>
