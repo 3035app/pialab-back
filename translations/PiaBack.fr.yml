@@ -1,0 +1,13 @@
+pia:
+
+    http_error:
+        503: >
+            L'application est en cours de maintenance.
+        500: >
+            Une erreur interne vient de se produire.
+        404: >
+            Page non trouvée. Vérifiez que l'URL est valide et que la page existe encore.
+        403: >
+            Cet accès est restreint, vous ne possedez pas les privilièges suffisant pour accéder à cette page.
+        401: >
+            Les identifiants sont invalides. Veuillez recommencer
