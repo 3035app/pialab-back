@@ -27,7 +27,7 @@ class RolesTransformer implements DataTransformerInterface
     /**
      * @param array $profile
      *
-     * @return array
+     * @return string
      */
     public function transform($roles)
     {

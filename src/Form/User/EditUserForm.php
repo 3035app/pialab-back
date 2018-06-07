@@ -42,6 +42,7 @@ class EditUserForm extends CreateUserForm
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
+
         $builder
             ->remove('password')
             ->remove('submit')

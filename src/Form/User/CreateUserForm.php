@@ -22,9 +22,6 @@ use PiaApi\Form\Application\Transformer\ApplicationTransformer;
 use PiaApi\Form\Structure\Transformer\StructureTransformer;
 use PiaApi\Form\User\Transformer\RolesTransformer;
 use PiaApi\Entity\Pia\Structure;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class CreateUserForm extends AbstractType
 {
@@ -100,14 +97,6 @@ class CreateUserForm extends AbstractType
         $builder->get('application')->addModelTransformer($this->applicationTransformer);
         $builder->get('structure')->addModelTransformer($this->structureTransformer);
         $builder->get('roles')->addModelTransformer($this->rolesTransformer);
-
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
-            $user = $event->getData();
-
-            if (!$user instanceof UserInterface) {
-                return;
-            }
-        });
     }
 
     private function getApplications(): array
