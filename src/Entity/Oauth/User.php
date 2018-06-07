@@ -78,7 +78,7 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         $this->email = $email;
         $this->username = $email;
         $this->password = $password;
-        $this->roles = ['ROLE_USER'];
+        $this->roles = [];
         $this->creationDate = new \DateTime();
         $this->expirationDate = new \DateTimeImmutable('+1 Year');
         $this->enabled = true;

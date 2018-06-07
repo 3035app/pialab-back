@@ -20,6 +20,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Entity\Oauth\Client;
 use PiaApi\Form\Application\Transformer\ApplicationTransformer;
 use PiaApi\Form\Structure\Transformer\StructureTransformer;
+use PiaApi\Form\User\Transformer\RolesTransformer;
 use PiaApi\Entity\Pia\Structure;
 
 class CreateUserForm extends AbstractType
@@ -39,19 +40,17 @@ class CreateUserForm extends AbstractType
      */
     protected $structureTransformer;
 
-    protected $userRoles = [
-        'ROLE_USER'        => 'ROLE_USER',
-        'ROLE_ADMIN'       => 'ROLE_ADMIN',
-        'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
-        'DPO'              => 'ROLE_DPO',
-        'Data controller'  => 'ROLE_CONTROLLER',
-    ];
+    /**
+     * @var RolesTransformer
+     */
+    protected $rolesTransformer;
 
-    public function __construct(RegistryInterface $doctrine, ApplicationTransformer $applicationTransformer, StructureTransformer $structureTransformer)
+    public function __construct(RegistryInterface $doctrine, ApplicationTransformer $applicationTransformer, StructureTransformer $structureTransformer, RolesTransformer $rolesTransformer)
     {
         $this->doctrine = $doctrine;
         $this->applicationTransformer = $applicationTransformer;
         $this->structureTransformer = $structureTransformer;
+        $this->rolesTransformer = $rolesTransformer;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -78,11 +77,14 @@ class CreateUserForm extends AbstractType
                 'label'    => 'Mot de passe',
             ])
             ->add('roles', ChoiceType::class, [
-                'required' => false,
-                'multiple' => true,
-                'expanded' => true,
-                'choices'  => $this->userRoles,
-                'label'    => 'Rôles',
+                'required'   => true,
+                'multiple'   => false,
+                'expanded'   => true,
+                'choices'    => $this->rolesTransformer->getRolesForChoiceList(),
+                'label'      => 'Rôles',
+                'label_attr' => [
+                    'title'  => 'Seulement 1 rôle peut être affecté à un utilisateur.',
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
@@ -94,6 +96,7 @@ class CreateUserForm extends AbstractType
 
         $builder->get('application')->addModelTransformer($this->applicationTransformer);
         $builder->get('structure')->addModelTransformer($this->structureTransformer);
+        $builder->get('roles')->addModelTransformer($this->rolesTransformer);
     }
 
     private function getApplications(): array

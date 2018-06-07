@@ -55,8 +55,6 @@ class JsonToEntityTransformer
             $objectAsArray = $this->validator->parseAndValidate($jsonOrArray);
         }
 
-        // dump($objectAsArray);
-
         // Creates the PIA
 
         /** @var Pia $pia */
@@ -110,7 +108,7 @@ class JsonToEntityTransformer
 
         $pia->setAttachments(new ArrayCollection());
 
-        if(isset($objectAsArray['attachments'])) {
+        if (isset($objectAsArray['attachments'])) {
             foreach ($objectAsArray['attachments'] as $attachment) {
                 /** @var Attachment $piaAttachment */
                 $piaAttachment = $this->serializer->fromArray($attachment, Attachment::class);
