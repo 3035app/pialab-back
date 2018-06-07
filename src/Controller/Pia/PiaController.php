@@ -20,6 +20,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\Entity\Pia\PiaTemplate;
+use PiaApi\Entity\Pia\Folder;
 
 class PiaController extends RestController
 {
@@ -83,6 +84,14 @@ class PiaController extends RestController
         $this->canAccessRouteOr304();
 
         $pia = $this->newFromRequest($request);
+
+        if ($request->get('folder_id') !== null || $request->get('folder') !== null) {
+            $folderId = $request->get('folder_id', $request->get('folder')['id']);
+
+            $folder = $this->getResource($folderId, Folder::class);
+            $pia->setFolder($folder);
+        }
+
         $pia->setStructure($this->getUser()->getStructure());
         $this->persist($pia);
 
@@ -105,6 +114,12 @@ class PiaController extends RestController
         }
 
         $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
+        if (($folderId = $request->get('folder_id')) !== null) {
+            $folder = $this->getResource($request->get('folder_id'), Folder::class);
+        } else {
+            $folder = $this->getUser()->getStructure()->getRootFolder();
+        }
+        $pia->setFolder($folder);
         $pia->setName($request->get('name', $pia->getName()));
         $pia->setAuthorName($request->get('author_name', $pia->getAuthorName()));
         $pia->setEvaluatorName($request->get('evaluator_name', $pia->getEvaluatorName()));
@@ -123,7 +138,7 @@ class PiaController extends RestController
      * @return array
      */
     public function updateAction(Request $request, $id)
-    {    
+    {
         $this->canAccessRouteOr304();
 
         $pia = $this->getResource($id);
@@ -133,7 +148,8 @@ class PiaController extends RestController
             'name'   => 'string',
             'author_name' => 'string',
             'evaluator_name' => 'string',
-            'validator_name' => 'string'
+            'validator_name' => 'string',
+            'folder' => Folder::class
         ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);
