@@ -132,7 +132,7 @@ class PiaController extends RestController
      * @return array
      */
     public function updateAction(Request $request, $id)
-    {    
+    {
         $this->canAccessRouteOr304();
 
         $pia = $this->getResource($id);
@@ -142,7 +142,8 @@ class PiaController extends RestController
             'name'   => 'string',
             'author_name' => 'string',
             'evaluator_name' => 'string',
-            'validator_name' => 'string'
+            'validator_name' => 'string',
+            'folder' => Folder::class
         ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);
