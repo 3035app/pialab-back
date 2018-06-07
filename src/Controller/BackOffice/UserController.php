@@ -25,6 +25,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use PiaApi\Entity\Pia\UserProfile;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserController extends BackOfficeAbstractController
 {
@@ -70,6 +71,8 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers", name="manage_users")
+     *
+     * @param Request $request
      */
     public function manageUsersAction(Request $request)
     {
@@ -117,6 +120,10 @@ class UserController extends BackOfficeAbstractController
 
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
+
+            if (isset($userData['sendResetingEmail'])) {
+                $this->sendResetingEmail($user);
+            }
 
             return $this->redirect($this->generateUrl('manage_users'));
         }
@@ -211,7 +218,8 @@ class UserController extends BackOfficeAbstractController
     /**
      * @Route("/manageUsers/sendResetPasswordEmail/{userId}", name="manage_users_send_reset_password_email")
      *
-     * @param string $username
+     * @param Request $request
+     * @param string  $username
      */
     public function sendResetPasswordEmailAction(Request $request, $userId)
     {
@@ -235,12 +243,7 @@ class UserController extends BackOfficeAbstractController
             // Uncomment this « if / endif » to apply the TTL between to email sending
             // if (!$user->isPasswordRequestNonExpired($this->retryTtl)) {
 
-            if (null === $user->getConfirmationToken()) {
-                $user->setConfirmationToken($this->tokenGenerator->generateToken());
-            }
-            $this->mailer->sendResettingEmailMessage($user);
-            $user->setPasswordRequestedAt(new \DateTime());
-            $this->userManager->updateUser($user);
+            $this->sendResetingEmail($user);
 
             return $this->redirect($this->generateUrl('manage_users'));
 
@@ -251,6 +254,21 @@ class UserController extends BackOfficeAbstractController
         return $this->render('pia/User/sendResetPasswordEmail.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * Sends FOSUser reset password email.
+     *
+     * @param UserInterface $user
+     */
+    private function sendResetingEmail(UserInterface $user): void
+    {
+        if (null === $user->getConfirmationToken()) {
+            $user->setConfirmationToken($this->tokenGenerator->generateToken());
+        }
+        $this->mailer->sendResettingEmailMessage($user);
+        $user->setPasswordRequestedAt(new \DateTime());
+        $this->userManager->updateUser($user);
     }
 
     protected function canAccess()

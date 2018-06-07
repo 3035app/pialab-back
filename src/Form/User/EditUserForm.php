@@ -20,7 +20,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Form\Application\Transformer\ApplicationTransformer;
 use PiaApi\Form\Structure\Transformer\StructureTransformer;
-use PiaApi\Form\User\UserProfileForm;
 use PiaApi\Form\User\Transformer\UserProfileTransformer;
 
 class EditUserForm extends CreateUserForm
@@ -34,8 +33,7 @@ class EditUserForm extends CreateUserForm
         UserProfileTransformer $profileTransformer,
         ApplicationTransformer $applicationTransformer,
         StructureTransformer $structureTransformer
-    )
-    {
+    ) {
         parent::__construct($doctrine, $applicationTransformer, $structureTransformer);
         $this->profileTransformer = $profileTransformer;
     }
@@ -47,6 +45,7 @@ class EditUserForm extends CreateUserForm
             ->remove('roles')
             ->remove('password')
             ->remove('submit')
+            ->remove('sendResetingEmail')
 
             ->add('username', TextType::class, [
                 'label'    => 'Nom d\'utilisateur',
@@ -79,7 +78,7 @@ class EditUserForm extends CreateUserForm
                 'label' => 'Annuler',
             ])
             ->add('profile', UserProfileForm::class, [
-                'label'   => false
+                'label'   => false,
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
