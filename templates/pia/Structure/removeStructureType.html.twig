@@ -3,9 +3,9 @@
 <div class="ui negative message">
     <div class="ui clearing basic segment">
         <div class="header">
-            Êtes vous certain de vouloir supprimer ce type de structure ?
+            {{ 'pia.structures.modals.remove_structure_type.title'|trans }}
         </div>
-        <i style="float:right;">(cliquez sur ce message pour annuler)</i>
+        <i style="float:right;">{{ 'pia.structures.modals.remove_structure_type.sub_title'|trans }}</i>
     </div>
 </div>
 
@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th colspan="100%">
-                Type de structure
+                {{ 'pia.structures.modals.remove_structure_type.resume.structure_type'|trans }}
             </th>
         </tr>
     </thead>
@@ -21,14 +21,14 @@
         <tr>
             <td class="collapsing">
                 <i class="chevron right icon"></i>
-                <b>Nom</b>
+                <b>{{ 'pia.structures.modals.remove_structure_type.resume.name'|trans }}</b>
             </td>
             <td>{{ structureType.name }}</td>
         </tr>
         <tr>
             <td class="collapsing">
                 <i class="building icon"></i>
-                <b>Nombre de structures associées</b>
+                <b>{{ 'pia.structures.modals.remove_structure_type.resume.structures_number'|trans }}</b>
             </td>
             <td>{{ structureType.structures|length }}</td>
         </tr>
@@ -37,9 +37,8 @@
 
 {{ form_start(form) }}
 
-{% do 
-    form.submit.setRendered() %}
+{% do form.submit.setRendered() %}
 
-<input type="submit" class="ui fluid red button" value="Supprimer le type de structure"/>
+<input type="submit" class="ui fluid red button" value="{{ 'pia.actions.remove'|trans }}"/>
 
 {{ form_end(form) }}

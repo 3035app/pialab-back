@@ -1,11 +1,13 @@
+{% trans_default_domain 'Pia' %}
+
 {% set structure = form.vars.value %}
 
 <div class="ui negative message">
     <div class="ui clearing basic segment">
         <div class="header">
-            Êtes vous certain de vouloir supprimer cette structure ?
+            {{ 'pia.structures.modals.remove.title'|trans }}
         </div>
-        <i style="float:right;">(cliquez sur ce message pour annuler)</i>
+        <i style="float:right;">{{ 'pia.structures.modals.remove.sub_title'|trans }}</i>
     </div>
 </div>
 
@@ -13,7 +15,7 @@
     <thead>
         <tr>
             <th colspan="100%">
-                Structure
+                {{ 'pia.structures.modals.remove.resume.structure'|trans }}
             </th>
         </tr>
     </thead>
@@ -21,21 +23,21 @@
         <tr>
             <td class="collapsing">
                 <i class="building icon"></i>
-                <b>Nom</b>
+                <b>{{ 'pia.structures.modals.remove.resume.name'|trans }}</b>
             </td>
             <td>{{ structure.name }}</td>
         </tr>
         <tr>
             <td class="collapsing">
                 <i class="users icon"></i>
-                <b>Nombre d'utilisateurs associés</b>
+                <b>{{ 'pia.structures.modals.remove.resume.users_number'|trans }}</b>
             </td>
             <td>{{ structure.users|length }}</td>
         </tr>
         <tr>
             <td class="collapsing">
                 <i class="folder open icon"></i>
-                <b>Nombre de PIAs associées</b>
+                <b>{{ 'pia.structures.modals.remove.resume.pias_number'|trans }}</b>
             </td>
             <td>{{ structure.pias|length }}</td>
         </tr>
@@ -44,9 +46,8 @@
 
 {{ form_start(form) }}
 
-{% do 
-    form.submit.setRendered() %}
+{% do form.submit.setRendered() %}
 
-<input type="submit" class="ui fluid red button" value="Supprimer la structure"/>
+<input type="submit" class="ui fluid red button" value="{{ 'pia.actions.remove'|trans }}"/>
 
 {{ form_end(form) }}

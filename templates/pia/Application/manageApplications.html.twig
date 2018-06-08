@@ -4,7 +4,9 @@
 
 {% import 'pia/Layout/_macros.html.twig' as macro %}
 
-{% block title %}{{ 'pia.applications.title'|trans }}{% endblock title %}
+{% block title %}
+    {{ 'pia.applications.title'|trans }}
+{% endblock title %}
 
 {% block navbar %}
     {% include 'pia/Layout/navbar.html.twig' with {
@@ -21,7 +23,8 @@
             <div class="ui segment">
 
                 <h2>
-                    <a href="?limit=1000" class="ui tiny button" style="float:right;">{{ 'pia.actions.display'|trans }} 1000</a>
+                    <a href="?limit=1000" class="ui tiny button" style="float:right;">{{ 'pia.actions.display'|trans }}
+                        1000</a>
                     {{ 'pia.applications.title'|trans }}
                 </h2>
 

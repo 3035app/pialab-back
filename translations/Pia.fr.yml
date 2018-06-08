@@ -33,6 +33,7 @@ pia:
     labels:
         yes: Oui
         no: Non
+        n_a: N/A
 
     applications:
         title: Applications
@@ -79,3 +80,40 @@ pia:
 
         add:
             title: Ajouter une application
+        
+        modals:
+            remove:
+                title: Êtes vous certain de vouloir supprimer ce gabarit ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    template: Gabarit
+                    name: Nom
+                    pias_number: Nombre de PIAs issues de ce gabarit
+
+    structures:
+        title: Structures
+
+        list:
+            id: "#"
+            name: Nom
+            type: Type
+            users_number: Nb d'utilisateurs
+            pias_number: Nb de PIAs
+            created_at: Créé le
+
+        modals:
+            remove:
+                title: Êtes vous certain de vouloir supprimer cette structure ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    structure: Structure
+                    name: Nom
+                    users_number: Nombre d'utilisateurs associés
+                    pias_number: Nombre de PIAs associées
+            remove_structure_type:
+                title: Êtes vous certain de vouloir supprimer ce type de structure ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    structure_type: Type de structure
+                    name: Nom
+                    structures_number: Nombre de structures associées

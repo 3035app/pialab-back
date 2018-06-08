@@ -1,8 +1,12 @@
+{% trans_default_domain 'Pia' %}
+
 {% extends 'pia/Layout/base.html.twig' %}
 
 {% import 'pia/Layout/_macros.html.twig' as macro %}
 
-{% block title %}PIA User Management{% endblock title %}
+{% block title %}
+    {{ 'pia.structures.title'|trans }}
+{% endblock title %}
 
 {% block navbar %}
     {% include 'pia/Layout/navbar.html.twig' with {
@@ -24,19 +28,19 @@
 
                         <h2>
                             <a href="?limit=1000" class="ui tiny button" style="float:right;">Voir 1000</a>
-                            Structures
+                            {{ 'pia.structures.title'|trans }}
                         </h2>
-                        
+
                         <div class="table responsive wrapper">
                             <table class="ui compact striped table">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Nom</th>
-                                        <th>Type</th>
-                                        <th>Nb d'utilisateurs</th>
-                                        <th>Nb de PIAs</th>
-                                        <th>Créé le</th>
+                                        <th>{{ 'pia.structures.list.id'|trans }}</th>
+                                        <th>{{ 'pia.structures.list.name'|trans }}</th>
+                                        <th>{{ 'pia.structures.list.type'|trans }}</th>
+                                        <th>{{ 'pia.structures.list.users_number'|trans }}</th>
+                                        <th>{{ 'pia.structures.list.pias_number'|trans }}</th>
+                                        <th>{{ 'pia.structures.list.created_at'|trans }}</th>
                                         <th class="right aligned">
                                             <i class="cog icon"></i>
                                         </th>
@@ -52,14 +56,14 @@
                                                 {% if structure.type is not null %}
                                                     {{ structure.type.name }}
                                                 {% else %}
-                                                    N/A
+                                                    {{ 'pia.labels.n_a'|trans }}
                                                 {% endif %}
                                             </td>
                                             <td>
-                                                <span class="ui green label" {% if structure.users|length == 0 %}style="opacity:0.3"{% endif %}>{{ structure.users|length }}</span>
+                                                <span class="ui green label" {% if structure.users|length == 0 %} style="opacity:0.3" {% endif %}>{{ structure.users|length }}</span>
                                             </td>
                                             <td>
-                                                <span class="ui red label" {% if structure.pias|length == 0 %}style="opacity:0.3"{% endif %}>{{ structure.pias|length }}</span>
+                                                <span class="ui red label" {% if structure.pias|length == 0 %} style="opacity:0.3" {% endif %}>{{ structure.pias|length }}</span>
                                             </td>
                                             <td>
                                                 {{ structure.createdAt|date('d/m/Y')}}
