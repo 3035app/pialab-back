@@ -21,6 +21,7 @@ use PiaApi\Entity\Oauth\Client;
 use PiaApi\Form\Application\Transformer\ApplicationTransformer;
 use PiaApi\Form\Structure\Transformer\StructureTransformer;
 use PiaApi\Entity\Pia\Structure;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class CreateUserForm extends AbstractType
 {
@@ -83,6 +84,13 @@ class CreateUserForm extends AbstractType
                 'expanded' => true,
                 'choices'  => $this->userRoles,
                 'label'    => 'Rôles',
+            ])
+            ->add('sendResetingEmail', CheckboxType::class, [
+                'required'     => false,
+                'label'        => 'Envoyer l\'email de RàZ de mot de passe ?',
+                'label_attr'   => [
+                    'title' => 'Envoyer automatiquement l\'email de réinitialisation de mot de passe à l\'adresse email saisie',
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

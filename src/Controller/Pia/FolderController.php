@@ -24,7 +24,7 @@ class FolderController extends RestController
      * @FOSRest\Get("/folders")
      * @Security("is_granted('ROLE_PIA_LIST')")
      *
-     * @return array
+     * @return View
      */
     public function listAction(Request $request)
     {
@@ -40,7 +40,7 @@ class FolderController extends RestController
      * @FOSRest\Get("/folders/{id}")
      * @Security("is_granted('ROLE_PIA_VIEW')")
      *
-     * @return array
+     * @return View
      */
     public function showAction(Request $request, $id)
     {
@@ -60,21 +60,24 @@ class FolderController extends RestController
      * @FOSRest\Post("/folders")
      * @Security("is_granted('ROLE_PIA_CREATE')")
      *
-     * @return array
+     * @return View
      */
     public function createAction(Request $request)
     {
         $this->canAccessRouteOr304();
 
-        if (($parentId = $request->get('parent_id')) === null) {
-            return $this->view('Missing parent id', Response::HTTP_BAD_REQUEST);
+        if ($request->get('parent_id') === null && $request->get('parent') === null) {
+            return $this->view('Missing parent identification', Response::HTTP_BAD_REQUEST);
         }
+
+        $parentId = $request->get('parent_id', $request->get('parent')['id']);
 
         $parent = $this->getRepository()->find($parentId);
 
         $folder = $this->newFromRequest($request);
         $folder->setStructure($this->getUser()->getStructure());
         $folder->setParent($parent);
+
         $this->persist($folder);
 
         return $this->view($folder, Response::HTTP_OK);
@@ -85,7 +88,7 @@ class FolderController extends RestController
      * @FOSRest\Post("/folders/{id}", requirements={"id"="\d+"})
      * @Security("is_granted('ROLE_PIA_EDIT')")
      *
-     * @return array
+     * @return View
      */
     public function updateAction(Request $request, $id)
     {
@@ -110,13 +113,13 @@ class FolderController extends RestController
      * @FOSRest\Delete("/folders/{id}", requirements={"id"="\d+"})
      * @Security("is_granted('ROLE_PIA_DELETE')")
      *
-     * @return array
+     * @return View
      */
     public function deleteAction(Request $request, $id)
     {
         $this->canAccessRouteOr304();
 
-        $folder = $this->getRepository()->find($id);
+        $folder = $this->getResource($id);
         $this->canAccessResourceOr304($folder);
         $this->remove($folder);
 

@@ -420,4 +420,16 @@ class Pia implements Timestampable
     {
         $this->folder = $folder;
     }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("folder_id")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return int
+     */
+    public function getFolderId(): ?int
+    {
+        return $this->folder !== null ? $this->folder->getId() : null;
+    }
 }
