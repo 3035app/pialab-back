@@ -23,3 +23,59 @@ pia:
             templates: Gabarits
             logged_in_as: Connecté en tant que
             logout: Déconnexion
+
+    actions:
+        add: Ajouter
+        display: Afficher
+        edit: Modifier
+        remove: Supprimer
+
+    labels:
+        yes: Oui
+        no: Non
+
+    applications:
+        title: Applications
+
+        list:
+            id: "#"
+            name: Nom
+            url: URL
+            urls: URLs
+            grant_types: Autorisations
+            client_id: Identifiant Client
+            client_secret: Clé Client
+
+        add:
+            title: Ajouter une application
+
+        modals:
+            remove:
+                title: Êtes vous certain de vouloir supprimer cette application ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    title: Application
+                    name: Nom
+                    url: URL
+                    urls: URLs de redirection
+                    user_number: Nombre d'utilisateurs associés
+                    tokens: Jetons de connexion
+                    currently_valid: en cours de validité
+
+    templates:
+        title: Gabarits de PIA
+
+        list:
+            id: "#"
+            name: Nom
+            description: Description
+            enabled: Actif ?
+            data_size: Taille des données
+            filename: Nom du fichier
+            created_at: Créé le
+            updated_at: Mis à jour le
+            structures_number: Nombre de structures
+            structure_types_number: Nombre de types de Structures
+
+        add:
+            title: Ajouter une application

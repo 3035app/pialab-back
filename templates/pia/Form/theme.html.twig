@@ -36,6 +36,12 @@
     {% if label is not same as(false) -%}
         {% set has_help = label_attr and label_attr['title'] is defined %}
 
+        {# translate field's help #}
+        {% if label_attr['title'] is defined %}
+            {% set title = label_attr['title']|trans({}, 'Pia') %}
+            {% do label_attr|merge({'title': title}) %}
+        {% endif %}
+
         {% if not compound -%}
             {% set label_attr = label_attr|merge({'for': id}) %}
         {%- endif -%}

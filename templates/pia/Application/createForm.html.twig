@@ -1,3 +1,5 @@
+{% trans_default_domain 'Pia' %}
+
 {{ form_start(form) }}
 
 {{ form_row(form.name) }}
@@ -9,7 +11,7 @@
 <div class="required field">
     <a href="#" class="ui tiny primary button application-form-add-uri" data-list=".uri-fields-list" style="float:right;">
         <i class="plus icon"></i>
-        add
+        {{ 'pia.actions.add'|trans }}
     </a>
     {{ form_label(form.redirectUris) }}
 

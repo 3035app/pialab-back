@@ -1,8 +1,10 @@
+{% trans_default_domain 'Pia' %}
+
 {% extends 'pia/Layout/base.html.twig' %}
 
 {% import 'pia/Layout/_macros.html.twig' as macro %}
 
-{% block title %}PIA User Management{% endblock title %}
+{% block title %}{{ 'pia.applications.title'|trans }}{% endblock title %}
 
 {% block navbar %}
     {% include 'pia/Layout/navbar.html.twig' with {
@@ -19,19 +21,19 @@
             <div class="ui segment">
 
                 <h2>
-                    <a href="?limit=1000" class="ui tiny button" style="float:right;">Voir 1000</a>
-                    Applications
+                    <a href="?limit=1000" class="ui tiny button" style="float:right;">{{ 'pia.actions.display'|trans }} 1000</a>
+                    {{ 'pia.applications.title'|trans }}
                 </h2>
 
                 <div class="table responsive wrapper">
                     <table class="ui compact striped table">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>URL</th>
-                                <th>URLs</th>
-                                <th>Grant types</th>
+                                <th>{{ 'pia.applications.list.id'|trans }}</th>
+                                <th>{{ 'pia.applications.list.name'|trans }}</th>
+                                <th>{{ 'pia.applications.list.url'|trans }}</th>
+                                <th>{{ 'pia.applications.list.urls'|trans }}</th>
+                                <th>{{ 'pia.applications.list.grant_types'|trans }}</th>
                                 <th class="right aligned">
                                     <i class="cog icon"></i>
                                 </th>
@@ -46,7 +48,7 @@
                                     <tbody>
                                         <tr>
                                             <td class="right aligned">
-                                                <b>Client_id:</b>
+                                                <b>{{ 'pia.applications.list.client_id'|trans }}:</b>
                                             </td>
                                             <td>
                                                 <span class="ui teal large label" style="font-family: Mono;">
@@ -56,7 +58,7 @@
                                         </tr>
                                         <tr>
                                             <td class="right aligned">
-                                                <b>Client_secret:</b>
+                                                <b>{{ 'pia.applications.list.client_secret'|trans }}</b>
                                             </td>
                                             <td>
                                                 <span class="ui teal large label" style="font-family: Mono;">
@@ -93,10 +95,10 @@
                                             <a class="ui blue tiny icon button" data-popup="data-popup" data-html="{{ applicationInfos|e }}">
                                                 <i class="key icon"></i>
                                             </a>
-                                            <a class="ui green tiny icon button" title="Modifier l'application" data-modal="data-modal" href="{{ path('manage_applications_edit_application', {'applicationId':application.id}) }}">
+                                            <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_applications_edit_application', {'applicationId':application.id}) }}">
                                                 <i class="pencil icon"></i>
                                             </a>
-                                            <a class="ui red tiny icon button" title="Supprimer l'application" data-modal="data-modal" href="{{ path('manage_applications_remove_application', {'applicationId':application.id}) }}">
+                                            <a class="ui red tiny icon button" title="{{ 'pia.actions.remove'|trans }}" data-modal="data-modal" href="{{ path('manage_applications_remove_application', {'applicationId':application.id}) }}">
                                                 <i class="trash icon"></i>
                                             </a>
                                         </div>
@@ -114,7 +116,7 @@
         <div class="four wide column">
             <div class="ui segment">
 
-                <h2>Ajouter une application</h2>
+                <h2>{{ 'pia.applications.add.title'|trans }}</h2>
 
                 {{ render(controller('PiaApi\\Controller\\BackOffice\\OauthController:addApplicationAction')) }}
 
