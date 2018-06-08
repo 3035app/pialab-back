@@ -59,7 +59,7 @@ pia:
                     name: Nom
                     url: URL
                     urls: URLs de redirection
-                    user_number: Nombre d'utilisateurs associés
+                    user_number: "Nombre d'utilisateur associé"
                     tokens: Jetons de connexion
                     currently_valid: en cours de validité
 
@@ -75,8 +75,8 @@ pia:
             filename: Nom du fichier
             created_at: Créé le
             updated_at: Mis à jour le
-            structures_number: Nombre de structures
-            structure_types_number: Nombre de types de Structures
+            structures_number: Nombre de structure
+            structure_types_number: Nombre de type de structure
 
         add:
             title: Ajouter une application
@@ -88,7 +88,7 @@ pia:
                 resume:
                     template: Gabarit
                     name: Nom
-                    pias_number: Nombre de PIAs issues de ce gabarit
+                    pias_number: Nombre de PIA issue de ce gabarit
 
     structures:
         title: Structures
@@ -97,9 +97,12 @@ pia:
             id: "#"
             name: Nom
             type: Type
-            users_number: Nb d'utilisateurs
-            pias_number: Nb de PIAs
+            users_number: "Nb d'utilisateur"
+            pias_number: Nb de PIA
             created_at: Créé le
+
+        add:
+            title: Ajouter une structure
 
         modals:
             remove:
@@ -108,12 +111,81 @@ pia:
                 resume:
                     structure: Structure
                     name: Nom
-                    users_number: Nombre d'utilisateurs associés
-                    pias_number: Nombre de PIAs associées
-            remove_structure_type:
+                    users_number: "Nombre d'utilisateur associé"
+                    pias_number: Nombre de PIA associée
+
+    structure_types:
+        title: Types de structure
+
+        list:
+            id: "#"
+            name: Nom
+            structures_number: "Nb de structure"
+
+        add:
+            title: Ajouter un type de structure
+
+        modals:
+            remove:
                 title: Êtes vous certain de vouloir supprimer ce type de structure ?
                 sub_title: (cliquez sur ce message pour annuler)
                 resume:
                     structure_type: Type de structure
                     name: Nom
-                    structures_number: Nombre de structures associées
+                    structures_number: Nombre de structure associée
+    users:
+        title: Utilisateurs
+
+        actions:
+            send_reset_email: "Envoyer l'e-mail de réinitialisation de mot de passe"
+
+        list:
+            id: "#"
+            application: Application
+            structure: Structure
+            username: Username
+            email: E-mail
+            roles: Roles
+            enabled: Actif
+            locked: Verrouillé
+            created_at: Créé le
+            expires_at: Expire le
+
+        add:
+            title: Ajouter un utilisateur
+
+        modals:
+            remove:
+                title: Êtes vous certain de vouloir supprimer cet utilisateur ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    user: Utilisateur
+                    username: "Nom d'utilisateur"
+                    email: E-mail
+                    created_at: Créé le
+                    expires_at: Expire le
+                    application: Application
+                    structure: Structure
+                    roles: Rôles
+
+        reseting:
+            send_email:
+                title: Envoi de l'email de réinitialisation de mot de passe
+                instructions: >
+                    <p>
+                        Un email de réinitialisation de mot de passe va être envoyé à l'adresse
+                        <b>%email%</b>.
+                    </p>
+                    <p>
+                        Cet email contiendra les instructions de réinitialisation du mot de passe pour le compte associé à cet email.
+                    </p>
+                reset_url: URL de réinitialisation
+                warning: >
+                    "ATTENTION: Ouvrez ce lien dans un onglet de navigation privée pour ne pas être déconnecté de votre compte d'administration une fois le mot de passe changé.<br/>
+                    Si vous ne le faites pas, vous allez être connecté en tant que cet utilisateur."
+            success:
+                title: Mot de passe oublié
+                password_reset_successfully: >
+                    Votre mot de passe à été modifié avec succès. <br/>
+                    Vous pouvez retourner sur l'application pour vous connecter
+                return_to_application: Retouner vers l'application

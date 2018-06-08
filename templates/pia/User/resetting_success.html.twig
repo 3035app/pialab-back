@@ -15,11 +15,15 @@
 
             <div class="ui segments">
                 <div class="ui segment">
-                    <span class="ui teal header">Mot de passe oublié</span>
+                    <span class="ui teal header">{{ 'pia.users.reseting.success.title'|trans }}</span>
                 </div>
                 <div class="ui teal segment">
-                    <p>Votre mot de passe à été modifié avec succès.</p>
-                    <p>Vous pouvez retourner sur l'application pour vous connecter</p>
+                    <p>{{ 'pia.users.reseting.success.password_reset_successfully'|trans }}</p>
+                    {% if app.user.application.url is not null %}
+                        <a href="{{ app.user.application.url }}" class="ui teal button">
+                            {{ 'pia.users.reseting.success.return_to_application'|trans }}
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
