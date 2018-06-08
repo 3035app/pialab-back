@@ -36,7 +36,7 @@ class CreateApplicationCommand extends Command
         parent::configure();
 
         $this
-            ->setName('pia:create-application')
+            ->setName('pia:application:create')
             ->setDescription('Creates a new application')
             ->addOption(
                 'name',

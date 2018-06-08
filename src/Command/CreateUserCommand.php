@@ -15,11 +15,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use PiaApi\Entity\Oauth\User;
+use PiaApi\Entity\Pia\Structure;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class AddUserCommand extends Command
+class CreateUserCommand extends Command
 {
     /**
      * @var EncoderFactoryInterface
@@ -53,6 +54,7 @@ class AddUserCommand extends Command
             ->setHelp('This command allows you to create a user for Pia Api')
             ->addOption('email', null, InputOption::VALUE_REQUIRED, 'The user\'s email')
             ->addOption('password', null, InputOption::VALUE_REQUIRED, 'The user\'s password')
+            ->addOption('structure', null, InputOption::VALUE_OPTIONAL, 'An existing structure')
         ;
     }
 
@@ -60,21 +62,20 @@ class AddUserCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
 
-        $email = $input->getOption('email', null);
-        $password = $input->getOption('password', null);
+        $email = $input->getOption('email');
+        $password = $input->getOption('password');
+        $structureName = $input->getOption('structure', null);
 
-        if ($email === null || $password === null) {
-            $this->io->error('You must set an email and a password');
-            return;
+        $structRepo = $this->entityManager->getRepository(Structure::class);
+        $structure = $structRepo->findOneByNameOrId($structureName);
+
+        if($structureName !== null && $structure === null){
+          $this->io->error('You must set an existing structure');
+          return;
         }
 
-        $this->addUser($email, $password);
-    }
-
-    public function addUser($email, $password)
-    {
         $user = new User($email, $password);
-
+        $user->setStructure($structure);
         $encoder = $this->encoderFactory->getEncoder($user);
         $user->setPassword($encoder->encodePassword($user->getPassword(), $user->getSalt()));
 
@@ -83,4 +84,5 @@ class AddUserCommand extends Command
 
         $this->io->success(sprintf('User %s successfully created !', $user->getEmail()));
     }
+
 }

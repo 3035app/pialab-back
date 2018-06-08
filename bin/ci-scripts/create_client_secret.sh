@@ -17,11 +17,9 @@ then
     CLIENTURL="http://localhost:4200"
 fi
 
-bin/console fos:oauth-server:create-client \
-            --redirect-uri="${CLIENTURL}" \
-            --grant-type="password" \
-            --grant-type="token" \
-            --grant-type="refresh_token"
+bin/console pia:application:create \
+            --name="Default App" \
+            --url="${CLIENTURL}" \
 
 
 # we do not want to parse the output of the fos:oauth-server command
@@ -31,4 +29,3 @@ clientsecret=$(psql -qt --no-align -w -h ${DBHOST} -c "select secret from oauth_
 
 echo "APICLIENTID=$clientid" > .api.env
 echo "APICLIENTSECRET=$clientsecret" >> .api.env
-
