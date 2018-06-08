@@ -43,7 +43,7 @@ class PiaController extends RestController
      */
     public function listAction(Request $request)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $structure = $this->getUser()->getStructure();
 
@@ -61,14 +61,14 @@ class PiaController extends RestController
      */
     public function showAction(Request $request, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $pia = $this->getRepository()->find($id);
         if ($pia === null) {
             return $this->view($pia, Response::HTTP_NOT_FOUND);
         }
 
-        $this->canAccessResourceOr304($pia);
+        $this->canAccessResourceOr403($pia);
 
         return $this->view($pia, Response::HTTP_OK);
     }
@@ -81,7 +81,7 @@ class PiaController extends RestController
      */
     public function createAction(Request $request)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $pia = $this->newFromRequest($request);
 
@@ -106,7 +106,7 @@ class PiaController extends RestController
      */
     public function createFromTemplateAction(Request $request, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
         /** @var PiaTemplate $piaTemplate */
         $piaTemplate = $this->getDoctrine()->getRepository(PiaTemplate::class)->find($id);
         if ($piaTemplate === null) {
@@ -139,10 +139,10 @@ class PiaController extends RestController
      */
     public function updateAction(Request $request, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $pia = $this->getResource($id);
-        $this->canAccessResourceOr304($pia);
+        $this->canAccessResourceOr403($pia);
 
         $updatableAttributes = [
             'name'   => 'string',
@@ -167,10 +167,10 @@ class PiaController extends RestController
      */
     public function deleteAction(Request $request, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $pia = $this->getRepository()->find($id);
-        $this->canAccessResourceOr304($pia);
+        $this->canAccessResourceOr403($pia);
         $this->remove($pia);
 
         return $this->view($pia, Response::HTTP_OK);
@@ -184,7 +184,7 @@ class PiaController extends RestController
      */
     public function importAction(Request $request)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $importData = $request->get('data', null);
         if ($importData === null) {
@@ -206,10 +206,10 @@ class PiaController extends RestController
      */
     public function exportAction(Request $request, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $pia = $this->getRepository()->find($id);
-        $this->canAccessResourceOr304($pia);
+        $this->canAccessResourceOr403($pia);
 
         $serializedPia = $this->jsonToEntityTransformer->reverseTransform($pia);
 
@@ -221,7 +221,7 @@ class PiaController extends RestController
         return Pia::class;
     }
 
-    public function canAccessResourceOr304($resource): void
+    public function canAccessResourceOr403($resource): void
     {
         if (!$resource instanceof Pia) {
             throw new AccessDeniedHttpException();

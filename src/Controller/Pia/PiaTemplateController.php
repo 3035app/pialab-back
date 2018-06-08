@@ -39,7 +39,7 @@ class PiaTemplateController extends RestController
      */
     public function listAction(Request $request)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $structure = $this->getUser()->getStructure();
         $collection = $this->getRepository()->findAvailablePiaTemplatesForStructure($structure);
@@ -55,14 +55,14 @@ class PiaTemplateController extends RestController
      */
     public function showAction(Request $request, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $piaTemplate = $this->getRepository()->find($id);
         if ($piaTemplate === null) {
             return $this->view($piaTemplate, Response::HTTP_NOT_FOUND);
         }
 
-        $this->canAccessResourceOr304($piaTemplate);
+        $this->canAccessResourceOr403($piaTemplate);
 
         return $this->view($piaTemplate, Response::HTTP_OK);
     }
@@ -72,7 +72,7 @@ class PiaTemplateController extends RestController
         return PiaTemplate::class;
     }
 
-    public function canAccessResourceOr304($resource): void
+    public function canAccessResourceOr403($resource): void
     {
         if (!$resource instanceof PiaTemplate) {
             throw new AccessDeniedHttpException();

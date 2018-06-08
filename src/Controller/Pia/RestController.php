@@ -189,14 +189,14 @@ abstract class RestController extends FOSRestController
      *
      * @throws AccessDeniedHttpException
      */
-    public function canAccessRouteOr304(): void
+    public function canAccessRouteOr403(): void
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw new AccessDeniedHttpException();
         }
     }
 
-    public function canAccessResourceOr304($resource): void
+    public function canAccessResourceOr403($resource): void
     {
         // Each controllers should define this method to perform a fine access control
     }
