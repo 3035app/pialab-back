@@ -82,6 +82,7 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         $this->creationDate = new \DateTime();
         $this->expirationDate = new \DateTimeImmutable('+1 Year');
         $this->enabled = true;
+        $this->profile = new UserProfile();
     }
 
     /**

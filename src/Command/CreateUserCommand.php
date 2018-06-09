@@ -80,8 +80,8 @@ class CreateUserCommand extends Command
         }
 
         $user = new User($email, $password);
-        $user->setFirstname($firstname);
-        $user->setLastname($lastname);
+        $user->getProfile()->setFirstname($firstname);
+        $user->getProfile()->setLastname($lastname);
         $user->setStructure($structure);
         $encoder = $this->encoderFactory->getEncoder($user);
         $user->setPassword($encoder->encodePassword($user->getPassword(), $user->getSalt()));
