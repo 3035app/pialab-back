@@ -54,7 +54,9 @@ class CreateUserCommand extends Command
             ->setHelp('This command allows you to create a user for Pia Api')
             ->addOption('email', null, InputOption::VALUE_REQUIRED, 'The user\'s email')
             ->addOption('password', null, InputOption::VALUE_REQUIRED, 'The user\'s password')
-            ->addOption('structure', null, InputOption::VALUE_OPTIONAL, 'An existing structure')
+            ->addOption('firstname', null, InputOption::VALUE_OPTIONAL, 'The user\'s first name')
+            ->addOption('lastname', null, InputOption::VALUE_OPTIONAL, 'The user\'s last name')
+            ->addOption('structure', null, InputOption::VALUE_OPTIONAL, 'The user\'s structure')
         ;
     }
 
@@ -65,16 +67,21 @@ class CreateUserCommand extends Command
         $email = $input->getOption('email');
         $password = $input->getOption('password');
         $structureName = $input->getOption('structure', null);
+        $firstname = $input->getOption('firstname', null);
+        $lastname = $input->getOption('lastname', null);
 
         $structRepo = $this->entityManager->getRepository(Structure::class);
         $structure = $structRepo->findOneByNameOrId($structureName);
 
-        if($structureName !== null && $structure === null){
-          $this->io->error('You must set an existing structure');
-          return;
+        if ($structureName !== null && $structure === null) {
+            $this->io->error('You must set an existing structure');
+
+            return;
         }
 
         $user = new User($email, $password);
+        $user->setFirstname($firstname);
+        $user->setLastname($lastname);
         $user->setStructure($structure);
         $encoder = $this->encoderFactory->getEncoder($user);
         $user->setPassword($encoder->encodePassword($user->getPassword(), $user->getSalt()));
@@ -84,5 +91,4 @@ class CreateUserCommand extends Command
 
         $this->io->success(sprintf('User %s successfully created !', $user->getEmail()));
     }
-
 }
