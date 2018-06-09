@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use PiaApi\Entity\Oauth\User;
+use PiaApi\Entity\Oauth\Client;
 use PiaApi\Entity\Pia\UserProfile;
 use PiaApi\Entity\Pia\Structure;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -58,6 +59,7 @@ class CreateUserCommand extends Command
             ->addOption('firstname', null, InputOption::VALUE_OPTIONAL, 'The user\'s first name')
             ->addOption('lastname', null, InputOption::VALUE_OPTIONAL, 'The user\'s last name')
             ->addOption('structure', null, InputOption::VALUE_OPTIONAL, 'The user\'s structure')
+            ->addOption('application', null, InputOption::VALUE_OPTIONAL, 'The user\'s application')
         ;
     }
 
@@ -68,14 +70,24 @@ class CreateUserCommand extends Command
         $email = $input->getOption('email');
         $password = $input->getOption('password');
         $structureName = $input->getOption('structure', null);
+        $appName = $input->getOption('application', null);
         $firstname = $input->getOption('firstname', null);
         $lastname = $input->getOption('lastname', null);
 
         $structRepo = $this->entityManager->getRepository(Structure::class);
         $structure = $structRepo->findOneByNameOrId($structureName);
 
+        $appRepo = $this->entityManager->getRepository(Client::class);
+        $app = $appRepo->findOneBy(['name' => $appName]);
+
         if ($structureName !== null && $structure === null) {
             $this->io->error('You must set an existing structure');
+
+            return;
+        }
+
+        if ($appName !== null && $app === null) {
+            $this->io->error('You must set an existing application');
 
             return;
         }
@@ -92,6 +104,9 @@ class CreateUserCommand extends Command
         }
         if ($structure !== null) {
             $user->setStructure($structure);
+        }
+        if ($app !== null) {
+            $user->setApplication($app);
         }
 
         $encoder = $this->encoderFactory->getEncoder($user);
