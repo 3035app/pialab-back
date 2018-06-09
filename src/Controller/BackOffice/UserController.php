@@ -151,7 +151,6 @@ class UserController extends BackOfficeAbstractController
 
         if ($user->getProfile() === null) {
             $profile = new UserProfile();
-            $profile->setUser($user);
             $user->setProfile($profile);
         }
 

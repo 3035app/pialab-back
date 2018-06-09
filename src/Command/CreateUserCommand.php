@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use PiaApi\Entity\Oauth\User;
+use PiaApi\Entity\Pia\UserProfile;
 use PiaApi\Entity\Pia\Structure;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -80,9 +81,19 @@ class CreateUserCommand extends Command
         }
 
         $user = new User($email, $password);
-        $user->getProfile()->setFirstname($firstname);
-        $user->getProfile()->setLastname($lastname);
-        $user->setStructure($structure);
+        $profile = new UserProfile();
+        $user->setProfile($profile);
+
+        if ($firstname !== null) {
+            $profile->setFirstName($firstname);
+        }
+        if ($lastname !== null) {
+            $profile->setLastName($lastname);
+        }
+        if ($structure !== null) {
+            $user->setStructure($structure);
+        }
+
         $encoder = $this->encoderFactory->getEncoder($user);
         $user->setPassword($encoder->encodePassword($user->getPassword(), $user->getSalt()));
 
