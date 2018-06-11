@@ -10,7 +10,7 @@
 
 namespace PiaApi\Form\User;
 
-use Symfony\Component\Form\AbstractType;
+use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -23,7 +23,7 @@ use PiaApi\Form\Structure\Transformer\StructureTransformer;
 use PiaApi\Entity\Pia\Structure;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
-class CreateUserForm extends AbstractType
+class CreateUserForm extends BaseForm
 {
     /**
      * @var RegistryInterface
@@ -63,40 +63,40 @@ class CreateUserForm extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'choices'  => $this->getApplications(),
-                'label'    => 'Application',
+                'label'    => 'pia.users.forms.create.application',
             ])
             ->add('structure', ChoiceType::class, [
                 'required' => false,
                 'multiple' => false,
                 'expanded' => false,
                 'choices'  => $this->getStructures(),
-                'label'    => 'Structure',
+                'label'    => 'pia.users.forms.create.structure',
             ])
             ->add('email', EmailType::class, [
-                'label'    => 'Adresse email',
+                'label'    => 'pia.users.forms.create.email',
             ])
             ->add('password', PasswordType::class, [
-                'label'    => 'Mot de passe',
+                'label'    => 'pia.users.forms.create.password',
             ])
             ->add('roles', ChoiceType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
                 'choices'  => $this->userRoles,
-                'label'    => 'Rôles',
+                'label'    => 'pia.users.forms.create.roles',
             ])
             ->add('sendResetingEmail', CheckboxType::class, [
                 'required'     => false,
-                'label'        => 'Envoyer l\'email de RàZ de mot de passe ?',
+                'label'        => 'pia.users.forms.create.sendResetingEmail',
                 'label_attr'   => [
-                    'title' => 'Envoyer automatiquement l\'email de réinitialisation de mot de passe à l\'adresse email saisie',
+                    'title' => 'pia.users.forms.create.sendResetingEmail_help',
                 ],
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'fluid',
                 ],
-                'label' => 'Créer l\'utilisateur',
+                'label' => 'pia.users.forms.create.submit',
             ])
         ;
 

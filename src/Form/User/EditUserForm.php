@@ -48,34 +48,34 @@ class EditUserForm extends CreateUserForm
             ->remove('sendResetingEmail')
 
             ->add('username', TextType::class, [
-                'label'    => 'Nom d\'utilisateur',
+                'label'    => 'pia.users.forms.edit.',
             ])
             ->add('roles', ChoiceType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
                 'choices'  => $this->userRoles,
-                'label'    => 'Rôles',
+                'label'    => 'pia.users.forms.edit.',
             ])
 
             ->add('expirationDate', DateType::class, [
                 'widget'   => 'single_text',
-                'label'    => 'Date d\'expiration du compte',
+                'label'    => 'pia.users.forms.edit.',
             ])
             ->add('enabled', CheckboxType::class, [
                 'required' => false,
-                'label'    => 'Actif',
+                'label'    => 'pia.users.forms.edit.',
             ])
             ->add('locked', CheckboxType::class, [
                 'required' => false,
-                'label'    => 'Verrouillé',
+                'label'    => 'pia.users.forms.edit.',
             ])
             ->add('cancel', ButtonType::class, [
                 'attr' => [
                     'class' => 'red cancel',
                     'style' => 'width: 48%;float:right;',
                 ],
-                'label' => 'Annuler',
+                'label' => 'pia.users.forms.edit.',
             ])
             ->add('profile', UserProfileForm::class, [
                 'label'   => false,
@@ -85,7 +85,7 @@ class EditUserForm extends CreateUserForm
                     'class' => '',
                     'style' => 'width: 48%;',
                 ],
-                'label' => 'Enregistrer l\'utilisateur',
+                'label' => 'pia.users.forms.edit.',
             ])
         ;
 

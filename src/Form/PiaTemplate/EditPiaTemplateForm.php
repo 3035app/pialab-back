@@ -28,14 +28,14 @@ class EditPiaTemplateForm extends CreatePiaTemplateForm
 
             ->add('enabled', CheckboxType::class, [
                 'required'   => false,
-                'label'      => 'Actif',
+                'label'      => 'pia.templates.forms.edit.enabled',
                 'label_attr' => [
-                    'title' => 'Un gabarit inactif ne sera visible de personne.',
+                    'title' => 'pia.templates.forms.edit.enabled_help',
                 ],
             ])
 
             ->add('importedFileName', TextType::class, [
-                'label'      => 'Nom du fichier actuel',
+                'label'      => 'pia.templates.forms.edit.importedFileName',
                 'required'   => false,
                 'disabled'   => true,
             ])
@@ -44,9 +44,9 @@ class EditPiaTemplateForm extends CreatePiaTemplateForm
                 'mapped'       => false,
                 'required'     => false,
                 'data_class'   => null,
-                'label'        => 'Nouveau fichier d\'export',
+                'label'        => 'pia.templates.forms.edit.newData',
                 'label_attr'   => [
-                    'title' => 'Laissez ce champ vide si vous n\'avez pas besoin de changer les données du gabarit',
+                    'title' => 'pia.templates.forms.edit.newData_help',
                 ],
             ])
 
@@ -55,14 +55,14 @@ class EditPiaTemplateForm extends CreatePiaTemplateForm
                     'class' => 'red cancel',
                     'style' => 'width: 48%;float:right;',
                 ],
-                'label' => 'Annuler',
+                'label' => 'pia.templates.forms.edit.cancel',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => '',
                     'style' => 'width: 48%;',
                 ],
-                'label' => 'Enregistrer le gabarit',
+                'label' => 'pia.templates.forms.edit.submit',
             ])
         ;
     }

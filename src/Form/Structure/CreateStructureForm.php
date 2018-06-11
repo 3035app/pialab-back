@@ -10,7 +10,7 @@
 
 namespace PiaApi\Form\Structure;
 
-use Symfony\Component\Form\AbstractType;
+use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -19,7 +19,7 @@ use PiaApi\Form\Structure\Transformer\StructureTypeTransformer;
 use PiaApi\Entity\Pia\StructureType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class CreateStructureForm extends AbstractType
+class CreateStructureForm extends BaseForm
 {
     /**
      * @var RegistryInterface
@@ -42,20 +42,20 @@ class CreateStructureForm extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'required' => true,
-                'label'    => 'Nom',
+                'label'    => 'pia.structures.forms.create.name',
             ])
             ->add('type', ChoiceType::class, [
                 'required' => false,
                 'multiple' => false,
                 'expanded' => false,
                 'choices'  => $this->getStructureTypes(),
-                'label'    => 'Type de structure',
+                'label'    => 'pia.structures.forms.create.type',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'fluid',
                 ],
-                'label' => 'Créer la structure',
+                'label' => 'pia.structures.forms.create.submit',
             ])
         ;
 

@@ -63,6 +63,29 @@ pia:
                     tokens: Jetons de connexion
                     currently_valid: en cours de validité
 
+        forms:
+            create:
+                name: Nom
+                url: URL
+                allowedGrantTypes: "Types d'autorisations"
+                redirectUris: URIs de redirection
+                submit: "Créer l'application"
+            edit:
+                cancel: Annuler
+                submit: "Enregistrer l'application"
+            remove:
+                submit: "Supprimer l'application"
+
+        labels:
+            grant_types:
+                authorization_code: "Code d'autorisation"
+                token: Jeton
+                password: Mot de passe
+                client_credentials: Identifiants client
+                refresh_token: Jeton de rafraichissement
+                extensions: Extension
+            
+
     templates:
         title: Gabarits de PIA
 
@@ -90,6 +113,23 @@ pia:
                     name: Nom
                     pias_number: Nombre de PIA issue de ce gabarit
 
+        forms:
+            create:
+                name: Nom
+                description: Description
+                data: "Fichier d'export"
+                submit: Créer le gabarit
+            edit:
+                enabled: Actif
+                enabled_help: Un gabarit inactif ne sera visible de personne.
+                importedFileName: Nom du fichier actuel
+                newData: "Nouveau fichier d'export"
+                newData_help: "Laissez ce champ vide si vous n'avez pas besoin de changer les données du gabarit"
+                cancel: Annuler
+                submit: Enregistrer le gabarit
+            remove:
+                submit: Supprimer le gabarit
+
     structures:
         title: Structures
 
@@ -114,6 +154,20 @@ pia:
                     users_number: "Nombre d'utilisateur associé"
                     pias_number: Nombre de PIA associée
 
+        forms:
+            create:
+                name: Nom
+                type: Type de structure
+                submit: Créer la structure
+            edit:
+                templates: Gabarits de PIA disponibles
+                templates_help: Les gabarits sélectionnés seront accessibles à cette structure
+
+                cancel: Annuler
+                submit: Enregistrer la structure
+            remove:
+                submit: Supprimer la structure
+
     structure_types:
         title: Types de structure
 
@@ -133,6 +187,19 @@ pia:
                     structure_type: Type de structure
                     name: Nom
                     structures_number: Nombre de structure associée
+
+        forms:
+            create:
+                name: Nom
+                submit: Créer le type de structure
+            edit:
+                templates: Gabarits de PIA disponibles
+                templates_help: Les gabarits sélectionnés seront accessibles à toutes les structures de ce type de structure
+                cancel: Annuler
+                submit: Enregistrer le type de structure
+            remove:
+                submit: Supprimer le type de structure
+
     users:
         title: Utilisateurs
 
@@ -167,6 +234,41 @@ pia:
                     application: Application
                     structure: Structure
                     roles: Rôles
+
+        forms:
+            create:
+                application: Application
+                structure: Structure
+                email: Adresse email
+                password: Mot de passe
+                roles: Rôles
+                sendResetingEmail: "Envoyer l'email de RàZ de mot de passe ?"
+                sendResetingEmail_help: "Envoyer automatiquement l'email de réinitialisation de mot de passe à l'adresse email saisie"
+                submit: "Créer l'utilisateur"
+            edit:
+                username: "Nom d'utilisateur"
+                roles: Rôles
+                expirationDate: "Date d'expiration du compte"
+                enabled: Actif
+                locked: Verrouillé
+                cancel: Annuler
+                submit: "Enregistrer l'utilisateur"
+            remove:
+                submit: "Supprimer l'utilisateur"
+            reset:
+                cancel: Annuler
+                submit: "Envoyer l'email"
+            profile:
+                firstName: Prénom
+                lastName: Nom
+
+        labels:
+            roles:
+                ROLE_USER: 
+                ROLE_ADMIN: 
+                ROLE_SUPER_ADMIN: 
+                ROLE_DPO: 
+                ROLE_CONTROLLER: 
 
         reseting:
             send_email:

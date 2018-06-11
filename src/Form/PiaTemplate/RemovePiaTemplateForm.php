@@ -10,11 +10,11 @@
 
 namespace PiaApi\Form\PiaTemplate;
 
-use Symfony\Component\Form\AbstractType;
+use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
-class RemovePiaTemplateForm extends AbstractType
+class RemovePiaTemplateForm extends BaseForm
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -23,7 +23,7 @@ class RemovePiaTemplateForm extends AbstractType
                 'attr' => [
                     'class' => 'ui fluid red button',
                 ],
-                'label' => 'Supprimer le gabarit',
+                'label' => 'pia.templates.forms.remove.submit',
             ])
         ;
     }

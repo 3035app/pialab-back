@@ -30,9 +30,9 @@ class EditStructureTypeForm extends CreateStructureTypeForm
                 'multiple'     => true,
                 'expanded'     => true,
                 'by_reference' => false,
-                'label'        => 'Gabarits de PIA disponibles',
+                'label'        => 'pia.structure_types.forms.edit.templates',
                 'label_attr'   => [
-                    'title' => 'Les gabarits sélectionnés seront accessibles à toutes les structures de ce type de structure',
+                    'title' => 'pia.structure_types.forms.edit.templates_help',
                 ],
             ])
 
@@ -41,14 +41,14 @@ class EditStructureTypeForm extends CreateStructureTypeForm
                     'class' => 'red cancel',
                     'style' => 'width: 48%;float:right;',
                 ],
-                'label' => 'Annuler',
+                'label' => 'pia.structure_types.forms.edit.cancel',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => '',
                     'style' => 'width: 48%;',
                 ],
-                'label' => 'Enregistrer le type de structure',
+                'label' => 'pia.structure_types.forms.edit.submit',
             ])
         ;
     }
