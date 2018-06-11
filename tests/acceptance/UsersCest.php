@@ -88,7 +88,7 @@ class UsersCest
 
         $I->waitForElementVisible($formName . ' input[type="submit"]');
 
-        $I->canSeeNumberOfElements('//table[@class="ui single line table"]/descendant-or-self::b[contains(text(), "Email")]/ancestor::tr/descendant::td[contains(text(), "' . $this->email . '")]', 1);
+        $I->canSeeNumberOfElements('//table[@class="ui single line table"]/descendant-or-self::b[contains(text(), "E-mail")]/ancestor::tr/descendant::td[contains(text(), "' . $this->email . '")]', 1);
 
         $I->click($formName . ' input[type="submit"]');
     }
