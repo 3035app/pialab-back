@@ -113,8 +113,12 @@ abstract class RestController extends FOSRestController
     {
         foreach ($attributesToMerge as $attributeToMerge => $attributeType) {
             $attributeData = $request->get($attributeToMerge);
-            if ($this->isTypeADoctrineEntity($attributeType) && isset($attributeData['id'])) {
-                $attributeData = $this->getResource($attributeData['id'], $attributeType);
+
+            if ($this->isTypeADoctrineEntity($attributeType)) {
+                $resourceId = $request->get($attributeToMerge . '_id');
+                if ($resourceId !== null) {
+                    $attributeData = $this->getResource($resourceId, $attributeType);
+                }
             }
 
             $this->propertyAccessor->setValue($entity, $attributeToMerge, $attributeData);
@@ -132,9 +136,6 @@ abstract class RestController extends FOSRestController
     protected function extractData(Request $request, $key = null): array
     {
         $data = $request->request->all();
-        //if ($key !== null) {
-        //    $data = $data[$key];
-        //}
 
         return array_filter($data, function ($item) {
             return $item != 'undefined';
