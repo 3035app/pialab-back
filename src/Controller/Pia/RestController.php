@@ -115,7 +115,7 @@ abstract class RestController extends FOSRestController
             $attributeData = $request->get($attributeToMerge);
 
             if ($this->isTypeADoctrineEntity($attributeType)) {
-                $resourceId = $request->get($attributeToMerge . '_id');
+                $resourceId = $request->get($attributeToMerge)['id'];
                 if ($resourceId !== null) {
                     $attributeData = $this->getResource($resourceId, $attributeType);
                 }

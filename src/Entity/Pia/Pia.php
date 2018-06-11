@@ -202,7 +202,8 @@ class Pia implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="Folder", inversedBy="pias")
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Default", "Export"})
+     * @JMS\MaxDepth(1)
      *
      * @var Folder
      */
@@ -419,18 +420,6 @@ class Pia implements Timestampable
     public function setFolder(?Folder $folder): void
     {
         $this->folder = $folder;
-    }
-
-    /**
-     * @JMS\VirtualProperty
-     * @JMS\SerializedName("folder_id")
-     * @JMS\Groups({"Default", "Export"})
-     *
-     * @return int
-     */
-    public function getFolderId(): ?int
-    {
-        return $this->folder !== null ? $this->folder->getId() : null;
     }
 
     /**
