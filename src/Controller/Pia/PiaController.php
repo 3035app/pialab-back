@@ -149,7 +149,18 @@ class PiaController extends RestController
             'author_name' => 'string',
             'evaluator_name' => 'string',
             'validator_name' => 'string',
-            'folder' => Folder::class
+            'folder' => Folder::class,
+            'dpo_status' => 'int',
+            'concerned_people_status' => 'int',
+            'status' => 'int',
+            'dpo_opinion'	 => 'string',
+            'concerned_people_opinion'	 => 'string',
+            'concerned_people_searched_opinion' => 'boolean',
+            'concerned_people_searched_content' => 'string',
+            'rejection_reason'	 => 'string',
+            'applied_adjustments'	 => 'string',
+            'dpos_names' => 'string',
+            'people_names' => 'sring'
         ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);
