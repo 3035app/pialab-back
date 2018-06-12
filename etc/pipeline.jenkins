@@ -11,7 +11,6 @@ pipeline {
         string(defaultValue: 'pialab-back', description: '', name: 'GlobalName')
 
         string(defaultValue: 'http://ci.libre-informatique.fr:8042/front', description: '', name: 'FrontUrl')
-        string(defaultValue: 'http://ci.libre-informatique.fr:8042/back', description: '', name: 'BackUrl')
 
         string(defaultValue: '/usr/share/pialab-back/public', description: '', name: 'BackDirectory')
 
