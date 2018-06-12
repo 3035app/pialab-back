@@ -159,10 +159,11 @@ class PiaController extends RestController
             'concerned_people_opinion'	         => 'string',
             'concerned_people_searched_opinion' => 'boolean',
             'concerned_people_searched_content' => 'string',
-            'rejection_reason'	                 => 'string',
+            'rejection_reason'	                => 'string',
             'applied_adjustments'	              => 'string',
             'dpos_names'                        => 'string',
-            'people_names'                      => 'sring',
+            'people_names'                      => 'string',
+            'type'                              => 'string',
         ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);
