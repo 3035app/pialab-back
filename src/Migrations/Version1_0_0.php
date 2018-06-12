@@ -309,6 +309,8 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
         $this->connection->commit();
 
+        $this->connection->commit();
+
         // Version20180530095437
 
         // Create and associate mandatory rootFolders for each structures
@@ -325,6 +327,8 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
                 $doctrine->getManager()->flush($rootFolder);
             }
         }
+
+        $this->connection->commit();
 
         // Version20180605082149
 
