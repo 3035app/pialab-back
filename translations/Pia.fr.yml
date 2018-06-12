@@ -291,3 +291,5 @@ pia:
                     Votre mot de passe à été modifié avec succès. <br/>
                     Vous pouvez retourner sur l'application pour vous connecter
                 return_to_application: Retouner vers l'application
+            request:
+                back: Retour
