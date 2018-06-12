@@ -85,12 +85,14 @@ class PiaController extends RestController
 
         $pia = $this->newFromRequest($request);
 
-        if ($request->get('folder_id') !== null || $request->get('folder') !== null) {
-            $folderId = $request->get('folder_id', $request->get('folder')['id']);
-
+        if ($request->get('folder') !== null) {
+            $folderId = $request->get('folder')['id'];
             $folder = $this->getResource($folderId, Folder::class);
-            $pia->setFolder($folder);
+        } else {
+            $folder = $this->getUser()->getStructure()->getRootFolder();
         }
+
+        $pia->setFolder($folder);
 
         $pia->setStructure($this->getUser()->getStructure());
         $this->persist($pia);
@@ -114,8 +116,8 @@ class PiaController extends RestController
         }
 
         $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
-        if (($folderId = $request->get('folder_id')) !== null) {
-            $folder = $this->getResource($request->get('folder_id'), Folder::class);
+        if (($folderId = $request->get('folder')) !== null) {
+            $folder = $this->getResource($request->get('folder')['id'], Folder::class);
         } else {
             $folder = $this->getUser()->getStructure()->getRootFolder();
         }
@@ -145,22 +147,22 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
 
         $updatableAttributes = [
-            'name'   => 'string',
-            'author_name' => 'string',
-            'evaluator_name' => 'string',
-            'validator_name' => 'string',
-            'folder' => Folder::class,
-            'dpo_status' => 'int',
-            'concerned_people_status' => 'int',
-            'status' => 'int',
-            'dpo_opinion'	 => 'string',
-            'concerned_people_opinion'	 => 'string',
+            'name'                              => 'string',
+            'author_name'                       => 'string',
+            'evaluator_name'                    => 'string',
+            'validator_name'                    => 'string',
+            'folder'                            => Folder::class,
+            'dpo_status'                        => 'int',
+            'concerned_people_status'           => 'int',
+            'status'                            => 'int',
+            'dpo_opinion'	                      => 'string',
+            'concerned_people_opinion'	         => 'string',
             'concerned_people_searched_opinion' => 'boolean',
             'concerned_people_searched_content' => 'string',
-            'rejection_reason'	 => 'string',
-            'applied_adjustments'	 => 'string',
-            'dpos_names' => 'string',
-            'people_names' => 'sring'
+            'rejection_reason'	                 => 'string',
+            'applied_adjustments'	              => 'string',
+            'dpos_names'                        => 'string',
+            'people_names'                      => 'sring',
         ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);

@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -ex
 
-Name=Pialab-back
+if [ -z ${Name} ]
+then
+    Name=Pialab-back
+fi
 
 if [ -z ${Branch} ]
 then
@@ -32,6 +35,6 @@ rm -rf \
 tar --exclude-vcs \
     --exclude=build \
     --exclude=bin/git-scripts \
-    -czhf ${Filename} ./*
+    -czhf ${Filename} ./* .env .api.env
 
 sha256sum ${Filename} > ${Filename}.sha256.txt

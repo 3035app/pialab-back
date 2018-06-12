@@ -18,7 +18,19 @@ then
 fi
 
 CLIENT_ID=$(openssl rand -hex 24)
+if [ -n "$ClientId" ]
+then
+    CLIENT_ID=$ClientId
+fi
+
 CLIENT_SECRET=$(openssl rand -hex 24)
+if [ -n "$ClientSecret" ]
+then
+    CLIENT_SECRET=$ClientSecret
+fi
+
+
+
 
 bin/console pia:application:create \
             --name="Default App" \

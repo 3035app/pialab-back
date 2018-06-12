@@ -18,7 +18,7 @@ services:
 
     PiaApi\:
         resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel.php,Auth/ClientManager.php}'
 
     PiaApi\Controller\:
         resource: '../src/Controller'
@@ -32,11 +32,12 @@ services:
             - { name: kernel.event_subscriber }
 
     PiaApi\Auth\ClientManager:
-        class: PiaApi\Auth\ClientManager
         arguments:
-          - '@fos_oauth_server.entity_manager'
-          - '%fos_oauth_server.model.client.class%'
+            - '@fos_oauth_server.entity_manager'
+            - '%fos_oauth_server.model.client.class%'
 
+    FOS\OAuthServerBundle\Model\ClientManagerInterface: '@PiaApi\Auth\ClientManager'
+ 
     # Used to fix bug when updating and entity througth REST api
     # jms_serializer.object_constructor:
     #     alias: jms_serializer.doctrine_object_constructor

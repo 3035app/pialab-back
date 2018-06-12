@@ -8,9 +8,14 @@ Installation process (not for production environments) :
 
 ```bash
 git clone https://github.com/pia-lab/pialab-back
-
 cd pialab-back
+```
 
+**Note:**
+
+The informations about the database connection and the SMTP server are stored as environment variables called DATABASE_URL and MAILER_URL respectively. For development, you can find and customize them inside .env.
+
+```bash
 composer install
 
 bin/console doctrine:database:create

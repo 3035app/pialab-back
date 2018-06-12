@@ -6,11 +6,41 @@ pipeline {
             args '--network=ci.network'
         }
     }
-    
+
+    parameters {
+        string(defaultValue: 'pialab-back', description: '', name: 'GlobalName')
+
+        string(defaultValue: 'http://ci.libre-informatique.fr:8042/front', description: '', name: 'FrontUrl')
+        string(defaultValue: 'http://ci.libre-informatique.fr:8042/back', description: '', name: 'BackUrl')
+
+        string(defaultValue: '/usr/share/pialab-back/public', description: '', name: 'BackDirectory')
+
+        string(defaultValue: '/etc/ssl/pialab.crt', description: '', name: 'BackSSLCertificateFile')
+        string(defaultValue: '/etc/ssl/pialab.key', description: '', name: 'BackSSLCertificateKeyFile')
+        string(defaultValue: '/etc/ssl/pialab.pem', description: '', name: 'BackSSLCertificateChainFile')
+
+        string(defaultValue: 'test', description: '', name: 'BuildEnv')
+
+        string(defaultValue: '', description: '', name: 'DatabaseName')
+        string(defaultValue: '', description: '', name: 'DatabaseUser')
+        string(defaultValue: '', description: '', name: 'DatabasePassword')
+
+        string(defaultValue: 'smtp://127.0.0.1:1025', description: '', name: 'MailerUrl')
+
+        /* string(defaultValue: 'master', description: '', name: 'BackGitBranch') */
+
+        string(defaultValue: '', description: '', name: 'ClientId')
+        string(defaultValue: '', description: '', name: 'ClientSecret')
+
+        choice(choices: 'true\nfalse', description: '', name: 'RunTest')
+
+    }
+
+
     environment {
         RND = "${BUILD_NUMBER}"
     }
-    
+
     options {
         timeout(time: 1, unit: 'HOURS')
         timestamps()
@@ -25,11 +55,11 @@ pipeline {
                 sh "php -v"
             }
         }
-        
+
         stage ('Set Env') {
             steps {
-                sh 'SYMFONYENV=test ./bin/ci-scripts/set_env_with_etcd.sh'
-                sh './bin/ci-scripts/set_pgpass.sh'                
+                sh "SYMFONYENV=${params.BuildEnv} ./bin/ci-scripts/set_env_with_etcd.sh"
+                sh './bin/ci-scripts/set_pgpass.sh'
                 sh 'cat ./.env'
                 sh 'cat $HOME/.pgpass'
             }
@@ -62,12 +92,20 @@ pipeline {
         }
 
         stage ('Start ') {
+            when {
+                expression { params.RunTest == 'true' }
+            }
+
             steps {
                 sh "./bin/ci-scripts/server_start.sh"
             }
         }
 
         stage ('Run Test') {
+             when {
+                expression { params.RunTest == 'true' }
+             }
+
             steps {
                 sh "./bin/ci-scripts/run_test.sh"
             }
@@ -75,7 +113,7 @@ pipeline {
 
         stage ('Create Archive') {
             steps {
-                sh 'Branch=${BRANCH_NAME} ./bin/ci-scripts/gen_archive.sh'
+                sh "Name=${params.GlobalName} Branch=${BRANCH_NAME} ./bin/ci-scripts/gen_archive.sh"
                 archiveArtifacts artifacts: "*.tar.gz*", fingerprint: true
                 build job: 'Copy Artifact', parameters: [string(name: 'Job', value: "${JOB_NAME}"), string(name: 'Project', value: "Pialab-back"), string(name: 'Branch', value: "${BRANCH_NAME}"), string(name: 'DoDeploy', value: "false")], wait: false
 
