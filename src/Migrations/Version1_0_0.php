@@ -53,20 +53,90 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        if ($this->cleanUpExistingMigrationsFoundInMigrationsTableAndSkip()) {
-            return;
-        }
+        // if ($this->cleanUpExistingMigrationsFoundInMigrationsTableAndSkip()) {
+        //     return;
+        // }
 
-        // Version00000000000000
+        // @TODO (For all Versions): Create a function in MigrationMergeTrait that do :
+        //        - Check if old migration_version exists.
+        //        - If exists, delete from migration_versions and skip this Version.
+        //        - Else, execute this Version
 
-        if ($schema->hasTable('pia_user')) {
-            return;
-        }
+        // @TODO: Move to Version1_0_0_data.php Versions 20180530095437 and 20180605082149 that uses Doctrine EM
+        //        Because of SQL transaction that changes are not visible by doctrine when used inside the same migration
 
-        $this->connection->beginTransaction();
+        $this->Version00000000000000_up();
 
-        // OAuth and Users
+        $this->Version20180515154624_up();
 
+        $this->Version20180516134220_up();
+
+        $this->Version20180517132216_up();
+
+        $this->Version20180522073548_up();
+
+        $this->Version20180524073608_up();
+
+        $this->Version20180524074718_up();
+
+        $this->Version20180524080353_up();
+
+        $this->Version20180524100033_up();
+
+        $this->Version20180524152449_up();
+
+        $this->Version20180528094424_up();
+
+        $this->Version20180528125823_up();
+
+        $this->Version20180528142132_up();
+
+        $this->Version20180530091757_up();
+
+        $this->Version20180530095437_up();
+
+        $this->Version20180605082149_up();
+    }
+
+    public function down(Schema $schema)
+    {
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
+
+        $this->Version20180605082149_down();
+
+        $this->Version20180530095437_down();
+
+        $this->Version20180530091757_down();
+
+        $this->Version20180528142132_down();
+
+        $this->Version20180528125823_down();
+
+        $this->Version20180528094424_down();
+
+        $this->Version20180524152449_down();
+
+        $this->Version20180524100033_down();
+
+        $this->Version20180524080353_down();
+
+        $this->Version20180524074718_down();
+
+        $this->Version20180524073608_down();
+
+        $this->Version20180522073548_down();
+
+        $this->Version20180517132216_down();
+
+        $this->Version20180516134220_down();
+
+        $this->Version20180515154624_down();
+
+        $this->Version00000000000000_down();
+    }
+
+    protected function Version00000000000000_up(): void
+    {
         $this->addSql('CREATE SEQUENCE oauth_access_token_id_seq INCREMENT BY 1 MINVALUE 1 START 1;');
         $this->addSql('CREATE SEQUENCE oauth_client_id_seq INCREMENT BY 1 MINVALUE 1 START 1;');
         $this->addSql('CREATE SEQUENCE pia_user_id_seq INCREMENT BY 1 MINVALUE 1 START 1;');
@@ -126,17 +196,16 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
         $this->addSql('ALTER TABLE pia_measure ADD CONSTRAINT FK_62227E733458351A FOREIGN KEY (pia_id) REFERENCES pia (id) NOT DEFERRABLE INITIALLY IMMEDIATE;');
         $this->addSql('ALTER TABLE pia_answer ADD CONSTRAINT FK_47C008EC3458351A FOREIGN KEY (pia_id) REFERENCES pia (id) NOT DEFERRABLE INITIALLY IMMEDIATE;');
         $this->addSql('ALTER TABLE pia_evaluation ADD CONSTRAINT FK_1AAADEB23458351A FOREIGN KEY (pia_id) REFERENCES pia (id) NOT DEFERRABLE INITIALLY IMMEDIATE;');
+    }
 
-        $this->connection->commit();
+    protected function Version00000000000000_down(): void
+    {
+        $this->addSql('DROP SCHEMA public CASCADE;');
+        $this->addSql('CREATE SCHEMA public;');
+    }
 
-        // Version20180515154624
-
-        // if (!$schema->hasTable('pia_user') || $schema->getTable('pia_user')->hasColumn('username_canonical')) {
-        //     return;
-        // }
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180515154624_up(): void
+    {
         $this->addSql('ALTER TABLE oauth_client ADD url VARCHAR(255) DEFAULT NULL');
         $this->addSql('DROP INDEX uniq_260ca7fe7927c74');
         $this->addSql('DROP INDEX uniq_260ca7ff85e0677');
@@ -158,17 +227,28 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
         $this->addSql('CREATE UNIQUE INDEX UNIQ_260CA7F92FC23A8 ON pia_user (username_canonical)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_260CA7FA0D96FBF ON pia_user (email_canonical)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_260CA7FC05FB297 ON pia_user (confirmation_token)');
+    }
 
-        $this->connection->commit();
+    protected function Version20180515154624_down(): void
+    {
+        $this->addSql('ALTER TABLE oauth_client DROP url');
+        $this->addSql('DROP INDEX UNIQ_260CA7F92FC23A8');
+        $this->addSql('DROP INDEX UNIQ_260CA7FA0D96FBF');
+        $this->addSql('DROP INDEX UNIQ_260CA7FC05FB297');
+        $this->addSql('ALTER TABLE pia_user DROP username_canonical');
+        $this->addSql('ALTER TABLE pia_user DROP email_canonical');
+        $this->addSql('ALTER TABLE pia_user DROP salt');
+        $this->addSql('ALTER TABLE pia_user DROP last_login');
+        $this->addSql('ALTER TABLE pia_user DROP confirmation_token');
+        $this->addSql('ALTER TABLE pia_user DROP password_requested_at');
+        $this->addSql('ALTER TABLE pia_user ALTER username TYPE VARCHAR(255)');
+        $this->addSql('ALTER TABLE pia_user ALTER email TYPE VARCHAR(255)');
+        $this->addSql('CREATE UNIQUE INDEX uniq_260ca7fe7927c74 ON pia_user (email)');
+        $this->addSql('CREATE UNIQUE INDEX uniq_260ca7ff85e0677 ON pia_user (username)');
+    }
 
-        // Version20180516134220
-
-        // if ($schema->hasTable('pia_structure')) {
-        //     return;
-        // }
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180516134220_up(): void
+    {
         $this->addSql('CREATE SEQUENCE pia_structure_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE pia_structure (id INT NOT NULL, name VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('ALTER TABLE pia_user ADD structure_id INT DEFAULT NULL');
@@ -177,89 +257,122 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
         $this->addSql('ALTER TABLE pia ADD structure_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE pia ADD CONSTRAINT FK_253A30622534008B FOREIGN KEY (structure_id) REFERENCES pia_structure (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_253A30622534008B ON pia (structure_id)');
+    }
 
-        $this->connection->commit();
+    protected function Version20180516134220_down(): void
+    {
+        $this->addSql('ALTER TABLE pia_user DROP CONSTRAINT FK_260CA7F2534008B');
+        $this->addSql('ALTER TABLE pia DROP CONSTRAINT FK_253A30622534008B');
+        $this->addSql('DROP SEQUENCE pia_structure_id_seq CASCADE');
+        $this->addSql('DROP TABLE pia_structure');
+        $this->addSql('DROP INDEX IDX_260CA7F2534008B');
+        $this->addSql('ALTER TABLE pia_user DROP structure_id');
+        $this->addSql('DROP INDEX IDX_253A30622534008B');
+        $this->addSql('ALTER TABLE pia DROP structure_id');
+    }
 
-        // Version20180517132216
-
-        // if ($schema->hasTable('pia_structure_type')) {
-        //     return;
-        // }
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180517132216_up(): void
+    {
         $this->addSql('CREATE SEQUENCE pia_structure_type_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE pia_structure_type (id INT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('ALTER TABLE pia_structure ADD type_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE pia_structure ADD CONSTRAINT FK_5036DBE6C54C8C93 FOREIGN KEY (type_id) REFERENCES pia_structure_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_5036DBE6C54C8C93 ON pia_structure (type_id)');
+    }
 
-        $this->connection->commit();
+    protected function Version20180517132216_down(): void
+    {
+        $this->addSql('ALTER TABLE pia_structure DROP CONSTRAINT FK_5036DBE6C54C8C93');
+        $this->addSql('DROP SEQUENCE pia_structure_type_id_seq CASCADE');
+        $this->addSql('DROP TABLE pia_structure_type');
+        $this->addSql('DROP INDEX IDX_5036DBE6C54C8C93');
+        $this->addSql('ALTER TABLE pia_structure DROP type_id');
+    }
 
-        // Version20180522073548
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180522073548_up(): void
+    {
         $this->addSql('CREATE SEQUENCE pia_profile_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE pia_profile (id INT NOT NULL, user_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, pia_roles TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_6372CD59A76ED395 ON pia_profile (user_id)');
         $this->addSql('COMMENT ON COLUMN pia_profile.pia_roles IS \'(DC2Type:json)\'');
         $this->addSql('ALTER TABLE pia_profile ADD CONSTRAINT FK_6372CD59A76ED395 FOREIGN KEY (user_id) REFERENCES pia_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+    }
 
-        $this->connection->commit();
+    protected function Version20180522073548_down(): void
+    {
+        $this->addSql('DROP SEQUENCE pia_profile_id_seq CASCADE');
+        $this->addSql('DROP TABLE pia_profile');
+    }
 
-        // Version20180524073608
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180524073608_up(): void
+    {
         $this->addSql('ALTER TABLE pia_profile ALTER name DROP NOT NULL');
+    }
 
-        $this->connection->commit();
+    protected function Version20180524073608_down(): void
+    {
+        $this->addSql('ALTER TABLE pia_profile ALTER name SET NOT NULL');
+    }
 
-        // Version20180524074718
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180524074718_up(): void
+    {
         $this->addSql('ALTER TABLE pia_profile ADD last_name VARCHAR(255) NOT NULL');
         $this->addSql('ALTER TABLE pia_profile DROP pia_roles');
         $this->addSql('ALTER TABLE pia_profile RENAME COLUMN name TO first_name');
+    }
 
-        $this->connection->commit();
+    protected function Version20180524074718_down(): void
+    {
+        $this->addSql('ALTER TABLE pia_profile ADD name VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NOT NULL');
+        $this->addSql('ALTER TABLE pia_profile DROP first_name');
+        $this->addSql('ALTER TABLE pia_profile DROP last_name');
+        $this->addSql('COMMENT ON COLUMN pia_profile.pia_roles IS \'(DC2Type:json)\'');
+    }
 
-        // Version20180524080353
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180524080353_up(): void
+    {
         $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NOT NULL');
         $this->addSql('COMMENT ON COLUMN pia_profile.pia_roles IS \'(DC2Type:json)\'');
+    }
 
-        $this->connection->commit();
-
-        // Version20180524100033
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180524080353_down(): void
+    {
         $this->addSql('ALTER TABLE pia_profile DROP pia_roles');
+    }
 
-        $this->connection->commit();
+    protected function Version20180524100033_up(): void
+    {
+        $this->addSql('ALTER TABLE pia_profile DROP pia_roles');
+    }
 
-        // Version20180524152449
+    protected function Version20180524100033_down(): void
+    {
+        $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NOT NULL');
+        $this->addSql('COMMENT ON COLUMN pia_profile.pia_roles IS \'(DC2Type:json)\'');
+    }
 
-        $this->connection->beginTransaction();
-
+    protected function Version20180524152449_up(): void
+    {
         $this->addSql('CREATE SEQUENCE pia_template_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE pia_template (id INT NOT NULL, enabled BOOLEAN NOT NULL, name VARCHAR(255) NOT NULL, description TEXT NULL, data TEXT NOT NULL, imported_file_name VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN pia_template.data IS \'(DC2Type:json)\'');
         $this->addSql('ALTER TABLE pia ADD template_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE pia ADD CONSTRAINT FK_253A30625DA0FB8 FOREIGN KEY (template_id) REFERENCES pia_template (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_253A30625DA0FB8 ON pia (template_id)');
+    }
 
-        $this->connection->commit();
+    protected function Version20180524152449_down(): void
+    {
+        $this->addSql('ALTER TABLE pia DROP CONSTRAINT FK_253A30625DA0FB8');
+        $this->addSql('DROP SEQUENCE pia_template_id_seq CASCADE');
+        $this->addSql('DROP TABLE pia_template');
+        $this->addSql('DROP INDEX IDX_253A30625DA0FB8');
+        $this->addSql('ALTER TABLE pia DROP template_id');
+    }
 
-        // Version20180528094424
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180528094424_up(): void
+    {
         $this->addSql('CREATE TABLE pia_templates__structures (structure_id INT NOT NULL, structure_pia_template_id INT NOT NULL, PRIMARY KEY(structure_id, structure_pia_template_id))');
         $this->addSql('CREATE INDEX IDX_56DAC3242534008B ON pia_templates__structures (structure_id)');
         $this->addSql('CREATE INDEX IDX_56DAC324F2DACB5 ON pia_templates__structures (structure_pia_template_id)');
@@ -270,31 +383,40 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
         $this->addSql('ALTER TABLE pia_templates__structures ADD CONSTRAINT FK_56DAC324F2DACB5 FOREIGN KEY (structure_pia_template_id) REFERENCES pia_structure (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE pia_templates__structure_types ADD CONSTRAINT FK_1518CE651EEEFCA2 FOREIGN KEY (structure_type_id) REFERENCES pia_template (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE pia_templates__structure_types ADD CONSTRAINT FK_1518CE657A287CD FOREIGN KEY (structure_type_pia_template_id) REFERENCES pia_structure_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+    }
 
-        $this->connection->commit();
+    protected function Version20180528094424_down(): void
+    {
+        $this->addSql('DROP TABLE pia_templates__structures');
+        $this->addSql('DROP TABLE pia_templates__structure_types');
+    }
 
-        // Version20180528125823
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180528125823_up(): void
+    {
         $this->addSql('ALTER TABLE pia_profile ALTER last_name DROP NOT NULL');
+    }
 
-        $this->connection->commit();
+    protected function Version20180528125823_down(): void
+    {
+        $this->addSql('ALTER TABLE pia_profile ALTER last_name SET NOT NULL');
+    }
 
-        // Version20180528142132
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180528142132_up(): void
+    {
         $this->addSql('ALTER TABLE pia_profile RENAME TO user_profile');
         $this->addSql('CREATE SEQUENCE user_profile_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('ALTER INDEX uniq_6372cd59a76ed395 RENAME TO UNIQ_D95AB405A76ED395');
+    }
 
-        $this->connection->commit();
+    protected function Version20180528142132_down(): void
+    {
+        $this->addSql('ALTER TABLE user_profile RENAME TO pia_profile');
+        $this->addSql('ALTER INDEX UNIQ_D95AB405A76ED395 RENAME TO uniq_6372cd59a76ed395');
+        $this->addSql('DROP SEQUENCE user_profile_id_seq');
+    }
 
-        // Version20180530091757
-
-        $this->connection->beginTransaction();
-
+    protected function Version20180530091757_up(): void
+    {
         $this->addSql('CREATE SEQUENCE pia_folder_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE pia_folder (id INT NOT NULL, name VARCHAR(255) NOT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, structure_id INT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_71BF4B04A977936C ON pia_folder (tree_root)');
@@ -306,192 +428,86 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
         $this->addSql('ALTER TABLE pia ADD CONSTRAINT FK_253A3062162CB942 FOREIGN KEY (folder_id) REFERENCES pia_folder (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_253A3062162CB942 ON pia (folder_id)');
         $this->addSql('CREATE INDEX IDX_71BF4B042534008B ON pia_folder (structure_id)');
-
-        $this->connection->commit();
-
-        // Version20180530095437
-
-        // Create and associate mandatory rootFolders for each structures
-
-        // /** @var RegistryInterface $doctrine */
-        // $doctrine = $this->container->get('doctrine');
-        // $structures = $doctrine->getRepository(Structure::class)->findAll();
-
-        // /** @var Structure $structure */
-        // foreach ($structures as $structure) {
-        //     if ($structure->getRootFolder() === null) {
-        //         $rootFolder = new Folder('root', $structure);
-        //         $doctrine->getManager()->persist($rootFolder);
-        //         $doctrine->getManager()->flush($rootFolder);
-        //     }
-        // }
-
-        // Version20180605082149
-
-        // /** @var RegistryInterface $doctrine */
-        // $doctrine = $this->container->get('doctrine');
-        // $structures = $doctrine->getRepository(Structure::class)->findAll();
-
-        // /** @var Structure $structure */
-        // foreach ($structures as $structure) {
-        //     $rootFolder = $structure->getRootFolder();
-        //     /** @var Pia $pia */
-        //     foreach ($structure->getPias() as $pia) {
-        //         $pia->setFolder($rootFolder);
-        //     }
-        // }
-
-        // $doctrine->getManager()->flush();
     }
 
-    public function down(Schema $schema)
+    protected function Version20180530091757_down(): void
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
+        $this->addSql('ALTER TABLE pia DROP CONSTRAINT FK_253A3062162CB942');
+        $this->addSql('ALTER TABLE pia_folder DROP CONSTRAINT FK_71BF4B042534008B');
+        $this->addSql('ALTER TABLE pia_folder DROP CONSTRAINT FK_71BF4B04A977936C');
+        $this->addSql('ALTER TABLE pia_folder DROP CONSTRAINT FK_71BF4B04727ACA70');
+        $this->addSql('DROP SEQUENCE pia_folder_id_seq CASCADE');
+        $this->addSql('DROP INDEX IDX_71BF4B042534008B');
+        $this->addSql('DROP TABLE pia_folder');
+        $this->addSql('DROP INDEX IDX_253A3062162CB942');
+        $this->addSql('ALTER TABLE pia DROP folder_id');
+    }
 
-        // Version20180605082149
+    protected function Version20180530095437_up(): void
+    {
+        // Create and associate mandatory rootFolders for each structures
 
-        // /** @var RegistryInterface $doctrine */
-        // $doctrine = $this->container->get('doctrine');
-        // $pias = $doctrine->getRepository(Pia::class)->findAll();
+        /** @var RegistryInterface $doctrine */
+        $doctrine = $this->container->get('doctrine');
+        $structures = $doctrine->getRepository(Structure::class)->findAll();
 
-        // /** @var Pia $pia */
-        // foreach ($pias as $pia) {
-        //     $pia->setFolder(null);
-        // }
+        /** @var Structure $structure */
+        foreach ($structures as $structure) {
+            if ($structure->getRootFolder() === null) {
+                $rootFolder = new Folder('root', $structure);
+                $doctrine->getManager()->persist($rootFolder);
+                $doctrine->getManager()->flush($rootFolder);
+            }
+        }
+    }
 
-        // $doctrine->getManager()->flush();
+    protected function Version20180530095437_down(): void
+    {
+        // Dissociate mandatory rootFolders for each structures
 
-        // // Version20180530095437
+        /** @var RegistryInterface $doctrine */
+        $doctrine = $this->container->get('doctrine');
+        $structures = $doctrine->getRepository(Structure::class)->findAll();
 
-        // // Dissociate mandatory rootFolders for each structures
+        /** @var Structure $structure */
+        foreach ($structures as $structure) {
+            if (($rootFolder = $structure->getRootFolder()) !== null) {
+                $rootFolder->setStructure(null);
+                $doctrine->getManager()->flush($rootFolder);
+            }
+        }
+    }
 
-        // /** @var RegistryInterface $doctrine */
-        // $doctrine = $this->container->get('doctrine');
-        // $structures = $doctrine->getRepository(Structure::class)->findAll();
+    protected function Version20180605082149_up(): void
+    {
+        /** @var RegistryInterface $doctrine */
+        $doctrine = $this->container->get('doctrine');
+        $structures = $doctrine->getRepository(Structure::class)->findAll();
 
-        // /** @var Structure $structure */
-        // foreach ($structures as $structure) {
-        //     if (($rootFolder = $structure->getRootFolder()) !== null) {
-        //         $rootFolder->setStructure(null);
-        //         $doctrine->getManager()->flush($rootFolder);
-        //     }
-        // }
+        /** @var Structure $structure */
+        foreach ($structures as $structure) {
+            $rootFolder = $structure->getRootFolder();
+            /** @var Pia $pia */
+            foreach ($structure->getPias() as $pia) {
+                $pia->setFolder($rootFolder);
+            }
+        }
 
-        // // Version20180530091757
+        $doctrine->getManager()->flush();
+    }
 
-        // $this->addSql('ALTER TABLE pia DROP CONSTRAINT FK_253A3062162CB942');
-        // $this->addSql('ALTER TABLE pia_folder DROP CONSTRAINT FK_71BF4B042534008B');
-        // $this->addSql('ALTER TABLE pia_folder DROP CONSTRAINT FK_71BF4B04A977936C');
-        // $this->addSql('ALTER TABLE pia_folder DROP CONSTRAINT FK_71BF4B04727ACA70');
-        // $this->addSql('DROP SEQUENCE pia_folder_id_seq CASCADE');
-        // $this->addSql('DROP INDEX IDX_71BF4B042534008B');
-        // $this->addSql('DROP TABLE pia_folder');
-        // $this->addSql('DROP INDEX IDX_253A3062162CB942');
-        // $this->addSql('ALTER TABLE pia DROP folder_id');
+    protected function Version20180605082149_down(): void
+    {
+        /** @var RegistryInterface $doctrine */
+        $doctrine = $this->container->get('doctrine');
+        $pias = $doctrine->getRepository(Pia::class)->findAll();
 
-        // // Version20180528142132
+        /** @var Pia $pia */
+        foreach ($pias as $pia) {
+            $pia->setFolder(null);
+        }
 
-        // $this->addSql('ALTER TABLE user_profile RENAME TO pia_profile');
-        // $this->addSql('ALTER INDEX UNIQ_D95AB405A76ED395 RENAME TO uniq_6372cd59a76ed395');
-        // $this->addSql('DROP SEQUENCE user_profile_id_seq');
-
-        // // Version20180528125823
-
-        // $this->addSql('ALTER TABLE pia_profile ALTER last_name SET NOT NULL');
-
-        // // Version20180528094424
-
-        // $this->addSql('DROP TABLE pia_templates__structures');
-        // $this->addSql('DROP TABLE pia_templates__structure_types');
-
-        // // Version20180524152449
-
-        // $this->addSql('ALTER TABLE pia DROP CONSTRAINT FK_253A30625DA0FB8');
-        // $this->addSql('DROP SEQUENCE pia_template_id_seq CASCADE');
-        // $this->addSql('DROP TABLE pia_template');
-        // $this->addSql('DROP INDEX IDX_253A30625DA0FB8');
-        // $this->addSql('ALTER TABLE pia DROP template_id');
-
-        // // Version20180524100033
-
-        // $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NOT NULL');
-        // $this->addSql('COMMENT ON COLUMN pia_profile.pia_roles IS \'(DC2Type:json)\'');
-
-        // // Version20180524080353
-
-        // $this->addSql('ALTER TABLE pia_profile DROP pia_roles');
-
-        // // Version20180524074718
-
-        // $this->addSql('ALTER TABLE pia_profile ADD name VARCHAR(255) NOT NULL');
-        // $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NOT NULL');
-        // $this->addSql('ALTER TABLE pia_profile DROP first_name');
-        // $this->addSql('ALTER TABLE pia_profile DROP last_name');
-        // $this->addSql('COMMENT ON COLUMN pia_profile.pia_roles IS \'(DC2Type:json)\'');
-
-        // // Version20180524073608
-
-        // $this->addSql('ALTER TABLE pia_profile ALTER name SET NOT NULL');
-
-        // Version20180522073548
-
-        // $this->addSql('DROP SEQUENCE pia_profile_id_seq CASCADE');
-        // $this->addSql('DROP TABLE pia_profile');
-
-        // Version20180517132216
-
-        // $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
-        // $this->addSql('ALTER TABLE pia_structure DROP CONSTRAINT FK_5036DBE6C54C8C93');
-        // $this->addSql('DROP SEQUENCE pia_structure_type_id_seq CASCADE');
-        // $this->addSql('DROP TABLE pia_structure_type');
-        // $this->addSql('DROP INDEX IDX_5036DBE6C54C8C93');
-        // $this->addSql('ALTER TABLE pia_structure DROP type_id');
-
-        // Version20180516134220
-
-        // if (!$schema->hasTable('pia_structure')) {
-        //     return;
-        // }
-
-        // $this->addSql('ALTER TABLE pia_user DROP CONSTRAINT FK_260CA7F2534008B');
-        // $this->addSql('ALTER TABLE pia DROP CONSTRAINT FK_253A30622534008B');
-        // $this->addSql('DROP SEQUENCE pia_structure_id_seq CASCADE');
-        // $this->addSql('DROP TABLE pia_structure');
-        // $this->addSql('DROP INDEX IDX_260CA7F2534008B');
-        // $this->addSql('ALTER TABLE pia_user DROP structure_id');
-        // $this->addSql('DROP INDEX IDX_253A30622534008B');
-        // $this->addSql('ALTER TABLE pia DROP structure_id');
-
-        // Version20180515154624
-
-        // if (!$schema->hasTable('pia_user') || !$schema->getTable('pia_user')->hasColumn('username_canonical')) {
-        //     return;
-        // }
-
-        // $this->addSql('ALTER TABLE oauth_client DROP url');
-        // $this->addSql('DROP INDEX UNIQ_260CA7F92FC23A8');
-        // $this->addSql('DROP INDEX UNIQ_260CA7FA0D96FBF');
-        // $this->addSql('DROP INDEX UNIQ_260CA7FC05FB297');
-        // $this->addSql('ALTER TABLE pia_user DROP username_canonical');
-        // $this->addSql('ALTER TABLE pia_user DROP email_canonical');
-        // $this->addSql('ALTER TABLE pia_user DROP salt');
-        // $this->addSql('ALTER TABLE pia_user DROP last_login');
-        // $this->addSql('ALTER TABLE pia_user DROP confirmation_token');
-        // $this->addSql('ALTER TABLE pia_user DROP password_requested_at');
-        // $this->addSql('ALTER TABLE pia_user ALTER username TYPE VARCHAR(255)');
-        // $this->addSql('ALTER TABLE pia_user ALTER email TYPE VARCHAR(255)');
-        // $this->addSql('CREATE UNIQUE INDEX uniq_260ca7fe7927c74 ON pia_user (email)');
-        // $this->addSql('CREATE UNIQUE INDEX uniq_260ca7ff85e0677 ON pia_user (username)');
-
-        // Version00000000000000
-
-        // if (!$schema->hasTable('pia_user')) {
-        //     return;
-        // }
-
-        $this->addSql('DROP SCHEMA public CASCADE;');
-        $this->addSql('CREATE SCHEMA public;');
+        $doctrine->getManager()->flush();
     }
 
     public function setContainer(?ContainerInterface $container = null)
