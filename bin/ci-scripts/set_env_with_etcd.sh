@@ -55,7 +55,7 @@ fi
 
 if [ -z "$DatabasePassword" ]
 then
-    DatabasePassword=pia_user_$Suffix
+    DatabasePassword=$(openssl rand -hex 8)
 fi
 
 if [ -z "$MailerUrl" ]
