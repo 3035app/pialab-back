@@ -31,6 +31,9 @@ pipeline {
 
         string(defaultValue: '', description: '', name: 'ClientId')
         string(defaultValue: '', description: '', name: 'ClientSecret')
+
+        choice(choices: 'true\nfalse', description: '', name: 'RunTest')
+
     }
 
 
@@ -89,12 +92,20 @@ pipeline {
         }
 
         stage ('Start ') {
+            when {
+                expression { params.RunTest == 'true' }
+            }
+
             steps {
                 sh "./bin/ci-scripts/server_start.sh"
             }
         }
 
         stage ('Run Test') {
+             when {
+                expression { params.RunTest == 'true' }
+             }
+
             steps {
                 sh "./bin/ci-scripts/run_test.sh"
             }
