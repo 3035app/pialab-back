@@ -1,13 +1,5 @@
 # Change Log
 
-## [Unreleased](https://github.com/pia-lab/pialab-back/tree/HEAD)
-
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.0.0...HEAD)
-
-**Merged pull requests:**
-
-- Wip translations [\#19](https://github.com/pia-lab/pialab-back/pull/19) ([PapsOu](https://github.com/PapsOu))
-
 ## [1.0.0](https://github.com/pia-lab/pialab-back/tree/1.0.0) (2018-06-12)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/0.4.5...1.0.0)
 
@@ -17,6 +9,7 @@
 
 **Merged pull requests:**
 
+- Wip translations [\#19](https://github.com/pia-lab/pialab-back/pull/19) ([PapsOu](https://github.com/PapsOu))
 - Fix user return button on password reset request [\#18](https://github.com/pia-lab/pialab-back/pull/18) ([PapsOu](https://github.com/PapsOu))
 - Add checkbox for sending password reset email [\#16](https://github.com/pia-lab/pialab-back/pull/16) ([PapsOu](https://github.com/PapsOu))
 - Wip pia folders [\#14](https://github.com/pia-lab/pialab-back/pull/14) ([PapsOu](https://github.com/PapsOu))
