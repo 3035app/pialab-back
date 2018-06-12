@@ -9,7 +9,6 @@
  */
 
 /**
- * @group all
  * @group piaTemplates
  */
 class PiaTemplatesCest
@@ -27,6 +26,7 @@ class PiaTemplatesCest
         $I->fillField('input[name="create_pia_template_form[name]"]', $this->piaTemplateName);
         $I->fillField('textarea[name="create_pia_template_form[description]"]', 'A selenium template');
 
+        // Docker cannot access backend filesystem, so we need to find another way to upload a json example.
         $I->fillField('input[name="create_pia_template_form[data]"]', $this->piaTemplateFilePath);
 
         $I->click('form[name="create_pia_template_form"] [type="submit"]');
