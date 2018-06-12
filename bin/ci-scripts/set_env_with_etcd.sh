@@ -58,6 +58,14 @@ then
     DatabasePassword=pia_user_$Suffix
 fi
 
+if [ -z "$MailerUrl" ]
+then
+    MailerUrl=smtp://127.0.0.1:1025
+
+fi
+
+
+
 # get postgres default
 postgreshost=$($ETCDCTLCMD get /default/postgres/hostname --print-value-only $ETCDENDPOINT)
 postgresuser=$($ETCDCTLCMD get /default/postgres/root/username --print-value-only $ETCDENDPOINT)
@@ -76,6 +84,8 @@ $ETCDCTLCMD put $Prefix/postgres/root/password $postgrespass $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/dbname $DatabaseName $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/username $DatabaseUser $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/password $DatabasePassword $ETCDENDPOINT
+
+$ETCDCTLCMD put $Prefix/smtp/default/url $MailerUrl $ETCDENDPOINT
 
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT
