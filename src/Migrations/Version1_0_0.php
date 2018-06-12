@@ -127,9 +127,9 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
         // Version20180515154624
 
-        if (!$schema->hasTable('pia_user') || $schema->getTable('pia_user')->hasColumn('username_canonical')) {
-            return;
-        }
+        // if (!$schema->hasTable('pia_user') || $schema->getTable('pia_user')->hasColumn('username_canonical')) {
+        //     return;
+        // }
 
         $this->addSql('ALTER TABLE oauth_client ADD url VARCHAR(255) DEFAULT NULL');
         $this->addSql('DROP INDEX uniq_260ca7fe7927c74');
@@ -155,9 +155,9 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
         // Version20180516134220
 
-        if ($schema->hasTable('pia_structure')) {
-            return;
-        }
+        // if ($schema->hasTable('pia_structure')) {
+        //     return;
+        // }
 
         $this->addSql('CREATE SEQUENCE pia_structure_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE pia_structure (id INT NOT NULL, name VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
@@ -170,9 +170,9 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
         // Version20180517132216
 
-        if ($schema->hasTable('pia_structure_type')) {
-            return;
-        }
+        // if ($schema->hasTable('pia_structure_type')) {
+        //     return;
+        // }
 
         $this->addSql('CREATE SEQUENCE pia_structure_type_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE pia_structure_type (id INT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
@@ -409,9 +409,9 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
         // Version20180515154624
 
-        if (!$schema->hasTable('pia_user') || !$schema->getTable('pia_user')->hasColumn('username_canonical')) {
-            return;
-        }
+        // if (!$schema->hasTable('pia_user') || !$schema->getTable('pia_user')->hasColumn('username_canonical')) {
+        //     return;
+        // }
 
         $this->addSql('ALTER TABLE oauth_client DROP url');
         $this->addSql('DROP INDEX UNIQ_260CA7F92FC23A8');
@@ -430,9 +430,9 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
         // Version00000000000000
 
-        if (!$schema->hasTable('pia_user')) {
-            return;
-        }
+        // if (!$schema->hasTable('pia_user')) {
+        //     return;
+        // }
 
         $this->addSql('DROP SCHEMA public CASCADE;');
         $this->addSql('CREATE SCHEMA public;');
