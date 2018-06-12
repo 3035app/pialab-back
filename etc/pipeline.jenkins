@@ -36,9 +36,6 @@ pipeline {
 
     environment {
         RND = "${BUILD_NUMBER}"
-
-
-
     }
 
     options {
@@ -58,7 +55,7 @@ pipeline {
 
         stage ('Set Env') {
             steps {
-                sh 'SYMFONYENV=${params.BuildEnv} ./bin/ci-scripts/set_env_with_etcd.sh'
+                sh "SYMFONYENV=${params.BuildEnv} ./bin/ci-scripts/set_env_with_etcd.sh"
                 sh './bin/ci-scripts/set_pgpass.sh'
                 sh 'cat ./.env'
                 sh 'cat $HOME/.pgpass'
