@@ -35,32 +35,30 @@ class EditStructureForm extends CreateStructureForm
         parent::buildForm($builder, $options);
         $builder
             ->remove('submit')
-
             ->add('templates', EntityType::class, [
                 'class'        => PiaTemplate::class,
                 'choice_label' => 'name',
                 'multiple'     => true,
                 'expanded'     => true,
                 'by_reference' => false,
-                'label'        => 'Gabarits de PIA disponibles',
+                'label'        => 'pia.structures.forms.edit.templates',
                 'label_attr'   => [
-                    'title' => 'Les gabarits sélectionnés seront accessibles à cette structure',
+                    'title' => 'pia.structures.forms.edit.templates_help',
                 ],
             ])
-
             ->add('cancel', ButtonType::class, [
                 'attr' => [
                     'class' => 'red cancel',
                     'style' => 'width: 48%;float:right;',
                 ],
-                'label' => 'Annuler',
+                'label' => 'pia.structures.forms.edit.cancel',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => '',
                     'style' => 'width: 48%;',
                 ],
-                'label' => 'Enregistrer la structure',
+                'label' => 'pia.structures.forms.edit.submit',
             ])
         ;
     }

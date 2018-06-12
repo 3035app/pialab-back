@@ -10,11 +10,11 @@
 
 namespace PiaApi\Form\Structure;
 
-use Symfony\Component\Form\AbstractType;
+use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
-class RemoveStructureForm extends AbstractType
+class RemoveStructureForm extends BaseForm
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -23,7 +23,7 @@ class RemoveStructureForm extends AbstractType
                 'attr' => [
                     'class' => 'ui fluid red button',
                 ],
-                'label' => 'Supprimer la structure',
+                'label' => 'pia.structures.forms.submit',
             ])
         ;
     }

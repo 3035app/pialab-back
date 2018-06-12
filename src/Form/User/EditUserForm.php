@@ -48,44 +48,44 @@ class EditUserForm extends CreateUserForm
             ->remove('sendResetingEmail')
 
             ->add('username', TextType::class, [
-                'label'    => 'Nom d\'utilisateur',
+                'label'    => 'pia.users.forms.edit.username',
+            ])
+            ->add('profile', UserProfileForm::class, [
+                'label'   => false,
             ])
             ->add('roles', ChoiceType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
                 'choices'  => $this->userRoles,
-                'label'    => 'Rôles',
+                'label'    => 'pia.users.forms.edit.roles',
             ])
 
             ->add('expirationDate', DateType::class, [
                 'widget'   => 'single_text',
-                'label'    => 'Date d\'expiration du compte',
+                'label'    => 'pia.users.forms.edit.expirationDate',
             ])
             ->add('enabled', CheckboxType::class, [
                 'required' => false,
-                'label'    => 'Actif',
+                'label'    => 'pia.users.forms.edit.enabled',
             ])
             ->add('locked', CheckboxType::class, [
                 'required' => false,
-                'label'    => 'Verrouillé',
+                'label'    => 'pia.users.forms.edit.locked',
             ])
             ->add('cancel', ButtonType::class, [
                 'attr' => [
                     'class' => 'red cancel',
                     'style' => 'width: 48%;float:right;',
                 ],
-                'label' => 'Annuler',
-            ])
-            ->add('profile', UserProfileForm::class, [
-                'label'   => false,
+                'label' => 'pia.users.forms.edit.cancel',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => '',
                     'style' => 'width: 48%;',
                 ],
-                'label' => 'Enregistrer l\'utilisateur',
+                'label' => 'pia.users.forms.edit.submit',
             ])
         ;
 

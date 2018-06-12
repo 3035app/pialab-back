@@ -10,7 +10,7 @@
 
 namespace PiaApi\Form\PiaTemplate;
 
-use Symfony\Component\Form\AbstractType;
+use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -18,7 +18,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class CreatePiaTemplateForm extends AbstractType
+class CreatePiaTemplateForm extends BaseForm
 {
     public function __construct(RegistryInterface $doctrine)
     {
@@ -30,21 +30,21 @@ class CreatePiaTemplateForm extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'required' => true,
-                'label'    => 'Nom',
+                'label'    => 'pia.templates.forms.create.name',
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
-                'label'    => 'Description',
+                'label'    => 'pia.templates.forms.create.description',
             ])
             ->add('data', FileType::class, [
-                'label'    => 'Fichier d\'export',
+                'label'    => 'pia.templates.forms.create.data',
                 'required' => true,
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'fluid',
                 ],
-                'label' => 'Créer le gabarit',
+                'label' => 'pia.templates.forms.create.submit',
             ])
         ;
     }

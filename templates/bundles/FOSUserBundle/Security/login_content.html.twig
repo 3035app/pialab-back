@@ -1,5 +1,5 @@
 <div class="ui middle aligned center aligned grid">
-    <div class="column" style="transform: translateY(75%); max-width:400px">
+    <div class="column" style="transform: translateY(50%); max-width:400px">
         <h2 class="ui image">
             <img src="{{ asset('assets/img/pia-lab.png') }}" class="image">
         </h2>
@@ -13,23 +13,28 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="user icon"></i>
-                        <input type="text" name="_username" placeholder="E-mail address">
+                        <input type="text" name="_username" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}">
                     </div>
                 </div>
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="lock icon"></i>
-                        <input type="password" name="_password" placeholder="Password">
+                        <input type="password" name="_password" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}">
                     </div>
                 </div>
                 {% if csrf_token %}
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
                 {% endif %}
 
-                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                <label for="remember_me">Rester connecté</label>
-
-                <button type="submit" name="_submit" class="ui fluid large blue submit button" onclick="this.closest('form').submit()">Login</button>
+                <div class="ui very basic segment left aligned">
+                    <div class="ui toggle checkbox">
+                        <input name="_remember_me" type="checkbox" id="remember_me" value="on">
+                        <label >{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
+                    </div>
+                </div>
+                <button type="submit" name="_submit" class="ui fluid large blue submit button" onclick="this.closest('form').submit()">
+                    {{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}
+                </button>
             </div>
         </form>
     </div>
