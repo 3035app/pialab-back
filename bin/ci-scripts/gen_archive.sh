@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -ex
 
-Name=Pialab-back
+if [ -z ${Name} ]
+then
+    Name=Pialab-back
+fi
 
 if [ -z ${Branch} ]
 then

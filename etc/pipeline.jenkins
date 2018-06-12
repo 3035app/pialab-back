@@ -8,7 +8,7 @@ pipeline {
     }
 
     parameters {
-        string(defaultValue: 'pialab', description: '', name: 'GlobalName')
+        string(defaultValue: 'pialab-back', description: '', name: 'GlobalName')
 
         string(defaultValue: 'http://ci.libre-informatique.fr:8042/front', description: '', name: 'FrontUrl')
         string(defaultValue: 'http://ci.libre-informatique.fr:8042/back', description: '', name: 'BackUrl')
@@ -102,7 +102,7 @@ pipeline {
 
         stage ('Create Archive') {
             steps {
-                sh 'Branch=${BRANCH_NAME} ./bin/ci-scripts/gen_archive.sh'
+                sh "Name=${params.GlobalName} Branch=${BRANCH_NAME} ./bin/ci-scripts/gen_archive.sh"
                 archiveArtifacts artifacts: "*.tar.gz*", fingerprint: true
                 build job: 'Copy Artifact', parameters: [string(name: 'Job', value: "${JOB_NAME}"), string(name: 'Project', value: "Pialab-back"), string(name: 'Branch', value: "${BRANCH_NAME}"), string(name: 'DoDeploy', value: "false")], wait: false
 
