@@ -70,10 +70,10 @@
                                             </td>
                                             <td class="right aligned">
                                                 <div class="ui small buttons">
-                                                    <a class="ui green tiny icon button" title="Modifier la structure" data-modal="data-modal" href="{{ path('manage_structures_edit_structure', {'structureId':structure.id}) }}">
+                                                    <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_edit_structure', {'structureId':structure.id}) }}">
                                                         <i class="pencil icon"></i>
                                                     </a>
-                                                    <a class="ui red tiny icon button" title="Supprimer la structure" data-modal="data-modal" href="{{ path('manage_structures_remove_structure', {'structureId':structure.id}) }}">
+                                                    <a class="ui red tiny icon button" title="{{ 'pia.actions.remove'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_remove_structure', {'structureId':structure.id}) }}">
                                                         <i class="trash icon"></i>
                                                     </a>
                                                 </div>
@@ -120,10 +120,10 @@
                                         </td>
                                         <td class="right aligned">
                                             <div class="ui small buttons">
-                                                <a class="ui green tiny icon button" title="{{ 'pia.actions.edit' }}" data-modal="data-modal" href="{{ path('manage_structures_edit_structure_type', {'structureTypeId':structureType.id}) }}">
+                                                <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_edit_structure_type', {'structureTypeId':structureType.id}) }}">
                                                     <i class="pencil icon"></i>
                                                 </a>
-                                                <a class="ui red tiny icon button" title="{{ 'pia.actions.remove' }}" data-modal="data-modal" href="{{ path('manage_structures_remove_structure_type', {'structureTypeId':structureType.id}) }}">
+                                                <a class="ui red tiny icon button" title="{{ 'pia.actions.remove'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_remove_structure_type', {'structureTypeId':structureType.id}) }}">
                                                     <i class="trash icon"></i>
                                                 </a>
                                             </div>

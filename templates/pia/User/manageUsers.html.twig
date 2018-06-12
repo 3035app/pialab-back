@@ -90,21 +90,21 @@
                                     </td>
                                     <td class="right aligned collapsing">
                                         <div class="ui small buttons">
-                                            <a class="ui green tiny icon button" data-modal="data-modal" title="{{ 'pia.actions.edit' }}" href="{{ path('manage_users_edit_user', {'userId':user.id}) }}">
+                                            <a class="ui green tiny icon button" data-modal="data-modal" title="{{ 'pia.actions.edit'|trans }}" href="{{ path('manage_users_edit_user', {'userId':user.id}) }}">
                                                 <i class="pencil icon"></i>
                                             </a>
-                                            <a class="ui orange tiny icon button" data-modal="data-modal" title="{{ 'pia.actions.edit' }}" href="{{ path('manage_users_send_reset_password_email', {'userId':user.id}) }}">
+                                            <a class="ui orange tiny icon button" data-modal="data-modal" title="{{ 'pia.actions.edit'|trans }}" href="{{ path('manage_users_send_reset_password_email', {'userId':user.id}) }}">
                                                 <i class="icons">
                                                     <i class="envelope outline icon"></i>
                                                     <i class="bottom right corner plus icon"></i>
                                                 </i>
                                             </a>
                                             {% if app.user != user %}
-                                                <a class="ui red tiny icon button" data-modal="data-modal" title="{{ 'pia.actions.remove' }}" href="{{ path('manage_users_remove_user', {'userId':user.id}) }}">
+                                                <a class="ui red tiny icon button" data-modal="data-modal" title="{{ 'pia.actions.remove'|trans }}" href="{{ path('manage_users_remove_user', {'userId':user.id}) }}">
                                                     <i class="trash icon"></i>
                                                 </a>
                                             {% else %}
-                                                <a class="ui red tiny icon disabled button" title="{{ 'pia.actions.remove' }}" href="#">
+                                                <a class="ui red tiny icon disabled button" title="{{ 'pia.actions.remove'|trans }}" href="#">
                                                     <i class="trash icon"></i>
                                                 </a>
                                             {% endif %}
