@@ -309,43 +309,39 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
         $this->connection->commit();
 
-        $this->connection->commit();
-
         // Version20180530095437
 
         // Create and associate mandatory rootFolders for each structures
 
-        /** @var RegistryInterface $doctrine */
-        $doctrine = $this->container->get('doctrine');
-        $structures = $doctrine->getRepository(Structure::class)->findAll();
+        // /** @var RegistryInterface $doctrine */
+        // $doctrine = $this->container->get('doctrine');
+        // $structures = $doctrine->getRepository(Structure::class)->findAll();
 
-        /** @var Structure $structure */
-        foreach ($structures as $structure) {
-            if ($structure->getRootFolder() === null) {
-                $rootFolder = new Folder('root', $structure);
-                $doctrine->getManager()->persist($rootFolder);
-                $doctrine->getManager()->flush($rootFolder);
-            }
-        }
-
-        $this->connection->commit();
+        // /** @var Structure $structure */
+        // foreach ($structures as $structure) {
+        //     if ($structure->getRootFolder() === null) {
+        //         $rootFolder = new Folder('root', $structure);
+        //         $doctrine->getManager()->persist($rootFolder);
+        //         $doctrine->getManager()->flush($rootFolder);
+        //     }
+        // }
 
         // Version20180605082149
 
-        /** @var RegistryInterface $doctrine */
-        $doctrine = $this->container->get('doctrine');
-        $structures = $doctrine->getRepository(Structure::class)->findAll();
+        // /** @var RegistryInterface $doctrine */
+        // $doctrine = $this->container->get('doctrine');
+        // $structures = $doctrine->getRepository(Structure::class)->findAll();
 
-        /** @var Structure $structure */
-        foreach ($structures as $structure) {
-            $rootFolder = $structure->getRootFolder();
-            /** @var Pia $pia */
-            foreach ($structure->getPias() as $pia) {
-                $pia->setFolder($rootFolder);
-            }
-        }
+        // /** @var Structure $structure */
+        // foreach ($structures as $structure) {
+        //     $rootFolder = $structure->getRootFolder();
+        //     /** @var Pia $pia */
+        //     foreach ($structure->getPias() as $pia) {
+        //         $pia->setFolder($rootFolder);
+        //     }
+        // }
 
-        $doctrine->getManager()->flush();
+        // $doctrine->getManager()->flush();
     }
 
     public function down(Schema $schema)
