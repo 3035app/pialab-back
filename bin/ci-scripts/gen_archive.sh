@@ -35,6 +35,6 @@ rm -rf \
 tar --exclude-vcs \
     --exclude=build \
     --exclude=bin/git-scripts \
-    -czhf ${Filename} ./* .env .api.env
+    -czhf ${Filename} ./* .env
 
 sha256sum ${Filename} > ${Filename}.sha256.txt
