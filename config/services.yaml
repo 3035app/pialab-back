@@ -15,7 +15,7 @@ services:
 
             # Services
             FOS\UserBundle\Mailer\MailerInterface: '@fos_user.mailer.twig_swift'
-        
+
     PiaApi\:
         resource: '../src/*'
         exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
@@ -30,6 +30,12 @@ services:
     PiaApi\Auth\PasswordResettingListener:
         tags:
             - { name: kernel.event_subscriber }
+
+    PiaApi\Auth\ClientManager:
+        class: PiaApi\Auth\ClientManager
+        arguments:
+          - '@fos_oauth_server.entity_manager'
+          - '%fos_oauth_server.model.client.class%'
 
     # Used to fix bug when updating and entity througth REST api
     # jms_serializer.object_constructor:

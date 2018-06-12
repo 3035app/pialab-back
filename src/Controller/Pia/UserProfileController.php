@@ -25,7 +25,7 @@ class UserProfileController extends RestController
      */
     public function profileAction(UserInterface $user = null)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         return $this->view($user->getProfile(), Response::HTTP_OK);
     }

@@ -28,7 +28,7 @@ class FolderController extends RestController
      */
     public function listAction(Request $request)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $structure = $this->getUser()->getStructure();
         $collection = $this->getRepository()->findBy(['structure' => $structure, 'parent' => null]);
@@ -44,14 +44,14 @@ class FolderController extends RestController
      */
     public function showAction(Request $request, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $folder = $this->getResource($id);
         if ($folder === null) {
             return $this->view($folder, Response::HTTP_NOT_FOUND);
         }
 
-        $this->canAccessResourceOr304($folder);
+        $this->canAccessResourceOr403($folder);
 
         return $this->view($folder, Response::HTTP_OK);
     }
@@ -64,7 +64,7 @@ class FolderController extends RestController
      */
     public function createAction(Request $request)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         if ($request->get('parent_id') === null && $request->get('parent') === null) {
             return $this->view('Missing parent identification', Response::HTTP_BAD_REQUEST);
@@ -92,10 +92,10 @@ class FolderController extends RestController
      */
     public function updateAction(Request $request, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $folder = $this->getResource($id);
-        $this->canAccessResourceOr304($folder);
+        $this->canAccessResourceOr403($folder);
 
         $updatableAttributes = [
             'name'   => 'string',
@@ -117,10 +117,10 @@ class FolderController extends RestController
      */
     public function deleteAction(Request $request, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $folder = $this->getResource($id);
-        $this->canAccessResourceOr304($folder);
+        $this->canAccessResourceOr403($folder);
         $this->remove($folder);
 
         return $this->view($folder, Response::HTTP_OK);
@@ -131,7 +131,7 @@ class FolderController extends RestController
         return Folder::class;
     }
 
-    public function canAccessResourceOr304($resource): void
+    public function canAccessResourceOr403($resource): void
     {
         if (!$resource instanceof Folder) {
             throw new AccessDeniedHttpException();

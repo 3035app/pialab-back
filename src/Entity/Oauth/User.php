@@ -340,6 +340,7 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
      */
     public function setProfile(?UserProfile $profile): void
     {
+        $profile->setUser($this);
         $this->profile = $profile;
     }
 }
