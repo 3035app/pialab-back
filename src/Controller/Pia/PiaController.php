@@ -116,8 +116,8 @@ class PiaController extends RestController
         }
 
         $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
-        if (($folderId = $request->get('folder_id')) !== null) {
-            $folder = $this->getResource($request->get('folder_id'), Folder::class);
+        if (($folderId = $request->get('folder')) !== null) {
+            $folder = $this->getResource($request->get('folder')['id'], Folder::class);
         } else {
             $folder = $this->getUser()->getStructure()->getRootFolder();
         }
