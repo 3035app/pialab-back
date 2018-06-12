@@ -34,7 +34,7 @@ then
 fi
 
 if [ -z "${BUILDENV}" ]
-then 
+then
     BUILDENV="dev"
 fi
 
@@ -43,8 +43,20 @@ then
     SYMFONYENV=${BUILDENV}
 fi
 
+if [ -z "$DatabaseName" ]
+then
+    DatabaseName=pia_db_$Suffix
+fi
 
+if [ -z "$DatabaseUser" ]
+then
+    DatabaseUser=pia_user_$Suffix
+fi
 
+if [ -z "$DatabasePassword" ]
+then
+    DatabasePassword=pia_user_$Suffix
+fi
 
 # get postgres default
 postgreshost=$($ETCDCTLCMD get /default/postgres/hostname --print-value-only $ETCDENDPOINT)
@@ -61,12 +73,12 @@ $ETCDCTLCMD put $Prefix/postgres/hostname $postgreshost $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/root/username $postgresuser $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/root/password $postgrespass $ETCDENDPOINT
 
-$ETCDCTLCMD put $Prefix/postgres/default/dbname pia_db_$Suffix $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/postgres/default/username pia_user_$Suffix $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/postgres/default/password pia_pass_$Suffix $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/default/dbname $DatabaseName $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/default/username $DatabaseUser $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/postgres/default/password $DatabasePassword $ETCDENDPOINT
 
 # set symfony env
-$ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT 
+$ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT
 # get ip
 currentip=$(hostname -i) # works only if the host name can be resolved
 $ETCDCTLCMD put $Prefix/url/addr $currentip':8000' $ETCDENDPOINT
