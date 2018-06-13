@@ -17,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use PiaApi\Entity\Pia\Structure;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\Entity\Pia\StructureType;
+use PiaApi\Entity\OAuth\User;
 use PiaApi\Form\Structure\CreateStructureForm;
 use PiaApi\Form\Structure\EditStructureForm;
 use PiaApi\Form\Structure\RemoveStructureForm;
@@ -55,7 +56,15 @@ class StructureController extends BackOfficeAbstractController
             throw new NotFoundHttpException(sprintf('Structure « %s » does not exist', $structureId));
         }
 
-        $pagerfantaUsers = $this->buildUserPagerByStructure($request, $structure);
+        $userPager = $this->getDoctrine()
+          ->getRepository(User::class)
+          ->getPaginatedUsersByStructure($structure);
+
+        $userPage = $request->get('page', 1);
+        $userLimit = $request->get('limit', $userPager->getMaxPerPage());
+
+        $userPager->setMaxPerPage($userLimit);
+        $userPager->setCurrentPage($userPager->getNbPages() < $userPage ? $userPager->getNbPages() : $userPage);
 
         $userForm = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
             'action'      => $this->generateUrl('manage_users_add_user'),
@@ -64,7 +73,7 @@ class StructureController extends BackOfficeAbstractController
 
         return $this->render('pia/Structure/showStructure.html.twig', [
             'structure'     => $structure,
-            'users'         => $pagerfantaUsers,
+            'users'         => $userPager,
             'userForm'      => $userForm->createView(),
         ]);
     }

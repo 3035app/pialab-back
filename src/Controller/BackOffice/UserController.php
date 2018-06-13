@@ -72,7 +72,6 @@ class UserController extends BackOfficeAbstractController
     /**
      * @Route("/manageUsers", name="manage_users")
      * @Security("is_granted('CAN_SHOW_USER')")
-
      *
      * @param Request $request
      */
@@ -80,13 +79,21 @@ class UserController extends BackOfficeAbstractController
     {
         if (!$this->isGranted('CAN_MANAGE_USERS') && $this->isGranted('CAN_MANAGE_OWNED_USERS')) {
             $structure = $this->getUser()->getStructure();
-            $pagerfanta = $this->buildUserPagerByStructure($request, $structure);
+            $userPager = $this->getDoctrine()
+              ->getRepository(User::class)
+              ->getPaginatedUsersByStructure($structure);
+
+            $userPage = $request->get('page', 1);
+            $userLimit = $request->get('limit', $userPager->getMaxPerPage());
+
+            $userPager->setMaxPerPage($userLimit);
+            $userPager->setCurrentPage($userPager->getNbPages() < $userPage ? $userPager->getNbPages() : $userPage);
         } else {
-            $pagerfanta = $this->buildPager($request, User::class);
+            $userPager = $this->buildPager($request, User::class);
         }
 
         return $this->render('pia/User/manageUsers.html.twig', [
-            'users' => $pagerfanta,
+            'users' => $userPager,
         ]);
     }
 
