@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\DBAL\Schema\Schema;
 use PiaApi\Migrations\Lib\MigrationTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -29,7 +30,7 @@ class Version<version_tag> extends AbstractMigration implements ContainerAwareIn
             <schema_versions>
         ],
         'data' => [
-            <data_versions>
+            // Please move here versions that uses directly doctrine entity manager
         ],
     ];
 
@@ -37,5 +38,5 @@ class Version<version_tag> extends AbstractMigration implements ContainerAwareIn
     //         OLD VERSIONS BELOW
     // #########################################
 
-    <old_versions>
+<old_versions>
 }

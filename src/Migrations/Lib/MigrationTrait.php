@@ -3,12 +3,14 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
 namespace PiaApi\Migrations\Lib;
+
+use Doctrine\DBAL\Schema\Schema;
 
 trait MigrationTrait
 {
@@ -17,14 +19,14 @@ trait MigrationTrait
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         foreach ($this->migrations['schema'] as $migration) {
-            $this->executeVersion($migration, 'up');
+            $this->executeVersion($migration, 'up', $schema);
         }
     }
 
     public function postUp(Schema $schema)
     {
         foreach ($this->migrations['data'] as $migration) {
-            $this->executeVersion($migration, 'up');
+            $this->executeVersion($migration, 'up', $schema);
         }
     }
 
@@ -33,14 +35,14 @@ trait MigrationTrait
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         foreach (array_reverse($this->migrations['schema']) as $migration) {
-            $this->executeVersion($migration, 'down');
+            $this->executeVersion($migration, 'down', $schema);
         }
     }
 
     public function preDown(Schema $schema)
     {
         foreach (array_reverse($this->migrations['data']) as $migration) {
-            $this->executeVersion($migration, 'down');
+            $this->executeVersion($migration, 'down', $schema);
         }
     }
 
@@ -52,7 +54,7 @@ trait MigrationTrait
      *
      * @throws \InvalidArgumentException
      */
-    public function executeVersion(string $versionId, ?string $upOrDown = 'up'): void
+    public function executeVersion(string $versionId, ?string $upOrDown = 'up', Schema $schema): void
     {
         if ($upOrDown !== 'up' && $upOrDown !== 'down') {
             throw new \InvalidArgumentException(
@@ -72,7 +74,7 @@ trait MigrationTrait
                 $upOrDown
             );
 
-            $this->{$versionMethod}();
+            $this->{$versionMethod}($schema);
         }
     }
 

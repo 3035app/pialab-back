@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -19,6 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Filesystem\Filesystem;
 
 class MergeMigrationsCommand extends Command implements ContainerAwareInterface
 {
@@ -29,7 +30,15 @@ class MergeMigrationsCommand extends Command implements ContainerAwareInterface
      */
     private $doctrineMigrationPath;
 
-    private $majorMigrationSkeltonName = 'majorMigration.skeleton';
+    /**
+     * @var string
+     */
+    private $doctrineMigrationNamespace;
+
+    /**
+     * @var string
+     */
+    private $majorMigrationSkeletonName = 'majorMigration.skeleton';
 
     /**
      * {@inheritdoc}
@@ -48,7 +57,7 @@ class MergeMigrationsCommand extends Command implements ContainerAwareInterface
             )
             ->setHelp(<<<EOT
 The <info>%command.name%</info> command will merge all migrations generated with 
-doctrine:migrations:diff or doctrine:migrations:generate commands to one correspondig to a specific tag name.
+doctrine:migrations:diff or doctrine:migrations:generate commands to one corresponding to a specific tag name.
 
 <info>php %command.full_name% [--tag=...]</info>
 
@@ -66,15 +75,22 @@ EOT
 
         $io->title('Merge Doctrine Migrations');
 
-        $this->handlingExistingMigrations($input->getArgument('tag'));
+        $tag = $input->getArgument('tag');
+
+        $versions = $this->handlingExistingMigrations();
+
+        $this->createTargetMigration($tag, $versions);
 
         return 0;
     }
 
+    /**
+     * Init parameters and loads migration classes.
+     */
     private function init()
     {
         $this->doctrineMigrationPath = $this->container->getParameter('doctrine_migrations.dir_name');
-        $doctrineMigrationNamespace = $this->container->getParameter('doctrine_migrations.namespace');
+        $this->doctrineMigrationNamespace = $this->container->getParameter('doctrine_migrations.namespace');
 
         $finder = new Finder();
         $finder->files()->in($this->doctrineMigrationPath)->name('/^Version[0-9]{14}\.php/');
@@ -87,20 +103,30 @@ EOT
         }
     }
 
-    private function handlingExistingMigrations(string $tag): void
+    /**
+     * Undocumented function.
+     *
+     * @return array
+     */
+    private function handlingExistingMigrations(): array
     {
+        // Retrieves migrations from namespaces
+
+        $doctrineMigrationNamespace = $this->doctrineMigrationNamespace;
         $migrations = array_filter(get_declared_classes(), function ($class) use ($doctrineMigrationNamespace) {
             preg_match('/^' . $doctrineMigrationNamespace . '\\\/', $class, $found);
 
             return count($found) > 0;
         });
 
+        // Looping through versions to build methods definitions
+
         $versions = [];
 
         foreach ($migrations as $migrationClass) {
-            $reflexionClass = new \ReflectionClass($migrationClass);
+            $reflectionClass = new \ReflectionClass($migrationClass);
 
-            $versionCode = str_replace('Version', '', $reflexionClass->getShortName());
+            $versionCode = str_replace('Version', '', $reflectionClass->getShortName());
 
             $fn = [
                 'up'   => null,
@@ -109,10 +135,10 @@ EOT
 
             // Handling up method
 
-            $up = $reflexionClass->getMethod('up');
+            $up = $reflectionClass->getMethod('up');
 
             $fn['up'] = [
-                'filePath'  => $reflexionClass->getFileName(),
+                'filePath'  => $reflectionClass->getFileName(),
                 'startLine' => $up->getStartLine(),
                 'endLine'   => $up->getEndLine(),
                 'body'      => '',
@@ -122,7 +148,7 @@ EOT
 
             // Handling down method
 
-            $down = $reflexionClass->getMethod('down');
+            $down = $reflectionClass->getMethod('down');
 
             $fn['down'] = $this->getMethodInfos($down);
 
@@ -131,17 +157,40 @@ EOT
 
         ksort($versions);
 
-        $this->createTargetMigration($tag, $versions);
+        return $versions;
     }
 
-    private function createTargetMigration(string $tag, $versions): void
+    private function createTargetMigration(string $tag, array $versions): void
     {
-        $migrationSkeleton = $this->doctrineMigrationPath . '/Lib/' . $this->majorMigrationSkeltonName;
+        $migrationSkeleton = $this->doctrineMigrationPath . '/Lib/' . $this->majorMigrationSkeletonName;
+        $versionTag = str_replace('.', '_', $tag);
 
         $content = file_get_contents($migrationSkeleton);
 
-        $content = str_replace('<version_tag>', str_replace('.', '_', $tag), $content);
-        $content = str_replace('<schema_versions>', array_keys($versions), $content);
+        $content = str_replace('<version_tag>', $versionTag, $content);
+        $content = str_replace('<schema_versions>', '\'' . implode('\',\'', array_keys($versions)) . '\',', $content);
+
+        $oldVersions = '';
+
+        foreach ($versions as $version => $methods) {
+            foreach ($methods as $methodName => $methodInfos) {
+                $methodName = sprintf('    protected function Version%s_%s(Schema $schema): void', $version, $methodName);
+                $oldVersions .= $methodName . "\n" . $methodInfos['body'];
+            }
+        }
+
+        $content = str_replace('<old_versions>', $oldVersions, $content);
+
+        $fs = new Filesystem();
+
+        $majorMigrationFilename = $this->doctrineMigrationPath . '/Version' . $versionTag . '.php';
+
+        $fs->touch($majorMigrationFilename);
+        $fs->appendToFile($majorMigrationFilename, $content);
+
+        foreach (array_keys($versions) as $version) {
+            $fs->remove($this->doctrineMigrationPath . '/Version' . $version . '.php');
+        }
     }
 
     private function getMethodInfos(\ReflectionMethod $method): array
