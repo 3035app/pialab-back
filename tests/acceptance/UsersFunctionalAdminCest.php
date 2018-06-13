@@ -52,15 +52,17 @@ class UsersFunctionalAdminCest
         $I->click('[name="create_user_form[submit]"]');
 
         $I->seeElement('//td[contains(text(), "' . $this->email . '")]');
+        $I->logout();
     }
 
     public function login_with_newly_created_functional_admin(Webguy $I)
     {
         $I->wantTo('Log-in with newly created function admin');
         $I->login($this->email, $this->password);
+        $I->amOnPage('/manageUsers');
 
         //Function Admin should not see other menus
-        $I->expect('All super_admin menus are not reachable');
+        $I->expect('All super_admin menus are not visible');
         $I->dontSeeNavMenuWithHref('/manageStructures');
         $I->dontSeeNavMenuWithHref('/managePiaTemplates');
         $I->dontSeeNavMenuWithHref('/manageApplications');
@@ -90,6 +92,7 @@ class UsersFunctionalAdminCest
         $I->click('[name="create_user_form[submit]"]');
 
         $I->seeElement('//td[contains(text(), "' . $this->dpoEmail . '")]');
+        $I->logout();
     }
 
     public function remove_newly_created_dpo_with_functional_admin(Webguy $I)
@@ -111,6 +114,8 @@ class UsersFunctionalAdminCest
 
         $I->expect('DPO is removed from the list');
         $I->dontSeeElement('//td[contains(text(), "' . $this->dpoEmail . '")]');
+
+        $I->logout();
     }
 
     public function remove_newly_created_funtional_admin(Webguy $I)
@@ -132,5 +137,7 @@ class UsersFunctionalAdminCest
 
         $I->expect('Functional Admin is removed from the list');
         $I->dontSeeElement('//td[contains(text(), "' . $this->email . '")]');
+
+        $I->logout();
     }
 }
