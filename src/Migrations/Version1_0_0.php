@@ -14,126 +14,47 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use PiaApi\Entity\Pia\Structure;
 use PiaApi\Entity\Pia\Folder;
+use PiaApi\Entity\Pia\Pia;
+use PiaApi\Entity\Pia\Structure;
+use PiaApi\Migrations\Lib\MigrationTrait;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use PiaApi\Migrations\MigrationMergeTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 {
-    use MigrationMergeTrait;
-
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    use
+        ContainerAwareTrait,
+        MigrationTrait
+    ;
 
     private $migrations = [
-        '00000000000000',
-        '20180515154624',
-        '20180516134220',
-        '20180517132216',
-        '20180522073548',
-        '20180524073608',
-        '20180524074718',
-        '20180524080353',
-        '20180524100033',
-        '20180524152449',
-        '20180528094424',
-        '20180528125823',
-        '20180528142132',
-        '20180530091757',
-        '20180530095437',
-        '20180605082149',
+        'schema' => [
+            '00000000000000',
+            '20180515154624',
+            '20180516134220',
+            '20180517132216',
+            '20180522073548',
+            '20180524073608',
+            '20180524074718',
+            '20180524080353',
+            '20180524100033',
+            '20180524152449',
+            '20180528094424',
+            '20180528125823',
+            '20180528142132',
+            '20180530091757',
+        ],
+        'data' => [
+            '20180530095437',
+            '20180605082149',
+        ],
     ];
 
-    public function up(Schema $schema)
-    {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
-        // if ($this->cleanUpExistingMigrationsFoundInMigrationsTableAndSkip()) {
-        //     return;
-        // }
-
-        // @TODO (For all Versions): Create a function in MigrationMergeTrait that do :
-        //        - Check if old migration_version exists.
-        //        - If exists, delete from migration_versions and skip this Version.
-        //        - Else, execute this Version
-
-        // @TODO: Move to Version1_0_0_data.php Versions 20180530095437 and 20180605082149 that uses Doctrine EM
-        //        Because of SQL transaction that changes are not visible by doctrine when used inside the same migration
-
-        $this->Version00000000000000_up();
-
-        $this->Version20180515154624_up();
-
-        $this->Version20180516134220_up();
-
-        $this->Version20180517132216_up();
-
-        $this->Version20180522073548_up();
-
-        $this->Version20180524073608_up();
-
-        $this->Version20180524074718_up();
-
-        $this->Version20180524080353_up();
-
-        $this->Version20180524100033_up();
-
-        $this->Version20180524152449_up();
-
-        $this->Version20180528094424_up();
-
-        $this->Version20180528125823_up();
-
-        $this->Version20180528142132_up();
-
-        $this->Version20180530091757_up();
-
-        $this->Version20180530095437_up();
-
-        $this->Version20180605082149_up();
-    }
-
-    public function down(Schema $schema)
-    {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
-        $this->Version20180605082149_down();
-
-        $this->Version20180530095437_down();
-
-        $this->Version20180530091757_down();
-
-        $this->Version20180528142132_down();
-
-        $this->Version20180528125823_down();
-
-        $this->Version20180528094424_down();
-
-        $this->Version20180524152449_down();
-
-        $this->Version20180524100033_down();
-
-        $this->Version20180524080353_down();
-
-        $this->Version20180524074718_down();
-
-        $this->Version20180524073608_down();
-
-        $this->Version20180522073548_down();
-
-        $this->Version20180517132216_down();
-
-        $this->Version20180516134220_down();
-
-        $this->Version20180515154624_down();
-
-        $this->Version00000000000000_down();
-    }
+    // #########################################
+    //         OLD VERSIONS BELOW
+    // #########################################
 
     protected function Version00000000000000_up(): void
     {
@@ -323,8 +244,12 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
     protected function Version20180524074718_down(): void
     {
-        $this->addSql('ALTER TABLE pia_profile ADD name VARCHAR(255) NOT NULL');
-        $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NOT NULL');
+        $this->addSql('ALTER TABLE pia_profile ADD name VARCHAR(255) NULL');
+        $this->addSql('UPDATE pia_profile SET name = \'\'');
+        $this->addSql('ALTER TABLE pia_profile ALTER COLUMN name SET NOT NULL');
+        $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NULL');
+        $this->addSql('UPDATE pia_profile SET pia_roles = \'{}\'');
+        $this->addSql('ALTER TABLE pia_profile ALTER COLUMN pia_roles SET NOT NULL');
         $this->addSql('ALTER TABLE pia_profile DROP first_name');
         $this->addSql('ALTER TABLE pia_profile DROP last_name');
         $this->addSql('COMMENT ON COLUMN pia_profile.pia_roles IS \'(DC2Type:json)\'');
@@ -332,7 +257,9 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
     protected function Version20180524080353_up(): void
     {
-        $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NOT NULL');
+        $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NULL');
+        $this->addSql('UPDATE pia_profile SET pia_roles = \'{}\'');
+        $this->addSql('ALTER TABLE pia_profile ALTER COLUMN pia_roles SET NOT NULL');
         $this->addSql('COMMENT ON COLUMN pia_profile.pia_roles IS \'(DC2Type:json)\'');
     }
 
@@ -348,7 +275,9 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
     protected function Version20180524100033_down(): void
     {
-        $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NOT NULL');
+        $this->addSql('ALTER TABLE pia_profile ADD pia_roles TEXT NULL');
+        $this->addSql('UPDATE pia_profile SET pia_roles = \'{}\'');
+        $this->addSql('ALTER TABLE pia_profile ALTER COLUMN pia_roles SET NOT NULL');
         $this->addSql('COMMENT ON COLUMN pia_profile.pia_roles IS \'(DC2Type:json)\'');
     }
 
@@ -508,10 +437,5 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
         }
 
         $doctrine->getManager()->flush();
-    }
-
-    public function setContainer(?ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 }

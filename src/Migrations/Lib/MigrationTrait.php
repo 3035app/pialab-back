@@ -1,0 +1,100 @@
+<?php
+
+/*
+ * Copyright (C) 2015-2018 Libre Informatique
+ *
+ * This file is licenced under the GNU LGPL v3.
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
+namespace PiaApi\Migrations\Lib;
+
+trait MigrationTrait
+{
+    public function up(Schema $schema)
+    {
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
+
+        foreach ($this->migrations['schema'] as $migration) {
+            $this->executeVersion($migration, 'up');
+        }
+    }
+
+    public function postUp(Schema $schema)
+    {
+        foreach ($this->migrations['data'] as $migration) {
+            $this->executeVersion($migration, 'up');
+        }
+    }
+
+    public function down(Schema $schema)
+    {
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
+
+        foreach (array_reverse($this->migrations['schema']) as $migration) {
+            $this->executeVersion($migration, 'down');
+        }
+    }
+
+    public function preDown(Schema $schema)
+    {
+        foreach (array_reverse($this->migrations['data']) as $migration) {
+            $this->executeVersion($migration, 'down');
+        }
+    }
+
+    /**
+     * Executes specifyed version and update migration_versions table if necessary.
+     *
+     * @param string      $versionId
+     * @param string|null $upOrDown
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function executeVersion(string $versionId, ?string $upOrDown = 'up'): void
+    {
+        if ($upOrDown !== 'up' && $upOrDown !== 'down') {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Migration method « executeVersion » parameter $upOrDown must be « up » or « down ». %s given',
+                    $upOrDown
+                )
+            );
+        }
+
+        if ($this->checkVersionAlreadyExists($versionId)) {
+            $this->connection->executeQuery(sprintf('DELETE FROM migration_versions WHERE version = \'%s\'', $versionId));
+        } else {
+            $versionMethod = sprintf(
+                'Version%s_%s',
+                $versionId,
+                $upOrDown
+            );
+
+            $this->{$versionMethod}();
+        }
+    }
+
+    public function cleanUpExistingMigrationsFoundInMigrationsTableAndSkip(): bool
+    {
+        $versionsInClause = '\'' . implode('\',\'', $this->migrations) . '\'';
+
+        $existingVersions = $this->connection->executeQuery('SELECT version FROM migration_versions WHERE version IN (' . $versionsInClause . ')');
+
+        if ($existingVersions->rowCount() === count($this->migrations)) {
+            $this->addSql('DELETE FROM migration_versions WHERE version IN (' . $versionsInClause . ')');
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function checkVersionAlreadyExists(string $versionId): bool
+    {
+        $existingVersion = $this->connection->executeQuery(sprintf('SELECT version FROM migration_versions WHERE version = \'%s\'', $versionId));
+
+        return $existingVersion->rowCount() > 0;
+    }
+}
