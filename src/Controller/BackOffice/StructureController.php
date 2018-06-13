@@ -22,10 +22,27 @@ use PiaApi\Form\Structure\CreateStructureTypeForm;
 use PiaApi\Entity\Pia\StructureType;
 use PiaApi\Form\Structure\EditStructureTypeForm;
 use PiaApi\Form\Structure\RemoveStructureTypeForm;
-use PiaApi\Entity\Pia\Folder;
+use PiaApi\Services\StructureService;
+use PiaApi\Services\StructureTypeService;
 
 class StructureController extends BackOfficeAbstractController
 {
+    /**
+     * @var StructureService
+     */
+    private $structureService;
+
+    /**
+     * @var StructureTypeService
+     */
+    private $structureTypeService;
+
+    public function __construct(StructureService $structureService, StructureTypeService $structureTypeService)
+    {
+        $this->structureService = $structureService;
+        $this->structureTypeService = $structureTypeService;
+    }
+
     /**
      * @Route("/manageStructures", name="manage_structures")
      */
@@ -64,11 +81,10 @@ class StructureController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $structureData = $form->getData();
 
-            $structure = new Structure($structureData['name']);
-
-            $structure->setType($structureData['type']);
-
-            $rootFolder = new Folder('root', $structure);
+            $structure = $this->structureService->createStructureForType(
+                $structureData['name'],
+                $structureData['type']
+            );
 
             $this->getDoctrine()->getManager()->persist($structure);
             $this->getDoctrine()->getManager()->flush();
@@ -99,7 +115,7 @@ class StructureController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $structureTypeData = $form->getData();
 
-            $structureType = new StructureType($structureTypeData['name']);
+            $structureType = $this->structureTypeService->createStructureType($structureTypeData['name']);
 
             $this->getDoctrine()->getManager()->persist($structureType);
             $this->getDoctrine()->getManager()->flush();

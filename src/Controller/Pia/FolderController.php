@@ -17,9 +17,20 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Folder;
+use PiaApi\Services\FolderService;
 
 class FolderController extends RestController
 {
+    /**
+     * @var FolderService
+     */
+    private $folderService;
+
+    public function __construct(FolderService $folderService)
+    {
+        $this->folderService = $folderService;
+    }
+
     /**
      * @FOSRest\Get("/folders")
      * @Security("is_granted('ROLE_PIA_LIST')")
@@ -70,13 +81,13 @@ class FolderController extends RestController
             return $this->view('Missing parent identification', Response::HTTP_BAD_REQUEST);
         }
 
-        $parentId = $request->get('parent_id', $request->get('parent')['id']);
+        $parent = $this->getResource($request->get('parent')['id'], Folder::class);
 
-        $parent = $this->getRepository()->find($parentId);
-
-        $folder = $this->newFromRequest($request);
-        $folder->setStructure($this->getUser()->getStructure());
-        $folder->setParent($parent);
+        $folder = $this->folderService->createFolderForStructureAndParent(
+            $request->get('name'),
+            $this->getUser()->getStructure(),
+            $parent
+        );
 
         $this->persist($folder);
 

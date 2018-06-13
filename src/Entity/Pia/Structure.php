@@ -36,7 +36,7 @@ class Structure implements Timestampable
     protected $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="StructureType", inversedBy="structures")
+     * @ORM\ManyToOne(targetEntity="StructureType", inversedBy="structures", cascade={"persist"})
      * @JMS\Groups({"Default", "Export"})
      *
      * @var StructureType
