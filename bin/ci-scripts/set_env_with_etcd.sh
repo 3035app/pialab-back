@@ -49,7 +49,7 @@ then
     if [ -n "${CLIENTURL}" ]
     then
         CLIENTURLREGEX=$(echo $CLIENTURL | sed -e s:.*//::g | sed -e s:/.*::g | sed -e s/:.*//g | sed -e s/'\.'/'\\.'/g)
-        SYMFONYCORSALLOW='^https?://'$CLIENTURL':?[0-9]*$'
+        SYMFONYCORSALLOW='^https?://'$CLIENTURLREGEX':?[0-9]*$'
     fi
 fi
 
