@@ -168,14 +168,14 @@ EOT
         $content = file_get_contents($migrationSkeleton);
 
         $content = str_replace('<version_tag>', $versionTag, $content);
-        $content = str_replace('<schema_versions>', '\'' . implode('\',\'', array_keys($versions)) . '\',', $content);
+        $content = str_replace('<schema_versions>', '\'' . implode('\',' . "\n            " . '\'', array_keys($versions)) . '\',', $content);
 
         $oldVersions = '';
 
         foreach ($versions as $version => $methods) {
             foreach ($methods as $methodName => $methodInfos) {
                 $methodName = sprintf('    protected function Version%s_%s(Schema $schema): void', $version, $methodName);
-                $oldVersions .= $methodName . "\n" . $methodInfos['body'];
+                $oldVersions .= "\n" . $methodName . "\n" . $methodInfos['body'];
             }
         }
 
@@ -206,7 +206,7 @@ EOT
         $fn['body'] = implode('', array_slice(
             file($fn['filePath']),
             $fn['startLine'],
-            ($fn['endLine'] - $fn['startLine']) + 1
+            ($fn['endLine'] - $fn['startLine'])
         ));
 
         return $fn;
