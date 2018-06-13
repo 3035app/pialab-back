@@ -14,6 +14,8 @@
  */
 class UsersCest
 {
+    private $firstname = 'John';
+    private $lastname = 'Doe';
     private $email = 'selenium@pialab.io';
     private $password = 'kFR5C1EGaPZDFJ1A';
 
@@ -35,7 +37,8 @@ class UsersCest
         } catch (\Exception $e) {
             // This part is optionnal
         }
-
+        $I->fillField('input[name="create_user_form[profile][firstName]"]', $this->firstname);
+        $I->fillField('input[name="create_user_form[profile][lastName]"]', $this->lastname);
         $I->fillField('input[name="create_user_form[email]"]', $this->email);
         $I->fillField('input[name="create_user_form[password]"]', $this->password);
 
