@@ -25,6 +25,7 @@ pia:
             logout: Déconnexion
 
     actions:
+        show: Voir
         add: Ajouter
         display: Afficher
         edit: Modifier
