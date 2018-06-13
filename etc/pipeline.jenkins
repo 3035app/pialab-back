@@ -24,6 +24,10 @@ pipeline {
         string(defaultValue: '', description: '', name: 'DatabaseUser')
         string(defaultValue: '', description: '', name: 'DatabasePassword')
 
+        string(defaultValue: '', description: '', name: 'DatabaseHost')
+        string(defaultValue: '', description: '', name: 'DatabaseRootUser')
+        string(defaultValue: '', description: '', name: 'DatabaseRootPassword')
+
         string(defaultValue: 'smtp://127.0.0.1:1025', description: '', name: 'MailerUrl')
 
         /* string(defaultValue: 'master', description: '', name: 'BackGitBranch') */
@@ -39,7 +43,7 @@ pipeline {
 
 
     environment {
-        RND = "${BUILD_NUMBER}"
+        RND = "${BRANCH_NAME}_${BUILD_NUMBER}_"
     }
 
     options {
@@ -59,7 +63,7 @@ pipeline {
 
         stage ('Set Env') {
             steps {
-                sh "SYMFONYENV=${params.BuildEnv} ./bin/ci-scripts/set_env_with_etcd.sh"
+                sh "SYMFONYENV=${params.BuildEnv} CLIENTURL=${params.FrontUrl} ./bin/ci-scripts/set_env_with_etcd.sh"
                 sh './bin/ci-scripts/set_pgpass.sh'
                 sh 'cat ./.env'
                 sh 'cat $HOME/.pgpass'
@@ -73,6 +77,10 @@ pipeline {
         }
 
         stage ('Create Database') {
+            when {
+                expression { params.RunTest == 'true' }
+            }
+
             steps {
                 sh "bin/ci-scripts/create_database.sh"
                 sh "bin/ci-scripts/create_schema.sh"
@@ -80,9 +88,13 @@ pipeline {
         }
 
         stage ('Add User') {
+            when {
+                expression { params.RunTest == 'true' }
+            }
+
             steps {
                 sh "bin/ci-scripts/create_user.sh"
-                sh "bin/ci-scripts/create_client_secret.sh"
+                sh "CLIENTURL=${params.FrontUrl} bin/ci-scripts/create_client_secret.sh"
             }
         }
 
