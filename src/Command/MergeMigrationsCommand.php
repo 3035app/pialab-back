@@ -136,20 +136,11 @@ EOT
             // Handling up method
 
             $up = $reflectionClass->getMethod('up');
-
-            $fn['up'] = [
-                'filePath'  => $reflectionClass->getFileName(),
-                'startLine' => $up->getStartLine(),
-                'endLine'   => $up->getEndLine(),
-                'body'      => '',
-            ];
-
-            $fn['up']['body'] = implode('', array_slice(file($fn['up']['filePath']), $fn['up']['startLine'], ($fn['up']['endLine'] - $fn['up']['startLine']) + 1));
+            $fn['up'] = $this->getMethodInfos($up);
 
             // Handling down method
 
             $down = $reflectionClass->getMethod('down');
-
             $fn['down'] = $this->getMethodInfos($down);
 
             $versions[$versionCode] = $fn;
