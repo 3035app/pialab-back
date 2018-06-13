@@ -77,7 +77,7 @@ EOT
 
         $tag = $input->getArgument('tag');
 
-        $versions = $this->handlingExistingMigrations();
+        $versions = $this->handleExistingMigrations();
 
         $this->createTargetMigration($tag, $versions);
 
@@ -108,7 +108,7 @@ EOT
      *
      * @return array
      */
-    private function handlingExistingMigrations(): array
+    private function handleExistingMigrations(): array
     {
         // Retrieves migrations from namespaces
 
