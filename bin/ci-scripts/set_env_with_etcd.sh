@@ -43,6 +43,16 @@ then
     SYMFONYENV=${BUILDENV}
 fi
 
+if [ -z "$SYMFONYCORSALLOW" ]
+then
+    SYMFONYCORSALLOW='#^https?://localhost:?[0-9]*$'
+    if [ -n "${CLIENTURL}" ]
+    then
+        CLIENTURLREGEX=$(echo $CLIENTURL | sed -e s:.*//::g | sed -e s:/.*::g | sed -e s/:.*//g | sed -e s/'\.'/'\\.'/g)
+        SYMFONYCORSALLOW='^https?://'$CLIENTURLREGEX':?[0-9]*$'
+    fi
+fi
+
 if [ -z "$DatabaseName" ]
 then
     DatabaseName=pia_db_$Suffix
@@ -55,7 +65,7 @@ fi
 
 if [ -z "$DatabasePassword" ]
 then
-    DatabasePassword=pia_user_$Suffix
+    DatabasePassword=$(openssl rand -hex 8)
 fi
 
 if [ -z "$MailerUrl" ]
@@ -89,6 +99,8 @@ $ETCDCTLCMD put $Prefix/smtp/default/url $MailerUrl $ETCDENDPOINT
 
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/symfony/cors/allow $SYMFONYCORSALLOW $ETCDENDPOINT
+
 # get ip
 currentip=$(hostname -i) # works only if the host name can be resolved
 $ETCDCTLCMD put $Prefix/url/addr $currentip':8000' $ETCDENDPOINT
