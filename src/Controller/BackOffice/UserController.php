@@ -25,6 +25,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use PiaApi\Entity\Pia\UserProfile;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserController extends BackOfficeAbstractController
 {

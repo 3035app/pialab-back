@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Form\Application\Transformer\ApplicationTransformer;
+use PiaApi\Form\Structure\Transformer\StructureTransformer;
 use PiaApi\Form\User\Transformer\UserProfileTransformer;
 use PiaApi\Form\Type\RolesType;
 
@@ -30,8 +31,9 @@ class EditUserForm extends CreateUserForm
 
     public function __construct(
       RegistryInterface $doctrine,
-      UserProfileTransformer $profileTransformer,
-      ApplicationTransformer $applicationTransformer
+        UserProfileTransformer $profileTransformer,
+        ApplicationTransformer $applicationTransformer,
+        StructureTransformer $structureTransformer
     ) {
         parent::__construct($doctrine, $applicationTransformer, $structureTransformer);
         $this->profileTransformer = $profileTransformer;
