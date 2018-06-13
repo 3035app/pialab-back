@@ -137,8 +137,8 @@ $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/symfony/cors/allow $SYMFONYCORSALLOW $ETCDENDPOINT
 
 $ETCDCTLCMD put $Prefix/client/url $CLIENTURL $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/client/id $ClientId $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/client/id $ClientSecret $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/client/id $CLIENT_ID $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/client/id $CLIENT_SECRET $ETCDENDPOINT
 
 # get ip
 currentip=$(hostname -i) # works only if the host name can be resolved
