@@ -19,8 +19,8 @@ class UsersFunctionalAdminCest
     private $email = 'selenium@pialab.io';
     private $password = 'kFR5C1EGaPZDFJ1A';
 
-    private $dpoFirstname = 'Dpo John';
-    private $dpoLastname = 'Dpo Doe';
+    private $dpoFirstname = 'DpoJohn';
+    private $dpoLastname = 'DpoDoe';
     private $dpoEmail = 'dpo-selenium@pialab.io';
     private $dpoPassword = 'DpokFR5C1EGaPZDFJ1A';
 
@@ -50,18 +50,20 @@ class UsersFunctionalAdminCest
         $I->checkSUIOption('input[name="create_user_form[roles][]"][value="ROLE_ADMIN"]');
 
         $I->click('[name="create_user_form[submit]"]');
+
+        $I->seeElement('//td[contains(text(), "' . $this->email . '")]');
     }
 
-    public function login_with_newly_created_user(Webguy $I)
+    public function login_with_newly_created_functional_admin(Webguy $I)
     {
         $I->wantTo('Log-in with newly created function admin');
         $I->login($this->email, $this->password);
 
         //Function Admin should not see other menus
         $I->expect('All super_admin menus are not reachable');
-        $I->cantShowNavMenuWithHref('/manageStructures');
-        $I->cantShowNavMenuWithHref('/managePiaTemplates');
-        $I->cantShowNavMenuWithHref('/manageApplications');
+        $I->dontSeeNavMenuWithHref('/manageStructures');
+        $I->dontSeeNavMenuWithHref('/managePiaTemplates');
+        $I->dontSeeNavMenuWithHref('/manageApplications');
 
         $I->logout();
     }
@@ -86,6 +88,8 @@ class UsersFunctionalAdminCest
         $I->checkSUIOption('input[name="create_user_form[roles][]"][value="ROLE_DPO"]');
 
         $I->click('[name="create_user_form[submit]"]');
+
+        $I->seeElement('//td[contains(text(), "' . $this->dpoEmail . '")]');
     }
 
     public function remove_newly_created_dpo_with_functional_admin(Webguy $I)
