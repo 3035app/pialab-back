@@ -17,20 +17,15 @@ then
     CLIENTURL="http://localhost:4200"
 fi
 
-CLIENT_ID=$(openssl rand -hex 24)
-if [ -n "$ClientId" ]
+if [ -z "$CLIENT_ID" ]
 then
-    CLIENT_ID=$ClientId
+    CLIENT_ID=$(openssl rand -hex 24)
 fi
 
-CLIENT_SECRET=$(openssl rand -hex 24)
-if [ -n "$ClientSecret" ]
+if [ -z "CLIENT_SECRET" ]
 then
-    CLIENT_SECRET=$ClientSecret
+    CLIENT_SECRET=$(openssl rand -hex 24)
 fi
-
-
-
 
 bin/console pia:application:create \
             --name="Default App" \

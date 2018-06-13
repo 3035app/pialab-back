@@ -74,13 +74,48 @@ then
 
 fi
 
+if [ -z "${CLIENTURL}" ]
+then
+    CLIENTURL="http://localhost:4200"
+fi
+
+CLIENT_ID=$(openssl rand -hex 24)
+if [ -n "$ClientId" ]
+then
+    CLIENT_ID=$ClientId
+fi
+
+CLIENT_SECRET=$(openssl rand -hex 24)
+if [ -n "$ClientSecret" ]
+then
+    CLIENT_SECRET=$ClientSecret
+fi
+
+
 
 
 # get postgres default
 postgreshost=$($ETCDCTLCMD get /default/postgres/hostname --print-value-only $ETCDENDPOINT)
 postgresuser=$($ETCDCTLCMD get /default/postgres/root/username --print-value-only $ETCDENDPOINT)
 postgrespass=$($ETCDCTLCMD get /default/postgres/root/password --print-value-only $ETCDENDPOINT)
-# TODO add a check default cnx with psql
+
+
+# usealready setted variable If They exist
+if [ -n "${DatabaseHost}" ]
+then
+    postgreshost=${DatabaseHost}
+fi
+
+if [ -n "${DatabaseRootUser}" ]
+then
+    postgresuser=${DatabaseRootUser}
+fi
+
+if [ -n "${DatabaseRootPassword}" ]
+then
+    postgrespass=${DatabaseRootPassword}
+fi
+
 
 # get selenium default
 SeleniumHost=$($ETCDCTLCMD get /default/selenium/hostname --print-value-only $ETCDENDPOINT)
@@ -100,6 +135,10 @@ $ETCDCTLCMD put $Prefix/smtp/default/url $MailerUrl $ETCDENDPOINT
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/symfony/cors/allow $SYMFONYCORSALLOW $ETCDENDPOINT
+
+$ETCDCTLCMD put $Prefix/client/url $CLIENTURL $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/client/id $ClientId $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/client/id $ClientSecret $ETCDENDPOINT
 
 # get ip
 currentip=$(hostname -i) # works only if the host name can be resolved
