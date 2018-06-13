@@ -24,6 +24,10 @@ pipeline {
         string(defaultValue: '', description: '', name: 'DatabaseUser')
         string(defaultValue: '', description: '', name: 'DatabasePassword')
 
+        string(defaultValue: '', description: '', name: 'DatabaseHost')
+        string(defaultValue: '', description: '', name: 'DatabaseRootUser')
+        string(defaultValue: '', description: '', name: 'DatabaseRootPassword')
+
         string(defaultValue: 'smtp://127.0.0.1:1025', description: '', name: 'MailerUrl')
 
         /* string(defaultValue: 'master', description: '', name: 'BackGitBranch') */

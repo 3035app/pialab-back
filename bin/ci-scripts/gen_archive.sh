@@ -32,9 +32,19 @@ rm -rf \
    *.nbr \
    *.dist
 
+cat > build-metadata.json <<- EOF
+{
+  "branch": "$Branch",
+  "commit": "$(git rev-parse HEAD)",
+  "date": "$(date +"%Y%m%d%H%M%S")",
+}
+EOF
+
+
 tar --exclude-vcs \
     --exclude=build \
     --exclude=bin/git-scripts \
-    -czhf ${Filename} ./* .env
+    --exclude=etc \
+    -czhf ${Filename} build-metadata.json ./* .env
 
 sha256sum ${Filename} > ${Filename}.sha256.txt
