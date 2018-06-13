@@ -1,8 +1,12 @@
+{% trans_default_domain 'Pia' %}
+
 {% extends 'pia/Layout/base.html.twig' %}
 
 {% import 'pia/Layout/_macros.html.twig' as macro %}
 
-{% block title %}PIA User Management{% endblock title %}
+{% block title %}
+    {{ 'pia.users.title'|trans }}
+{% endblock title %}
 
 {% block navbar %}
     {% include 'pia/Layout/navbar.html.twig' with {
@@ -21,7 +25,7 @@
         <div class="four wide column">
             <div class="ui segment">
 
-                <h2>Ajouter un utilisateur</h2>
+                <h2>{{ 'pia.users.add.title'|trans }}</h2>
 
                 {{ render(controller('PiaApi\\Controller\\BackOffice\\UserController:addUserAction')) }}
 

@@ -21,7 +21,7 @@ services:
 
     PiaApi\:
         resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel.php,Auth/ClientManager.php}'
 
     PiaApi\Controller\:
         resource: '../src/Controller'
@@ -34,6 +34,7 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+
     PiaApi\Form\Type\RolesType:
         tags: [form.type]
 
@@ -43,6 +44,14 @@ services:
 
     PiaApi\Security\Role\RoleHierarchy:
         arguments: ['@security.token_storage', '%security.role_hierarchy.roles%', '@security.role_hierarchy']
+
+
+    PiaApi\Auth\ClientManager:
+        arguments:
+            - '@fos_oauth_server.entity_manager'
+            - '%fos_oauth_server.model.client.class%'
+
+    FOS\OAuthServerBundle\Model\ClientManagerInterface: '@PiaApi\Auth\ClientManager'
 
     # Used to fix bug when updating and entity througth REST api
     # jms_serializer.object_constructor:

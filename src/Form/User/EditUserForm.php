@@ -18,10 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Form\Application\Transformer\ApplicationTransformer;
-use PiaApi\Form\Structure\Transformer\StructureTransformer;
 use PiaApi\Form\User\Transformer\UserProfileTransformer;
 use PiaApi\Form\Type\RolesType;
-use Symfony\Component\Security\Core\Security;
 
 class EditUserForm extends CreateUserForm
 {
@@ -30,13 +28,12 @@ class EditUserForm extends CreateUserForm
      */
     protected $profileTransformer;
 
-    public function __construct(RegistryInterface $doctrine,
-        UserProfileTransformer $profileTransformer,
-        ApplicationTransformer $applicationTransformer,
-        StructureTransformer $structureTransformer,
-        Security $security
+    public function __construct(
+      RegistryInterface $doctrine,
+      UserProfileTransformer $profileTransformer,
+      ApplicationTransformer $applicationTransformer
     ) {
-        parent::__construct($doctrine, $applicationTransformer, $structureTransformer, $security);
+        parent::__construct($doctrine, $applicationTransformer, $structureTransformer);
         $this->profileTransformer = $profileTransformer;
     }
 
@@ -47,47 +44,46 @@ class EditUserForm extends CreateUserForm
             ->remove('roles')
             ->remove('password')
             ->remove('submit')
+            ->remove('sendResetingEmail')
 
             ->add('username', TextType::class, [
-                'label'    => 'Alias de l\'utilisateur',
+                'label'    => 'pia.users.forms.edit.username',
+            ])
+            ->add('profile', UserProfileForm::class, [
+                'label'   => false,
             ])
             ->add('roles', RolesType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
-                'label'    => 'Rôles',
+                'label'    => 'pia.users.forms.edit.roles',
             ])
-
             ->add('expirationDate', DateType::class, [
                 'widget'   => 'single_text',
-                'label'    => 'Date d\'expiration du compte',
+                'label'    => 'pia.users.forms.edit.expirationDate',
             ])
             ->add('enabled', CheckboxType::class, [
                 'required' => false,
-                'label'    => 'Actif',
+                'label'    => 'pia.users.forms.edit.enabled',
             ])
             ->add('locked', CheckboxType::class, [
                 'required' => false,
-                'label'    => 'Verrouillé',
+                'label'    => 'pia.users.forms.edit.locked',
             ])
             ->add('cancel', ButtonType::class, [
                 'attr' => [
                     'class' => 'red cancel',
                     'style' => 'width: 48%;float:right;',
                 ],
-                'label' => 'Annuler',
-            ])
-            ->add('profile', UserProfileForm::class, [
-                'label'   => false,
+                'label' => 'pia.users.forms.edit.cancel',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => '',
                     'style' => 'width: 48%;',
                 ],
-                'label' => 'Enregistrer l\'utilisateur',
-            ])
-        ;
+                'label' => 'pia.users.forms.edit.submit',
+            ]);
 
         $builder->get('profile')->addModelTransformer($this->profileTransformer);
     }

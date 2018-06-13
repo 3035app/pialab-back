@@ -1,5 +1,24 @@
 # Change Log
 
+## [1.0.0](https://github.com/pia-lab/pialab-back/tree/1.0.0) (2018-06-12)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/0.4.5...1.0.0)
+
+**Implemented enhancements:**
+
+- Proposition de Roadmap [\#2](https://github.com/pia-lab/pialab-back/issues/2)
+
+**Merged pull requests:**
+
+- Wip translations [\#19](https://github.com/pia-lab/pialab-back/pull/19) ([PapsOu](https://github.com/PapsOu))
+- Fix user return button on password reset request [\#18](https://github.com/pia-lab/pialab-back/pull/18) ([PapsOu](https://github.com/PapsOu))
+- Add checkbox for sending password reset email [\#16](https://github.com/pia-lab/pialab-back/pull/16) ([PapsOu](https://github.com/PapsOu))
+- Wip pia folders [\#14](https://github.com/pia-lab/pialab-back/pull/14) ([PapsOu](https://github.com/PapsOu))
+- Wip pia folders [\#13](https://github.com/pia-lab/pialab-back/pull/13) ([PapsOu](https://github.com/PapsOu))
+- Rename table pia\_profile to user\_profile [\#12](https://github.com/pia-lab/pialab-back/pull/12) ([GlennCavarle](https://github.com/GlennCavarle))
+- Wip pia templates [\#11](https://github.com/pia-lab/pialab-back/pull/11) ([PapsOu](https://github.com/PapsOu))
+- Wip ci [\#10](https://github.com/pia-lab/pialab-back/pull/10) ([PapsOu](https://github.com/PapsOu))
+- Ci backend tests [\#9](https://github.com/pia-lab/pialab-back/pull/9) ([PapsOu](https://github.com/PapsOu))
+
 ## [0.4.5](https://github.com/pia-lab/pialab-back/tree/0.4.5) (2018-05-18)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/0.4.4...0.4.5)
 

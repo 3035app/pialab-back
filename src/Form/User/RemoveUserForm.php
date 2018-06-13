@@ -10,11 +10,11 @@
 
 namespace PiaApi\Form\User;
 
-use Symfony\Component\Form\AbstractType;
+use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
-class RemoveUserForm extends AbstractType
+class RemoveUserForm extends BaseForm
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -23,7 +23,7 @@ class RemoveUserForm extends AbstractType
                 'attr' => [
                     'class' => 'ui fluid red button',
                 ],
-                'label' => 'Supprimer l\'utilisateur',
+                'label' => 'pia.users.forms.remove.submit',
             ])
         ;
     }

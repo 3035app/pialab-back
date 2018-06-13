@@ -10,12 +10,12 @@
 
 namespace PiaApi\Form\User;
 
-use Symfony\Component\Form\AbstractType;
+use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class UserProfileForm extends AbstractType
+class UserProfileForm extends BaseForm
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -23,13 +23,13 @@ class UserProfileForm extends AbstractType
             ->add('user', HiddenType::class)
 
             ->add('firstName', TextType::class, [
-                'required' => true,
-                'label'    => 'Nom',
+                'required' => false,
+                'label'    => 'pia.users.forms.profile.firstName',
             ])
 
             ->add('lastName', TextType::class, [
-                'required' => true,
-                'label'    => 'Prénom',
+                'required' => false,
+                'label'    => 'pia.users.forms.profile.lastName',
             ])
         ;
     }

@@ -7,3 +7,4 @@ fos_oauth_server:
     service:
         user_provider: PiaApi\Auth\UserProvider
         storage:       PiaApi\Auth\OAuthStorage
+        client_manager: PiaApi\Auth\ClientManager

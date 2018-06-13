@@ -10,12 +10,12 @@
 
 namespace PiaApi\Form\User;
 
-use Symfony\Component\Form\AbstractType;
+use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class SendResetPasswordEmailForm extends AbstractType
+class SendResetPasswordEmailForm extends BaseForm
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -25,14 +25,14 @@ class SendResetPasswordEmailForm extends AbstractType
                     'class' => 'red cancel',
                     'style' => 'width: 48%;float:right;',
                 ],
-                'label' => 'Annuler',
+                'label' => 'pia.users.forms.reset.cancel',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'orange',
                     'style' => 'width: 48%;',
                 ],
-                'label' => 'Envoyer l\'email',
+                'label' => 'pia.users.forms.reset.submit',
             ])
         ;
     }

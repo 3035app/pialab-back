@@ -1,11 +1,13 @@
+{% trans_default_domain 'Pia' %}
+
 {% set application = form.vars.value %}
 
 <div class="ui negative message">
     <div class="ui clearing basic segment">
         <div class="header">
-            Êtes vous certain de vouloir supprimer cette application ?
+            {{ 'pia.applications.modals.remove.title'|trans }}
         </div>
-        <i style="float:right;">(cliquez sur ce message pour annuler)</i>
+        <i style="float:right;">{{ 'pia.applications.modals.remove.sub_title'|trans }}</i>
     </div>
 </div>
 
@@ -13,7 +15,7 @@
     <thead>
         <tr>
             <th colspan="100%">
-                Application
+                {{ 'pia.applications.modals.remove.resume.title'|trans }}
             </th>
         </tr>
     </thead>
@@ -21,21 +23,21 @@
         <tr>
             <td class="collapsing">
                 <i class="user circle icon"></i>
-                <b>Nom</b>
+                <b>{{ 'pia.applications.modals.remove.resume.name'|trans }}</b>
             </td>
             <td>{{ application.name }}</td>
         </tr>
         <tr>
             <td class="collapsing">
                 <i class="globe icon"></i>
-                <b>URL</b>
+                <b>{{ 'pia.applications.modals.remove.resume.url'|trans }}</b>
             </td>
             <td>{{ application.url }}</td>
         </tr>
         <tr>
             <td class="collapsing">
                 <i class="share square outline icon"></i>
-                <b>URLs de redirection</b>
+                <b>{{ 'pia.applications.modals.remove.resume.urls'|trans }}</b>
             </td>
             <td>
                 {% for redirectUri in application.redirectUris %}
@@ -46,20 +48,22 @@
         <tr>
             <td class="collapsing">
                 <i class="envelope icon"></i>
-                <b>Nombre d'utilisateurs associés</b>
+                <b>{{ 'pia.applications.modals.remove.resume.user_number'|trans }}</b>
             </td>
             <td>{{ application.users|length }}</td>
         </tr>
         <tr>
             <td class="collapsing">
                 <i class="envelope icon"></i>
-                <b>Jetons de connexion</b>
+                <b>{{ 'pia.applications.modals.remove.resume.tokens'|trans }}</b>
             </td>
             <td>
                 <span class="ui label">{{ application.tokens|length }}</span>
-                {% set validtokens = application.getNotExpiredTokens()|length %}
+                {% set validtokens = application.getNotExpiredTokens() | length %}
                 {% if validtokens > 0 %}
-                    <span class="ui red label">{{ validtokens }} en cours de validité</span>
+                    <span class="ui red label">
+                        {{ validtokens }}&nbsp;{{ 'pia.applications.modals.remove.resume.currently_valid'|trans }}
+                    </span>
                 {% endif %}
             </td>
         </tr>
@@ -71,6 +75,6 @@
 {% do 
     form.submit.setRendered() %}
 
-<input type="submit" class="ui fluid red button" value="Supprimer l'application"/>
+<input type="submit" class="ui fluid red button" value="{{ 'pia.actions.remove'|trans }}"/>
 
 {{ form_end(form) }}

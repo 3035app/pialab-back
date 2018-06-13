@@ -33,7 +33,7 @@ abstract class PiaSubController extends RestController
 
     public function listAction(Request $request, $piaId)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $criteria = $this->extractCriteria($request, ['pia' => $piaId]);
         $collection = $this->getRepository()->findBy($criteria);
@@ -43,7 +43,7 @@ abstract class PiaSubController extends RestController
 
     public function showAction(Request $request, $piaId, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $entity = $this->getRepository()->find($id);
         if ($entity === null) {
@@ -55,7 +55,7 @@ abstract class PiaSubController extends RestController
 
     public function createAction(Request $request, $piaId)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $entity = $this->newFromRequest($request, $piaId);
         $this->persist($entity);
@@ -65,7 +65,7 @@ abstract class PiaSubController extends RestController
 
     public function updateAction(Request $request, $piaId, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $entity = $this->newFromRequest($request, $piaId);
         $this->update($entity);
@@ -75,7 +75,7 @@ abstract class PiaSubController extends RestController
 
     public function deleteAction(Request $request, $piaId, $id)
     {
-        $this->canAccessRouteOr304();
+        $this->canAccessRouteOr403();
 
         $entity = $this->getRepository()->find($id);
         $this->remove($entity);
@@ -83,7 +83,7 @@ abstract class PiaSubController extends RestController
         return $this->view($entity, Response::HTTP_OK);
     }
 
-    public function canAccessResourceOr304($resource): void
+    public function canAccessResourceOr403($resource): void
     {
         if (!in_array(get_class($resource), $this->entityClasses)) {
             return;

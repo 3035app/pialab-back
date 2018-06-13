@@ -22,7 +22,10 @@ class RolesType extends AbstractType
     public function __construct(RoleHierarchy $roleHierarchy)
     {
         $roleNames = $roleHierarchy->getUserAccessibleRoles();
-        $this->roles = array_combine($roleNames, $roleNames);
+        $roleLabels = array_map(function ($roleName) {
+            return 'pia.users.labels.roles.' . $roleName;
+        }, $roleNames);
+        $this->roles = array_combine($roleLabels, $roleNames);
     }
 
     public function configureOptions(OptionsResolver $resolver)

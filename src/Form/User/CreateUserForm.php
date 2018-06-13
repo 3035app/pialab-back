@@ -11,7 +11,7 @@
 namespace PiaApi\Form\User;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\AbstractType;
+use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -24,9 +24,9 @@ use PiaApi\Form\Structure\Transformer\StructureTransformer;
 use PiaApi\Entity\Pia\Structure;
 use PiaApi\Entity\Oauth\Client;
 use PiaApi\Form\Type\RolesType;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
-class CreateUserForm extends AbstractType
+class CreateUserForm extends BaseForm
 {
     /**
      * @var RegistryInterface
@@ -51,13 +51,11 @@ class CreateUserForm extends AbstractType
     public function __construct(
       RegistryInterface $doctrine,
        ApplicationTransformer $applicationTransformer,
-       StructureTransformer $structureTransformer,
-       Security $security)
+       StructureTransformer $structureTransformer)
     {
         $this->doctrine = $doctrine;
         $this->applicationTransformer = $applicationTransformer;
         $this->structureTransformer = $structureTransformer;
-        $this->security = $security;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -69,7 +67,7 @@ class CreateUserForm extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'choices'  => $this->getApplications($options),
-                'label'    => 'Application',
+                'label'    => 'pia.users.forms.create.application',
             ]);
         } else {
             $builder
@@ -86,7 +84,7 @@ class CreateUserForm extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'choices'  => $this->getStructures($options),
-                'label'    => 'Structure',
+                'label'    => 'pia.users.forms.create.structure',
             ]);
         } else {
             $builder
@@ -101,22 +99,30 @@ class CreateUserForm extends AbstractType
                 'label'   => false,
             ])
             ->add('email', EmailType::class, [
-                'label'    => 'Adresse email',
+                'label'    => 'pia.users.forms.create.email',
             ])
             ->add('password', PasswordType::class, [
-                'label'    => 'Mot de passe',
+                'label'    => 'pia.users.forms.create.password',
             ])
             ->add('roles', RolesType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
-                'label'    => 'Rôles',
+
+                'label'    => 'pia.users.forms.create.roles',
+            ])
+            ->add('sendResetingEmail', CheckboxType::class, [
+                'required'     => false,
+                'label'        => 'pia.users.forms.create.sendResetingEmail',
+                'label_attr'   => [
+                    'title' => 'pia.users.forms.create.sendResetingEmail_help',
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'fluid',
                 ],
-                'label' => 'Créer l\'utilisateur',
+                'label' => 'pia.users.forms.create.submit',
             ])
         ;
 
@@ -156,6 +162,8 @@ class CreateUserForm extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'application' => false,
             'structure'   => false,

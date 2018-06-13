@@ -202,7 +202,8 @@ class Pia implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="Folder", inversedBy="pias")
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Default", "Export"})
+     * @JMS\MaxDepth(1)
      *
      * @var Folder
      */
@@ -419,5 +420,93 @@ class Pia implements Timestampable
     public function setFolder(?Folder $folder): void
     {
         $this->folder = $folder;
+    }
+
+    /**
+     * @param int $dpoStatus
+     */
+    public function setDpoStatus(?int $dpoStatus): void
+    {
+        $this->dpoStatus = $dpoStatus;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus(?int $status): void
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @param int $concernedPeopleStatus
+     */
+    public function setConcernedPeopleStatus(int $concernedPeopleStatus): void
+    {
+        $this->concernedPeopleStatus = $concernedPeopleStatus;
+    }
+
+    /**
+     * @param string $dpoOpinion
+     */
+    public function setDpoOpinion(?string $dpoOpinion): void
+    {
+        $this->dpoOpinion = $dpoOpinion;
+    }
+
+    /**
+     * @param string $concernedPeopleOpinion
+     */
+    public function setConcernedPeopleOpinion(?string $concernedPeopleOpinion): void
+    {
+        $this->concernedPeopleOpinion = $concernedPeopleOpinion;
+    }
+
+    /**
+     * @param string $concernedPeopleSearchedContent
+     */
+    public function setConcernedPeopleSearchedContent(?string $concernedPeopleSearchedContent): void
+    {
+        $this->concernedPeopleSearchedContent = $concernedPeopleSearchedContent;
+    }
+
+    /**
+     * @param string $rejectionReason
+     */
+    public function setRejectionReason(?string $rejectionReason): void
+    {
+        $this->rejectionReason = $rejectionReason;
+    }
+
+    /**
+     * @param string $appliedAdjustments
+     */
+    public function setAppliedAdjustments(?string $appliedAdjustments): void
+    {
+        $this->appliedAdjustments = $appliedAdjustments;
+    }
+
+    /**
+     * @param string $dposNames
+     */
+    public function setDposNames(?string $dposNames): void
+    {
+        $this->dposNames = $dposNames;
+    }
+
+    /**
+     * @param string $peopleNames
+     */
+    public function setPeopleNames(?string $peopleNames): void
+    {
+        $this->peopleNames = $peopleNames;
+    }
+
+    /**
+     * @param string $concernedPeopleSearchedOpinion
+     */
+    public function setConcernedPeopleSearchedOpinion(?string $concernedPeopleSearchedOpinion): void
+    {
+        $this->concernedPeopleSearchedOpinion = $concernedPeopleSearchedOpinion;
     }
 }

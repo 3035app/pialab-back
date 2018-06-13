@@ -8,9 +8,14 @@ Installation process (not for production environments) :
 
 ```bash
 git clone https://github.com/pia-lab/pialab-back
-
 cd pialab-back
+```
 
+**Note:**
+
+The informations about the database connection and the SMTP server are stored as environment variables called DATABASE_URL and MAILER_URL respectively. For development, you can find and customize them inside .env.
+
+```bash
 composer install
 
 bin/console doctrine:database:create
@@ -40,9 +45,9 @@ With a super admin user (has role `ROLE_SUPER_ADMIN`), you can login into the ad
 
 ## Oauth usage
 
-### Create Oauth client
+### Create Oauth application
 
-You must include these grant_types :
+The following  grant_types are implicitly included :
 
 - password
 - token
@@ -50,14 +55,12 @@ You must include these grant_types :
 
 ```bash
 bin/console \
-    fos:oauth-server:create-client \
-    --redirect-uri="http://localhost:4200" \
-    --grant-type="password" \
-    --grant-type="token" \
-    --grant-type="refresh_token"
+    pia:application:create \
+    --name="Default App"
+    --url="http://localhost:4200" \
 ```
 
-Note: You can create this Oauth client in the backend admin UI.
+Note: You can create this Oauth application in the backend admin UI.
 
 ### Create a standard user
 

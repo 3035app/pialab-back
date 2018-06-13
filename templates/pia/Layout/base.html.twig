@@ -3,20 +3,24 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}" />
-        <title>
-            {% block title %}PIA User Management{% endblock %}
-        </title>
-        {# <link rel="stylesheet" href="{{ asset('assets/css/semantic-librinfo.min.css') }}"/> #}
+
+        <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}"/>
+        <title>{% spaceless %}
+            {{ 'pia.app_name'|trans({}, 'Pia') }} - {{ 'pia.layout.title'|trans({}, 'Pia') }} |
+            {% block title %}
+
+            {% endblock %}
+        {% endspaceless %}</title>
 
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('assets/css/semantic-superhero.min.css') }}"/>
             <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}"/>
         {% endblock %}
 
-        <script src="{{ asset('assets/js/jquery.min.js') }}"></script> {# included in HEAD because of inline jQuery scripts #}
+        <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+        {# included in HEAD because of possible presence of inline jQuery scripts #}
     </head>
-    <body {% block body_attributes %}{% endblock body_attributes %}>
+    <body {% block body_attributes %} {% endblock body_attributes %}>
         {% block navbar %}{% endblock navbar %}
 
         {% block body %}{% endblock %}
@@ -31,9 +35,7 @@
                 $(document).ready(function () {
                     $('.ui.checkbox').checkbox();
                     $('.ui.dropdown').dropdown();
-                    $('[data-popup]').popup({
-                        on: 'click'
-                    });
+                    $('[data-popup]').popup({on: 'click'});
                 })
             </script>
         {% endblock %}

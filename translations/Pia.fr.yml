@@ -1,0 +1,296 @@
+pia:
+    app_name: PiaLab
+
+    http_error:
+        503: >
+            L'application est en cours de maintenance.
+        500: >
+            Une erreur interne vient de se produire.
+        404: >
+            Page non trouvée. Vérifiez que l'URL est valide et que la page existe encore.
+        403: >
+            Cet accès est restreint, vous ne possedez pas les privilièges suffisant pour accéder à cette page.
+        401: >
+            Les identifiants sont invalides. Veuillez recommencer
+
+    layout:
+        title: "Interface d'Administration"
+
+        navbar:
+            users: Utilisateurs
+            applications: Applications
+            structures: Structures
+            templates: Gabarits
+            logged_in_as: Connecté en tant que
+            logout: Déconnexion
+
+    actions:
+        add: Ajouter
+        display: Afficher
+        edit: Modifier
+        remove: Supprimer
+
+    labels:
+        yes: Oui
+        no: Non
+        n_a: N/A
+
+    applications:
+        title: Applications
+
+        list:
+            id: "#"
+            name: Nom
+            url: URL
+            urls: URLs
+            grant_types: Autorisations
+            client_id: Identifiant Client
+            client_secret: Clé Client
+
+        add:
+            title: Ajouter une application
+
+        modals:
+            remove:
+                title: Êtes vous certain de vouloir supprimer cette application ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    title: Application
+                    name: Nom
+                    url: URL
+                    urls: URLs de redirection
+                    user_number: "Nombre d'utilisateur associé"
+                    tokens: Jetons de connexion
+                    currently_valid: en cours de validité
+
+        forms:
+            create:
+                name: Nom
+                url: URL
+                allowedGrantTypes: "Types d'autorisations"
+                redirectUris: URIs de redirection
+                submit: "Créer l'application"
+            edit:
+                cancel: Annuler
+                submit: "Enregistrer l'application"
+            remove:
+                submit: "Supprimer l'application"
+
+        labels:
+            grant_types:
+                authorization_code: "Code d'autorisation"
+                token: Jeton
+                password: Mot de passe
+                client_credentials: Identifiants client
+                refresh_token: Jeton de rafraichissement
+                extensions: Extension
+
+
+    templates:
+        title: Gabarits de PIA
+
+        list:
+            id: "#"
+            name: Nom
+            description: Description
+            enabled: Actif ?
+            data_size: Taille des données
+            filename: Nom du fichier
+            created_at: Créé le
+            updated_at: Mis à jour le
+            structures_number: Nombre de structure
+            structure_types_number: Nombre de type de structure
+
+        add:
+            title: Ajouter une application
+
+        modals:
+            remove:
+                title: Êtes vous certain de vouloir supprimer ce gabarit ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    template: Gabarit
+                    name: Nom
+                    pias_number: Nombre de PIA issue de ce gabarit
+
+        forms:
+            create:
+                name: Nom
+                description: Description
+                data: "Fichier d'export"
+                submit: Créer le gabarit
+            edit:
+                enabled: Actif
+                enabled_help: Un gabarit inactif ne sera visible de personne.
+                importedFileName: Nom du fichier actuel
+                newData: "Nouveau fichier d'export"
+                newData_help: "Laissez ce champ vide si vous n'avez pas besoin de changer les données du gabarit"
+                cancel: Annuler
+                submit: Enregistrer le gabarit
+            remove:
+                submit: Supprimer le gabarit
+
+    structures:
+        title: Structures
+
+        list:
+            id: "#"
+            name: Nom
+            type: Type
+            users_number: "Nb d'utilisateur"
+            pias_number: Nb de PIA
+            created_at: Créé le
+
+        add:
+            title: Ajouter une structure
+
+        modals:
+            remove:
+                title: Êtes vous certain de vouloir supprimer cette structure ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    structure: Structure
+                    name: Nom
+                    users_number: "Nombre d'utilisateur associé"
+                    pias_number: Nombre de PIA associée
+
+        forms:
+            create:
+                name: Nom
+                type: Type de structure
+                submit: Créer la structure
+            edit:
+                templates: Gabarits de PIA disponibles
+                templates_help: Les gabarits sélectionnés seront accessibles à cette structure
+
+                cancel: Annuler
+                submit: Enregistrer la structure
+            remove:
+                submit: Supprimer la structure
+
+    structure_types:
+        title: Types de structure
+
+        list:
+            id: "#"
+            name: Nom
+            structures_number: "Nb de structure"
+
+        add:
+            title: Ajouter un type de structure
+
+        modals:
+            remove:
+                title: Êtes vous certain de vouloir supprimer ce type de structure ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    structure_type: Type de structure
+                    name: Nom
+                    structures_number: Nombre de structure associée
+
+        forms:
+            create:
+                name: Nom
+                submit: Créer le type de structure
+            edit:
+                templates: Gabarits de PIA disponibles
+                templates_help: Les gabarits sélectionnés seront accessibles à toutes les structures de ce type de structure
+                cancel: Annuler
+                submit: Enregistrer le type de structure
+            remove:
+                submit: Supprimer le type de structure
+
+    users:
+        title: Utilisateurs
+
+        actions:
+            send_reset_email: "Envoyer l'e-mail de réinitialisation de mot de passe"
+
+        list:
+            id: "#"
+            application: Application
+            structure: Structure
+            username: Username
+            email: E-mail
+            roles: Roles
+            enabled: Actif
+            locked: Verrouillé
+            created_at: Créé le
+            expires_at: Expire le
+
+        add:
+            title: Ajouter un utilisateur
+
+        modals:
+            remove:
+                title: Êtes vous certain de vouloir supprimer cet utilisateur ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    user: Utilisateur
+                    username: "Nom d'utilisateur"
+                    email: E-mail
+                    created_at: Créé le
+                    expires_at: Expire le
+                    application: Application
+                    structure: Structure
+                    roles: Rôles
+
+        forms:
+            create:
+                application: Application
+                structure: Structure
+                email: Adresse email
+                password: Mot de passe
+                roles: Rôles
+                sendResetingEmail: "Envoyer l'email de RàZ de mot de passe ?"
+                sendResetingEmail_help: "Envoyer automatiquement l'email de réinitialisation de mot de passe à l'adresse email saisie"
+                submit: "Créer l'utilisateur"
+            edit:
+                username: "Nom d'utilisateur"
+                roles: Rôles
+                expirationDate: "Date d'expiration du compte"
+                enabled: Actif
+                locked: Verrouillé
+                cancel: Annuler
+                submit: "Enregistrer l'utilisateur"
+            remove:
+                submit: "Supprimer l'utilisateur"
+            reset:
+                cancel: Annuler
+                submit: "Envoyer l'email"
+            profile:
+                firstName: Prénom
+                lastName: Nom
+
+        labels:
+            roles:
+                ROLE_USER : Invité
+                ROLE_CONTROLLER : Responsable de Traitement
+                ROLE_DPO : DPO
+                ROLE_ADMIN : Administrateur Fonctionnel
+                ROLE_TECHNICAL_ADMIN  : Administrateur Technique
+                ROLE_SUPER_ADMIN  : Super Administrateur
+
+        reseting:
+            send_email:
+                title: Envoi de l'email de réinitialisation de mot de passe
+                instructions: >
+                    <p>
+                        Un email de réinitialisation de mot de passe va être envoyé à l'adresse
+                        <b>%email%</b>.
+                    </p>
+                    <p>
+                        Cet email contiendra les instructions de réinitialisation du mot de passe pour le compte associé à cet email.
+                    </p>
+                reset_url: URL de réinitialisation
+                warning: >
+                    "ATTENTION: Ouvrez ce lien dans un onglet de navigation privée pour ne pas être déconnecté de votre compte d'administration une fois le mot de passe changé.<br/>
+                    Si vous ne le faites pas, vous allez être connecté en tant que cet utilisateur."
+            success:
+                title: Mot de passe oublié
+                password_reset_successfully: >
+                    Votre mot de passe à été modifié avec succès. <br/>
+                    Vous pouvez retourner sur l'application pour vous connecter
+                return_to_application: Retouner vers l'application
+            request:
+                back: Retour

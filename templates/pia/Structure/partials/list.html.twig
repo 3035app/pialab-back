@@ -1,22 +1,25 @@
+{% trans_default_domain 'Pia' %}
+{% import 'pia/Layout/_macros.html.twig' as macro %}
+
 <div class="ui segment">
 
   <h2>
-    <a href="?limit=1000" class="ui tiny button" style="float:right;">Voir 1000</a>
-    Structures
+      <a href="?limit=1000" class="ui tiny button" style="float:right;">{{ 'pia.actions.display'|trans }} 1000</a>
+      {{ 'pia.structures.title'|trans }}
   </h2>
 
   <div class="table responsive wrapper">
     <table class="ui compact striped table">
       <thead>
         <tr>
-          <th>#</th>
-          <th>Nom</th>
-          <th>Type</th>
-          <th>Nb d'utilisateurs</th>
-          <th>Nb de PIAs</th>
-          <th>Créé le</th>
+          <th>{{ 'pia.structures.list.id'|trans }}</th>
+          <th>{{ 'pia.structures.list.name'|trans }}</th>
+          <th>{{ 'pia.structures.list.type'|trans }}</th>
+          <th>{{ 'pia.structures.list.users_number'|trans }}</th>
+          <th>{{ 'pia.structures.list.pias_number'|trans }}</th>
+          <th>{{ 'pia.structures.list.created_at'|trans }}</th>
           <th class="right aligned">
-            <i class="cog icon"></i>
+              <i class="cog icon"></i>
           </th>
         </tr>
       </thead>
@@ -30,7 +33,7 @@
               {% if structure.type is not null %}
                 {{ structure.type.name }}
               {% else %}
-                N/A
+                  {{ 'pia.labels.n_a'|trans }}
               {% endif %}
             </td>
             <td>
@@ -43,17 +46,14 @@
               {{ structure.createdAt|date('d/m/Y')}}
             </td>
             <td class="right aligned">
-              <div class="ui small buttons">
-                <a class="ui blue tiny icon button" title="Modifier la structure" href="{{ path('manage_structures_show_structure', {'structureId':structure.id}) }}">
-                  <i class="external alternate icon"></i>
-                </a>
-                <a class="ui green tiny icon button" title="Modifier la structure" data-modal="data-modal" href="{{ path('manage_structures_edit_structure', {'structureId':structure.id}) }}">
-                  <i class="pencil icon"></i>
-                </a>
-                <a class="ui red tiny icon button" title="Supprimer la structure" data-modal="data-modal" href="{{ path('manage_structures_remove_structure', {'structureId':structure.id}) }}">
-                  <i class="trash icon"></i>
-                </a>
-              </div>
+                <div class="ui small buttons">
+                    <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_edit_structure', {'structureId':structure.id}) }}">
+                        <i class="pencil icon"></i>
+                    </a>
+                    <a class="ui red tiny icon button" title="{{ 'pia.actions.remove'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_remove_structure', {'structureId':structure.id}) }}">
+                        <i class="trash icon"></i>
+                    </a>
+                </div>
             </td>
           </tr>
         {% endfor %}

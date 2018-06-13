@@ -67,6 +67,16 @@ class Client extends BaseClient
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @fix FOS\OAuthServerBundle\Model\Client which concatenate id and random_id
+     */
+    public function getPublicId()
+    {
+        return $this->getRandomId();
+    }
+
+    /**
      * @return string
      */
     public function getName(): ?string

@@ -1,10 +1,11 @@
+{% trans_default_domain 'Pia' %}
 {% import 'pia/Layout/_macros.html.twig' as macro %}
 
 <div class="ui segment">
 
   <h2>
-    <a href="?limit=1000" class="ui tiny button" style="float:right;">Voir 1000</a>
-    Utilisateurs
+      <a href="?limit=1000" class="ui tiny button" style="float:right;">{{ 'pia.actions.display'|trans }} 1000</a>
+      {{ 'pia.users.title'|trans }}
   </h2>
 
   <div class="table responsive wrapper">
@@ -12,16 +13,16 @@
       <thead>
         <tr>
           {% if is_granted('CAN_MANAGE_USERS') %}
-            <th>Application</th>
-            <th>Structure</th>
+          <th>{{ 'pia.users.list.application'|trans }}</th>
+          <th>{{ 'pia.users.list.structure'|trans }}</th>
           {% endif %}
-          <th>Alias</th>
-          <th>Email</th>
-          <th>Roles</th>
-          <th>Actif</th>
-          <th>Verrouillé</th>
-          <th>Créé le</th>
-          <th>Expire le</th>
+          <th>{{ 'pia.users.list.username'|trans }}</th>
+          <th>{{ 'pia.users.list.email'|trans }}</th>
+          <th>{{ 'pia.users.list.roles'|trans }}</th>
+          <th>{{ 'pia.users.list.enabled'|trans }}</th>
+          <th>{{ 'pia.users.list.locked'|trans }}</th>
+          <th>{{ 'pia.users.list.created_at'|trans }}</th>
+          <th>{{ 'pia.users.list.expires_at'|trans }}</th>
           <th class="right aligned">
             <i class="cog icon"></i>
           </th>
@@ -38,7 +39,7 @@
                     {{ user.application.name }}
                   </a>
                 {% else %}
-                  N/A
+                  {{ 'pia.labels.n_a'|trans }}
                 {% endif %}
               </td>
               <td>
@@ -47,7 +48,7 @@
                     {{ user.structure.name }}
                   </a>
                 {% else %}
-                  N/A
+                  {{ 'pia.labels.n_a'|trans }}
                 {% endif %}
               </td>
             {% endif %}

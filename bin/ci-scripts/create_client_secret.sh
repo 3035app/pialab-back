@@ -17,18 +17,26 @@ then
     CLIENTURL="http://localhost:4200"
 fi
 
-bin/console fos:oauth-server:create-client \
-            --redirect-uri="${CLIENTURL}" \
-            --grant-type="password" \
-            --grant-type="token" \
-            --grant-type="refresh_token"
+CLIENT_ID=$(openssl rand -hex 24)
+if [ -n "$ClientId" ]
+then
+    CLIENT_ID=$ClientId
+fi
+
+CLIENT_SECRET=$(openssl rand -hex 24)
+if [ -n "$ClientSecret" ]
+then
+    CLIENT_SECRET=$ClientSecret
+fi
 
 
-# we do not want to parse the output of the fos:oauth-server command
-lid=$(psql -qt --no-align -w -h ${DBHOST} -c 'select max(id) from oauth_client;' -U ${DBUSER} -d ${DBNAME}  )
-clientid=$(psql -qt --no-align -w -h ${DBHOST} -c "select id||'_'||random_id from oauth_client where id=$lid;" -U ${DBUSER} -d ${DBNAME}  )
-clientsecret=$(psql -qt --no-align -w -h ${DBHOST} -c "select secret from oauth_client where id=$lid;" -U ${DBUSER} -d ${DBNAME}  )
 
-echo "APICLIENTID=$clientid" > .api.env
-echo "APICLIENTSECRET=$clientsecret" >> .api.env
 
+bin/console pia:application:create \
+            --name="Default App" \
+            --url="${CLIENTURL}" \
+            --client-id="${CLIENT_ID}" \
+            --client-secret="${CLIENT_SECRET}"
+
+echo "APICLIENTID=${CLIENT_ID}" > .api.env
+echo "APICLIENTSECRET=${CLIENT_SECRET}" >> .api.env
