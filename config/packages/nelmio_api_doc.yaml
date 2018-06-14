@@ -8,6 +8,8 @@ nelmio_api_doc:
         default:
             path_patterns:
                 - ^/pias
-        folders:
-            path_patterns:
                 - ^/folders
+        admin:
+            path_patterns:
+                - ^/users
+                - ^/structures
