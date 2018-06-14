@@ -104,7 +104,7 @@ security:
             - CAN_MANAGE_ANSWERS
             - CAN_MANAGE_COMMENTS
             - CAN_MANAGE_ATTACHMENTS
-            - CAN_MANAGE_EVALUATONS
+            - CAN_MANAGE_EVALUATIONS
 
         ROLE_DPO:
             - ROLE_CONTROLLER
