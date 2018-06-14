@@ -105,7 +105,7 @@ EOT
             );
         }
         //one of them is set but not the other
-        elseif (!$clientId xor !$clientSecret) {
+        elseif ($clientId xor $clientSecret) {
             $io->error('You must set client_id AND client_secret');
 
             return;
