@@ -102,7 +102,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Post("/pias/new-from-template/{id}")
-     * @Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('ROLE_PIA_CREATE')")
      *
      * @return array
      */
