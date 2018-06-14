@@ -164,10 +164,10 @@ $ETCDCTLCMD put $Prefix/client/url $CLIENTURL $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/client/id $CLIENT_ID $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/client/secret $CLIENT_SECRET $ETCDENDPOINT
 
-$ETCDCTLCMD put $Prefix/apache/servername $ $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/apache/directory $CLIENT_ID $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/apache/certificate/file $CLIENT_SECRET $ETCDENDPOINT
-$ETCDCTLCMD put $Prefix/apache/certificate/key $CLIENT_SECRET $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/apache/servername $ServerName $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/apache/directory $BackDirectory $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/apache/certificate/file $BackSSLCertificateFile $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/apache/certificate/key $BackSSLCertificateKeyFile $ETCDENDPOINT
 
 # get ip
 currentip=$(hostname -i) # works only if the host name can be resolved
