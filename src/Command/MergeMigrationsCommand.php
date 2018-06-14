@@ -79,9 +79,31 @@ EOT
 
         $versions = $this->handleExistingMigrations();
 
-        $this->createTargetMigration($tag, $versions);
+        if (count($versions) === 0) {
+            $io->error('There is no available migration to merge. Exiting');
 
-        return 0;
+            return 42;
+        }
+
+        $io->table(
+            [
+                'Version',
+            ],
+            [
+                [implode("\n", array_keys($versions))],
+            ]
+        );
+
+        $io->caution('Following version(s) will be processed and deleted');
+        $io->warning('Untracked versions won\'t be recoverable');
+
+        if ($io->confirm('Do you really want to continue ?')) {
+            $this->createTargetMigration($tag, $versions);
+
+            return 0;
+        }
+
+        return 42;
     }
 
     /**
