@@ -47,8 +47,8 @@
 
 
    SSLEngine on
-   SSLCertificateFile {{getv "/apache/certifcate/file"}}
-   SSLCertificateKeyFile {{getv "/apache/certifcate/key"}}
+   SSLCertificateFile {{getv "/apache/certificate/file"}}
+   SSLCertificateKeyFile {{getv "/apache/certificate/key"}}
 
    ErrorLog /var/log/apache2/{{getv "/apache/servername"}}-error.log
    CustomLog /var/log/apache2/{{getv "/apache/servername"}}-access.log combined

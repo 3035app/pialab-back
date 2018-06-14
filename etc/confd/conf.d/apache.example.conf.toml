@@ -4,6 +4,6 @@ dest = "apache.example.conf"
 keys = [
      "/apache/servername",
      "/apache/directory",
-     "/apache/certifcate/file",
-     "/apache/certifcate/key",
+     "/apache/certificate/file",
+     "/apache/certificate/key",
 ]
