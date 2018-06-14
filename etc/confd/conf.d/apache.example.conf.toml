@@ -1,6 +1,6 @@
 [template]
 src = "apache.example.conf.tmpl"
-dest = "config/apache.example.conf"
+dest = "apache.example.conf"
 keys = [
      "/apache/servername",
      "/apache/directory",
