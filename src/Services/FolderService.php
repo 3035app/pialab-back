@@ -32,4 +32,12 @@ class FolderService
 
         return $folder;
     }
+
+    public function createFolderForParent(string $name, Folder $parent): Folder
+    {
+        $folder = new Folder($name);
+        $folder->setParent($parent);
+
+        return $folder;
+    }
 }
