@@ -1,0 +1,55 @@
+# Redirection Backend vers HTTPS
+<VirtualHost *:80>
+  ServerName {{getv "/apache/servername"}}
+  Redirect Permanent / https://{{getv "/apache/servername"}}/
+  ErrorLog /var/log/apache2/{{getv "/apache/servername"}}-error.log
+  CustomLog /var/log/apache2/{{getv "/apache/servername"}}-access.log combined
+</VirtualHost>
+
+# Virtualhost du backend
+<VirtualHost *:443>
+  ServerName {{getv "/apache/servername"}}
+  DocumentRoot {{getv "/apache/directory"}}/
+  DirectoryIndex index.php index.html
+
+  <Directory {{getv "/apache/directory"}}>
+        AllowOverride All
+        Order Allow,Deny
+        Allow from All
+        Options +FollowSymlinks -MultiViews
+        DirectoryIndex index.php
+
+        # rewrite rule from symfony/apache-pack
+        RewriteEngine On
+        RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
+        RewriteRule ^(.*) - [E=BASE:%1]
+
+        RewriteCond %{HTTP:Authorization} .
+        RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+        RewriteCond %{ENV:REDIRECT_STATUS} ^$
+        RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
+
+        RewriteCond %{REQUEST_FILENAME} -f
+        RewriteRule ^ - [L]
+
+        RewriteRule ^ %{ENV:BASE}/index.php [L]
+   </Directory>
+
+   # mod_fastcgi.c
+   <FilesMatch "\.php[345]?$">
+        SetHandler php72-fcgi
+   </FilesMatch>
+
+   Action php72-fcgi /php72-fcgi virtual
+   Alias /php72-fcgi /var/www/{{getv "/apache/servername"}}/cgi-bin/php72-fcgi
+   FastCgiExternalServer /var/www/{{getv "/apache/servername"}}/cgi-bin/php72-fcgi -idle-timeout 300 -socket /var/run/php/php7.2-fpm.sock -pass-header Authorization
+
+
+   SSLEngine on
+   SSLCertificateFile {{getv "/apache/certifcate/file"}}
+   SSLCertificateKeyFile {{getv "/apache/certifcate/key"}}
+
+   ErrorLog /var/log/apache2/{{getv "/apache/servername"}}-error.log
+   CustomLog /var/log/apache2/{{getv "/apache/servername"}}-access.log combined
+</VirtualHost>
