@@ -99,7 +99,7 @@ EOT
             $client->setSecret($clientSecret);
         }
         //one of them is set but not the other
-        elseif (!(!$clientId && !$clientSecret)) {
+        elseif ($clientId xor $clientSecret) {
             $io->error('You must set client_id AND client_secret');
 
             return;
