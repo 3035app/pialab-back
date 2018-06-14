@@ -16,6 +16,6 @@ class StructureTypeService
 {
     public function createStructureType(string $name): StructureType
     {
-        return new Structure($name);
+        return new StructureType($name);
     }
 }
