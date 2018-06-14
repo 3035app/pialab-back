@@ -10,7 +10,7 @@
   <div class="item" style="padding:0;width:130px;background:#2B3E50 url({{ asset('assets/img/pia-lab-small.png') }}) no-repeat scroll 50% 50%;background-size:contain;"></div>
   <div class="menu">
 
-    {% if is_granted('CAN_MANAGE_OWNED_USERS') or is_granted('CAN_MANAGE_ALL_USERS') %}
+    {% if is_granted('CAN_MANAGE_ONLY_OWNED_USERS') or is_granted('CAN_MANAGE_USERS') %}
       <a class="{{ menu.activeMenu(activeItem, 'users') }} item" href="{{ path('manage_users') }}">
         <i class="user icon"></i>{{ 'pia.layout.navbar.users'|trans }}
       </a>

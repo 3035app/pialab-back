@@ -88,7 +88,7 @@ security:
           - CAN_DELETE_USER
 
         #Special permission which limit to owned users  (from the same structure)
-        CAN_MANAGE_OWNED_USERS:
+        CAN_MANAGE_ONLY_OWNED_USERS:
           - CAN_SHOW_USER
           - CAN_CREATE_USER
           - CAN_EDIT_USER
@@ -115,18 +115,17 @@ security:
 
         ROLE_ADMIN:
             - ROLE_DPO
-            - CAN_MANAGE_OWNED_USERS
+            - CAN_MANAGE_ONLY_OWNED_USERS
 
         ROLE_TECHNICAL_ADMIN:
             - ROLE_ADMIN
+            - CAN_MANAGE_USERS
             - CAN_EXPORT_PIA
             - CAN_MANAGE_STRUCTURES
             - CAN_MANAGE_STRUCTURE_TYPES
             - CAN_MANAGE_PIA_TEMPLATES
-            - CAN_MANAGE_USERS
             - CAN_MANAGE_APPLICATIONS
         ROLE_SUPER_ADMIN:
-            - ROLE_ADMIN
             - ROLE_TECHNICAL_ADMIN
 
 

@@ -45,6 +45,7 @@ class UsersCest
         $I->checkSUIOption('input[name="create_user_form[roles][]"][value="ROLE_SUPER_ADMIN"]');
 
         $I->click('[name="create_user_form[submit]"]');
+        $I->canSee($this->email, '//td');
     }
 
     public function login_with_newly_created_user(Webguy $I)

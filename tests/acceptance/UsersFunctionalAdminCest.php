@@ -109,7 +109,7 @@ class UsersFunctionalAdminCest
 
         $I->click('[name="create_user_form[submit]"]');
 
-        $I->seeElement('//td[contains(text(), "' . $this->dpoEmail . '")]');
+        $I->canSee($this->dpoEmail, '//td');
         $I->logout();
     }
 
@@ -131,7 +131,7 @@ class UsersFunctionalAdminCest
         $I->click($formName . ' input[type="submit"]');
 
         $I->expect('DPO is removed from the list');
-        $I->dontSeeElement('//td[contains(text(), "' . $this->dpoEmail . '")]');
+        $I->dontSee($this->dpoEmail, '//td');
 
         $I->logout();
     }
@@ -154,7 +154,7 @@ class UsersFunctionalAdminCest
         $I->click($formName . ' input[type="submit"]');
 
         $I->expect('Functional Admin is removed from the list');
-        $I->dontSeeElement('//td[contains(text(), "' . $this->email . '")]');
+        $I->dontSee($this->email, '//td');
 
         $I->logout();
     }

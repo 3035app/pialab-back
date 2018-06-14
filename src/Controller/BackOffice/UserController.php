@@ -91,7 +91,7 @@ class UserController extends BackOfficeAbstractController
      */
     public function manageUsersAction(Request $request)
     {
-        if (!$this->isGranted('CAN_MANAGE_USERS') && $this->isGranted('CAN_MANAGE_OWNED_USERS')) {
+        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_USERS')) {
             $structure = $this->getUser()->getStructure();
             $userPager = $this->getDoctrine()
               ->getRepository(User::class)
@@ -148,8 +148,8 @@ class UserController extends BackOfficeAbstractController
 
             $user->setApplication($userData['application']);
 
-            //a ROLE_ADMIN (which contains CAN_MANAGE_OWNED_USERS) must have a structure
-            if (!$userData['structure'] && $this->roleHierarchy->isGranted($user, 'CAN_MANAGE_OWNED_USERS')) {
+            //a ROLE_ADMIN (which contains CAN_MANAGE_ONLY_OWNED_USERS) must have a structure
+            if (!$userData['structure'] && $user->hasRole('ROLE_ADMIN')) {
                 throw new \DomainException('A Functional Administrator must be assigned to a Structure');
             }
             $user->setStructure($userData['structure']);

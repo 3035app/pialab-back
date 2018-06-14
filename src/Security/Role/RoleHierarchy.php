@@ -35,7 +35,10 @@ class RoleHierarchy
         $this->definedRoles = array_filter(array_keys($roles), function ($role) {
             return substr($role, 0, 5) == 'ROLE_';
         });
-        $this->user = $tokenStorage->getToken()->getUser();
+        //special case when logout
+        if ($tokenStorage->getToken() !== null) {
+            $this->user = $tokenStorage->getToken()->getUser();
+        }
         $this->roleHierarchy = $roleHierarchy;
     }
 

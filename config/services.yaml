@@ -41,6 +41,8 @@ services:
     PiaApi\Security\Voter\PermissionVoter:
         arguments: ['@security.role_hierarchy']
         tags: [security.voter]
+    PiaApi\Security\Voter\CanManageUsersVoter:
+        tags: [security.voter]
 
     PiaApi\Security\Role\RoleHierarchy:
         arguments: ['@security.token_storage', '%security.role_hierarchy.roles%', '@security.role_hierarchy']

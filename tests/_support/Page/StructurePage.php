@@ -29,7 +29,7 @@ class StructurePage
         $I->amOnPage('/manageStructures');
         $I->fillField('input[name="create_structure_type_form[name]"]', $structureType);
         $I->click('[name="create_structure_type_form[submit]"]');
-        $I->seeElement('//td[contains(text(), "' . $structureType . '")]');
+        $I->canSee($structureType, '//td');
 
         return $this;
     }
@@ -43,8 +43,7 @@ class StructurePage
         $I->selectOptionFromSUISelect('create_structure_form[type]', $structureType);
         $I->click('[name="create_structure_form[submit]"]');
 
-        $I->amOnPage('/manageStructures');
-        $I->seeElement('//td[contains(./text(), "' . $structure . '")]');
+        $I->canSee($structure, '//td');
 
         return $this;
     }
@@ -62,7 +61,6 @@ class StructurePage
 
         $I->click($formName . ' input[type="submit"]');
 
-        $I->amOnPage('/manageStructures');
         $I->dontSee($structure, '//td');
     }
 
@@ -79,7 +77,6 @@ class StructurePage
 
         $I->click($formName . ' input[type="submit"]');
 
-        $I->amOnPage('/manageStructures');
         $I->dontSee($structureType, '//td');
     }
 }
