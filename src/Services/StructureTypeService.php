@@ -14,6 +14,11 @@ use PiaApi\Entity\Pia\StructureType;
 
 class StructureTypeService
 {
+    public function getEntityClass(): string
+    {
+        return StructureType::class;
+    }
+
     public function createStructureType(string $name): StructureType
     {
         return new StructureType($name);

@@ -26,13 +26,12 @@
                     <div class="ui divider"></div>
                     <div class="ui buttons">
                         <a class="ui default button" href="{{ path('fos_user_resetting_request') }}">Rééssayer</a>
-
                         {% if app.user.application and app.user.application.url is not null %}
                             <a href="{{ app.user.application.url }}" class="ui teal button">
-                                {{ 'pia.users.reseting.success.return_to_application'|trans({}, 'Pia') }}
+                                {{ 'pia.users.resetting.success.return_to_application'|trans({}, 'Pia') }}
                             </a>
                         {% else %}
-                            <a class="ui teal button" onclick="javascript:window.history.go(-1);">{{ 'pia.users.reseting.request.back'|trans({}, 'Pia') }}</a>
+                            <a class="ui teal button" onclick="javascript:window.history.go(-1);">{{ 'pia.users.resetting.request.back'|trans({}, 'Pia') }}</a>
                         {% endif %}
                     </div>
                 </div>

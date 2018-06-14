@@ -73,11 +73,10 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
      */
     protected $structure;
 
-    public function __construct(?string $email = null, ?string $password)
+    public function __construct(?string $email = null)
     {
         $this->email = $email;
         $this->username = $email;
-        $this->password = $password;
         $this->roles = ['ROLE_USER'];
         $this->creationDate = new \DateTime();
         $this->expirationDate = new \DateTimeImmutable('+1 Year');

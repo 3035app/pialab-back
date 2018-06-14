@@ -13,17 +13,26 @@ namespace PiaApi\Services;
 use FOS\OAuthServerBundle\Model\ClientManagerInterface;
 use PiaApi\Entity\Oauth\Client;
 use FOS\OAuthServerBundle\Model\ClientInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class ApplicationService
+class ApplicationService extends AbstractService
 {
     /**
      * @var ClientManagerInterface
      */
     private $clientManager;
 
-    public function __construct(ClientManagerInterface $clientManager)
-    {
+    public function __construct(
+        RegistryInterface $doctrine,
+        ClientManagerInterface $clientManager
+    ) {
+        parent::__construct($doctrine);
         $this->clientManager = $clientManager;
+    }
+
+    public function getEntityClass(): string
+    {
+        return Client::class;
     }
 
     /**

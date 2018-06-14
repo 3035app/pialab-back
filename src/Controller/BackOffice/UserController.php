@@ -11,7 +11,6 @@
 namespace PiaApi\Controller\BackOffice;
 
 use FOS\UserBundle\Mailer\MailerInterface;
-use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use PiaApi\Entity\Oauth\User;
 use PiaApi\Form\User\CreateUserForm;
@@ -23,17 +22,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use PiaApi\Entity\Pia\UserProfile;
-use Symfony\Component\Security\Core\User\UserInterface;
+use PiaApi\Services\UserService;
 
 class UserController extends BackOfficeAbstractController
 {
-    /**
-     * @var EncoderFactoryInterface
-     */
-    private $encoderFactory;
-
     /**
      * @var TokenStorageInterface
      */
@@ -50,23 +43,27 @@ class UserController extends BackOfficeAbstractController
     private $mailer;
 
     /**
-     * @var UserManagerInterface
-     */
-    private $userManager;
-
-    /**
      * @var TokenGeneratorInterface
      */
     private $tokenGenerator;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory, TokenStorageInterface $tokenStorage, MailerInterface $mailer, int $FOSUserResettingRetryTTL, UserManagerInterface $userManager, TokenGeneratorInterface $tokenGenerator)
-    {
-        $this->encoderFactory = $encoderFactory;
+    /**
+     * @var UserService
+     */
+    private $userService;
+
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        MailerInterface $mailer,
+        int $FOSUserResettingRetryTTL,
+        TokenGeneratorInterface $tokenGenerator,
+        UserService $userService
+    ) {
         $this->tokenStorage = $tokenStorage;
         $this->retryTtl = $FOSUserResettingRetryTTL;
         $this->mailer = $mailer;
-        $this->userManager = $userManager;
         $this->tokenGenerator = $tokenGenerator;
+        $this->userService = $userService;
     }
 
     /**
@@ -107,22 +104,22 @@ class UserController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userData = $form->getData();
 
-            $user = new User($userData['email'], $userData['password']);
+            $user = $this->userService->createUserForStructureAndApplication(
+                $userData['email'],
+                $userData['password'],
+                $userData['structure'],
+                $userData['application']
+            );
+
             foreach ($userData['roles'] as $role) {
                 $user->addRole($role);
             }
 
-            $encoder = $this->encoderFactory->getEncoder($user);
-            $user->setPassword($encoder->encodePassword($userData['password'], $user->getSalt()));
-
-            $user->setApplication($userData['application']);
-            $user->setStructure($userData['structure']);
-
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
 
-            if (isset($userData['sendResetingEmail'])) {
-                $this->sendResetingEmail($user);
+            if (isset($userData['sendResettingEmail']) && $userData['sendResettingEmail'] === true) {
+                $this->userService->sendResettingEmail($user);
             }
 
             return $this->redirect($this->generateUrl('manage_users'));
@@ -138,12 +135,11 @@ class UserController extends BackOfficeAbstractController
      *
      * @param Request $request
      */
-    public function editUserAction(Request $request)
+    public function editUserAction(Request $request, $userId)
     {
         $this->canAccess();
 
-        $userId = $request->get('userId');
-        $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
+        $user = $this->userService->getRepository()->find($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
@@ -179,12 +175,11 @@ class UserController extends BackOfficeAbstractController
      *
      * @param Request $request
      */
-    public function removeUserAction(Request $request)
+    public function removeUserAction(Request $request, $userId)
     {
         $this->canAccess();
 
-        $userId = $request->get('userId');
-        $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
+        $user = $this->userService->getRepository()->find($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
@@ -224,7 +219,7 @@ class UserController extends BackOfficeAbstractController
     {
         $this->canAccess();
 
-        $user = $this->userManager->findUserBy(['id' => $userId]);
+        $user = $this->userService->getRepository()->find($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
@@ -239,10 +234,10 @@ class UserController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
 
-            // Uncomment this « if / endif » to apply the TTL between to email sending
+            // Uncomment this « if / endif » to apply the TTL allowed between two emails request
             // if (!$user->isPasswordRequestNonExpired($this->retryTtl)) {
 
-            $this->sendResetingEmail($user);
+            $this->userService->sendResettingEmail($user);
 
             return $this->redirect($this->generateUrl('manage_users'));
 
@@ -253,21 +248,6 @@ class UserController extends BackOfficeAbstractController
         return $this->render('pia/User/sendResetPasswordEmail.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * Sends FOSUser reset password email.
-     *
-     * @param UserInterface $user
-     */
-    private function sendResetingEmail(UserInterface $user): void
-    {
-        if (null === $user->getConfirmationToken()) {
-            $user->setConfirmationToken($this->tokenGenerator->generateToken());
-        }
-        $this->mailer->sendResettingEmailMessage($user);
-        $user->setPasswordRequestedAt(new \DateTime());
-        $this->userManager->updateUser($user);
     }
 
     protected function canAccess()

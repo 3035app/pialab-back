@@ -85,11 +85,11 @@ class CreateUserForm extends BaseForm
                 'choices'  => $this->userRoles,
                 'label'    => 'pia.users.forms.create.roles',
             ])
-            ->add('sendResetingEmail', CheckboxType::class, [
+            ->add('sendResettingEmail', CheckboxType::class, [
                 'required'     => false,
-                'label'        => 'pia.users.forms.create.sendResetingEmail',
+                'label'        => 'pia.users.forms.create.sendResettingEmail',
                 'label_attr'   => [
-                    'title' => 'pia.users.forms.create.sendResetingEmail_help',
+                    'title' => 'pia.users.forms.create.sendResettingEmail_help',
                 ],
             ])
             ->add('submit', SubmitType::class, [

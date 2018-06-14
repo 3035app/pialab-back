@@ -11,6 +11,7 @@ services:
         bind:
             # Parameters
             $FOSUserResettingRetryTTL: '%fos_user.resetting.retry_ttl%'
+            $KernelProjectDir: '%kernel.project_dir%'
             # $SecurityRoleHierarchyRoles: '%security.role_hierarchy.roles%'
 
             # Services
