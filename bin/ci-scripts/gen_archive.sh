@@ -12,8 +12,8 @@ then
 fi
 
 # Clean current git dir
-git clean -df
-git checkout -- .
+#git clean -df
+#git checkout -- .
 
 # optimize loader and remove dev package from vendor
 composer install --no-dev --no-scripts --no-interaction

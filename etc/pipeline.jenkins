@@ -10,13 +10,13 @@ pipeline {
     parameters {
         string(defaultValue: 'pialab-back', description: '', name: 'GlobalName')
 
+        string(defaultValue: 'http://ci.libre-informatique.fr:8042/back', description: '', name: 'BackUrl')
         string(defaultValue: 'http://ci.libre-informatique.fr:8042/front', description: '', name: 'FrontUrl')
 
         string(defaultValue: '/usr/share/pialab-back/public', description: '', name: 'BackDirectory')
 
         string(defaultValue: '/etc/ssl/pialab.crt', description: '', name: 'BackSSLCertificateFile')
         string(defaultValue: '/etc/ssl/pialab.key', description: '', name: 'BackSSLCertificateKeyFile')
-        string(defaultValue: '/etc/ssl/pialab.pem', description: '', name: 'BackSSLCertificateChainFile')
 
         string(defaultValue: 'test', description: '', name: 'BuildEnv')
 
@@ -137,7 +137,7 @@ pipeline {
 
     post {
         always {
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: false, reportDir: 'tests/_output/', reportFiles: 'report.html', reportName: 'Codeception Report', reportTitles: ''])
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'tests/_output/', reportFiles: 'report.html', reportName: 'Codeception Report', reportTitles: ''])
             cleanWs()
         }
     }

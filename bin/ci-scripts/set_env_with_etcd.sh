@@ -92,6 +92,30 @@ then
 fi
 
 
+# Apache Conf
+if [ -z "${ServerName}" ]
+then
+    ServerName=pialab.io
+    if [ -n ${BackUrl} ]
+    then
+        ServerName=$(echo $BackUrl | sed -e s:.*//::g | sed -e s:/.*::g | sed -e s/:.*//g )
+    fi
+fi
+
+if [ -z "${BackDirectory}" ]
+then
+    BackDirectory=/usr/share/pialab-back/public
+fi
+
+if [ -z "${BackSSLCertificateFile}" ]
+then
+    BackSSLCertificateFile=/etc/ssl/pialab.crt
+fi
+
+if [ -z "${BackSSLCertificateKeyFile}" ]
+then
+    BackSSLCertificateKeyFile=/etc/ssl/pialab.key
+fi
 
 
 # get postgres default
@@ -139,6 +163,11 @@ $ETCDCTLCMD put $Prefix/symfony/cors/allow $SYMFONYCORSALLOW $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/client/url $CLIENTURL $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/client/id $CLIENT_ID $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/client/secret $CLIENT_SECRET $ETCDENDPOINT
+
+$ETCDCTLCMD put $Prefix/apache/servername $ServerName $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/apache/directory $BackDirectory $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/apache/certificate/file $BackSSLCertificateFile $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/apache/certificate/key $BackSSLCertificateKeyFile $ETCDENDPOINT
 
 # get ip
 currentip=$(hostname -i) # works only if the host name can be resolved
