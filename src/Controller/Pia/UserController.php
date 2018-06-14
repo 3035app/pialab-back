@@ -34,6 +34,7 @@ class UserController extends RestController
      *         @Swg\Items(ref=@Nelmio\Model(type=User::class, groups={"Default"}))
      *     )
      * )
+     *
      * @Security("is_granted('CAN_SHOW_USER')")
      *
      * @return array
@@ -92,6 +93,8 @@ class UserController extends RestController
     /**
      * @Swg\Tag(name="User")
      *
+     * @FOSRest\Put("/users/{id}", requirements={"id"="\d+"})
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Update a user",
@@ -100,8 +103,6 @@ class UserController extends RestController
      *         ref=@Nelmio\Model(type=User::class, groups={"Default"})
      *     )
      * )
-     *
-     * @FOSRest\Put("/users/{id}", requirements={"id"="\d+"})
      *
      * @Security("is_granted('CAN_EDIT_USER')")
      *
@@ -115,6 +116,8 @@ class UserController extends RestController
     /**
      * @Swg\Tag(name="User")
      *
+     * @FOSRest\Delete("/users/{id}", requirements={"id"="\d+"})
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Delete a user",
@@ -123,8 +126,6 @@ class UserController extends RestController
      *         ref=@Nelmio\Model(type=User::class, groups={"Default"})
      *     )
      * )
-     *
-     * @FOSRest\Delete("/users/{id}", requirements={"id"="\d+"})
      *
      * @Security("is_granted('CAN_DELETE_USER')")
      *
