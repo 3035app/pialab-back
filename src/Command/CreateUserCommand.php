@@ -131,7 +131,7 @@ class CreateUserCommand extends Command
         $this->entityManager->flush();
 
         if ($input->getOption('sendResetEmail') !== null) {
-            $this->userService->sendResetingEmail($user);
+            $this->userService->sendResettingEmail($user);
         }
 
         $this->io->success(sprintf('User %s successfully created !', $user->getEmail()));

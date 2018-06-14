@@ -45,7 +45,7 @@ class EditUserForm extends CreateUserForm
             ->remove('roles')
             ->remove('password')
             ->remove('submit')
-            ->remove('sendResetingEmail')
+            ->remove('sendResettingEmail')
 
             ->add('username', TextType::class, [
                 'label'    => 'pia.users.forms.edit.username',
