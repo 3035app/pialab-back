@@ -24,6 +24,24 @@ class UsersFunctionalAdminCest
     private $dpoEmail = 'dpo-selenium@pialab.io';
     private $dpoPassword = 'DpokFR5C1EGaPZDFJ1A';
 
+    private $structure = 'AdminStructure SAS';
+    private $structureType = 'AdminStructureType';
+
+    public function init_variables(Webguy $I)
+    {
+        $this->structure = $this->structure . rand(100, 999);
+        $this->structureType = $this->structureType . rand(100, 999);
+    }
+
+    public function create_new_structure(Webguy $I)
+    {
+        $I->login();
+
+        $structurePage = new \Page\StructurePage($I);
+        $structurePage->createStructureType($this->structureType);
+        $structurePage->createStructure($this->structure, $this->structureType);
+    }
+
     public function create_new_functional_admin(Webguy $I)
     {
         $I->login();
@@ -139,5 +157,14 @@ class UsersFunctionalAdminCest
         $I->dontSeeElement('//td[contains(text(), "' . $this->email . '")]');
 
         $I->logout();
+    }
+
+    public function remove_structure(Webguy $I)
+    {
+        $I->login();
+
+        $structurePage = new \Page\StructurePage($I);
+        $structurePage->removeStructure($this->structure);
+        $structurePage->removeStructureType($this->structureType);
     }
 }

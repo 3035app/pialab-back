@@ -148,7 +148,7 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
 
     public function addRole($role)
     {
-        if (!in_array($role, $this->roles)) {
+        if (!$this->hasRole($role)) {
             $this->roles[] = $role;
         }
 

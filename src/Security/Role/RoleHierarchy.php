@@ -57,4 +57,17 @@ class RoleHierarchy
 
         return $roleNames;
     }
+
+    public function isGranted(User $user, string $roleOrPermission)
+    {
+        $userRoles = array_map(function ($roleName) {
+            return new Role($roleName);
+        }, $user->getRoles());
+
+        $reachableRoleNames = array_map(function ($role) {
+            return $role->getRole();
+        }, $this->roleHierarchy->getReachableRoles($userRoles));
+
+        return in_array($roleOrPermission, $reachableRoleNames);
+    }
 }

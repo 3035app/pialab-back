@@ -26,6 +26,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use PiaApi\Entity\Pia\UserProfile;
 use Symfony\Component\Security\Core\User\UserInterface;
+use PiaApi\Security\Role\RoleHierarchy;
 
 class UserController extends BackOfficeAbstractController
 {
@@ -59,7 +60,19 @@ class UserController extends BackOfficeAbstractController
      */
     private $tokenGenerator;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory, TokenStorageInterface $tokenStorage, MailerInterface $mailer, int $FOSUserResettingRetryTTL, UserManagerInterface $userManager, TokenGeneratorInterface $tokenGenerator)
+    /**
+     * @var RoleHierarchy
+     */
+    private $roleHierarchy;
+
+    public function __construct(
+      EncoderFactoryInterface $encoderFactory,
+      TokenStorageInterface $tokenStorage,
+      MailerInterface $mailer,
+      int $FOSUserResettingRetryTTL,
+      UserManagerInterface $userManager,
+      TokenGeneratorInterface $tokenGenerator,
+      RoleHierarchy $roleHierarchy)
     {
         $this->encoderFactory = $encoderFactory;
         $this->tokenStorage = $tokenStorage;
@@ -67,6 +80,7 @@ class UserController extends BackOfficeAbstractController
         $this->mailer = $mailer;
         $this->userManager = $userManager;
         $this->tokenGenerator = $tokenGenerator;
+        $this->roleHierarchy = $roleHierarchy;
     }
 
     /**
@@ -133,6 +147,11 @@ class UserController extends BackOfficeAbstractController
             $user->setPassword($encoder->encodePassword($userData['password'], $user->getSalt()));
 
             $user->setApplication($userData['application']);
+
+            //a ROLE_ADMIN (which contains CAN_MANAGE_OWNED_USERS) must have a structure
+            if (!$userData['structure'] && $this->roleHierarchy->isGranted($user, 'CAN_MANAGE_OWNED_USERS')) {
+                throw new \DomainException('A Functional Administrator must be assigned to a Structure');
+            }
             $user->setStructure($userData['structure']);
 
             $this->getDoctrine()->getManager()->persist($user);
