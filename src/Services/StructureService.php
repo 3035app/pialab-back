@@ -34,10 +34,12 @@ class StructureService
         return $structure;
     }
 
-    public function createStructureOfType(string $name, StructureType $structureType): Structure
+    public function createStructureOfType(string $name, ?StructureType $structureType): Structure
     {
         $structure = $this->createStructure($name);
-        $structure->setType($structureType);
+        if ($structureType !== null) {
+            $structure->setType($structureType);
+        }
 
         return $structure;
     }
