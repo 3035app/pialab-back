@@ -6,7 +6,7 @@ export ETCDCTL_API=3
 # rand number to avoid build colision (same db used by two build)
 if [ ! -f shuf.nbr ]
 then
-    shuf -i 200-600 -n 1 > shuf.nbr
+    openssl rand -hex 6 > shuf.nbr
 fi
 
 if [ -z "$Suffix" ]
