@@ -111,7 +111,7 @@ security:
             - CAN_MANAGE_PIAS
             - CAN_SHOW_PIA_TEMPLATE
             - CAN_IMPORT_PIA
-            - CAN_MANAGE_EVALUATIONS
+            - CAN_MANAGE_FOLDERS
 
         ROLE_ADMIN:
             - ROLE_DPO
