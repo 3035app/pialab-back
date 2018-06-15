@@ -96,7 +96,7 @@ fi
 if [ -z "${ServerName}" ]
 then
     ServerName=pialab.io
-    if [ -n ${BackUrl} ]
+    if [ -n "${BackUrl}" ]
     then
         ServerName=$(echo $BackUrl | sed -e s:.*//::g | sed -e s:/.*::g | sed -e s/:.*//g )
     fi
