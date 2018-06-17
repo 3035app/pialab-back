@@ -50,14 +50,13 @@ class PiaController extends RestController
      *         @Swg\Items(ref=@Nelmio\Model(type=Pia::class, groups={"Default"}))
      *     )
      * )
-     * @Security("is_granted('ROLE_PIA_LIST')")
+     *
+     * @Security("is_granted('CAN_SHOW_PIA')")
      *
      * @return array
      */
     public function listAction(Request $request)
     {
-        $this->canAccessRouteOr403();
-
         $structure = $this->getUser()->getStructure();
 
         $criteria = array_merge($this->extractCriteria($request), ['structure' => $structure]);
@@ -80,14 +79,12 @@ class PiaController extends RestController
      *     )
      * )
      *
-     * @Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('CAN_SHOW_PIA')")
      *
      * @return array
      */
     public function showAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
-
         $pia = $this->getRepository()->find($id);
         if ($pia === null) {
             return $this->view($pia, Response::HTTP_NOT_FOUND);
@@ -112,14 +109,12 @@ class PiaController extends RestController
      *     )
      * )
      *
-     * @Security("is_granted('ROLE_PIA_CREATE')")
+     * @Security("is_granted('CAN_CREATE_PIA')")
      *
      * @return array
      */
     public function createAction(Request $request)
     {
-        $this->canAccessRouteOr403();
-
         $pia = $this->newFromRequest($request);
 
         if ($request->get('folder') !== null) {
@@ -128,9 +123,7 @@ class PiaController extends RestController
         } else {
             $folder = $this->getUser()->getStructure()->getRootFolder();
         }
-
         $pia->setFolder($folder);
-
         $pia->setStructure($this->getUser()->getStructure());
         $this->persist($pia);
 
@@ -139,13 +132,12 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Post("/pias/new-from-template/{id}")
-     * @Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('CAN_CREATE_PIA')")
      *
      * @return array
      */
     public function createFromTemplateAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
         /** @var PiaTemplate $piaTemplate */
         $piaTemplate = $this->getDoctrine()->getRepository(PiaTemplate::class)->find($id);
         if ($piaTemplate === null) {
@@ -183,35 +175,33 @@ class PiaController extends RestController
      *
      * @FOSRest\Put("/pias/{id}", requirements={"id"="\d+"})
      *
-     * @Security("is_granted('ROLE_PIA_EDIT')")
+     * @Security("is_granted('CAN_EDIT_PIA')")
      *
      * @return array
      */
     public function updateAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
-
         $pia = $this->getResource($id);
         $this->canAccessResourceOr403($pia);
 
         $updatableAttributes = [
-            'name'                              => 'string',
-            'author_name'                       => 'string',
-            'evaluator_name'                    => 'string',
-            'validator_name'                    => 'string',
-            'folder'                            => Folder::class,
-            'dpo_status'                        => 'int',
-            'concerned_people_status'           => 'int',
-            'status'                            => 'int',
-            'dpo_opinion'	                      => 'string',
-            'concerned_people_opinion'	         => 'string',
-            'concerned_people_searched_opinion' => 'boolean',
-            'concerned_people_searched_content' => 'string',
-            'rejection_reason'	                 => 'string',
-            'applied_adjustments'	              => 'string',
-            'dpos_names'                        => 'string',
-            'people_names'                      => 'sring',
-        ];
+              'name'                              => 'string',
+              'author_name'                       => 'string',
+              'evaluator_name'                    => 'string',
+              'validator_name'                    => 'string',
+              'folder'                            => Folder::class,
+              'dpo_status'                        => 'int',
+              'concerned_people_status'           => 'int',
+              'status'                            => 'int',
+              'dpo_opinion'	                      => 'string',
+              'concerned_people_opinion'	         => 'string',
+              'concerned_people_searched_opinion' => 'boolean',
+              'concerned_people_searched_content' => 'string',
+              'rejection_reason'	                 => 'string',
+              'applied_adjustments'	              => 'string',
+              'dpos_names'                        => 'string',
+              'people_names'                      => 'sring',
+          ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);
 
@@ -223,6 +213,8 @@ class PiaController extends RestController
     /**
      * @Swg\Tag(name="Treatment")
      *
+     * @FOSRest\Delete("/pias/{id}", requirements={"id"="\d+"})
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Delete a treatment",
@@ -232,16 +224,12 @@ class PiaController extends RestController
      *     )
      * )
      *
-     * @FOSRest\Delete("/pias/{id}", requirements={"id"="\d+"})
-     *
-     * @Security("is_granted('ROLE_PIA_DELETE')")
+     * @Security("is_granted('CAN_DELETE_PIA')")
      *
      * @return array
      */
     public function deleteAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
-
         $pia = $this->getRepository()->find($id);
         $this->canAccessResourceOr403($pia);
         $this->remove($pia);
@@ -251,14 +239,12 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Post("/pias/import")
-     * @Security("is_granted('ROLE_PIA_CREATE')")
+     * @Security("is_granted('CAN_IMPORT_PIA')")
      *
      * @return array
      */
     public function importAction(Request $request)
     {
-        $this->canAccessRouteOr403();
-
         $importData = $request->get('data', null);
         if ($importData === null) {
             return $this->view($importData, Response::HTTP_BAD_REQUEST);
@@ -273,7 +259,7 @@ class PiaController extends RestController
 
     /**
      * @FOSRest\Get("/pias/export/{id}", requirements={"id"="\d+"})
-     * @Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('CAN_EXPORT_PIA')")
      *
      * @return array
      */

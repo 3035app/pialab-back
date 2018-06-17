@@ -15,6 +15,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use Swagger\Annotations as Swg;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use PiaApi\Entity\Pia\Attachment;
 
 class AttachmentController extends PiaSubController
@@ -32,6 +33,8 @@ class AttachmentController extends PiaSubController
      *         @Swg\Items(ref=@Nelmio\Model(type=Attachment::class, groups={"Default"}))
      *     )
      * )
+     *
+     * @Security("is_granted('CAN_SHOW_PIA')")
      */
     public function listAction(Request $request, $piaId)
     {
@@ -51,6 +54,8 @@ class AttachmentController extends PiaSubController
      *         ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})
      *     )
      * )
+     *
+     * @Security("is_granted('CAN_SHOW_PIA')")
      */
     public function showAction(Request $request, $piaId, $id)
     {
@@ -70,6 +75,8 @@ class AttachmentController extends PiaSubController
      *         ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})
      *     )
      * )
+     *
+     * @Security("is_granted('CAN_EDIT_PIA')")
      */
     public function createAction(Request $request, $piaId)
     {
@@ -89,6 +96,8 @@ class AttachmentController extends PiaSubController
      *         ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})
      *     )
      * )
+     *
+     * @Security("is_granted('CAN_EDIT_PIA')")
      */
     public function updateAction(Request $request, $piaId, $id)
     {
@@ -99,6 +108,7 @@ class AttachmentController extends PiaSubController
      * @Swg\Tag(name="Attachment")
      *
      * @FOSRest\Delete("pias/{piaId}/attachments/{id}")
+
      *
      * @Swg\Response(
      *     response=200,
@@ -108,6 +118,8 @@ class AttachmentController extends PiaSubController
      *         ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})
      *     )
      * )
+     *
+     * @Security("is_granted('CAN_EDIT_PIA')")
      *
      * @return array
      */

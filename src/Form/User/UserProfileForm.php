@@ -23,12 +23,12 @@ class UserProfileForm extends BaseForm
             ->add('user', HiddenType::class)
 
             ->add('firstName', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'label'    => 'pia.users.forms.profile.firstName',
             ])
 
             ->add('lastName', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'label'    => 'pia.users.forms.profile.lastName',
             ])
         ;

@@ -12,31 +12,28 @@ namespace PiaApi\Controller\BackOffice;
 
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use PiaApi\Form\Structure\CreateStructureForm;
-use PiaApi\Form\Structure\EditStructureForm;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Pia\Folder;
+use PiaApi\Entity\Pia\StructureType;
+use PiaApi\Entity\OAuth\User;
+use PiaApi\Form\Structure\CreateStructureForm;
+use PiaApi\Form\Structure\EditStructureForm;
 use PiaApi\Form\Structure\RemoveStructureForm;
 use PiaApi\Form\Structure\CreateStructureTypeForm;
-use PiaApi\Entity\Pia\StructureType;
 use PiaApi\Form\Structure\EditStructureTypeForm;
 use PiaApi\Form\Structure\RemoveStructureTypeForm;
-use PiaApi\Entity\Pia\Folder;
+use PiaApi\Form\User\CreateUserForm;
 
 class StructureController extends BackOfficeAbstractController
 {
     /**
      * @Route("/manageStructures", name="manage_structures")
+     * @Security("is_granted('CAN_SHOW_STRUCTURE')")
      */
     public function manageStructuresAction(Request $request)
     {
-        if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return $this->redirect($this->generateUrl('fos_user_security_login'));
-        }
-
-        $this->canAccess();
-
         $pagerfanta = $this->buildPager($request, Structure::class);
         $pagerfantaSt = $this->buildPager($request, StructureType::class, 20, 'pageSt', 'limitSt');
 
@@ -47,14 +44,48 @@ class StructureController extends BackOfficeAbstractController
     }
 
     /**
+     * @Route("/showStructure/{structureId}", name="manage_structures_show_structure")
+     * @Security("is_granted('CAN_SHOW_STRUCTURE')")
+     */
+    public function showStructureAction(Request $request)
+    {
+        $structureId = $request->get('structureId');
+        $structure = $this->getDoctrine()->getRepository(Structure::class)->find($structureId);
+
+        if ($structure === null) {
+            throw new NotFoundHttpException(sprintf('Structure « %s » does not exist', $structureId));
+        }
+
+        $userPager = $this->getDoctrine()
+          ->getRepository(User::class)
+          ->getPaginatedUsersByStructure($structure);
+
+        $userPage = $request->get('page', 1);
+        $userLimit = $request->get('limit', $userPager->getMaxPerPage());
+
+        $userPager->setMaxPerPage($userLimit);
+        $userPager->setCurrentPage($userPager->getNbPages() < $userPage ? $userPager->getNbPages() : $userPage);
+
+        $userForm = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
+            'action'      => $this->generateUrl('manage_users_add_user'),
+            'structure'   => $structure,
+        ]);
+
+        return $this->render('pia/Structure/showStructure.html.twig', [
+            'structure'     => $structure,
+            'users'         => $userPager,
+            'userForm'      => $userForm->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/manageStructures/addStructure", name="manage_structures_add_structure")
+     * @Security("is_granted('CAN_CREATE_STRUCTURE')")
      *
      * @param Request $request
      */
     public function addStructureAction(Request $request)
     {
-        $this->canAccess();
-
         $form = $this->createForm(CreateStructureForm::class, [], [
             'action' => $this->generateUrl('manage_structures_add_structure'),
         ]);
@@ -83,13 +114,12 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/addStructureType", name="manage_structures_add_structure_type")
+     * @Security("is_granted('CAN_CREATE_STRUCTURE_TYPE')")
      *
      * @param Request $request
      */
     public function addStructureTypeAction(Request $request)
     {
-        $this->canAccess();
-
         $form = $this->createForm(CreateStructureTypeForm::class, [], [
             'action' => $this->generateUrl('manage_structures_add_structure_type'),
         ]);
@@ -114,13 +144,12 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/editStructure/{structureId}", name="manage_structures_edit_structure")
+     * @Security("is_granted('CAN_EDIT_STRUCTURE')")
      *
      * @param Request $request
      */
     public function editStructureAction(Request $request)
     {
-        $this->canAccess();
-
         $structureId = $request->get('structureId');
         $structure = $this->getDoctrine()->getRepository(Structure::class)->find($structureId);
 
@@ -150,13 +179,12 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/editStructureType/{structureTypeId}", name="manage_structures_edit_structure_type")
+     * @Security("is_granted('CAN_EDIT_STRUCTURE_TYPE')")
      *
      * @param Request $request
      */
     public function editStructureTypeAction(Request $request)
     {
-        $this->canAccess();
-
         $structureTypeId = $request->get('structureTypeId');
         $structureType = $this->getDoctrine()->getRepository(StructureType::class)->find($structureTypeId);
 
@@ -186,13 +214,12 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/removeStructure/{structureId}", name="manage_structures_remove_structure")
+     * @Security("is_granted('CAN_DELETE_STRUCTURE')")
      *
      * @param Request $request
      */
     public function removeStructureAction(Request $request)
     {
-        $this->canAccess();
-
         $structureId = $request->get('structureId');
         $structure = $this->getDoctrine()->getRepository(Structure::class)->find($structureId);
 
@@ -226,13 +253,12 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/removeStructureType/{structureTypeId}", name="manage_structures_remove_structure_type")
+     * @Security("is_granted('CAN_DELETE_STRUCTURE_TYPE')")
      *
      * @param Request $request
      */
     public function removeStructureTypeAction(Request $request)
     {
-        $this->canAccess();
-
         $structureTypeId = $request->get('structureTypeId');
         $structureType = $this->getDoctrine()->getRepository(StructureType::class)->find($structureTypeId);
 
@@ -262,12 +288,5 @@ class StructureController extends BackOfficeAbstractController
         return $this->render('pia/Structure/removeStructureType.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-    protected function canAccess()
-    {
-        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
-            throw new AccessDeniedHttpException();
-        }
     }
 }

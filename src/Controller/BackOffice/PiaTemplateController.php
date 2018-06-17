@@ -12,7 +12,7 @@ namespace PiaApi\Controller\BackOffice;
 
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use PiaApi\Form\PiaTemplate\CreatePiaTemplateForm;
 use PiaApi\Form\PiaTemplate\EditPiaTemplateForm;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,15 +24,12 @@ class PiaTemplateController extends BackOfficeAbstractController
 {
     /**
      * @Route("/managePiaTemplates", name="manage_pia_templates")
+     * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
+     *
+     * @param Request $request
      */
     public function managePiaTemplatesAction(Request $request)
     {
-        if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return $this->redirect($this->generateUrl('fos_user_security_login'));
-        }
-
-        $this->canAccess();
-
         $pagerfanta = $this->buildPager($request, PiaTemplate::class);
 
         return $this->render('pia/PiaTemplate/managePiaTemplates.html.twig', [
@@ -42,13 +39,12 @@ class PiaTemplateController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePiaTemplates/addPiaTemplate", name="manage_pia_templates_add_pia_template")
+     * @Security("is_granted('CAN_CREATE_PIA_TEMPLATE')")
      *
      * @param Request $request
      */
     public function addPiaTemplateAction(Request $request)
     {
-        $this->canAccess();
-
         $form = $this->createForm(CreatePiaTemplateForm::class, [], [
             'action' => $this->generateUrl('manage_pia_templates_add_pia_template'),
         ]);
@@ -83,13 +79,12 @@ class PiaTemplateController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePiaTemplates/editPiaTemplate/{piaTemplateId}", name="manage_pia_templates_edit_pia_template")
+     * @Security("is_granted('CAN_EDIT_PIA_TEMPLATE')")
      *
      * @param Request $request
      */
     public function editPiaTemplateAction(Request $request)
     {
-        $this->canAccess();
-
         $piaTemplateId = $request->get('piaTemplateId');
         $piaTemplate = $this->getDoctrine()->getRepository(PiaTemplate::class)->find($piaTemplateId);
 
@@ -125,13 +120,12 @@ class PiaTemplateController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePiaTemplates/removePiaTemplate/{piaTemplateId}", name="manage_pia_templates_remove_pia_template")
+     * @Security("is_granted('CAN_REMOVE_PIA_TEMPLATE')")
      *
      * @param Request $request
      */
     public function removePiaTemplateAction(Request $request)
     {
-        $this->canAccess();
-
         $piaTemplateId = $request->get('piaTemplateId');
         $piaTemplate = $this->getDoctrine()->getRepository(PiaTemplate::class)->find($piaTemplateId);
 
@@ -157,12 +151,5 @@ class PiaTemplateController extends BackOfficeAbstractController
         return $this->render('pia/PiaTemplate/removePiaTemplate.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-    protected function canAccess()
-    {
-        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
-            throw new AccessDeniedHttpException();
-        }
     }
 }

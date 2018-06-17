@@ -34,7 +34,7 @@ class AnswerController extends PiaSubController
      *     )
      * )
      *
-     * @Security("is_granted('ROLE_ANSWER_LIST')")
+     * @Security("is_granted('CAN_SHOW_ANSWER')")
      */
     public function listAction(Request $request, $piaId)
     {
@@ -55,7 +55,7 @@ class AnswerController extends PiaSubController
      *     )
      * )
      *
-     * @Security("is_granted('ROLE_ANSWER_VIEW")
+     * @Security("is_granted('CAN_SHOW_ANSWER")
      */
     public function showAction(Request $request, $piaId, $id)
     {
@@ -76,7 +76,7 @@ class AnswerController extends PiaSubController
      *     )
      * )
      *
-     * @Security("is_granted('ROLE_ANSWER_CREATE')")
+     * @Security("is_granted('CAN_CREATE_ANSWER')")
      */
     public function createAction(Request $request, $piaId)
     {
@@ -97,7 +97,7 @@ class AnswerController extends PiaSubController
      *     )
      * )
      *
-     * @Security("is_granted('ROLE_ANSWER_EDIT')")
+     * @Security("is_granted('CAN_EDIT_ANSWER')")
      */
     public function updateAction(Request $request, $piaId, $id)
     {
@@ -118,7 +118,7 @@ class AnswerController extends PiaSubController
      *     )
      * )
      *
-     * @Security("is_granted('ROLE_ANSWER_DELETE')")
+     * @Security("is_granted('CAN_DELETE_ANSWER')")
      *
      * @return array
      */

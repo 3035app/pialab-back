@@ -147,4 +147,9 @@ class WebGuy extends \Codeception\Actor
         $this->click('//select[@name="' . $selectName . '"]/ancestor::div[contains(@class,"ui dropdown")]');
         $this->click('//select[@name="' . $selectName . '"]/ancestor::div[contains(@class,"ui dropdown")]/div[contains(@class, "menu")]/div[contains(@class, "item")][contains(text(), "' . str_replace('"', '\"', $optionLabel) . '")]');
     }
+
+    public function dontSeeNavMenuWithHref($href)
+    {
+        return $this->dontSeeElement('//body/div[contains(@class, "ui menu")]/descendant::a[contains(@href,"' . $href . '")]');
+    }
 }

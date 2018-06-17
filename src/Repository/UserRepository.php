@@ -12,6 +12,10 @@ namespace PiaApi\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
+use PiaApi\Entity\Pia\Structure;
+use Pagerfanta\PagerfantaInterface;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
 
 class UserRepository extends EntityRepository
 {
@@ -27,5 +31,30 @@ class UserRepository extends EntityRepository
         $qb->setParameter('usernameOrEmail', $usernameOrEmail);
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param Structure $structure
+     * @param int       $defaultLimit
+     *
+     * @return PagerfantaInterface
+     */
+    public function getPaginatedUsersByStructure(
+            Structure $structure,
+            ?int $defaultLimit = 20
+        ): PagerfantaInterface {
+        $queryBuilder = $this->createQueryBuilder('e');
+
+        $queryBuilder
+                ->orderBy('e.id', 'DESC')
+                ->where('e.structure = :structure')
+                ->setParameter('structure', $structure);
+
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($defaultLimit);
+
+        return $pagerfanta;
     }
 }
