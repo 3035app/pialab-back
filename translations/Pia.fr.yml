@@ -25,6 +25,7 @@ pia:
             logout: Déconnexion
 
     actions:
+        show: Voir
         add: Ajouter
         display: Afficher
         edit: Modifier
@@ -84,7 +85,7 @@ pia:
                 client_credentials: Identifiants client
                 refresh_token: Jeton de rafraichissement
                 extensions: Extension
-            
+
 
     templates:
         title: Gabarits de PIA
@@ -103,7 +104,7 @@ pia:
 
         add:
             title: Ajouter une application
-        
+
         modals:
             remove:
                 title: Êtes vous certain de vouloir supprimer ce gabarit ?
@@ -264,11 +265,12 @@ pia:
 
         labels:
             roles:
-                ROLE_USER: 
-                ROLE_ADMIN: 
-                ROLE_SUPER_ADMIN: 
-                ROLE_DPO: 
-                ROLE_CONTROLLER: 
+                ROLE_USER : Invité
+                ROLE_CONTROLLER : Responsable de Traitement
+                ROLE_DPO : DPO
+                ROLE_ADMIN : Administrateur Fonctionnel
+                ROLE_TECHNICAL_ADMIN  : Administrateur Technique
+                ROLE_SUPER_ADMIN  : Super Administrateur
 
         reseting:
             send_email:

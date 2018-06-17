@@ -3,40 +3,49 @@
 {% import _self as menu %}
 
 {% if activeItem is not defined %}
-    {% set activeItem = null %}
+  {% set activeItem = null %}
 {% endif %}
 
 <div class="ui menu">
-    <div class="item" style="padding:0;width:130px;background:#2B3E50 url({{ asset('assets/img/pia-lab-small.png') }}) no-repeat scroll 50% 50%;background-size:contain;"></div>
-    <div class="menu">
-        <a class="{{ menu.activeMenu(activeItem, 'users') }} item" href="{{ path('manage_users') }}">
-            <i class="user icon"></i>{{ 'pia.layout.navbar.users'|trans }}
-        </a>
-        <a class="{{ menu.activeMenu(activeItem, 'applications') }} item" href="{{ path('manage_applications') }}">
-            <i class="database icon"></i>{{ 'pia.layout.navbar.applications'|trans }}
-        </a>
-        <a class="{{ menu.activeMenu(activeItem, 'structures') }} item" href="{{ path('manage_structures') }}">
-            <i class="building icon"></i>{{ 'pia.layout.navbar.structures'|trans }}
-        </a>
-        <a class="{{ menu.activeMenu(activeItem, 'pia_templates') }} item" href="{{ path('manage_pia_templates') }}">
-            <i class="building icon"></i>{{ 'pia.layout.navbar.templates'|trans }}
-        </a>
-    </div>
-    <div class="right menu">
-        {% if app.user %}
-            <div class="item">
-                {{ 'pia.layout.navbar.logged_in_as'|trans }} :
-                <span class="current username">{{ app.user.email }}</span>
-            </div>
-        {% endif %}
+  <div class="item" style="padding:0;width:130px;background:#2B3E50 url({{ asset('assets/img/pia-lab-small.png') }}) no-repeat scroll 50% 50%;background-size:contain;"></div>
+  <div class="menu">
 
-        <a class="active item" href="{{ path('fos_user_security_logout') }}">
-            <i class="sign out icon"></i>
-            {{ 'pia.layout.navbar.logout'|trans }}
-        </a>
-    </div>
+    {% if is_granted('CAN_MANAGE_ONLY_OWNED_USERS') or is_granted('CAN_MANAGE_USERS') %}
+      <a class="{{ menu.activeMenu(activeItem, 'users') }} item" href="{{ path('manage_users') }}">
+        <i class="user icon"></i>{{ 'pia.layout.navbar.users'|trans }}
+      </a>
+    {% endif %}
+    {% if is_granted('CAN_MANAGE_STRUCTURES') %}
+      <a class="{{ menu.activeMenu(activeItem, 'structures') }} item" href="{{ path('manage_structures') }}">
+        <i class="building icon"></i>{{ 'pia.layout.navbar.structures'|trans }}
+      </a>
+    {% endif %}
+    {% if is_granted('CAN_MANAGE_PIA_TEMPLATES') %}
+      <a class="{{ menu.activeMenu(activeItem, 'pia_templates') }} item" href="{{ path('manage_pia_templates') }}">
+        <i class="file alternate outline icon"></i>{{ 'pia.layout.navbar.templates'|trans }}
+      </a>
+    {% endif %}
+    {% if is_granted('CAN_MANAGE_APPLICATIONS') %}
+      <a class="{{ menu.activeMenu(activeItem, 'applications') }} item" href="{{ path('manage_applications') }}">
+        <i class="database icon"></i>{{ 'pia.layout.navbar.applications'|trans }}
+      </a>
+    {% endif %}
+  </div>
+  <div class="right menu">
+    {% if app.user %}
+      <div class="item">
+        {{ 'pia.layout.navbar.logged_in_as'|trans }} : &nbsp;
+        <span class="current username">{{ app.user.email }}</span>
+      </div>
+    {% endif %}
+
+    <a class="active item" href="{{ path('fos_user_security_logout') }}">
+      <i class="sign out icon"></i>
+      Logout
+    </a>
+  </div>
 </div>
 
 {% macro activeMenu(activeItem, menuName) %}
-    {% if activeItem == menuName %}active{% endif %}
+  {% if activeItem == menuName %}active{% endif %}
 {% endmacro %}

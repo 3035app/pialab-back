@@ -1,0 +1,44 @@
+{% extends 'pia/Layout/base.html.twig' %}
+
+{% import 'pia/Layout/_macros.html.twig' as macro %}
+
+{% block title %}PIA User Management{% endblock title %}
+
+{% block navbar %}
+  {% include 'pia/Layout/navbar.html.twig' with {
+    'activeItem' : 'my_structure'
+  } %}
+{% endblock navbar %}
+
+{% block body %}
+
+  <div class="ui grid">
+    <div class="three wide column">
+      <div class="ui segment">
+        <h2>
+          {{structure.name}}
+          <br>
+          <small>({{structure.type.name}})</small>
+        </h2>
+      </div>
+    </div>
+
+    <div class="ten wide column">
+      {{ include('pia/User/partials/list.html.twig',{'users':users}) }}
+    </div>
+
+    <div class="three wide column">
+      <div class="ui segment">
+        <h2>Ajouter un utilisateur</h2>
+        {{ include('pia/Layout/form.html.twig',{'form':userForm}) }}
+
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+{% endblock javascripts %}

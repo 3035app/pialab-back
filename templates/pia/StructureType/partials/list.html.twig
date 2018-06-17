@@ -1,0 +1,47 @@
+{% trans_default_domain 'Pia' %}
+{% import 'pia/Layout/_macros.html.twig' as macro %}
+
+<div class="ui segment">
+
+  <h2>
+    <a href="?limitSt=1000" class="ui tiny button" style="float:right;">Voir 1000</a>
+    {{ 'pia.structure_types.title'|trans }}
+  </h2>
+
+  <table class="ui compact striped table">
+    <thead>
+      <tr>
+        <th>{{ 'pia.structure_types.list.id'|trans }}</th>
+        <th>{{ 'pia.structure_types.list.name'|trans }}</th>
+        <th>{{ 'pia.structure_types.list.structures_number'|trans }}</th>
+        <th class="right aligned">
+          <i class="cog icon"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for structureType in structureTypes %}
+        <tr>
+          <td>{{ structureType.id }}</td>
+          <td>{{ structureType.name }}</td>
+          <td>
+            <span class="ui label">{{ structureType.structures|length }}</span>
+          </td>
+          <td class="right aligned">
+            <div class="ui small buttons">
+              <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_edit_structure_type', {'structureTypeId':structureType.id}) }}">
+                <i class="pencil icon"></i>
+              </a>
+              <a class="ui red tiny icon button" title="{{ 'pia.actions.remove'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_remove_structure_type', {'structureTypeId':structureType.id}) }}">
+                <i class="trash icon"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ pagerfanta(structureTypes, 'semantic_ui', {'pageParameter': 'pageSt'}) }}
+</div>

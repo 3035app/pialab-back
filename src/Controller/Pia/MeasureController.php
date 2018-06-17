@@ -20,7 +20,7 @@ class MeasureController extends PiaSubController
 {
     /**
      * @FOSRest\Get("/pias/{piaId}/measures")
-     * @Security("is_granted('ROLE_MEASURE_LIST')")
+     * @Security("is_granted('CAN_SHOW_MEASURE')")
      */
     public function listAction(Request $request, $piaId)
     {
@@ -29,7 +29,7 @@ class MeasureController extends PiaSubController
 
     /**
      * @FOSRest\Get("/pias/{piaId}/measures/{id}")
-     * @Security("is_granted('ROLE_MEASURE_VIEW')")
+     * @Security("is_granted('CAN_SHOW_MEASURE')")
      */
     public function showAction(Request $request, $piaId, $id)
     {
@@ -38,7 +38,7 @@ class MeasureController extends PiaSubController
 
     /**
      * @FOSRest\Post("/pias/{piaId}/measures")
-     * @Security("is_granted('ROLE_MEASURE_CREATE')")
+     * @Security("is_granted('CAN_CREATE_MEASURE')")
      */
     public function createAction(Request $request, $piaId)
     {
@@ -49,7 +49,7 @@ class MeasureController extends PiaSubController
      * @FOSRest\Put("/pias/{piaId}/measures/{id}")
      * @FOSRest\Patch("/pias/{piaId}/measures/{id}")
      * @FOSRest\Post("/pias/{piaId}/measures/{id}")
-     * @Security("is_granted('ROLE_MEASURE_EDIT')")
+     * @Security("is_granted('CAN_EDIT_MEASURE')")
      */
     public function updateAction(Request $request, $piaId, $id)
     {
@@ -58,7 +58,7 @@ class MeasureController extends PiaSubController
 
     /**
      * @FOSRest\Delete("pias/{piaId}/measures/{id}")
-     * @Security("is_granted('ROLE_MEASURE_DELETE')")
+     * @Security("is_granted('CAN_DELETE_MEASURE')")
      *
      * @return array
      */

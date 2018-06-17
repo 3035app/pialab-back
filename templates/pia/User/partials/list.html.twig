@@ -1,0 +1,104 @@
+{% trans_default_domain 'Pia' %}
+{% import 'pia/Layout/_macros.html.twig' as macro %}
+
+<div class="ui segment">
+
+  <h2>
+      <a href="?limit=1000" class="ui tiny button" style="float:right;">{{ 'pia.actions.display'|trans }} 1000</a>
+      {{ 'pia.users.title'|trans }}
+  </h2>
+
+  <div class="table responsive wrapper">
+    <table class="ui compact stackable striped table">
+      <thead>
+        <tr>
+          {% if is_granted('CAN_MANAGE_USERS') %}
+          <th>{{ 'pia.users.list.application'|trans }}</th>
+          <th>{{ 'pia.users.list.structure'|trans }}</th>
+          {% endif %}
+          <th>{{ 'pia.users.list.username'|trans }}</th>
+          <th>{{ 'pia.users.list.email'|trans }}</th>
+          <th>{{ 'pia.users.list.roles'|trans }}</th>
+          <th>{{ 'pia.users.list.enabled'|trans }}</th>
+          <th>{{ 'pia.users.list.locked'|trans }}</th>
+          <th>{{ 'pia.users.list.created_at'|trans }}</th>
+          <th>{{ 'pia.users.list.expires_at'|trans }}</th>
+          <th class="right aligned">
+            <i class="cog icon"></i>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for user in users %}
+          <tr>
+            {% if is_granted('CAN_MANAGE_USERS') %}
+              <td>
+                {% if user.application is not null %}
+                  <a href="{{ path('manage_applications') }}">
+                    {{ user.application.name }}
+                  </a>
+                {% else %}
+                  {{ 'pia.labels.n_a'|trans }}
+                {% endif %}
+              </td>
+              <td>
+                {% if user.structure is not null %}
+                  <a href="{{ path('manage_structures') }}">
+                    {{ user.structure.name }}
+                  </a>
+                {% else %}
+                  {{ 'pia.labels.n_a'|trans }}
+                {% endif %}
+              </td>
+            {% endif %}
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              {% for role in user.roles if role != 'ROLE_USER' %}
+                <span class="ui label">{{ role }}</span>
+              {% endfor %}
+            </td>
+            <td>
+              {{ macro.boolLabel(user.enabled) }}
+            </td>
+            <td>
+              {{ macro.boolLabel(user.locked) }}
+            </td>
+            <td>
+              {{ user.creationDate|date('d/m/Y')}}
+            </td>
+            <td>
+              {{ user.expirationDate|date('d/m/Y')}}
+            </td>
+            <td class="right aligned collapsing">
+              <div class="ui small buttons">
+                <a class="ui green tiny icon button" data-modal="data-modal" title="Modifier l'utilisateur" href="{{ path('manage_users_edit_user', {'userId':user.id}) }}">
+                  <i class="pencil icon"></i>
+                </a>
+                <a class="ui orange tiny icon button" data-modal="data-modal" title="Envoyer l'email de réinitialisation de mot de passe" href="{{ path('manage_users_send_reset_password_email', {'userId':user.id}) }}">
+                  <i class="icons">
+                    <i class="envelope outline icon"></i>
+                    <i class="bottom right corner plus icon"></i>
+                  </i>
+                </a>
+                {% if app.user != user %}
+                  <a class="ui red tiny icon button" data-modal="data-modal" title="Supprimer l'utilisateur" href="{{ path('manage_users_remove_user', {'userId':user.id}) }}">
+                    <i class="trash icon"></i>
+                  </a>
+                {% else %}
+                  <a class="ui red tiny icon disabled button" title="Supprimer l'utilisateur" href="#">
+                    <i class="trash icon"></i>
+                  </a>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+
+  {{ pagerfanta(users, 'semantic_ui') }}
+</div>

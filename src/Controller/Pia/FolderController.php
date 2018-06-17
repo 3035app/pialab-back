@@ -22,14 +22,12 @@ class FolderController extends RestController
 {
     /**
      * @FOSRest\Get("/folders")
-     * @Security("is_granted('ROLE_PIA_LIST')")
+     * @Security("is_granted('CAN_SHOW_FOLDER')")
      *
      * @return View
      */
     public function listAction(Request $request)
     {
-        $this->canAccessRouteOr403();
-
         $structure = $this->getUser()->getStructure();
         $collection = $this->getRepository()->findBy(['structure' => $structure, 'parent' => null]);
 
@@ -38,14 +36,12 @@ class FolderController extends RestController
 
     /**
      * @FOSRest\Get("/folders/{id}")
-     * @Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('CAN_SHOW_FOLDER')")
      *
      * @return View
      */
     public function showAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
-
         $folder = $this->getResource($id);
         if ($folder === null) {
             return $this->view($folder, Response::HTTP_NOT_FOUND);
@@ -58,14 +54,12 @@ class FolderController extends RestController
 
     /**
      * @FOSRest\Post("/folders")
-     * @Security("is_granted('ROLE_PIA_CREATE')")
+     * @Security("is_granted('CAN_CREATE_FOLDER')")
      *
      * @return View
      */
     public function createAction(Request $request)
     {
-        $this->canAccessRouteOr403();
-
         if ($request->get('parent_id') === null && $request->get('parent') === null) {
             return $this->view('Missing parent identification', Response::HTTP_BAD_REQUEST);
         }
@@ -86,14 +80,12 @@ class FolderController extends RestController
     /**
      * @FOSRest\Put("/folders/{id}", requirements={"id"="\d+"})
      * @FOSRest\Post("/folders/{id}", requirements={"id"="\d+"})
-     * @Security("is_granted('ROLE_PIA_EDIT')")
+     * @Security("is_granted('CAN_EDIT_FOLDER')")
      *
      * @return View
      */
     public function updateAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
-
         $folder = $this->getResource($id);
         $this->canAccessResourceOr403($folder);
 
@@ -111,14 +103,12 @@ class FolderController extends RestController
 
     /**
      * @FOSRest\Delete("/folders/{id}", requirements={"id"="\d+"})
-     * @Security("is_granted('ROLE_PIA_DELETE')")
+     * @Security("is_granted('CAN_DELETE_FOLDER')")
      *
      * @return View
      */
     public function deleteAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
-
         $folder = $this->getResource($id);
         $this->canAccessResourceOr403($folder);
         $this->remove($folder);
