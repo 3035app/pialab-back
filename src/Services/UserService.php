@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -18,6 +18,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
+use PiaApi\Entity\Pia\UserProfile;
 
 class UserService extends AbstractService
 {
@@ -98,6 +99,10 @@ class UserService extends AbstractService
             }
         }
 
+        $profile = new UserProfile();
+        $profile->setUser($user);
+        $user->setProfile($profile);
+
         return $user;
     }
 
@@ -157,7 +162,7 @@ class UserService extends AbstractService
      * @param User   $user
      * @param string $password
      */
-    private function encodePassword(User &$user, string $password): void
+    public function encodePassword(User &$user, string $password): void
     {
         $encoder = $this->encoderFactory->getEncoder($user);
         $user->setPassword($encoder->encodePassword($password, $user->getSalt()));

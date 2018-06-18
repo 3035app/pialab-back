@@ -24,15 +24,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserController extends BackOfficeAbstractController
 {
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
     /**
      * @var int
      */
@@ -59,14 +53,12 @@ class UserController extends BackOfficeAbstractController
     private $roleHierarchy;
 
     public function __construct(
-        TokenStorageInterface $tokenStorage,
         MailerInterface $mailer,
         int $FOSUserResettingRetryTTL,
         TokenGeneratorInterface $tokenGenerator,
         UserService $userService,
         RoleHierarchy $roleHierarchy
     ) {
-        $this->tokenStorage = $tokenStorage;
         $this->retryTtl = $FOSUserResettingRetryTTL;
         $this->mailer = $mailer;
         $this->tokenGenerator = $tokenGenerator;
@@ -132,18 +124,13 @@ class UserController extends BackOfficeAbstractController
                 $user->addRole($role);
             }
 
-            $profile = new UserProfile();
-            $profile->setUser($user);
-            $user->setProfile($profile);
-            $profile->setFirstName($userData['profile']['firstName']);
-            $profile->setLastName($userData['profile']['lastName']);
+            $user->getProfile()->setFirstName($userData['profile']['firstName']);
+            $user->getProfile()->setLastName($userData['profile']['lastName']);
 
             $user->setUsername($this->generateUsername($user));
-
-            $encoder = $this->encoderFactory->getEncoder($user);
-            $user->setPassword($encoder->encodePassword($userData['password'], $user->getSalt()));
-
             $user->setApplication($userData['application']);
+
+            $this->userService->encodePassword($user, $userData['password']);
 
             //a ROLE_ADMIN (which contains CAN_MANAGE_ONLY_OWNED_USERS) must have a structure
             if (!$userData['structure'] && $user->hasRole('ROLE_ADMIN')) {
