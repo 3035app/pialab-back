@@ -13,17 +13,18 @@ namespace PiaApi\Controller\BackOffice;
 use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use PiaApi\Entity\Oauth\User;
+use PiaApi\Entity\Pia\UserProfile;
 use PiaApi\Form\User\CreateUserForm;
 use PiaApi\Form\User\EditUserForm;
 use PiaApi\Form\User\RemoveUserForm;
 use PiaApi\Form\User\SendResetPasswordEmailForm;
+use PiaApi\Security\Role\RoleHierarchy;
+use PiaApi\Services\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use PiaApi\Entity\Pia\UserProfile;
-use PiaApi\Services\UserService;
 
 class UserController extends BackOfficeAbstractController
 {
@@ -63,7 +64,7 @@ class UserController extends BackOfficeAbstractController
         int $FOSUserResettingRetryTTL,
         TokenGeneratorInterface $tokenGenerator,
         UserService $userService,
-    RoleHierarchy $roleHierarchy
+        RoleHierarchy $roleHierarchy
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->retryTtl = $FOSUserResettingRetryTTL;
