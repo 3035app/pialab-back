@@ -86,7 +86,7 @@ class ImportPiaCommand extends Command
 
         // Transforming from json to entities
 
-        $pia = $this->fetchDataAsEntites($fileContent, $structure);
+        $pia = $this->fetchDataAsEntities($fileContent, $structure);
 
         // Applying changes (or not if dry-run)
 
@@ -98,7 +98,7 @@ class ImportPiaCommand extends Command
         }
     }
 
-    private function fetchDataAsEntites($data, $structure)
+    private function fetchDataAsEntities($data, $structure): Pia
     {
         /** @var Pia $pia */
         $pia = $this->jsonToEntityTransformer->transform($data);
@@ -107,7 +107,7 @@ class ImportPiaCommand extends Command
 
         $this->io->table(
             [
-                'Entity', 'Desccription', 'Number',
+                'Entity', 'Description', 'Number',
             ],
             [
                 ['Pia', '"' . $pia->getName() . '", Structure #' . ($structure !== null ? $structure->getId() : 'N/A')],

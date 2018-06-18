@@ -116,9 +116,9 @@ class PiaTemplate implements Timestampable
     }
 
     /**
-     * @param bool $enabled
+     * @param bool|null $enabled
      */
-    public function setEnabled(bool $enabled): void
+    public function setEnabled(?bool $enabled = true): void
     {
         $this->enabled = $enabled;
     }
