@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -33,30 +33,32 @@ class PiaTemplateController extends RestController
 
     /**
      * @FOSRest\Get("/pia-templates")
-     * @Security("is_granted('ROLE_PIA_LIST')")
+     * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
      *
      * @return array
      */
     public function listAction(Request $request)
     {
-        $this->canAccessRouteOr403();
-
         $structure = $this->getUser()->getStructure();
-        $collection = $this->getRepository()->findAvailablePiaTemplatesForStructure($structure);
+        if ($structure !== null) {
+            $collection = $this->getRepository()->findAvailablePiaTemplatesForStructure($structure);
+        } elseif ($this->isGranted('ROLE_TECHNICAL_ADMIN')) {
+            $collection = $this->getRepository()->findAll();
+        } else {
+            $collection = [];
+        }
 
         return $this->view($collection, Response::HTTP_OK);
     }
 
     /**
      * @FOSRest\Get("/pia-templates/{id}")
-     * @Security("is_granted('ROLE_PIA_VIEW')")
+     * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
      *
      * @return array
      */
     public function showAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
-
         $piaTemplate = $this->getRepository()->find($id);
         if ($piaTemplate === null) {
             return $this->view($piaTemplate, Response::HTTP_NOT_FOUND);

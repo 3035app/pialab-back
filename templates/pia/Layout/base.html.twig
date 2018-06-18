@@ -3,11 +3,12 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}"/>
         <title>{% spaceless %}
-            {{ 'pia.app_name'|trans({}, 'Pia') }} - {{ 'pia.layout.title'|trans({}, 'Pia') }} | 
+            {{ 'pia.app_name'|trans({}, 'Pia') }} - {{ 'pia.layout.title'|trans({}, 'Pia') }} |
             {% block title %}
-                
+
             {% endblock %}
         {% endspaceless %}</title>
 
@@ -29,6 +30,7 @@
         {% block javascripts %}
             <script src="{{ asset('assets/js/semantic.min.js') }}"></script>
             <script src="{{ asset('assets/js/semantic-custom.min.js') }}"></script>
+            <script src="{{ asset('assets/js/modal.js') }}"></script>
             <script>
                 $(document).ready(function () {
                     $('.ui.checkbox').checkbox();

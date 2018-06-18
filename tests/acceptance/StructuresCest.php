@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -17,30 +17,26 @@ class StructuresCest
     private $structure = 'selenium';
     private $structureType = 'seleniumType';
 
+    public function init_variables(Webguy $I)
+    {
+        $this->structure = $this->structure . rand(100, 999);
+        $this->structureType = $this->structureType . rand(100, 999);
+    }
+
     public function create_new_structure_type_test(Webguy $I)
     {
         $I->login();
 
-        $I->wantTo('Create a new structure type');
-        $I->amOnPage('/manageStructures');
-
-        $I->fillField('input[name="create_structure_type_form[name]"]', $this->structureType);
-
-        $I->click('[name="create_structure_type_form[submit]"]');
+        $structurePage = new \Page\StructurePage($I);
+        $structurePage->createStructureType($this->structureType);
     }
 
     public function create_new_structure_test(Webguy $I)
     {
         $I->login();
 
-        $I->wantTo('Create a new structure');
-        $I->amOnPage('/manageStructures');
-
-        $I->fillField('input[name="create_structure_form[name]"]', $this->structure);
-
-        $I->selectOptionFromSUISelect('create_structure_form[type]', $this->structureType);
-
-        $I->click('[name="create_structure_form[submit]"]');
+        $structurePage = new \Page\StructurePage($I);
+        $structurePage->createStructure($this->structure, $this->structureType);
     }
 
     public function edit_newly_created_structure_type_test(Webguy $I)
@@ -95,35 +91,15 @@ class StructuresCest
     {
         $I->login();
 
-        $I->wantTo('Remove newly created structure');
-        $I->amOnPage('/manageStructures');
-
-        $I->click('//td[contains(text(), "' . $this->structure . '")]/ancestor::tr/descendant::a[contains(@href,"/manageStructures/removeStructure/")]');
-
-        $formName = 'form[name="remove_structure_form"]';
-
-        $I->waitForElementVisible($formName . ' input[type="submit"]');
-
-        $I->canSeeNumberOfElements('//table[@class="ui single line table"]/descendant-or-self::b[contains(text(), "Nom")]/ancestor::tr/descendant::td[contains(text(), "' . $this->structure . '")]', 1);
-
-        $I->click($formName . ' input[type="submit"]');
+        $structurePage = new \Page\StructurePage($I);
+        $structurePage->removeStructure($this->structure);
     }
 
     public function remove_newly_created_structure_type_test(Webguy $I)
     {
         $I->login();
 
-        $I->wantTo('Remove newly created structure type');
-        $I->amOnPage('/manageStructures');
-
-        $I->click('//td[contains(text(), "' . $this->structure . '")]/ancestor::tr/descendant::a[contains(@href,"/manageStructures/removeStructureType/")]');
-
-        $formName = 'form[name="remove_structure_type_form"]';
-
-        $I->waitForElementVisible($formName . ' input[type="submit"]');
-
-        $I->canSeeNumberOfElements('//table[@class="ui single line table"]/descendant-or-self::b[contains(text(), "Nom")]/ancestor::tr/descendant::td[contains(text(), "' . $this->structureType . '")]', 1);
-
-        $I->click($formName . ' input[type="submit"]');
+        $structurePage = new \Page\StructurePage($I);
+        $structurePage->removeStructureType($this->structureType);
     }
 }

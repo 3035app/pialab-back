@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -13,7 +13,6 @@ namespace PiaApi\Form\User;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -21,6 +20,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Form\Application\Transformer\ApplicationTransformer;
 use PiaApi\Form\Structure\Transformer\StructureTransformer;
 use PiaApi\Form\User\Transformer\UserProfileTransformer;
+use PiaApi\Form\Type\RolesType;
 
 class EditUserForm extends CreateUserForm
 {
@@ -29,7 +29,8 @@ class EditUserForm extends CreateUserForm
      */
     protected $profileTransformer;
 
-    public function __construct(RegistryInterface $doctrine,
+    public function __construct(
+      RegistryInterface $doctrine,
         UserProfileTransformer $profileTransformer,
         ApplicationTransformer $applicationTransformer,
         StructureTransformer $structureTransformer
@@ -53,14 +54,12 @@ class EditUserForm extends CreateUserForm
             ->add('profile', UserProfileForm::class, [
                 'label'   => false,
             ])
-            ->add('roles', ChoiceType::class, [
+            ->add('roles', RolesType::class, [
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
-                'choices'  => $this->userRoles,
                 'label'    => 'pia.users.forms.edit.roles',
             ])
-
             ->add('expirationDate', DateType::class, [
                 'widget'   => 'single_text',
                 'label'    => 'pia.users.forms.edit.expirationDate',
@@ -86,8 +85,7 @@ class EditUserForm extends CreateUserForm
                     'style' => 'width: 48%;',
                 ],
                 'label' => 'pia.users.forms.edit.submit',
-            ])
-        ;
+            ]);
 
         $builder->get('profile')->addModelTransformer($this->profileTransformer);
     }

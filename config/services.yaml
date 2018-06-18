@@ -1,7 +1,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+imports:
+    - { resource: pialab/parameters.yaml }
+
 parameters:
-    locale: 'en'
+    locale: 'fr'
 
 services:
     _defaults:
@@ -32,13 +35,27 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+
+    PiaApi\Form\Type\RolesType:
+        tags: [form.type]
+
+    PiaApi\Security\Voter\PermissionVoter:
+        arguments: ['@security.role_hierarchy']
+        tags: [security.voter]
+    PiaApi\Security\Voter\CanManageUsersVoter:
+        tags: [security.voter]
+
+    PiaApi\Security\Role\RoleHierarchy:
+        arguments: ['@security.token_storage', '%security.role_hierarchy.roles%', '@security.role_hierarchy']
+
+
     PiaApi\Auth\ClientManager:
         arguments:
             - '@fos_oauth_server.entity_manager'
             - '%fos_oauth_server.model.client.class%'
 
     FOS\OAuthServerBundle\Model\ClientManagerInterface: '@PiaApi\Auth\ClientManager'
- 
+
     # Used to fix bug when updating and entity througth REST api
     # jms_serializer.object_constructor:
     #     alias: jms_serializer.doctrine_object_constructor

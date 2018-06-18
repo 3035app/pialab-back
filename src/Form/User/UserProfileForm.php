@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -23,12 +23,12 @@ class UserProfileForm extends BaseForm
             ->add('user', HiddenType::class)
 
             ->add('firstName', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'label'    => 'pia.users.forms.profile.firstName',
             ])
 
             ->add('lastName', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'label'    => 'pia.users.forms.profile.lastName',
             ])
         ;

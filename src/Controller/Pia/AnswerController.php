@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -20,7 +20,7 @@ class AnswerController extends PiaSubController
 {
     /**
      * @FOSRest\Get("/pias/{piaId}/answers")
-     * @Security("is_granted('ROLE_ANSWER_LIST')")
+     * @Security("is_granted('CAN_SHOW_ANSWER')")
      */
     public function listAction(Request $request, $piaId)
     {
@@ -29,7 +29,7 @@ class AnswerController extends PiaSubController
 
     /**
      * @FOSRest\Get("/pias/{piaId}/answers/{id}")
-     * @Security("is_granted('ROLE_ANSWER_VIEW")
+     * @Security("is_granted('CAN_SHOW_ANSWER")
      */
     public function showAction(Request $request, $piaId, $id)
     {
@@ -38,7 +38,7 @@ class AnswerController extends PiaSubController
 
     /**
      * @FOSRest\Post("/pias/{piaId}/answers")
-     * @Security("is_granted('ROLE_ANSWER_CREATE')")
+     * @Security("is_granted('CAN_CREATE_ANSWER')")
      */
     public function createAction(Request $request, $piaId)
     {
@@ -49,7 +49,7 @@ class AnswerController extends PiaSubController
      * @FOSRest\Put("/pias/{piaId}/answers/{id}")
      * @FOSRest\Patch("/pias/{piaId}/answers/{id}")
      * @FOSRest\Post("/pias/{piaId}/answers/{id}")
-     * @Security("is_granted('ROLE_ANSWER_EDIT')")
+     * @Security("is_granted('CAN_EDIT_ANSWER')")
      */
     public function updateAction(Request $request, $piaId, $id)
     {
@@ -58,7 +58,7 @@ class AnswerController extends PiaSubController
 
     /**
      * @FOSRest\Delete("pias/{piaId}/answers/{id}")
-     * @Security("is_granted('ROLE_ANSWER_DELETE')")
+     * @Security("is_granted('CAN_DELETE_ANSWER')")
      *
      * @return array
      */
