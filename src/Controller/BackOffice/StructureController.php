@@ -10,19 +10,20 @@
 
 namespace PiaApi\Controller\BackOffice;
 
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use PiaApi\Form\Structure\CreateStructureForm;
-use PiaApi\Form\Structure\EditStructureForm;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use PiaApi\Entity\Pia\Structure;
-use PiaApi\Form\Structure\RemoveStructureForm;
-use PiaApi\Form\Structure\CreateStructureTypeForm;
 use PiaApi\Entity\Pia\StructureType;
+use PiaApi\Form\Structure\CreateStructureForm;
+use PiaApi\Form\Structure\CreateStructureTypeForm;
+use PiaApi\Form\Structure\EditStructureForm;
 use PiaApi\Form\Structure\EditStructureTypeForm;
+use PiaApi\Form\Structure\RemoveStructureForm;
 use PiaApi\Form\Structure\RemoveStructureTypeForm;
 use PiaApi\Services\StructureService;
 use PiaApi\Services\StructureTypeService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StructureController extends BackOfficeAbstractController
 {
