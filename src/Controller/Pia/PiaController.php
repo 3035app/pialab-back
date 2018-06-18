@@ -186,7 +186,7 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
         $this->remove($pia);
 
-        return $this->view($pia, Response::HTTP_OK);
+        return $this->view(null, Response::HTTP_OK);
     }
 
     /**

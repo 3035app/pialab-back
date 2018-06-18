@@ -134,7 +134,7 @@ class FolderController extends RestController
         $this->canAccessResourceOr403($folder);
         $this->remove($folder);
 
-        return $this->view($folder, Response::HTTP_OK);
+        return $this->view(null, Response::HTTP_OK);
     }
 
     protected function getEntityClass()

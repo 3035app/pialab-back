@@ -80,7 +80,7 @@ abstract class PiaSubController extends RestController
         $entity = $this->getRepository()->find($id);
         $this->remove($entity);
 
-        return $this->view($entity, Response::HTTP_OK);
+        return $this->view(null, Response::HTTP_OK);
     }
 
     public function canAccessResourceOr403($resource): void
