@@ -18,6 +18,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\Services\FolderService;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class FolderController extends RestController
 {
@@ -26,8 +27,11 @@ class FolderController extends RestController
      */
     private $folderService;
 
-    public function __construct(FolderService $folderService)
-    {
+    public function __construct(
+        PropertyAccessorInterface $propertyAccessor,
+        FolderService $folderService
+    ) {
+        parent::__construct($propertyAccessor);
         $this->folderService = $folderService;
     }
 

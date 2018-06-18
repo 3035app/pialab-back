@@ -18,6 +18,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class PiaTemplateController extends RestController
 {
@@ -26,8 +27,11 @@ class PiaTemplateController extends RestController
      */
     protected $jsonToEntityTransformer;
 
-    public function __construct(JsonToEntityTransformer $jsonToEntityTransformer)
-    {
+    public function __construct(
+        PropertyAccessorInterface $propertyAccessor,
+        JsonToEntityTransformer $jsonToEntityTransformer
+    ) {
+        parent::__construct($propertyAccessor);
         $this->jsonToEntityTransformer = $jsonToEntityTransformer;
     }
 

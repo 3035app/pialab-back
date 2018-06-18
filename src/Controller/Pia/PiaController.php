@@ -29,10 +29,12 @@ class PiaController extends RestController
      */
     protected $jsonToEntityTransformer;
 
-    public function __construct(JsonToEntityTransformer $jsonToEntityTransformer, PropertyAccessorInterface $propertyAccessor)
-    {
+    public function __construct(
+        PropertyAccessorInterface $propertyAccessor,
+        JsonToEntityTransformer $jsonToEntityTransformer
+    ) {
+        parent::__construct($propertyAccessor);
         $this->jsonToEntityTransformer = $jsonToEntityTransformer;
-        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
