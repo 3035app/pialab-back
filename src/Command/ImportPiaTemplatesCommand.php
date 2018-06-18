@@ -24,6 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use PiaApi\Entity\Pia\PiaTemplate;
+use splitbrain\PHPArchive\Tar;
 
 class ImportPiaTemplatesCommand extends Command
 {
@@ -47,6 +48,11 @@ class ImportPiaTemplatesCommand extends Command
      */
     protected $io;
 
+    /**
+     * @var string
+     */
+    private $temporaryExtractFolder = '/tmp/PIA-Templates-import';
+
     public function __construct(
         EntityManagerInterface $entityManager,
         JsonToEntityTransformer $jsonToEntityTransformer,
@@ -64,7 +70,7 @@ class ImportPiaTemplatesCommand extends Command
             ->setName('pia:templates:batch-import')
             ->setDescription('Imports a collection of PIA templates into backend')
             ->setHelp('This command allows you to import all json files included in a specific folder as PIA templates')
-            ->addArgument('templatesFolder', InputArgument::REQUIRED, 'The target directory that contains templates json files (can be relative or absolute)')
+            ->addArgument('templatesFolderOrArchive', InputArgument::REQUIRED, 'The target directory (or archive) that contains templates json files (can be relative or absolute)')
             ->addOption('enableAll', null, InputOption::VALUE_NONE, 'Does the templates imported should be enabled ? By default, all templates are disabled')
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Do the import without persisting values in database')
         ;
@@ -74,9 +80,11 @@ class ImportPiaTemplatesCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
 
-        $templatesFolder = $input->getArgument('templatesFolder');
+        $templatesFolder = $input->getArgument('templatesFolderOrArchive');
         $enableAll = $input->getOption('enableAll');
         $dryRun = $input->getOption('dry-run');
+
+        $this->extractArchive($templatesFolder);
 
         // Fetch file
 
@@ -90,7 +98,7 @@ class ImportPiaTemplatesCommand extends Command
 
         // Transforming from json to entities
 
-        if ($this->io->confirm(sprintf('confirm importing %i template(s) ?', count($fileInfos)))) {
+        if ($this->io->confirm(sprintf('confirm importing %d template(s) ?', count($fileInfos)))) {
             foreach ($fileInfos as $fileInfo) {
                 $template = $this->buildTemplate($fileInfo['path'], $fileInfo['filename'], $enableAll);
                 if (!$dryRun) {
@@ -98,6 +106,29 @@ class ImportPiaTemplatesCommand extends Command
                     $this->entityManager->flush($template);
                 }
             }
+        }
+    }
+
+    private function extractArchive(string &$archivePath): void
+    {
+        $tempDir = sprintf(
+            '%s_%s',
+            $this->temporaryExtractFolder,
+            (new \DateTime('NOW'))->format('Ymd-His-u')
+        );
+
+        if (!is_dir($archivePath)) {
+            $this->io->note([
+                sprintf('Importing files from archive « %s », extracted to path « %s »', $archivePath, $tempDir),
+            ]);
+
+            $tar = new Tar();
+            $tar->open($archivePath);
+            $tar->extract($tempDir);
+
+            $archivePath = $tempDir;
+        } else {
+            $this->io->note(sprintf('Importing files under folder « %s »', $tempDir));
         }
     }
 

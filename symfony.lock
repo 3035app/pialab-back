@@ -215,6 +215,9 @@
     "phpunit/phpunit-mock-objects": {
         "version": "6.1.1"
     },
+    "pimple/pimple": {
+        "version": "v3.2.3"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -229,6 +232,9 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "raulfraile/distill": {
+        "version": "v0.8.0"
     },
     "sebastian/code-unit-reverse-lookup": {
         "version": "1.0.1"
@@ -271,6 +277,9 @@
             "version": "4.0",
             "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
         }
+    },
+    "splitbrain/php-archive": {
+        "version": "1.1.0"
     },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",
@@ -439,6 +448,9 @@
             "version": "4.0",
             "ref": "cda8b550123383d25827705d05a42acf6819fe4e"
         }
+    },
+    "symfony/security": {
+        "version": "v4.1.0"
     },
     "symfony/security-bundle": {
         "version": "3.3",
