@@ -243,8 +243,8 @@ pia:
                 email: Adresse email
                 password: Mot de passe
                 roles: Rôles
-                sendResetingEmail: "Envoyer l'email de RàZ de mot de passe ?"
-                sendResetingEmail_help: "Envoyer automatiquement l'email de réinitialisation de mot de passe à l'adresse email saisie"
+                sendResettingEmail: "Envoyer l'email de RàZ de mot de passe ?"
+                sendResettingEmail_help: "Envoyer automatiquement l'email de réinitialisation de mot de passe à l'adresse email saisie"
                 submit: "Créer l'utilisateur"
             edit:
                 username: "Nom d'utilisateur"
@@ -272,7 +272,7 @@ pia:
                 ROLE_TECHNICAL_ADMIN  : Administrateur Technique
                 ROLE_SUPER_ADMIN  : Super Administrateur
 
-        reseting:
+        resetting:
             send_email:
                 title: Envoi de l'email de réinitialisation de mot de passe
                 instructions: >

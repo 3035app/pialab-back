@@ -17,13 +17,13 @@
 
             <div class="ui segments">
                 <div class="ui segment">
-                    <span class="ui teal header">{{ 'pia.users.reseting.success.title'|trans }}</span>
+                    <span class="ui teal header">{{ 'pia.users.resetting.success.title'|trans }}</span>
                 </div>
                 <div class="ui teal segment">
-                    <p>{{ 'pia.users.reseting.success.password_reset_successfully'|trans }}</p>
+                    <p>{{ 'pia.users.resetting.success.password_reset_successfully'|trans }}</p>
                     {% if app.user.application and app.user.application.url is not null %}
                         <a href="{{ app.user.application.url }}" class="ui teal button">
-                            {{ 'pia.users.reseting.success.return_to_application'|trans }}
+                            {{ 'pia.users.resetting.success.return_to_application'|trans }}
                         </a>
                     {% endif %}
                 </div>

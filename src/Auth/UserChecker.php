@@ -1,11 +1,10 @@
 <?php
 
 /*
- * This file is part of the Symfony package.
+ * Copyright (C) 2015-2018 Libre Informatique
  *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
+ * This file is licensed under the GNU LGPL v3.
+ * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 

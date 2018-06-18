@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -11,35 +11,22 @@
 namespace PiaApi\Controller\BackOffice;
 
 use FOS\UserBundle\Mailer\MailerInterface;
-use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use PiaApi\Entity\Oauth\User;
+use PiaApi\Entity\Pia\UserProfile;
 use PiaApi\Form\User\CreateUserForm;
 use PiaApi\Form\User\EditUserForm;
 use PiaApi\Form\User\RemoveUserForm;
 use PiaApi\Form\User\SendResetPasswordEmailForm;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use PiaApi\Entity\Pia\UserProfile;
-use Symfony\Component\Security\Core\User\UserInterface;
 use PiaApi\Security\Role\RoleHierarchy;
+use PiaApi\Services\UserService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends BackOfficeAbstractController
 {
-    /**
-     * @var EncoderFactoryInterface
-     */
-    private $encoderFactory;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
     /**
      * @var int
      */
@@ -51,14 +38,14 @@ class UserController extends BackOfficeAbstractController
     private $mailer;
 
     /**
-     * @var UserManagerInterface
-     */
-    private $userManager;
-
-    /**
      * @var TokenGeneratorInterface
      */
     private $tokenGenerator;
+
+    /**
+     * @var UserService
+     */
+    private $userService;
 
     /**
      * @var RoleHierarchy
@@ -66,20 +53,16 @@ class UserController extends BackOfficeAbstractController
     private $roleHierarchy;
 
     public function __construct(
-      EncoderFactoryInterface $encoderFactory,
-      TokenStorageInterface $tokenStorage,
-      MailerInterface $mailer,
-      int $FOSUserResettingRetryTTL,
-      UserManagerInterface $userManager,
-      TokenGeneratorInterface $tokenGenerator,
-      RoleHierarchy $roleHierarchy)
-    {
-        $this->encoderFactory = $encoderFactory;
-        $this->tokenStorage = $tokenStorage;
+        MailerInterface $mailer,
+        int $FOSUserResettingRetryTTL,
+        TokenGeneratorInterface $tokenGenerator,
+        UserService $userService,
+        RoleHierarchy $roleHierarchy
+    ) {
         $this->retryTtl = $FOSUserResettingRetryTTL;
         $this->mailer = $mailer;
-        $this->userManager = $userManager;
         $this->tokenGenerator = $tokenGenerator;
+        $this->userService = $userService;
         $this->roleHierarchy = $roleHierarchy;
     }
 
@@ -130,23 +113,24 @@ class UserController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userData = $form->getData();
 
-            $user = new User($userData['email'], $userData['password']);
+            $user = $this->userService->createUserForStructureAndApplication(
+                $userData['email'],
+                $userData['password'],
+                $userData['structure'],
+                $userData['application']
+            );
+
             foreach ($userData['roles'] as $role) {
                 $user->addRole($role);
             }
 
-            $profile = new UserProfile();
-            $profile->setUser($user);
-            $user->setProfile($profile);
-            $profile->setFirstName($userData['profile']['firstName']);
-            $profile->setLastName($userData['profile']['lastName']);
+            $user->getProfile()->setFirstName($userData['profile']['firstName']);
+            $user->getProfile()->setLastName($userData['profile']['lastName']);
 
             $user->setUsername($this->generateUsername($user));
-
-            $encoder = $this->encoderFactory->getEncoder($user);
-            $user->setPassword($encoder->encodePassword($userData['password'], $user->getSalt()));
-
             $user->setApplication($userData['application']);
+
+            $this->userService->encodePassword($user, $userData['password']);
 
             //a ROLE_ADMIN (which contains CAN_MANAGE_ONLY_OWNED_USERS) must have a structure
             if (!$userData['structure'] && $user->hasRole('ROLE_ADMIN')) {
@@ -157,8 +141,8 @@ class UserController extends BackOfficeAbstractController
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
 
-            if (isset($userData['sendResetingEmail'])) {
-                $this->sendResetingEmail($user);
+            if (isset($userData['sendResettingEmail']) && $userData['sendResettingEmail'] === true) {
+                $this->userService->sendResettingEmail($user);
             }
 
             return $this->redirect($this->generateUrl('manage_users'));
@@ -175,10 +159,9 @@ class UserController extends BackOfficeAbstractController
      *
      * @param Request $request
      */
-    public function editUserAction(Request $request)
+    public function editUserAction(Request $request, $userId)
     {
-        $userId = $request->get('userId');
-        $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
+        $user = $this->userService->getRepository()->find($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
@@ -217,10 +200,9 @@ class UserController extends BackOfficeAbstractController
      *
      * @param Request $request
      */
-    public function removeUserAction(Request $request)
+    public function removeUserAction(Request $request, $userId)
     {
-        $userId = $request->get('userId');
-        $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
+        $user = $this->userService->getRepository()->find($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
@@ -261,7 +243,7 @@ class UserController extends BackOfficeAbstractController
     {
         $this->canAccess();
 
-        $user = $this->userManager->findUserBy(['id' => $userId]);
+        $user = $this->userService->getRepository()->find($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
@@ -276,10 +258,10 @@ class UserController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
 
-            // Uncomment this « if / endif » to apply the TTL between to email sending
+            // Uncomment this « if / endif » to apply the TTL allowed between two emails request
             // if (!$user->isPasswordRequestNonExpired($this->retryTtl)) {
 
-            $this->sendResetingEmail($user);
+            $this->userService->sendResettingEmail($user);
 
             return $this->redirect($this->generateUrl('manage_users'));
 
@@ -290,21 +272,6 @@ class UserController extends BackOfficeAbstractController
         return $this->render('pia/User/sendResetPasswordEmail.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * Sends FOSUser reset password email.
-     *
-     * @param UserInterface $user
-     */
-    private function sendResetingEmail(UserInterface $user): void
-    {
-        if (null === $user->getConfirmationToken()) {
-            $user->setConfirmationToken($this->tokenGenerator->generateToken());
-        }
-        $this->mailer->sendResettingEmailMessage($user);
-        $user->setPasswordRequestedAt(new \DateTime());
-        $this->userManager->updateUser($user);
     }
 
     protected function generateUsername(User $user)

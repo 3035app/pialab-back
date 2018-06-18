@@ -3,31 +3,46 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
 namespace PiaApi\Controller\BackOffice;
 
-use Symfony\Component\HttpFoundation\Request;
+use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Pia\StructureType;
+use PiaApi\Form\Structure\CreateStructureForm;
+use PiaApi\Form\Structure\CreateStructureTypeForm;
+use PiaApi\Form\Structure\EditStructureForm;
+use PiaApi\Form\Structure\EditStructureTypeForm;
+use PiaApi\Form\Structure\RemoveStructureForm;
+use PiaApi\Form\Structure\RemoveStructureTypeForm;
+use PiaApi\Services\StructureService;
+use PiaApi\Services\StructureTypeService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use PiaApi\Entity\Pia\Structure;
-use PiaApi\Entity\Pia\Folder;
-use PiaApi\Entity\Pia\StructureType;
-use PiaApi\Entity\OAuth\User;
-use PiaApi\Form\Structure\CreateStructureForm;
-use PiaApi\Form\Structure\EditStructureForm;
-use PiaApi\Form\Structure\RemoveStructureForm;
-use PiaApi\Form\Structure\CreateStructureTypeForm;
-use PiaApi\Form\Structure\EditStructureTypeForm;
-use PiaApi\Form\Structure\RemoveStructureTypeForm;
-use PiaApi\Form\User\CreateUserForm;
 
 class StructureController extends BackOfficeAbstractController
 {
+    /**
+     * @var StructureService
+     */
+    private $structureService;
+
+    /**
+     * @var StructureTypeService
+     */
+    private $structureTypeService;
+
+    public function __construct(StructureService $structureService, StructureTypeService $structureTypeService)
+    {
+        $this->structureService = $structureService;
+        $this->structureTypeService = $structureTypeService;
+    }
+
     /**
      * @Route("/manageStructures", name="manage_structures")
      * @Security("is_granted('CAN_SHOW_STRUCTURE')")
@@ -95,11 +110,10 @@ class StructureController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $structureData = $form->getData();
 
-            $structure = new Structure($structureData['name']);
-
-            $structure->setType($structureData['type']);
-
-            $rootFolder = new Folder('root', $structure);
+            $structure = $this->structureService->createStructureOfType(
+                $structureData['name'],
+                $structureData['type']
+            );
 
             $this->getDoctrine()->getManager()->persist($structure);
             $this->getDoctrine()->getManager()->flush();
@@ -129,7 +143,7 @@ class StructureController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $structureTypeData = $form->getData();
 
-            $structureType = new StructureType($structureTypeData['name']);
+            $structureType = $this->structureTypeService->createStructureType($structureTypeData['name']);
 
             $this->getDoctrine()->getManager()->persist($structureType);
             $this->getDoctrine()->getManager()->flush();

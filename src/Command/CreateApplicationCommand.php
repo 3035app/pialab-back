@@ -3,29 +3,32 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
 namespace PiaApi\Command;
 
+use PiaApi\Services\ApplicationService;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use FOS\OAuthServerBundle\Model\ClientManagerInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CreateApplicationCommand extends Command
 {
-    private $clientManager;
+    /**
+     * @var ApplicationService
+     */
+    private $applicationService;
 
-    public function __construct(ClientManagerInterface $clientManager)
+    public function __construct(ApplicationService $applicationService)
     {
         parent::__construct();
 
-        $this->clientManager = $clientManager;
+        $this->applicationService = $applicationService;
     }
 
     /**
@@ -84,34 +87,43 @@ EOT
 
         $io->title('Client Credentials');
 
-        // Create a new client
-        $client = $this->clientManager->createClient();
+        $application = null;
 
-        $client->setName($input->getOption('name'));
-        $client->setUrl($input->getOption('url'));
-        $client->setAllowedGrantTypes(['password', 'token', 'refresh_token']);
-
+        $applicationName = $input->getOption('name');
+        $applicationUrl = $input->getOption('url');
+        $applicationGrantTypes = ['password', 'token', 'refresh_token'];
         $clientId = $input->getOption('client-id', false);
         $clientSecret = $input->getOption('client-secret', false);
 
         if ($clientId && $clientSecret) {
-            $client->setRandomId($clientId);
-            $client->setSecret($clientSecret);
+            $application = $this->applicationService->createApplicationWithIdentifiers(
+                $applicationName,
+                $applicationUrl,
+                $applicationGrantTypes,
+                $clientId,
+                $clientSecret
+            );
         }
         //one of them is set but not the other
         elseif ($clientId xor $clientSecret) {
             $io->error('You must set client_id AND client_secret');
 
             return;
+        } else {
+            $application = $this->applicationService->createApplication(
+                $applicationName,
+                $applicationUrl,
+                $applicationGrantTypes
+            );
         }
 
         // Save the client
-        $this->clientManager->updateClient($client);
+        $this->applicationService->updateApplication($application);
 
         // Give the credentials back to the user
         $headers = ['Client ID', 'Client Secret'];
         $rows = [
-            [$client->getPublicId(), $client->getSecret()],
+            [$application->getPublicId(), $application->getSecret()],
         ];
 
         $io->table($headers, $rows);
