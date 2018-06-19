@@ -17,6 +17,9 @@ use Doctrine\DBAL\Schema\Schema;
 use PiaApi\Migrations\Lib\MigrationTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use PiaApi\Entity\Oauth\User;
+use PiaApi\Entity\Pia\UserProfile;
 
 class Version1_1_0 extends AbstractMigration implements ContainerAwareInterface
 {
