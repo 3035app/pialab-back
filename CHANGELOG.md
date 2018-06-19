@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.0.2](https://github.com/pia-lab/pialab-back/tree/1.0.2) (2018-06-19)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.0.1...1.0.2)
+
+**Merged pull requests:**
+
+- Add domain logic encapsulation using services [\#22](https://github.com/pia-lab/pialab-back/pull/22) ([GlennCavarle](https://github.com/GlennCavarle))
+- Wip migrations merge [\#21](https://github.com/pia-lab/pialab-back/pull/21) ([PapsOu](https://github.com/PapsOu))
+- First step to limit the customer backend [\#15](https://github.com/pia-lab/pialab-back/pull/15) ([GlennCavarle](https://github.com/GlennCavarle))
+
+## [1.0.1](https://github.com/pia-lab/pialab-back/tree/1.0.1) (2018-06-14)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.0.0...1.0.1)
+
 ## [1.0.0](https://github.com/pia-lab/pialab-back/tree/1.0.0) (2018-06-12)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/0.4.5...1.0.0)
 
