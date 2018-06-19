@@ -3,6 +3,6 @@ modules:
     enabled:
         - \Helper\Api
         - REST:
-            url: '%TEST_SERVER_URL%:8000'
+            url: 'http://{{getv "/url/addr"}}'
             depends: PhpBrowser
             part: Json
