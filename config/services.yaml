@@ -56,6 +56,12 @@ services:
 
     FOS\OAuthServerBundle\Model\ClientManagerInterface: '@PiaApi\Auth\ClientManager'
 
+    api_exception_subscriber:
+        class: PiaApi\EventListener\ApiExceptionSubscriber
+        arguments: []
+        tags:
+            - { name: kernel.event_subscriber }
+
     # Used to fix bug when updating and entity througth REST api
     # jms_serializer.object_constructor:
     #     alias: jms_serializer.doctrine_object_constructor

@@ -13,6 +13,7 @@ namespace PiaApi\Controller\Pia;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use PiaApi\Exception\Folder\NonEmptyFolderCannotBeDeletedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
@@ -126,6 +127,11 @@ class FolderController extends RestController
     {
         $folder = $this->getResource($id);
         $this->canAccessResourceOr403($folder);
+
+        if (count($folder->getPias())) {
+            throw new NonEmptyFolderCannotBeDeletedException();
+        }
+
         $this->remove($folder);
 
         return $this->view([], Response::HTTP_OK);
