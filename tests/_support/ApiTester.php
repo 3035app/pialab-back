@@ -8,14 +8,6 @@
  * file that was distributed with this source code.
  */
 
-/*
- * Copyright (C) 2015-2018 Libre Informatique
- *
- * This file is licensed under the GNU LGPL v3.
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
- */
-
 class ApiTester extends \Codeception\Actor
 {
     use _generated\ApiTesterActions;
@@ -88,7 +80,7 @@ class ApiTester extends \Codeception\Actor
     public function getClientId()
     {
         if ($this->clientId === null) {
-            $this->clientId = $this->getEnvParam('TEST_CLIENT_ID', $this->clientId);
+            $this->clientId = $this->getEnvParam('CLIENT_ID', $this->clientId);
         }
 
         return $this->clientId;
@@ -97,7 +89,7 @@ class ApiTester extends \Codeception\Actor
     public function getClientSecret()
     {
         if ($this->clientSecret === null) {
-            $this->clientSecret = $this->getEnvParam('TEST_CLIENT_SECRET', $this->clientSecret);
+            $this->clientSecret = $this->getEnvParam('CLIENT_SECRET', $this->clientSecret);
         }
 
         return $this->clientSecret;
