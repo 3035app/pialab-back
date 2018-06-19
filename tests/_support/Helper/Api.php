@@ -14,15 +14,20 @@ class Api extends \Codeception\Module
 {
     public function getOAuthToken(): ?string
     {
-        $response = json_decode($this->getModule('REST')->response);
+        $response = $this->getPreviousResponse();
 
-        return isset($response->token) ? $response->token : null;
+        return isset($response->access_token) ? $response->access_token : null;
     }
 
     public function getOAuthRefreshToken(): ?string
     {
-        $response = json_decode($this->getModule('REST')->response);
+        $response = $this->getPreviousResponse();
 
         return isset($response->refresh_token) ? $response->refresh_token : null;
+    }
+
+    public function getPreviousResponse()
+    {
+        return json_decode($this->getModule('REST')->response);
     }
 }

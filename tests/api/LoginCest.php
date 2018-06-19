@@ -10,11 +10,17 @@
 
 use Codeception\Util\HttpCode;
 
+/**
+ * @group all
+ * @group api
+ * @group api_login
+ */
 class LoginCest
 {
     public function login_test(ApiTester $I)
     {
-        $I->amGoingTo('Login to API');
+        $I->amGoingTo('Login to the API');
+
         $I->login();
 
         $I->seeResponseCodeIs(HttpCode::OK);
@@ -29,6 +35,8 @@ class LoginCest
 
     public function wrong_credentials_login_test(ApiTester $I)
     {
+        $I->amGoingTo('Login to API with bad credentials');
+
         $I->setPassword('aWrongPassword');
         $I->login();
         $I->setPassword(null); // Reset password
@@ -47,6 +55,8 @@ class LoginCest
 
     public function refresh_token_test(ApiTester $I)
     {
+        $I->amGoingTo('Refresh connection to API with a refresh token');
+
         $I->login();
 
         $I->sendGET($I->getBaseUrl() . '/oauth/v2/token', [
