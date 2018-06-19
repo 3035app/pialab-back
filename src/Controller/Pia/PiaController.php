@@ -138,23 +138,24 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
 
         $updatableAttributes = [
-              'name'                              => 'string',
-              'author_name'                       => 'string',
-              'evaluator_name'                    => 'string',
-              'validator_name'                    => 'string',
-              'folder'                            => Folder::class,
-              'dpo_status'                        => 'int',
-              'concerned_people_status'           => 'int',
-              'status'                            => 'int',
-              'dpo_opinion'	                      => 'string',
-              'concerned_people_opinion'	         => 'string',
-              'concerned_people_searched_opinion' => 'boolean',
-              'concerned_people_searched_content' => 'string',
-              'rejection_reason'	                 => 'string',
-              'applied_adjustments'	              => 'string',
-              'dpos_names'                        => 'string',
-              'people_names'                      => 'sring',
-          ];
+            'name'                              => 'string',
+            'author_name'                       => 'string',
+            'evaluator_name'                    => 'string',
+            'validator_name'                    => 'string',
+            'folder'                            => Folder::class,
+            'dpo_status'                        => 'int',
+            'concerned_people_status'           => 'int',
+            'status'                            => 'int',
+            'dpo_opinion'	                      => 'string',
+            'concerned_people_opinion'	         => 'string',
+            'concerned_people_searched_opinion' => 'boolean',
+            'concerned_people_searched_content' => 'string',
+            'rejection_reason'	                => 'string',
+            'applied_adjustments'	              => 'string',
+            'dpos_names'                        => 'string',
+            'people_names'                      => 'string',
+            'type'                              => 'string',
+        ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);
 

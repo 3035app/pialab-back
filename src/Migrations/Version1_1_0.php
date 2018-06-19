@@ -30,6 +30,7 @@ class Version1_1_0 extends AbstractMigration implements ContainerAwareInterface
 
     private $migrations = [
         'schema' => [
+            '20180612141711',
         ],
         'data' => [
             '20180619143737',
@@ -39,6 +40,22 @@ class Version1_1_0 extends AbstractMigration implements ContainerAwareInterface
     // #########################################
     //         OLD VERSIONS BELOW
     // #########################################
+
+    protected function Version20180612141711_up(Schema $schema): void
+    {
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
+
+        $this->addSql('ALTER TABLE pia ADD type VARCHAR(255) NULL');
+        $this->addSql("UPDATE pia set type='advanced'");
+        $this->addSql('ALTER TABLE pia ALTER COLUMN type SET NOT NULL');
+    }
+
+    protected function Version20180612141711_down(Schema $schema): void
+    {
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
+
+        $this->addSql('ALTER TABLE pia DROP type');
+    }
 
     protected function Version20180619143737_up(Schema $schema): void
     {
