@@ -53,6 +53,9 @@ class LoginCest
         ]);
     }
 
+    /**
+     * @depends login_test
+     */
     public function refresh_token_test(ApiTester $I)
     {
         $I->amGoingTo('Refresh connection to API with a refresh token');

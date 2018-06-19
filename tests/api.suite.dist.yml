@@ -3,6 +3,6 @@ modules:
     enabled:
         - \Helper\Api
         - REST:
-            url: http://localhost:8000/
+            url: '%TEST_SERVER_URL%:4444'
             depends: PhpBrowser
             part: Json

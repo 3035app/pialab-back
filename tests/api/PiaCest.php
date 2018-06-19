@@ -10,14 +10,6 @@
 
 use Codeception\Util\HttpCode;
 
-/*
- * Copyright (C) 2015-2018 Libre Informatique
- *
- * This file is licensed under the GNU LGPL v3.
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
- */
-
 /**
  * @group all
  * @group api
@@ -89,6 +81,9 @@ class PiaCest
         $this->pia = (array) $I->getPreviousResponse();
     }
 
+    /**
+     * @depends create_pia_test
+     */
     public function edit_created_pia_test(ApiTester $I)
     {
         $I->amGoingTo('Edit previous created PIA, with id: ' . $this->pia['id']);
@@ -111,6 +106,9 @@ class PiaCest
         $I->canSeeResponseContainsJson(['name' => 'codecept-name-edited']);
     }
 
+    /**
+     * @depends create_pia_test
+     */
     public function remove_created_pia_test(ApiTester $I)
     {
         $I->amGoingTo('Remove previous created PIA, with id: ' . $this->pia['id']);
