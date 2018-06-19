@@ -16,6 +16,6 @@ userexist=$(psql -qt --no-align -w -h ${DBHOST} -c "select count(*) from pia_use
 
 if [ $userexist -eq 0 ]
 then
-    bin/console pia:user:create --email=lici@pialab.io --password=pia42
+    bin/console pia:user:create lici@pialab.io pia42
     bin/console pia:user:promote lici@pialab.io --role=ROLE_SUPER_ADMIN
 fi

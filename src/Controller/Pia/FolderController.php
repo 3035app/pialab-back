@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -17,9 +17,24 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Folder;
+use PiaApi\Services\FolderService;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class FolderController extends RestController
 {
+    /**
+     * @var FolderService
+     */
+    private $folderService;
+
+    public function __construct(
+        PropertyAccessorInterface $propertyAccessor,
+        FolderService $folderService
+    ) {
+        parent::__construct($propertyAccessor);
+        $this->folderService = $folderService;
+    }
+
     /**
      * @FOSRest\Get("/folders")
      * @Security("is_granted('CAN_SHOW_FOLDER')")
@@ -64,13 +79,13 @@ class FolderController extends RestController
             return $this->view('Missing parent identification', Response::HTTP_BAD_REQUEST);
         }
 
-        $parentId = $request->get('parent_id', $request->get('parent')['id']);
+        $parent = $this->getResource($request->get('parent')['id'], Folder::class);
 
-        $parent = $this->getRepository()->find($parentId);
-
-        $folder = $this->newFromRequest($request);
-        $folder->setStructure($this->getUser()->getStructure());
-        $folder->setParent($parent);
+        $folder = $this->folderService->createFolderForStructureAndParent(
+            $request->get('name'),
+            $this->getUser()->getStructure(),
+            $parent
+        );
 
         $this->persist($folder);
 
@@ -113,7 +128,7 @@ class FolderController extends RestController
         $this->canAccessResourceOr403($folder);
         $this->remove($folder);
 
-        return $this->view($folder, Response::HTTP_OK);
+        return $this->view(null, Response::HTTP_OK);
     }
 
     protected function getEntityClass()

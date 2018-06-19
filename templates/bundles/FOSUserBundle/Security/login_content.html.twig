@@ -35,6 +35,10 @@
                 <button type="submit" name="_submit" class="ui fluid large blue submit button" onclick="this.closest('form').submit()">
                     {{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}
                 </button>
+                <div class="ui divider"></div>
+                <a href="{{ path('fos_user_resetting_request') }}" class="ui fluid">
+                    {{ 'security.login.password_forgotten'|trans({}, 'FOSUserBundle') }}
+                </a>
             </div>
         </form>
     </div>

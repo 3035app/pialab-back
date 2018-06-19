@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -19,6 +19,7 @@ use PiaApi\Entity\Pia\StructureType;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use PiaApi\Services\StructureService;
 
 class CreateStructureCommand extends Command
 {
@@ -37,10 +38,17 @@ class CreateStructureCommand extends Command
      */
     protected $io;
 
+    /**
+     * @var StructureService
+     */
+    private $structureService;
+
     public function __construct(
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        StructureService $structureService
     ) {
         $this->entityManager = $entityManager;
+        $this->structureService = $structureService;
         parent::__construct();
     }
 
@@ -70,13 +78,11 @@ EOT
         $structTypeRepo = $this->entityManager->getRepository(StructureType::class);
         $structType = $structTypeRepo->findOneBy(['name' => $type]);
         if ($structType === null) {
-            $structType = new StructureType($type);
+            $structType = $this->structureTypeService->createStructureType($type);
         }
 
-        $structure = new Structure($name);
-        $structure->setType($structType);
+        $structure = $this->structureService->createStructureOfType($name, $structType);
 
-        $this->entityManager->persist($structType);
         $this->entityManager->persist($structure);
         $this->entityManager->flush();
 

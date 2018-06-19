@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -111,11 +111,11 @@ class CreateUserForm extends BaseForm
 
                 'label'    => 'pia.users.forms.create.roles',
             ])
-            ->add('sendResetingEmail', CheckboxType::class, [
+            ->add('sendResettingEmail', CheckboxType::class, [
                 'required'     => false,
-                'label'        => 'pia.users.forms.create.sendResetingEmail',
+                'label'        => 'pia.users.forms.create.sendResettingEmail',
                 'label_attr'   => [
-                    'title' => 'pia.users.forms.create.sendResetingEmail_help',
+                    'title' => 'pia.users.forms.create.sendResettingEmail_help',
                 ],
             ])
             ->add('submit', SubmitType::class, [

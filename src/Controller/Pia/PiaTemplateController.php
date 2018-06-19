@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -18,6 +18,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class PiaTemplateController extends RestController
 {
@@ -26,8 +27,11 @@ class PiaTemplateController extends RestController
      */
     protected $jsonToEntityTransformer;
 
-    public function __construct(JsonToEntityTransformer $jsonToEntityTransformer)
-    {
+    public function __construct(
+        PropertyAccessorInterface $propertyAccessor,
+        JsonToEntityTransformer $jsonToEntityTransformer
+    ) {
+        parent::__construct($propertyAccessor);
         $this->jsonToEntityTransformer = $jsonToEntityTransformer;
     }
 

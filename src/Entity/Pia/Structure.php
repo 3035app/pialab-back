@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -36,7 +36,7 @@ class Structure implements Timestampable
     protected $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="StructureType", inversedBy="structures")
+     * @ORM\ManyToOne(targetEntity="StructureType", inversedBy="structures", cascade={"persist"})
      * @JMS\Groups({"Default", "Export"})
      *
      * @var StructureType

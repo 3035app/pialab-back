@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -29,10 +29,12 @@ class PiaController extends RestController
      */
     protected $jsonToEntityTransformer;
 
-    public function __construct(JsonToEntityTransformer $jsonToEntityTransformer, PropertyAccessorInterface $propertyAccessor)
-    {
+    public function __construct(
+        PropertyAccessorInterface $propertyAccessor,
+        JsonToEntityTransformer $jsonToEntityTransformer
+    ) {
+        parent::__construct($propertyAccessor);
         $this->jsonToEntityTransformer = $jsonToEntityTransformer;
-        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
@@ -174,7 +176,7 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
         $this->remove($pia);
 
-        return $this->view($pia, Response::HTTP_OK);
+        return $this->view(null, Response::HTTP_OK);
     }
 
     /**

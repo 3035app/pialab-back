@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -73,11 +73,10 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
      */
     protected $structure;
 
-    public function __construct(?string $email = null, ?string $password)
+    public function __construct(?string $email = null)
     {
         $this->email = $email;
         $this->username = $email;
-        $this->password = $password;
         $this->roles = ['ROLE_USER'];
         $this->creationDate = new \DateTime();
         $this->expirationDate = new \DateTimeImmutable('+1 Year');
