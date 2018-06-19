@@ -22,6 +22,8 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class PromoteUserCommand extends Command
 {
+    const NAME = 'pia:user:promote';
+
     /**
      * @var EncoderFactoryInterface
      */
@@ -49,7 +51,7 @@ class PromoteUserCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('pia:user:promote')
+            ->setName(self::NAME)
             ->setDescription('Creates a new user.')
             ->setHelp('This command allows you to create a user for Pia Api')
             ->addArgument('email', null, InputArgument::REQUIRED, 'The user\'s email')

@@ -28,6 +28,8 @@ use splitbrain\PHPArchive\Tar;
 
 class ImportPiaTemplatesCommand extends Command
 {
+    const NAME = 'pia:templates:batch-import';
+
     /**
      * @var JsonToEntityTransformer
      */
@@ -67,7 +69,7 @@ class ImportPiaTemplatesCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('pia:templates:batch-import')
+            ->setName(self::NAME)
             ->setDescription('Imports a collection of PIA templates into backend')
             ->setHelp('This command allows you to import all json files included in a specific folder as PIA templates')
             ->addArgument('templatesFolderOrArchive', InputArgument::REQUIRED, 'The target directory (or archive) that contains templates json files (can be relative or absolute)')

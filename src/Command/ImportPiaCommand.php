@@ -23,6 +23,8 @@ use PiaApi\Entity\Pia\Pia;
 
 class ImportPiaCommand extends Command
 {
+    const NAME = 'pia:import';
+
     /**
      * @var JsonToEntityTransformer
      */
@@ -49,7 +51,7 @@ class ImportPiaCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('pia:import')
+            ->setName(self::NAME)
             ->setDescription('Imports a Pia from a json file.')
             ->setHelp('This command allows you to import a Pia from a json file')
             ->addArgument('jsonFile', InputArgument::REQUIRED, 'The target json file to import. Could be an Url')

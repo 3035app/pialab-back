@@ -25,6 +25,8 @@ class MergeMigrationsCommand extends Command implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
+    const NAME = 'doctrine:migrations:merge';
+
     /**
      * @var string
      */
@@ -48,7 +50,7 @@ class MergeMigrationsCommand extends Command implements ContainerAwareInterface
         parent::configure();
 
         $this
-            ->setName('doctrine:migrations:merge')
+            ->setName(self::NAME)
             ->setDescription('Merges dev migrations into single one')
             ->addArgument(
                 'tag',
