@@ -45,6 +45,7 @@ tar --exclude-vcs \
     --exclude=build \
     --exclude=bin/git-scripts \
     --exclude=etc \
+    --exclude=var \
     -czhf ${Filename} build-metadata.json ./* .env
 
 sha256sum ${Filename} > ${Filename}.sha256.txt
