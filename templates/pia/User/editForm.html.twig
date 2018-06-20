@@ -5,11 +5,14 @@
 <div class="ui stackable equal width grid">
     <div class="field column">
         {{ form_row(form.username) }}
+        {{ form_row(form.profile.lastName) }}
+        {{ form_row(form.profile.firstName) }}
         {{ form_row(form.email) }}
-        {{ form_row(form.application) }}
-        {{ form_row(form.structure) }}
+
     </div>
     <div class="field column">
+      {{ form_row(form.application) }}
+      {{ form_row(form.structure) }}
         {{ form_row(form.roles) }}
     </div>
 </div>
@@ -21,15 +24,6 @@
     </div>
     <div class="field column">
         {{ form_row(form.expirationDate) }}
-    </div>
-</div>
-
-<div class="ui stackable equal width grid">
-    <div class="field column">
-        {{ form_row(form.profile.lastName, {'attr': {'class': 'column'}}) }}
-    </div>
-    <div class="field column">
-        {{ form_row(form.profile.firstName, {'attr': {'class': 'column'}}) }}
     </div>
 </div>
 

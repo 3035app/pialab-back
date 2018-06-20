@@ -209,6 +209,14 @@ class Pia implements Timestampable
      */
     protected $folder;
 
+    /**
+     * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string
+     */
+    protected $type;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -503,10 +511,18 @@ class Pia implements Timestampable
     }
 
     /**
-     * @param string $concernedPeopleSearchedOpinion
+     * @param bool $concernedPeopleSearchedOpinion
      */
-    public function setConcernedPeopleSearchedOpinion(?string $concernedPeopleSearchedOpinion): void
+    public function setConcernedPeopleSearchedOpinion(bool $concernedPeopleSearchedOpinion): void
     {
         $this->concernedPeopleSearchedOpinion = $concernedPeopleSearchedOpinion;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
     }
 }

@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class PiaTemplateController extends RestController
 {
@@ -32,8 +33,11 @@ class PiaTemplateController extends RestController
      */
     protected $jsonToEntityTransformer;
 
-    public function __construct(JsonToEntityTransformer $jsonToEntityTransformer)
-    {
+    public function __construct(
+        PropertyAccessorInterface $propertyAccessor,
+        JsonToEntityTransformer $jsonToEntityTransformer
+    ) {
+        parent::__construct($propertyAccessor);
         $this->jsonToEntityTransformer = $jsonToEntityTransformer;
     }
 

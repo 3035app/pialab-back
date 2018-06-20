@@ -12,12 +12,14 @@ namespace PiaApi\Controller\BackOffice;
 
 use PiaApi\Entity\Pia\Structure;
 use PiaApi\Entity\Pia\StructureType;
+use PiaApi\Entity\Oauth\User;
 use PiaApi\Form\Structure\CreateStructureForm;
 use PiaApi\Form\Structure\CreateStructureTypeForm;
 use PiaApi\Form\Structure\EditStructureForm;
 use PiaApi\Form\Structure\EditStructureTypeForm;
 use PiaApi\Form\Structure\RemoveStructureForm;
 use PiaApi\Form\Structure\RemoveStructureTypeForm;
+use PiaApi\Form\User\CreateUserForm;
 use PiaApi\Services\StructureService;
 use PiaApi\Services\StructureTypeService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

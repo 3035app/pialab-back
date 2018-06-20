@@ -11,7 +11,8 @@ fos_rest:
         default_format: json
     serializer:
         serialize_null:  true
-
+    exception:
+        enabled: true
     view:
         view_response_listener:  true
         formats: { json: true, xml: false, rss: false }

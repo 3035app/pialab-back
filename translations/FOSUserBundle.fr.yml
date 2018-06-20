@@ -17,3 +17,7 @@ resetting:
     request:
         cancel: Annuler
         submit: Réinitialiser
+
+security:
+    login:
+        password_forgotten: Mot de passe oublié ?

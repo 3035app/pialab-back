@@ -21,7 +21,7 @@
                 </div>
                 <div class="ui teal segment">
                     <p>{{ 'pia.users.resetting.success.password_reset_successfully'|trans }}</p>
-                    {% if app.user.application and app.user.application.url is not null %}
+                    {% if app.user && app.user.application and app.user.application.url is not null %}
                         <a href="{{ app.user.application.url }}" class="ui teal button">
                             {{ 'pia.users.resetting.success.return_to_application'|trans }}
                         </a>
