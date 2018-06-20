@@ -76,9 +76,6 @@ class PiaAnswersCest
 
         $answerData = array_replace_recursive($this->answerData, [
             'pia_id' => $this->pia['id'],
-            'data'   => [
-                'text'  => 'codecept-answer',
-            ],
         ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
