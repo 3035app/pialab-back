@@ -17,41 +17,7 @@ use Codeception\Util\HttpCode;
  */
 class PiaCest
 {
-    private $piaDatas = [
-        'author_name'                       => 'codecept-author',
-        'evaluator_name'                    => 'codecept-evaluator',
-        'name'                              => 'codecept-name',
-        'validator_name'                    => 'codecept-validator',
-        'type'                              => 'regular',
-        'concerned_people_searched_opinion' => 0,
-    ];
-
-    private $piaType = [
-        'progress'                          => 'integer',
-        'status'                            => 'integer',
-        'name'                              => 'string',
-        'author_name'                       => 'string',
-        'evaluator_name'                    => 'string',
-        'validator_name'                    => 'string',
-        'dpo_status'                        => 'integer',
-        'dpo_opinion'                       => 'string|null',
-        'concerned_people_opinion'          => 'boolean|string|null',
-        'concerned_people_status'           => 'integer',
-        'concerned_people_searched_opinion' => 'boolean',
-        'concerned_people_searched_content' => 'string|null',
-        'rejection_reason'                  => 'string|null',
-        'applied_adjustements'              => 'string|null',
-        'dpos_names'                        => 'string|null',
-        'people_names'                      => 'string|null',
-        'is_example'                        => 'boolean',
-        'folder'                            => 'array|null',
-        'id'                                => 'integer',
-        'created_at'                        => 'string',
-        'updated_at'                        => 'string',
-        'type'                              => 'string',
-    ];
-
-    private $pia = [];
+    use _support\ApiFixturesTrait;
 
     public function list_pias_test(ApiTester $I)
     {
@@ -79,7 +45,7 @@ class PiaCest
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
 
-        $I->seeResponseMatchesJsonType($this->piaType);
+        $I->seeResponseMatchesJsonType($this->piaJsonType);
 
         $this->pia = (array) $I->getPreviousResponse();
     }
@@ -104,7 +70,7 @@ class PiaCest
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
 
-        $I->seeResponseMatchesJsonType($this->piaType);
+        $I->seeResponseMatchesJsonType($this->piaJsonType);
 
         $I->canSeeResponseContainsJson(['name' => 'codecept-name-edited']);
     }
