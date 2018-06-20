@@ -95,7 +95,7 @@ class UserService extends AbstractService
             $application = $this->applicationService->getRepository()->findOneBy(['name' => $applicationName]);
 
             if ($application !== null) {
-                $user->setStructure($application);
+                $user->setApplication($application);
             }
         }
 
