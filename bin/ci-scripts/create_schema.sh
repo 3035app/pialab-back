@@ -12,11 +12,13 @@ else
     exit 42
 fi
 
-bin/console doctrine:database:create --if-not-exists --no-interaction 
+bin/console cache:clear --no-interaction
+
+bin/console doctrine:database:create --if-not-exists --no-interaction
 
 bin/console doctrine:migration:migrate --no-interaction
 
 # Just for debug purposes
-bin/console doctrine:schema:update --dump-sql --no-interaction 
+bin/console doctrine:schema:update --dump-sql --no-interaction
 
-bin/console doctrine:schema:validate --no-interaction 
+bin/console doctrine:schema:validate --no-interaction
