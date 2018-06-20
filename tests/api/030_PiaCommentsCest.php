@@ -64,7 +64,7 @@ class PiaCommentsCest
      */
     public function create_pia_comment_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Create an comment for specific PIA');
+        $I->amGoingTo('Create a comment for specific PIA');
 
         $I->login();
 
