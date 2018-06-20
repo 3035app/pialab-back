@@ -24,6 +24,6 @@ testuserexist=$(psql -qt --no-align -w -h ${DBHOST} -c "select count(*) from pia
 
 if [ $testuserexist -eq 0 ]
 then
-    bin/console pia:user:create api@pialab.io api42
-    bin/console pia:user:promote api@pialab.io --role=ROLE_USER
+    bin/console pia:user:create api@pialab.io api42 --application="Default App"
+    bin/console pia:user:promote api@pialab.io --role=ROLE_USER 
 fi

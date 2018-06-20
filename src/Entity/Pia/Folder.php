@@ -108,7 +108,7 @@ class Folder implements Timestampable
     protected $pias;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Structure", inversedBy="folders").
+     * @ORM\ManyToOne(targetEntity="Structure", inversedBy="folders", cascade={"remove"}).
      * @JMS\Groups({"Full"})
      *
      * @var Structure

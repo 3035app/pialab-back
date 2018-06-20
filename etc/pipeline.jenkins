@@ -93,8 +93,8 @@ pipeline {
             }
 
             steps {
-                sh "bin/ci-scripts/create_user.sh"
                 sh "CLIENTURL=${params.FrontUrl} bin/ci-scripts/create_client_secret.sh"
+                sh "bin/ci-scripts/create_user.sh"
             }
         }
 
