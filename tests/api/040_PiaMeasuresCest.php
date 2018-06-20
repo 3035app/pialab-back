@@ -115,7 +115,7 @@ class PiaMeasuresCest
 
         $I->login();
 
-        $this->measure['content'] = 'codecept-measure-description';
+        $this->measure['content'] = 'codecept-measure-content';
         $this->measureData['content'] = $this->measure['content'];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
