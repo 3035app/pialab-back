@@ -211,7 +211,7 @@ pia:
             id: "#"
             application: Application
             structure: Structure
-            username: Username
+            username: Alias
             email: E-mail
             roles: Roles
             enabled: Actif
@@ -228,7 +228,7 @@ pia:
                 sub_title: (cliquez sur ce message pour annuler)
                 resume:
                     user: Utilisateur
-                    username: "Nom d'utilisateur"
+                    username: "Alias"
                     email: E-mail
                     created_at: Créé le
                     expires_at: Expire le
@@ -247,7 +247,7 @@ pia:
                 sendResettingEmail_help: "Envoyer automatiquement l'email de réinitialisation de mot de passe à l'adresse email saisie"
                 submit: "Créer l'utilisateur"
             edit:
-                username: "Nom d'utilisateur"
+                username: "Alias"
                 roles: Rôles
                 expirationDate: "Date d'expiration du compte"
                 enabled: Actif
