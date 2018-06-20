@@ -18,10 +18,12 @@ use Codeception\Util\HttpCode;
 class PiaCest
 {
     private $piaDatas = [
-        'author_name'             => 'codecept-author',
-        'evaluator_name'          => 'codecept-evaluator',
-        'name'                    => 'codecept-name',
-        'validator_name'          => 'codecept-validator',
+        'author_name'                       => 'codecept-author',
+        'evaluator_name'                    => 'codecept-evaluator',
+        'name'                              => 'codecept-name',
+        'validator_name'                    => 'codecept-validator',
+        'type'                              => 'regular',
+        'concerned_people_searched_opinion' => 0,
     ];
 
     private $piaType = [
@@ -35,7 +37,7 @@ class PiaCest
         'dpo_opinion'                       => 'string|null',
         'concerned_people_opinion'          => 'boolean|string|null',
         'concerned_people_status'           => 'integer',
-        'concerned_people_searched_opinion' => 'boolean|null',
+        'concerned_people_searched_opinion' => 'boolean',
         'concerned_people_searched_content' => 'string|null',
         'rejection_reason'                  => 'string|null',
         'applied_adjustements'              => 'string|null',
@@ -46,6 +48,7 @@ class PiaCest
         'id'                                => 'integer',
         'created_at'                        => 'string',
         'updated_at'                        => 'string',
+        'type'                              => 'string',
     ];
 
     private $pia = [];
