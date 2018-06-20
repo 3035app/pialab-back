@@ -47,4 +47,26 @@ trait ApiFixturesTrait
     ];
 
     private $pia = [];
+
+    private function createTestPia(\ApiTester $I): void
+    {
+        $I->login();
+
+        $I->amBearerAuthenticated($I->getToken());
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST($I->getBaseUrl() . '/pias', $this->piaDatas);
+
+        $this->pia = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
+    }
+
+    private function removeTestPia(\ApiTester $I): void
+    {
+        $I->login();
+
+        $I->amBearerAuthenticated($I->getToken());
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendDELETE($I->getBaseUrl() . '/pias/' . $this->pia['id']);
+
+        $this->pia = [];
+    }
 }

@@ -110,6 +110,7 @@ class ApiTester extends \Codeception\Actor
         );
         $this->token = $this->getOAuthToken();
         $this->refreshToken = $this->getOAuthRefreshToken();
+        $this->amBearerAuthenticated($this->getToken());
     }
 
     private function getEnvParam(string $envParamName, $default = null): ?string

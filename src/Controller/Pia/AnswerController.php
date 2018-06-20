@@ -29,7 +29,7 @@ class AnswerController extends PiaSubController
 
     /**
      * @FOSRest\Get("/pias/{piaId}/answers/{id}")
-     * @Security("is_granted('CAN_SHOW_ANSWER")
+     * @Security("is_granted('CAN_SHOW_ANSWER')")
      */
     public function showAction(Request $request, $piaId, $id)
     {

@@ -99,7 +99,7 @@ class Folder implements Timestampable
     private $children;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pia", mappedBy="folder")
+     * @ORM\OneToMany(targetEntity="Pia", mappedBy="folder",cascade={"remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
      *
@@ -108,7 +108,7 @@ class Folder implements Timestampable
     protected $pias;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Structure", inversedBy="folders", cascade={"remove"}).
+     * @ORM\ManyToOne(targetEntity="Structure", inversedBy="folders").
      * @JMS\Groups({"Full"})
      *
      * @var Structure
