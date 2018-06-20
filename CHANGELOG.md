@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.1.0](https://github.com/pia-lab/pialab-back/tree/1.1.0) (2018-06-19)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.0.2...1.1.0)
+
+**Merged pull requests:**
+
+- Add type property to Pia model [\#20](https://github.com/pia-lab/pialab-back/pull/20) ([RomainSanchez](https://github.com/RomainSanchez))
+
 ## [1.0.2](https://github.com/pia-lab/pialab-back/tree/1.0.2) (2018-06-19)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.0.1...1.0.2)
 
