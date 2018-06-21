@@ -6,3 +6,9 @@ modules:
             url: '%TEST_SERVER_URL%:8000'
             depends: PhpBrowser
             part: Json
+        - Doctrine2:
+            depends: Symfony
+            cleanup: true
+        - Symfony:
+            app_path: 'src'
+            environment: 'test' 
