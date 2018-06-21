@@ -27,6 +27,10 @@ class Pia implements Timestampable
     use ResourceTrait,
         TimestampableEntity;
 
+    const TYPE_REGULAR    = 'regular';
+    const TYPE_SIMPLIFIED = 'simplified';
+    const TYPE_ADVANCED   = 'advanced';
+
     /**
      * @ORM\Column(type="smallint")
      * @JMS\Groups({"Default", "Export"})
@@ -211,11 +215,11 @@ class Pia implements Timestampable
 
     /**
      * @ORM\Column(type="string")
-     * @JMS\Groups({"Default", "Export"})
+     * @JMS\Groups({"Default", "Full"})
      *
      * @var string
      */
-    protected $type;
+    protected $type = self::TYPE_ADVANCED;
 
     public function __construct()
     {
@@ -235,7 +239,17 @@ class Pia implements Timestampable
      */
     public function computeProgress(): int
     {
-        return round((100 / 36) * count($this->answers ?? []));
+        $questions = 36;
+
+        if($this->type == self::TYPE_REGULAR) {
+          $questions = 18;
+        }
+
+        if($this->type == self::TYPE_SIMPLIFIED) {
+          $questions = 6;
+        }
+
+        return round((100 / $questions) * count($this->answers ?? []));
     }
 
     /**
