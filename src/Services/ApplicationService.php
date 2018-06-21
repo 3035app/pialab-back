@@ -36,39 +36,28 @@ class ApplicationService extends AbstractService
     }
 
     /**
-     * @param string     $name
-     * @param string     $url
-     * @param array|null $grantTypes
+     * @param string      $name
+     * @param string      $url
+     * @param array|null  $grantTypes
+     * @param string|null $clientId
+     * @param string|null $clientSecret
      *
      * @return Client
      */
-    public function createApplication(string $name, string $url, ?array $grantTypes = ['password', 'token', 'refresh_token']): Client
+    public function createApplication(string $name, string $url, ?array $grantTypes = ['password', 'token', 'refresh_token'], ?string $clientId = null, ?string $clientSecret = null): Client
     {
         /** @var Client $application */
         $application = $this->clientManager->createClient();
-
         $application->setName($name);
         $application->setUrl($url);
         $application->setAllowedGrantTypes($grantTypes);
 
-        return $application;
-    }
-
-    /**
-     * @param string     $name
-     * @param string     $url
-     * @param array|null $grantTypes
-     * @param string     $clientId
-     * @param string     $clientSecret
-     *
-     * @return Client
-     */
-    public function createApplicationWithIdentifiers(string $name, string $url, ?array $grantTypes = ['password', 'token', 'refresh_token'], string $clientId, string $clientSecret): Client
-    {
-        $application = $this->createApplication($name, $url, $grantTypes);
-
-        $application->setRandomId($clientId);
-        $application->setSecret($clientSecret);
+        if ($clientId !== null) {
+            $application->setRandomId($clientId);
+        }
+        if ($clientSecret !== null) {
+            $application->setSecret($clientSecret);
+        }
 
         return $application;
     }
