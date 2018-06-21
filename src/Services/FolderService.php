@@ -30,10 +30,13 @@ class FolderService extends AbstractService
         return new Folder($name, $structure);
     }
 
-    public function createFolderForStructureAndParent(string $name, Structure $structure, Folder $parent): Folder
+    public function createFolderForStructureAndParent(string $name, Structure $structure, ?Folder $parent = null): Folder
     {
         $folder = new Folder($name, $structure);
-        $folder->setParent($parent);
+
+        if ($parent !== null) {
+            $folder->setParent($parent);
+        }
 
         return $folder;
     }

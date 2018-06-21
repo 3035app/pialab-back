@@ -115,12 +115,14 @@ class Folder implements Timestampable
      */
     protected $structure;
 
-    public function __construct(string $name, ?Structure $structure)
+    public function __construct(string $name, ?Structure $structure = null)
     {
         $this->name = $name;
-        $this->structure = $structure;
 
-        $structure->getFolders()->add($this);
+        if ($structure !== null) {
+            $this->structure = $structure;
+            $structure->getFolders()->add($this);
+        }
 
         $this->pias = new ArrayCollection();
         $this->children = new ArrayCollection();

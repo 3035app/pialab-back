@@ -67,3 +67,6 @@ class Kernel extends BaseKernel
         $routes->import($confDir . '/{routes}' . self::CONFIG_EXTS, '/', 'glob');
     }
 }
+
+// Hack foun here for Codeception : https://github.com/Codeception/Codeception/issues/4838#issuecomment-373646175
+class_alias(Kernel::class, 'App\Kernel', true);

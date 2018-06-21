@@ -30,4 +30,9 @@ class Api extends \Codeception\Module
     {
         return json_decode($this->getModule('REST')->response);
     }
+
+    public function getEntityManager()
+    {
+        return $this->getModule('Doctrine2')->_getEntityManager();
+    }
 }
