@@ -1,0 +1,6 @@
+[template]
+src = "api.suite.yml.tmpl"
+dest = "tests/api.suite.yml"
+keys = [
+       "/url/addr",
+]

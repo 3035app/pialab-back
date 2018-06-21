@@ -13,11 +13,11 @@ namespace PiaApi\Exception\Folder;
 use PiaApi\Exception\ApiException;
 use Symfony\Component\HttpFoundation\Response;
 
-class NonEmptyFolderCannotBeDeletedException extends ApiException
+class RootFolderCannotBeDeletedException extends ApiException
 {
     public function __construct()
     {
-        $message = 'Folder must be empty before being deleted';
-        parent::__construct(Response::HTTP_CONFLICT, $message, 701);
+        $message = 'You cannot delete Root folder';
+        parent::__construct(Response::HTTP_CONFLICT, $message, 702);
     }
 }

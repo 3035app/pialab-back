@@ -70,60 +70,6 @@ class UserService extends AbstractService
     }
 
     /**
-     * @param string      $email
-     * @param string      $password
-     * @param string|null $structureName
-     * @param string|null $applicationName
-     *
-     * @return User
-     */
-    public function createUser(string $email, string $password, ?string $structureName = null, ?string $applicationName = null): User
-    {
-        $user = new User($email);
-
-        $this->encodePassword($user, $password);
-
-        if ($structureName !== null) {
-            $structure = $this->structureService->getRepository()->findOneBy(['name' => $structureName]);
-
-            if ($structure !== null) {
-                $user->setStructure($structure);
-            }
-        }
-
-        if ($applicationName !== null) {
-            $application = $this->applicationService->getRepository()->findOneBy(['name' => $applicationName]);
-
-            if ($application !== null) {
-                $user->setApplication($application);
-            }
-        }
-
-        $profile = new UserProfile();
-        $profile->setUser($user);
-        $user->setProfile($profile);
-
-        return $user;
-    }
-
-    /**
-     * @param string               $email
-     * @param string               $password
-     * @param ClientInterface|null $application
-     *
-     * @return User
-     */
-    public function createUserForStructure(string $email, string $password, ?Structure $structure = null): User
-    {
-        $user = $this->createUser($email, $password);
-        if ($structure !== null) {
-            $user->setStructure($structure);
-        }
-
-        return $user;
-    }
-
-    /**
      * @param string               $email
      * @param string               $password
      * @param Structure|null       $structure
@@ -131,9 +77,20 @@ class UserService extends AbstractService
      *
      * @return User
      */
-    public function createUserForStructureAndApplication(string $email, string $password, ?Structure $structure = null, ?ClientInterface $application = null): User
+    public function createUser(string $email, string $password, ?Structure $structure = null, ?ClientInterface $application = null): User
     {
-        $user = $this->createUserForStructure($email, $password, $structure);
+        $user = new User($email);
+
+        $this->encodePassword($user, $password);
+
+        $profile = new UserProfile();
+        $profile->setUser($user);
+        $user->setProfile($profile);
+
+        if ($structure !== null) {
+            $user->setStructure($structure);
+        }
+
         if ($application !== null) {
             $user->setApplication($application);
         }

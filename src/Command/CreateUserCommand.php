@@ -21,6 +21,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use PiaApi\Entity\Oauth\Client;
 
 class CreateUserCommand extends Command
 {
@@ -101,24 +102,35 @@ class CreateUserCommand extends Command
         $firstName = $input->getOption('firstName', null);
         $lastName = $input->getOption('lastName', null);
 
+        $structure = null;
+        $application = null;
+
+        if ($structureName !== null) {
+            $structure = $this->entityManager->getRepository(Structure::class)->findOneBy(['name' => $structureName]);
+
+            if ($structure === null) {
+                $this->io->error(sprintf('Structure with name « %s » was not found', $structureName));
+
+                return 42;
+            }
+        }
+
+        if ($appName !== null) {
+            $application = $this->entityManager->getRepository(Client::class)->findOneBy(['name' => $appName]);
+
+            if ($application === null) {
+                $this->io->error(sprintf('Application with name « %s » was not found', $appName));
+
+                return 42;
+            }
+        }
+
         $user = $this->userService->createUser(
             $email,
             $password,
-            $structureName,
-            $appName
+            $structure,
+            $application
         );
-
-        if ($structureName !== null && $user->getStructure() === null) {
-            $this->io->error(sprintf('Structure with name « %s » was not found', $structureName));
-
-            return 42;
-        }
-
-        if ($appName !== null && $user->getApplication() === null) {
-            $this->io->error(sprintf('Application with name « %s » was not found', $appName));
-
-            return 42;
-        }
 
         if ($firstName !== null) {
             $user->getProfile()->setFirstName($firstName);
