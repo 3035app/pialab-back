@@ -53,7 +53,7 @@ class PiaCommentsCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/comments');
+        $I->sendGET('/pias/' . $this->pia['id'] . '/comments');
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -73,7 +73,7 @@ class PiaCommentsCest
         ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/comments', $commentData);
+        $I->sendPOST('/pias/' . $this->pia['id'] . '/comments', $commentData);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -93,7 +93,7 @@ class PiaCommentsCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/comments/' . $this->comment['id'], $this->comment);
+        $I->sendGET('/pias/' . $this->pia['id'] . '/comments/' . $this->comment['id'], $this->comment);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -115,7 +115,7 @@ class PiaCommentsCest
         $this->comment['description'] = $this->commentData['description'] . '-edited';
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/comments/' . $this->comment['id'], $this->comment);
+        $I->sendPUT('/pias/' . $this->pia['id'] . '/comments/' . $this->comment['id'], $this->comment);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -135,7 +135,7 @@ class PiaCommentsCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/comments/' . $this->comment['id']);
+        $I->sendDELETE('/pias/' . $this->pia['id'] . '/comments/' . $this->comment['id']);
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }

@@ -62,7 +62,7 @@ class LoginCest
 
         $I->login();
 
-        $I->sendGET($I->getBaseUrl() . '/oauth/v2/token', [
+        $I->sendGET('/oauth/v2/token', [
             'client_id'     => $I->getClientId(),
             'client_secret' => $I->getClientSecret(),
             'refresh_token' => $I->getRefreshToken(),

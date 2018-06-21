@@ -20,8 +20,8 @@ use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\Services\FolderService;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use PiaApi\Exception\Folder\RootFolderCannotBeDeletedException;
+use PiaApi\Entity\Pia\Structure;
 
 class FolderController extends RestController
 {
@@ -78,15 +78,13 @@ class FolderController extends RestController
      */
     public function createAction(Request $request)
     {
-        if ($request->get('parent_id') === null && $request->get('parent') === null) {
-            throw new HttpException(Response::HTTP_BAD_REQUEST, 'You must define parent for folder creation');
-        }
-
         $parent = $request->get('parent') !== null ? $this->getResource($request->get('parent')['id'], Folder::class) : null;
+
+        $structure = $this->getUser()->getStructure();
 
         $folder = $this->folderService->createFolderForStructureAndParent(
             $request->get('name'),
-            $this->getUser()->getStructure(),
+            $structure,
             $parent
         );
 

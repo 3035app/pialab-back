@@ -54,7 +54,7 @@ trait ApiFixturesTrait
 
         $I->amBearerAuthenticated($I->getToken());
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/pias', $this->piaDatas);
+        $I->sendPOST('/pias', $this->piaDatas);
 
         $this->pia = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
     }
@@ -65,7 +65,7 @@ trait ApiFixturesTrait
 
         $I->amBearerAuthenticated($I->getToken());
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE($I->getBaseUrl() . '/pias/' . $this->pia['id']);
+        $I->sendDELETE('/pias/' . $this->pia['id']);
 
         $this->pia = [];
     }

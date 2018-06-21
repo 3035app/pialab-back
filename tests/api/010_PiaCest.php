@@ -25,7 +25,7 @@ class PiaCest
 
         $I->login();
 
-        $I->sendGET($I->getBaseUrl() . '/pias');
+        $I->sendGET('/pias');
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -38,7 +38,7 @@ class PiaCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/pias', $this->piaDatas);
+        $I->sendPOST('/pias', $this->piaDatas);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -58,7 +58,7 @@ class PiaCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias', $this->piaDatas);
+        $I->sendGET('/pias', $this->piaDatas);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -80,7 +80,7 @@ class PiaCest
         $this->pia['name'] = $this->piaDatas['name'] . '-edited';
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT($I->getBaseUrl() . '/pias/' . $this->pia['id'],
+        $I->sendPUT('/pias/' . $this->pia['id'],
             array_merge($this->piaDatas, json_decode(json_encode($this->pia), JSON_OBJECT_AS_ARRAY))
         );
 
@@ -102,7 +102,7 @@ class PiaCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE($I->getBaseUrl() . '/pias/' . $this->pia['id']);
+        $I->sendDELETE('/pias/' . $this->pia['id']);
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }

@@ -3,12 +3,6 @@ modules:
     enabled:
         - \Helper\Api
         - REST:
-            url: '%TEST_SERVER_URL%:8000'
-            depends: PhpBrowser
+            url: http://localhost:8000
             part: Json
-        - Doctrine2:
-            depends: Symfony
-            cleanup: true
-        - Symfony:
-            app_path: 'src'
-            environment: 'test' 
+            depends: PhpBrowser

@@ -70,7 +70,7 @@ class PiaEvaluationsCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/evaluations');
+        $I->sendGET('/pias/' . $this->pia['id'] . '/evaluations');
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -91,7 +91,7 @@ class PiaEvaluationsCest
         ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/evaluations', $evaluationData);
+        $I->sendPOST('/pias/' . $this->pia['id'] . '/evaluations', $evaluationData);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -114,7 +114,7 @@ class PiaEvaluationsCest
         $this->evaluationData['evaluation_comment'] = $this->evaluation['evaluation_comment'];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/evaluations/' . $this->evaluation['id'], $this->evaluation);
+        $I->sendPUT('/pias/' . $this->pia['id'] . '/evaluations/' . $this->evaluation['id'], $this->evaluation);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -134,7 +134,7 @@ class PiaEvaluationsCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/evaluations/' . $this->evaluation['id'], $this->evaluation);
+        $I->sendGET('/pias/' . $this->pia['id'] . '/evaluations/' . $this->evaluation['id'], $this->evaluation);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -156,7 +156,7 @@ class PiaEvaluationsCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/evaluations/' . $this->evaluation['id']);
+        $I->sendDELETE('/pias/' . $this->pia['id'] . '/evaluations/' . $this->evaluation['id']);
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }

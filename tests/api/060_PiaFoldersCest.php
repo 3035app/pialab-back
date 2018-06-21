@@ -28,7 +28,7 @@ class PiaFoldersCest
         'lft'        => 'integer',
         'lvl'        => 'integer',
         'rgt'        => 'integer',
-        'parent'     => 'array',
+        'parent'     => 'array|null',
         'children'   => 'array',
         'pias'       => 'array',
         'id'         => 'integer',
@@ -44,17 +44,29 @@ class PiaFoldersCest
 
     private $rootFolderId;
 
-    public function init_root_folder_test(ApiTester $I)
+    public function create_root_folder_test(ApiTester $I)
     {
-        $rootFolder = new Folder('codecept-root');
-        $I->persistEntity($rootFolder);
-        $I->flushToDatabase();
+        $I->amGoingTo('Create root folder');
 
-        $this->rootFolderId = $rootFolder->getId();
+        $I->login();
+
+        $rootData = [
+            'name' => 'codecept-root',
+        ];
+
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/folders', $rootData);
+
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeResponseIsJson();
+
+        $I->seeResponseMatchesJsonType($this->folderJsonType);
+
+        $this->rootFolderId = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY)['id'];
     }
 
     /**
-     * @depends init_root_folder_test
+     * @depends create_root_folder_test
      */
     public function list_pia_folders_for_pia_test(ApiTester $I)
     {
@@ -63,14 +75,14 @@ class PiaFoldersCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/folders');
+        $I->sendGET('/folders');
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
     }
 
     /**
-     * @depends init_root_folder_test
+     * @depends create_root_folder_test
      */
     public function create_a_folder_test(ApiTester $I)
     {
@@ -83,7 +95,7 @@ class PiaFoldersCest
         ];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/folders', $this->folderData);
+        $I->sendPOST('/folders', $this->folderData);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -91,25 +103,6 @@ class PiaFoldersCest
         $I->seeResponseMatchesJsonType($this->folderJsonType);
 
         $this->folder = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
-    }
-
-    /**
-     * @depends init_root_folder_test
-     */
-    public function cannot_create_a_root_folder_test(ApiTester $I)
-    {
-        $I->amGoingTo('Create a root folder');
-
-        $I->login();
-
-        $rootData = $this->folderData;
-        $rootData['parent'] = null;
-
-        $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/folders', $rootData);
-
-        $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
-        $I->seeResponseIsJson();
     }
 
     /**
@@ -125,7 +118,7 @@ class PiaFoldersCest
         $this->folderData['name'] = $this->folder['name'];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT($I->getBaseUrl() . '/folders/' . $this->folder['id'], $this->folder);
+        $I->sendPUT('/folders/' . $this->folder['id'], $this->folder);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -154,7 +147,7 @@ class PiaFoldersCest
         ];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/folders', $folderToBeMovedData);
+        $I->sendPOST('/folders', $folderToBeMovedData);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -171,7 +164,7 @@ class PiaFoldersCest
         ];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/folders/' . $folderToBeMoved['id'], $folderToBeMoved);
+        $I->sendPOST('/folders/' . $folderToBeMoved['id'], $folderToBeMoved);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -190,7 +183,7 @@ class PiaFoldersCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/folders/' . $this->folder['id'], $this->folder);
+        $I->sendGET('/folders/' . $this->folder['id'], $this->folder);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -212,14 +205,14 @@ class PiaFoldersCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE($I->getBaseUrl() . '/folders/' . $this->folder['id']);
+        $I->sendDELETE('/folders/' . $this->folder['id']);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
     }
 
     /**
-     * @depends init_root_folder_test
+     * @depends create_root_folder_test
      */
     public function remove_root_folder_test(ApiTester $I)
     {
@@ -228,7 +221,7 @@ class PiaFoldersCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE($I->getBaseUrl() . '/folders/' . $this->rootFolderId);
+        $I->sendDELETE('/folders/' . $this->rootFolderId);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();

@@ -53,7 +53,7 @@ class PiaAttachmentsCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/attachments');
+        $I->sendGET('/pias/' . $this->pia['id'] . '/attachments');
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -73,7 +73,7 @@ class PiaAttachmentsCest
         ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/attachments', $attachmentData);
+        $I->sendPOST('/pias/' . $this->pia['id'] . '/attachments', $attachmentData);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -96,7 +96,7 @@ class PiaAttachmentsCest
         $this->attachmentData['name'] = $this->attachment['name'];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/attachments/' . $this->attachment['id'], $this->attachment);
+        $I->sendPUT('/pias/' . $this->pia['id'] . '/attachments/' . $this->attachment['id'], $this->attachment);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -116,7 +116,7 @@ class PiaAttachmentsCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/attachments/' . $this->attachment['id'], $this->attachment);
+        $I->sendGET('/pias/' . $this->pia['id'] . '/attachments/' . $this->attachment['id'], $this->attachment);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -138,7 +138,7 @@ class PiaAttachmentsCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/attachments/' . $this->attachment['id']);
+        $I->sendDELETE('/pias/' . $this->pia['id'] . '/attachments/' . $this->attachment['id']);
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }

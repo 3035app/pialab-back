@@ -47,18 +47,6 @@ class ApiTester extends \Codeception\Actor
      */
     private $refreshToken = null;
 
-    public function getBaseUrl()
-    {
-        if (!isset($this->baseurl)) {
-            if (getenv('TEST_SERVER_URL') === false) {
-                die("Env var TEST_SERVER_URL is mandatory \n export TEST_SERVER_URL='/'");
-            }
-            $this->baseurl = $this->getEnvParam('TEST_SERVER_URL', $this->baseurl);
-        }
-
-        return $this->baseurl;
-    }
-
     public function getUser()
     {
         if ($this->user === null) {
@@ -99,7 +87,7 @@ class ApiTester extends \Codeception\Actor
     {
         $this->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
         $this->sendPOST(
-            $this->getBaseUrl() . '/oauth/v2/token',
+            '/oauth/v2/token',
             [
                 'client_id'     => $this->getClientId(),
                 'client_secret' => $this->getClientSecret(),

@@ -59,7 +59,7 @@ class PiaAnswersCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/answers');
+        $I->sendGET('/pias/' . $this->pia['id'] . '/answers');
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -79,7 +79,7 @@ class PiaAnswersCest
         ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/answers', $answerData);
+        $I->sendPOST('/pias/' . $this->pia['id'] . '/answers', $answerData);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -99,7 +99,7 @@ class PiaAnswersCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/answers/' . $this->answer['id'], $this->answer);
+        $I->sendGET('/pias/' . $this->pia['id'] . '/answers/' . $this->answer['id'], $this->answer);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -121,7 +121,7 @@ class PiaAnswersCest
         $this->answer['data']['text'] = $this->answerData['data']['text'] . '-edited';
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/answers/' . $this->answer['id'], $this->answer);
+        $I->sendPUT('/pias/' . $this->pia['id'] . '/answers/' . $this->answer['id'], $this->answer);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -141,7 +141,7 @@ class PiaAnswersCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/answers/' . $this->answer['id']);
+        $I->sendDELETE('/pias/' . $this->pia['id'] . '/answers/' . $this->answer['id']);
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }

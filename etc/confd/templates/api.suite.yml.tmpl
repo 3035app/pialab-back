@@ -6,9 +6,3 @@ modules:
             url: 'http://{{getv "/url/addr"}}'
             depends: PhpBrowser
             part: Json
-        - Doctrine2:
-            depends: Symfony
-            cleanup: true
-        - Symfony:
-            app_path: 'src'
-            environment: 'test' 

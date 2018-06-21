@@ -53,7 +53,7 @@ class PiaMeasuresCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/measures');
+        $I->sendGET('/pias/' . $this->pia['id'] . '/measures');
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -73,7 +73,7 @@ class PiaMeasuresCest
         ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/measures', $measureData);
+        $I->sendPOST('/pias/' . $this->pia['id'] . '/measures', $measureData);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -96,7 +96,7 @@ class PiaMeasuresCest
         $this->measureData['title'] = $this->measure['title'];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/measures/' . $this->measure['id'], $this->measure);
+        $I->sendPUT('/pias/' . $this->pia['id'] . '/measures/' . $this->measure['id'], $this->measure);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -119,7 +119,7 @@ class PiaMeasuresCest
         $this->measureData['content'] = $this->measure['content'];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/measures/' . $this->measure['id'], $this->measure);
+        $I->sendPUT('/pias/' . $this->pia['id'] . '/measures/' . $this->measure['id'], $this->measure);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -139,7 +139,7 @@ class PiaMeasuresCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/measures/' . $this->measure['id'], $this->measure);
+        $I->sendGET('/pias/' . $this->pia['id'] . '/measures/' . $this->measure['id'], $this->measure);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -162,7 +162,7 @@ class PiaMeasuresCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE($I->getBaseUrl() . '/pias/' . $this->pia['id'] . '/measures/' . $this->measure['id']);
+        $I->sendDELETE('/pias/' . $this->pia['id'] . '/measures/' . $this->measure['id']);
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }
