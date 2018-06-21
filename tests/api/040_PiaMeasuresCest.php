@@ -88,7 +88,7 @@ class PiaMeasuresCest
      */
     public function edit_title_of_created_pia_measure_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Edit title of previous created PIA measure, with id: ' . $this->measure['id']);
+        $I->amGoingTo('Edit title of previously created PIA measure, with id: ' . $this->measure['id']);
 
         $I->login();
 
@@ -111,7 +111,7 @@ class PiaMeasuresCest
      */
     public function edit_content_of_created_pia_measure_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Edit content of previous created PIA measure, with id: ' . $this->measure['id']);
+        $I->amGoingTo('Edit content of previously created PIA measure, with id: ' . $this->measure['id']);
 
         $I->login();
 
@@ -134,7 +134,7 @@ class PiaMeasuresCest
      */
     public function show_created_pia_measure_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Show previous created PIA measure, with id: ' . $this->measure['id']);
+        $I->amGoingTo('Show previously created PIA measure, with id: ' . $this->measure['id']);
 
         $I->login();
 
@@ -157,7 +157,7 @@ class PiaMeasuresCest
      */
     public function remove_created_pia_measure_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Remove previous created measure PIA, with id: ' . $this->pia['id']);
+        $I->amGoingTo('Remove previously created measure PIA, with id: ' . $this->pia['id']);
 
         $I->login();
 

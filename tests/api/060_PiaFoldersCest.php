@@ -110,7 +110,7 @@ class PiaFoldersCest
      */
     public function edit_created_pia_folder_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Edit content of previous created folder, with id: ' . $this->folder['id']);
+        $I->amGoingTo('Edit content of previously created folder, with id: ' . $this->folder['id']);
 
         $I->login();
 
@@ -157,7 +157,7 @@ class PiaFoldersCest
 
         $folderToBeMoved = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
 
-        // Move folder to previous created folder
+        // Move folder to previously created folder
 
         $folderToBeMoved['parent'] = [
             'id' => $this->folder['id'],
@@ -178,7 +178,7 @@ class PiaFoldersCest
      */
     public function show_created_pia_folder_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Show previous created folder, with id: ' . $this->folder['id']);
+        $I->amGoingTo('Show previously created folder, with id: ' . $this->folder['id']);
 
         $I->login();
 
@@ -200,7 +200,7 @@ class PiaFoldersCest
      */
     public function remove_created_pia_folder_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Remove previous created folder, with id: ' . $this->folder['id']);
+        $I->amGoingTo('Remove previously created folder, with id: ' . $this->folder['id']);
 
         $I->login();
 

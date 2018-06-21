@@ -73,7 +73,7 @@ class PiaCest
      */
     public function edit_created_pia_test(\ApiTester $I)
     {
-        $I->amGoingTo('Edit previous created PIA, with id: ' . $this->pia['id']);
+        $I->amGoingTo('Edit previously created PIA, with id: ' . $this->pia['id']);
 
         $I->login();
 
@@ -97,7 +97,7 @@ class PiaCest
      */
     public function remove_created_pia_test(\ApiTester $I)
     {
-        $I->amGoingTo('Remove previous created PIA, with id: ' . $this->pia['id']);
+        $I->amGoingTo('Remove previously created PIA, with id: ' . $this->pia['id']);
 
         $I->login();
 

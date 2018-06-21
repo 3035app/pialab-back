@@ -94,7 +94,7 @@ class PiaAnswersCest
      */
     public function show_created_pia_answer_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Show previous created PIA answer, with id: ' . $this->answer['id']);
+        $I->amGoingTo('Show previously created PIA answer, with id: ' . $this->answer['id']);
 
         $I->login();
 
@@ -114,7 +114,7 @@ class PiaAnswersCest
      */
     public function edit_created_pia_answer_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Edit previous created PIA answer, with id: ' . $this->answer['id']);
+        $I->amGoingTo('Edit previously created PIA answer, with id: ' . $this->answer['id']);
 
         $I->login();
 
@@ -136,7 +136,7 @@ class PiaAnswersCest
      */
     public function remove_created_pia_answer_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Remove previous created answer PIA, with id: ' . $this->pia['id']);
+        $I->amGoingTo('Remove previously created answer PIA, with id: ' . $this->pia['id']);
 
         $I->login();
 

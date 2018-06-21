@@ -88,7 +88,7 @@ class PiaCommentsCest
      */
     public function show_created_pia_comment_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Show previous created PIA comment, with id: ' . $this->comment['id']);
+        $I->amGoingTo('Show previously created PIA comment, with id: ' . $this->comment['id']);
 
         $I->login();
 
@@ -108,7 +108,7 @@ class PiaCommentsCest
      */
     public function edit_created_pia_comment_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Edit previous created PIA comment, with id: ' . $this->comment['id']);
+        $I->amGoingTo('Edit previously created PIA comment, with id: ' . $this->comment['id']);
 
         $I->login();
 
@@ -130,7 +130,7 @@ class PiaCommentsCest
      */
     public function remove_created_pia_comment_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Remove previous created comment PIA, with id: ' . $this->pia['id']);
+        $I->amGoingTo('Remove previously created comment PIA, with id: ' . $this->pia['id']);
 
         $I->login();
 

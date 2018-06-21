@@ -88,7 +88,7 @@ class PiaAttachmentsCest
      */
     public function edit_created_pia_attachment_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Edit content of previous created PIA attachment, with id: ' . $this->attachment['id']);
+        $I->amGoingTo('Edit content of previously created PIA attachment, with id: ' . $this->attachment['id']);
 
         $I->login();
 
@@ -111,7 +111,7 @@ class PiaAttachmentsCest
      */
     public function show_created_pia_attachment_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Show previous created PIA attachment, with id: ' . $this->attachment['id']);
+        $I->amGoingTo('Show previously created PIA attachment, with id: ' . $this->attachment['id']);
 
         $I->login();
 
@@ -133,7 +133,7 @@ class PiaAttachmentsCest
      */
     public function remove_created_pia_attachment_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Remove previous created attachment PIA, with id: ' . $this->pia['id']);
+        $I->amGoingTo('Remove previously created attachment PIA, with id: ' . $this->pia['id']);
 
         $I->login();
 

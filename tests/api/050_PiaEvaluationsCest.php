@@ -106,7 +106,7 @@ class PiaEvaluationsCest
      */
     public function edit_created_pia_evaluation_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Edit content of previous created PIA evaluation, with id: ' . $this->evaluation['id']);
+        $I->amGoingTo('Edit content of previously created PIA evaluation, with id: ' . $this->evaluation['id']);
 
         $I->login();
 
@@ -129,7 +129,7 @@ class PiaEvaluationsCest
      */
     public function show_created_pia_evaluation_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Show previous created PIA evaluation, with id: ' . $this->evaluation['id']);
+        $I->amGoingTo('Show previously created PIA evaluation, with id: ' . $this->evaluation['id']);
 
         $I->login();
 
@@ -151,7 +151,7 @@ class PiaEvaluationsCest
      */
     public function remove_created_pia_evaluation_for_pia_test(ApiTester $I)
     {
-        $I->amGoingTo('Remove previous created evaluation PIA, with id: ' . $this->pia['id']);
+        $I->amGoingTo('Remove previously created evaluation PIA, with id: ' . $this->pia['id']);
 
         $I->login();
 
