@@ -83,7 +83,7 @@ EOT
             $structType = $this->structureTypeService->createStructureType($type);
         }
 
-        $structure = $this->structureService->createStructureOfType($name, $structType);
+        $structure = $this->structureService->createStructure($name, $structType);
 
         $this->entityManager->persist($structure);
         $this->entityManager->flush();

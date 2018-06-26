@@ -20,28 +20,20 @@ class FolderService extends AbstractService
         return Folder::class;
     }
 
-    public function createFolder(string $name): Folder
-    {
-        return new Folder($name);
-    }
-
-    public function createFolderForStructure(string $name, Structure $structure): Folder
-    {
-        return new Folder($name, $structure);
-    }
-
-    public function createFolderForStructureAndParent(string $name, Structure $structure, Folder $parent): Folder
+    /**
+     * @param string         $name
+     * @param Structure|null $structure
+     * @param Folder|null    $parent
+     *
+     * @return Folder
+     */
+    public function createFolder(string $name, ?Structure $structure = null, ?Folder $parent = null): Folder
     {
         $folder = new Folder($name, $structure);
-        $folder->setParent($parent);
 
-        return $folder;
-    }
-
-    public function createFolderForParent(string $name, Folder $parent): Folder
-    {
-        $folder = new Folder($name);
-        $folder->setParent($parent);
+        if ($parent !== null) {
+            $folder->setParent($parent);
+        }
 
         return $folder;
     }

@@ -20,6 +20,8 @@ use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\Services\FolderService;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use PiaApi\Exception\Folder\RootFolderCannotBeDeletedException;
+use PiaApi\Entity\Pia\Structure;
 
 class FolderController extends RestController
 {
@@ -76,15 +78,13 @@ class FolderController extends RestController
      */
     public function createAction(Request $request)
     {
-        if ($request->get('parent_id') === null && $request->get('parent') === null) {
-            return $this->view('Missing parent identification', Response::HTTP_BAD_REQUEST);
-        }
+        $parent = $request->get('parent') !== null ? $this->getResource($request->get('parent')['id'], Folder::class) : null;
 
-        $parent = $this->getResource($request->get('parent')['id'], Folder::class);
+        $structure = $this->getUser()->getStructure();
 
-        $folder = $this->folderService->createFolderForStructureAndParent(
+        $folder = $this->folderService->createFolder(
             $request->get('name'),
-            $this->getUser()->getStructure(),
+            $structure,
             $parent
         );
 
@@ -132,6 +132,10 @@ class FolderController extends RestController
             throw new NonEmptyFolderCannotBeDeletedException();
         }
 
+        if ($folder->isRoot() && $folder->getStructure() !== null) {
+            throw new RootFolderCannotBeDeletedException();
+        }
+
         $this->remove($folder);
 
         return $this->view([], Response::HTTP_OK);
@@ -148,7 +152,7 @@ class FolderController extends RestController
             throw new AccessDeniedHttpException();
         }
 
-        if ($resource->getStructure() !== $this->getUser()->getStructure()) {
+        if ($resource->getStructure() !== null && $resource->getStructure() !== $this->getUser()->getStructure()) {
             throw new AccessDeniedHttpException();
         }
     }

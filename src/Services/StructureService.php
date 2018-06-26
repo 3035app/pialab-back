@@ -34,18 +34,18 @@ class StructureService extends AbstractService
         return Structure::class;
     }
 
-    public function createStructure(string $name): Structure
+    /**
+     * @param string             $name
+     * @param StructureType|null $structureType
+     *
+     * @return Structure
+     */
+    public function createStructure(string $name, ?StructureType $structureType = null): Structure
     {
         $structure = new Structure($name);
 
-        $this->folderService->createFolderForStructure('root', $structure);
+        $this->folderService->createFolder('root', $structure);
 
-        return $structure;
-    }
-
-    public function createStructureOfType(string $name, ?StructureType $structureType): Structure
-    {
-        $structure = $this->createStructure($name);
         if ($structureType !== null) {
             $structure->setType($structureType);
         }

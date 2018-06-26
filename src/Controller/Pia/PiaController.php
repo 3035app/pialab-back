@@ -85,7 +85,7 @@ class PiaController extends RestController
             $folderId = $request->get('folder')['id'];
             $folder = $this->getResource($folderId, Folder::class);
         } else {
-            $folder = $this->getUser()->getStructure()->getRootFolder();
+            $folder = $this->getUser()->getStructure() ? $this->getUser()->getStructure()->getRootFolder() : null;
         }
         $pia->setFolder($folder);
         $pia->setStructure($this->getUser()->getStructure());
@@ -112,7 +112,7 @@ class PiaController extends RestController
         if (($folderId = $request->get('folder')) !== null) {
             $folder = $this->getResource($request->get('folder')['id'], Folder::class);
         } else {
-            $folder = $this->getUser()->getStructure()->getRootFolder();
+            $folder = $this->getUser()->getStructure() ? $this->getUser()->getStructure()->getRootFolder() : null;
         }
         $pia->setFolder($folder);
         $pia->setName($request->get('name', $pia->getName()));
@@ -150,7 +150,7 @@ class PiaController extends RestController
             'concerned_people_opinion'	         => 'string',
             'concerned_people_searched_opinion' => 'boolean',
             'concerned_people_searched_content' => 'string',
-            'rejection_reason'	                => 'string',
+            'rejection_reason'	                 => 'string',
             'applied_adjustments'	              => 'string',
             'dpos_names'                        => 'string',
             'people_names'                      => 'string',

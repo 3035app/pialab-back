@@ -19,6 +19,11 @@ class StructureTypeService
         return StructureType::class;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return StructureType
+     */
     public function createStructureType(string $name): StructureType
     {
         return new StructureType($name);

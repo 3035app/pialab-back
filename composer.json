@@ -32,6 +32,8 @@
     },
     "require-dev": {
         "codeception/codeception": "^2.4",
+        "flow/jsonpath": "^0.4.0",
+        "guzzlehttp/guzzle": "^6.3",
         "symfony/phpunit-bridge": "^4.0",
         "symfony/profiler-pack": "^1.0",
         "symfony/web-server-bundle": "^4.0"
@@ -86,5 +88,5 @@
             "allow-contrib": false
         }
     },
-    "version": "1.0.2"
+    "version": "1.1.0"
 }

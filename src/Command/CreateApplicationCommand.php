@@ -98,7 +98,7 @@ EOT
         $clientSecret = $input->getOption('client-secret', false);
 
         if ($clientId && $clientSecret) {
-            $application = $this->applicationService->createApplicationWithIdentifiers(
+            $application = $this->applicationService->createApplication(
                 $applicationName,
                 $applicationUrl,
                 $applicationGrantTypes,
