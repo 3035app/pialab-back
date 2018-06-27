@@ -1,6 +1,14 @@
 # Change Log
 
-## [1.1.0](https://github.com/pia-lab/pialab-back/tree/1.1.0) (2018-06-19)
+## [1.2.0](https://github.com/pia-lab/pialab-back/tree/1.2.0) (2018-06-27)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.1.0...1.2.0)
+
+**Merged pull requests:**
+
+- Wip api tests [\#25](https://github.com/pia-lab/pialab-back/pull/25) ([PapsOu](https://github.com/PapsOu))
+- Add PIA template batch import [\#24](https://github.com/pia-lab/pialab-back/pull/24) ([PapsOu](https://github.com/PapsOu))
+
+## [1.1.0](https://github.com/pia-lab/pialab-back/tree/1.1.0) (2018-06-20)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.0.2...1.1.0)
 
 **Merged pull requests:**
