@@ -23,6 +23,8 @@ use PiaApi\Services\StructureService;
 
 class CreateStructureCommand extends Command
 {
+    const NAME = 'pia:structure:create';
+
     /**
      * @var EncoderFactoryInterface
      */
@@ -55,7 +57,7 @@ class CreateStructureCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('pia:structure:create')
+            ->setName(self::NAME)
             ->setDescription('Creates a new Structure.')
             ->addOption('name', null, InputOption::VALUE_REQUIRED, 'The name of the structure')
             ->addOption('type', null, InputOption::VALUE_REQUIRED, 'The type of the structure')

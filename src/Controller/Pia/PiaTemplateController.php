@@ -10,14 +10,20 @@
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use PiaApi\Entity\Pia\PiaTemplate;
+use FOS\RestBundle\View\View;
+use PiaApi\Command\ImportPiaTemplatesCommand;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
+use PiaApi\Entity\Pia\PiaTemplate;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class PiaTemplateController extends RestController
@@ -39,7 +45,7 @@ class PiaTemplateController extends RestController
      * @FOSRest\Get("/pia-templates")
      * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
      *
-     * @return array
+     * @return View
      */
     public function listAction(Request $request)
     {
@@ -59,7 +65,7 @@ class PiaTemplateController extends RestController
      * @FOSRest\Get("/pia-templates/{id}")
      * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
      *
-     * @return array
+     * @return View
      */
     public function showAction(Request $request, $id)
     {
@@ -71,6 +77,42 @@ class PiaTemplateController extends RestController
         $this->canAccessResourceOr403($piaTemplate);
 
         return $this->view($piaTemplate, Response::HTTP_OK);
+    }
+
+    /**
+     * @FOSRest\Post("/pia-templates/importCollection")
+     * @Security("is_granted('CAN_CREATE_PIA_TEMPLATE')")
+     *
+     * @return View
+     */
+    public function importCollectionAction(Request $request, KernelInterface $kernel): View
+    {
+        /** @var UploadedFile $uploadedFile */
+        $uploadedFile = $request->files->get('collection');
+
+        if ($uploadedFile === null) {
+            return $this->view('Please send a valid archive', Response::HTTP_BAD_REQUEST);
+        }
+
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $inputData = [
+            'command'                  => ImportPiaTemplatesCommand::NAME,
+            'templatesFolderOrArchive' => $uploadedFile->getRealPath(),
+            '--no-interaction'         => true,
+        ];
+
+        if ($request->get('enableAll') !== null) {
+            $inputData['--enableAll'] = true;
+        }
+
+        $input = new ArrayInput($inputData);
+
+        $output = new NullOutput();
+        $returnCode = $application->run($input, $output);
+
+        return $this->view($returnCode, $returnCode === 0 ? Response::HTTP_OK : Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     protected function getEntityClass()

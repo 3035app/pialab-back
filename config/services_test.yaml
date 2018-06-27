@@ -7,3 +7,5 @@ services:
     # aliases are prefixed with test. For example:
     #
     # test.App\Service\MyService: '@App\Service\MyService'
+    JsonToEntityTransformer: '@PiaApi\DataExchange\Transformer\JsonToEntityTransformer'
+    PiaTemplateService: '@PiaApi\Services\PiaTemplateService'

@@ -21,6 +21,8 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class RemoveUserCommand extends Command
 {
+    const NAME = 'pia:user:remove';
+
     /**
      * @var EncoderFactoryInterface
      */
@@ -48,7 +50,7 @@ class RemoveUserCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('pia:user:remove')
+            ->setName(self::NAME)
             ->setDescription('Remove a user.')
             ->setHelp('This command allows you to remove a user for given email')
             ->addArgument('email', null, InputArgument::REQUIRED, 'The user\'s email')

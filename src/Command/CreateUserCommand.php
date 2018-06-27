@@ -25,6 +25,8 @@ use PiaApi\Entity\Oauth\Client;
 
 class CreateUserCommand extends Command
 {
+    const NAME = 'pia:user:create';
+
     /**
      * @var EncoderFactoryInterface
      */
@@ -60,7 +62,7 @@ class CreateUserCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('pia:user:create')
+            ->setName(self::NAME)
             ->setDescription('Creates a new user.')
             ->setHelp('This command allows you to create a user for Pia Api')
             ->addArgument('email', InputArgument::OPTIONAL, 'The user\'s email')

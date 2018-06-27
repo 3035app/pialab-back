@@ -23,6 +23,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ExportPiaCommand extends Command
 {
+    const NAME = 'pia:export';
+
     /**
      * @var JsonToEntityTransformer
      */
@@ -49,7 +51,7 @@ class ExportPiaCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('pia:export')
+            ->setName(self::NAME)
             ->setDescription('Exports a Pia to a json file.')
             ->setHelp('This command allows you to export a Pia to a json file')
             ->addOption('pia', null, InputOption::VALUE_OPTIONAL, 'The PIA unique ID')

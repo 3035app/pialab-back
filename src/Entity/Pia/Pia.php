@@ -27,9 +27,9 @@ class Pia implements Timestampable
     use ResourceTrait,
         TimestampableEntity;
 
-    const TYPE_REGULAR    = 'regular';
+    const TYPE_REGULAR = 'regular';
     const TYPE_SIMPLIFIED = 'simplified';
-    const TYPE_ADVANCED   = 'advanced';
+    const TYPE_ADVANCED = 'advanced';
 
     /**
      * @ORM\Column(type="smallint")
@@ -241,12 +241,12 @@ class Pia implements Timestampable
     {
         $questions = 36;
 
-        if($this->type == self::TYPE_REGULAR) {
-          $questions = 18;
+        if ($this->type == self::TYPE_REGULAR) {
+            $questions = 18;
         }
 
-        if($this->type == self::TYPE_SIMPLIFIED) {
-          $questions = 6;
+        if ($this->type == self::TYPE_SIMPLIFIED) {
+            $questions = 6;
         }
 
         return round((100 / $questions) * count($this->answers ?? []));

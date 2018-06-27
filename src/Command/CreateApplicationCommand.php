@@ -19,6 +19,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CreateApplicationCommand extends Command
 {
+    const NAME = 'pia:application:create';
+
     /**
      * @var ApplicationService
      */
@@ -39,7 +41,7 @@ class CreateApplicationCommand extends Command
         parent::configure();
 
         $this
-            ->setName('pia:application:create')
+            ->setName(self::NAME)
             ->setDescription('Creates a new application')
             ->addOption(
                 'name',
