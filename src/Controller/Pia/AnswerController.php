@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -55,7 +55,7 @@ class AnswerController extends PiaSubController
      *     )
      * )
      *
-     * @Security("is_granted('CAN_SHOW_ANSWER")
+     * @Security("is_granted('CAN_SHOW_ANSWER')")
      */
     public function showAction(Request $request, $piaId, $id)
     {

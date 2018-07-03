@@ -31,19 +31,21 @@ fi
     # todo: remove this two line:
     #psql -w -h ${DBHOST} -c "DROP DATABASE IF EXISTS ${DBAPPNAME};" -U ${DBROOTUSER}
     #psql -w -h ${DBHOST} -c "DROP ROLE IF EXISTS ${DBAPPUSER};" -U ${DBROOTUSER}
-    
+
     userexist=$(psql -qt -w -h ${DBHOST} -U ${DBROOTUSER} -c "SELECT rolname FROM pg_catalog.pg_roles WHERE rolname = '${DBUSER}';"|sed -e s/' '//g)
     if [ -z ${userexist} ]
     then
         psql -w -h ${DBHOST} -c "CREATE USER ${DBUSER} WITH PASSWORD '${DBPASSWORD}';" -U ${DBROOTUSER}
     fi
+    # we change the password if user already exist
+    psql -w -h ${DBHOST} -c "ALTER USER ${DBUSER} WITH PASSWORD '${DBPASSWORD}';" -U ${DBROOTUSER}
     psql -w -h ${DBHOST} -c "ALTER ROLE ${DBUSER} WITH CREATEDB;" -U ${DBROOTUSER}
-    
+
     dbexist=$(psql -qt -w -h ${DBHOST} -U ${DBROOTUSER} -c "SELECT datname FROM pg_catalog.pg_database WHERE datname = '${DBNAME}';"|sed -e s/' '//g)
     if [ -z ${dbexist} ]
     then
         psql -w -h ${DBHOST} -c "CREATE DATABASE ${DBNAME};" -U ${DBROOTUSER}
     fi
     psql -w -h ${DBHOST} -c "ALTER DATABASE ${DBNAME} OWNER TO ${DBUSER};" -U ${DBROOTUSER}
-    
-    #psql -w -h ${DBHOST} -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' -U ${DBROOTUSER} -d ${DBAPPNAME}    
+
+    #psql -w -h ${DBHOST} -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' -U ${DBROOTUSER} -d ${DBAPPNAME}

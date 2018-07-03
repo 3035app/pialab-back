@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -22,6 +22,8 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class PromoteUserCommand extends Command
 {
+    const NAME = 'pia:user:promote';
+
     /**
      * @var EncoderFactoryInterface
      */
@@ -49,7 +51,7 @@ class PromoteUserCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('pia:user:promote')
+            ->setName(self::NAME)
             ->setDescription('Creates a new user.')
             ->setHelp('This command allows you to create a user for Pia Api')
             ->addArgument('email', null, InputArgument::REQUIRED, 'The user\'s email')
@@ -66,6 +68,7 @@ class PromoteUserCommand extends Command
 
         if ($email === null) {
             $this->io->error('You must set an email');
+
             return;
         }
 
@@ -73,6 +76,7 @@ class PromoteUserCommand extends Command
 
         if ($user === null) {
             $this->io->error(sprintf('There is no user with email « %s »', $email));
+
             return;
         }
 

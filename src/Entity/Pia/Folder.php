@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -99,7 +99,7 @@ class Folder implements Timestampable
     private $children;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pia", mappedBy="folder")
+     * @ORM\OneToMany(targetEntity="Pia", mappedBy="folder",cascade={"remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
      *
@@ -115,12 +115,14 @@ class Folder implements Timestampable
      */
     protected $structure;
 
-    public function __construct(string $name, ?Structure $structure)
+    public function __construct(string $name, ?Structure $structure = null)
     {
         $this->name = $name;
-        $this->structure = $structure;
 
-        $structure->getFolders()->add($this);
+        if ($structure !== null) {
+            $this->structure = $structure;
+            $structure->getFolders()->add($this);
+        }
 
         $this->pias = new ArrayCollection();
         $this->children = new ArrayCollection();

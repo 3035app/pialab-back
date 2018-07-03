@@ -3,14 +3,13 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
 namespace PiaApi\Controller\BackOffice;
 
-use FOS\OAuthServerBundle\Model\ClientManagerInterface;
 use OAuth2\OAuth2;
 use PiaApi\Entity\Oauth\Client;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -20,17 +19,18 @@ use PiaApi\Form\Application\RemoveApplicationForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use PiaApi\Services\ApplicationService;
 
-class OauthController extends BackOfficeAbstractController
+class ApplicationController extends BackOfficeAbstractController
 {
     /**
-     * @var ClientManagerInterface
+     * @var ApplicationService
      */
-    protected $fosOauthClientManager;
+    private $applicationService;
 
-    public function __construct(ClientManagerInterface $fosOauthClientManager)
+    public function __construct(ApplicationService $applicationService)
     {
-        $this->fosOauthClientManager = $fosOauthClientManager;
+        $this->applicationService = $applicationService;
     }
 
     /**
@@ -55,7 +55,7 @@ class OauthController extends BackOfficeAbstractController
     public function addApplicationAction(Request $request)
     {
         $form = $this->createForm(CreateApplicationForm::class, [
-            'allowedGrantTypes' => [
+            'allowedGrantTypes' => [ // Sets default grant types checked on form
                 OAuth2::GRANT_TYPE_IMPLICIT         => OAuth2::GRANT_TYPE_IMPLICIT,
                 OAuth2::GRANT_TYPE_USER_CREDENTIALS => OAuth2::GRANT_TYPE_USER_CREDENTIALS,
                 OAuth2::GRANT_TYPE_REFRESH_TOKEN    => OAuth2::GRANT_TYPE_REFRESH_TOKEN,
@@ -70,13 +70,14 @@ class OauthController extends BackOfficeAbstractController
             if ($form->isValid()) {
                 $applicationData = $form->getData();
 
-                $client = $this->fosOauthClientManager->createClient();
-                /* @var Client $client */
-                $client->setName($applicationData['name']);
-                $client->setUrl($applicationData['url']);
-                $client->setRedirectUris($applicationData['redirectUris']);
-                $client->setAllowedGrantTypes($applicationData['allowedGrantTypes']);
-                $this->fosOauthClientManager->updateClient($client);
+                $application = $this->applicationService->createApplication(
+                    $applicationData['name'],
+                    $applicationData['url'],
+                    $applicationData['allowedGrantTypes']
+                );
+                $application->setRedirectUris($applicationData['redirectUris']);
+
+                $this->applicationService->updateApplication($application);
             }
 
             return $this->redirect($this->generateUrl('manage_applications'));

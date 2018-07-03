@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -23,6 +23,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ExportPiaCommand extends Command
 {
+    const NAME = 'pia:export';
+
     /**
      * @var JsonToEntityTransformer
      */
@@ -49,7 +51,7 @@ class ExportPiaCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('pia:export')
+            ->setName(self::NAME)
             ->setDescription('Exports a Pia to a json file.')
             ->setHelp('This command allows you to export a Pia to a json file')
             ->addOption('pia', null, InputOption::VALUE_OPTIONAL, 'The PIA unique ID')

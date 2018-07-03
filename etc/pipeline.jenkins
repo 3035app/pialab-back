@@ -38,6 +38,7 @@ pipeline {
         choice(choices: 'true\nfalse', description: '', name: 'RunTest')
 
         choice(choices: 'public\nprivate', description: '', name: 'Repo')
+        string(defaultValue: 'Pialab-back', description: '', name: 'Project')
 
     }
 
@@ -93,8 +94,8 @@ pipeline {
             }
 
             steps {
-                sh "bin/ci-scripts/create_user.sh"
                 sh "CLIENTURL=${params.FrontUrl} bin/ci-scripts/create_client_secret.sh"
+                sh "bin/ci-scripts/create_user.sh"
             }
         }
 
@@ -128,7 +129,7 @@ pipeline {
             steps {
                 sh "Name=${params.GlobalName} Branch=${BRANCH_NAME} ./bin/ci-scripts/gen_archive.sh"
                 archiveArtifacts artifacts: "*.tar.gz*", fingerprint: true
-                build job: 'Copy Artifact', parameters: [string(name: 'Job', value: "${JOB_NAME}"), string(name: 'Project', value: "Pialab-back"), string(name: 'Branch', value: "${BRANCH_NAME}"), string(name: 'DoDeploy', value: "false"), string(name: 'Repo', value: "${LIREPOPATH}/${params.Repo}")], wait: false
+                build job: 'Copy Artifact', parameters: [string(name: 'Job', value: "${JOB_NAME}"), string(name: 'Project', value: "${params.Project}"), string(name: 'Branch', value: "${BRANCH_NAME}"), string(name: 'DoDeploy', value: "false"), string(name: 'Repo', value: "${LIREPOPATH}/${params.Repo}")], wait: false
 
             }
         }

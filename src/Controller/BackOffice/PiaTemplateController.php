@@ -3,25 +3,36 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
 namespace PiaApi\Controller\BackOffice;
 
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\Form\PiaTemplate\CreatePiaTemplateForm;
 use PiaApi\Form\PiaTemplate\EditPiaTemplateForm;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\Form\PiaTemplate\RemovePiaTemplateForm;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use PiaApi\Services\PiaTemplateService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PiaTemplateController extends BackOfficeAbstractController
 {
+    /**
+     * @var PiaTemplateService
+     */
+    private $piaTemplateService;
+
+    public function __construct(
+        PiaTemplateService $piaTemplateService
+    ) {
+        $this->piaTemplateService = $piaTemplateService;
+    }
+
     /**
      * @Route("/managePiaTemplates", name="manage_pia_templates")
      * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
@@ -54,17 +65,11 @@ class PiaTemplateController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $piaTemplateData = $form->getData();
 
-            $piaTemplate = new PiaTemplate($piaTemplateData['name']);
-
-            /** @var UploadedFile $file */
-            $file = $piaTemplateData['data'];
-
-            if ($file) {
-                $piaTemplate->addFile($file);
-            }
-            if (isset($piaTemplateData['description'])) {
-                $piaTemplate->setDescription($piaTemplateData['description']);
-            }
+            $piaTemplate = $this->piaTemplateService->createTemplateWithFile(
+                $piaTemplateData['name'],
+                $piaTemplateData['data'],
+                isset($piaTemplateData['description']) ? $piaTemplateData['description'] : null
+            );
 
             $this->getDoctrine()->getManager()->persist($piaTemplate);
             $this->getDoctrine()->getManager()->flush();
@@ -120,7 +125,7 @@ class PiaTemplateController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePiaTemplates/removePiaTemplate/{piaTemplateId}", name="manage_pia_templates_remove_pia_template")
-     * @Security("is_granted('CAN_REMOVE_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_DELETE_PIA_TEMPLATE')")
      *
      * @param Request $request
      */

@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -26,6 +26,10 @@ class Pia implements Timestampable
 {
     use ResourceTrait,
         TimestampableEntity;
+
+    const TYPE_REGULAR = 'regular';
+    const TYPE_SIMPLIFIED = 'simplified';
+    const TYPE_ADVANCED = 'advanced';
 
     /**
      * @ORM\Column(type="smallint")
@@ -209,6 +213,14 @@ class Pia implements Timestampable
      */
     protected $folder;
 
+    /**
+     * @ORM\Column(type="string")
+     * @JMS\Groups({"Default", "Full"})
+     *
+     * @var string
+     */
+    protected $type = self::TYPE_ADVANCED;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -227,7 +239,17 @@ class Pia implements Timestampable
      */
     public function computeProgress(): int
     {
-        return round((100 / 36) * count($this->answers ?? []));
+        $questions = 36;
+
+        if ($this->type == self::TYPE_REGULAR) {
+            $questions = 18;
+        }
+
+        if ($this->type == self::TYPE_SIMPLIFIED) {
+            $questions = 6;
+        }
+
+        return round((100 / $questions) * count($this->answers ?? []));
     }
 
     /**
@@ -503,10 +525,18 @@ class Pia implements Timestampable
     }
 
     /**
-     * @param string $concernedPeopleSearchedOpinion
+     * @param bool $concernedPeopleSearchedOpinion
      */
-    public function setConcernedPeopleSearchedOpinion(?string $concernedPeopleSearchedOpinion): void
+    public function setConcernedPeopleSearchedOpinion(bool $concernedPeopleSearchedOpinion): void
     {
         $this->concernedPeopleSearchedOpinion = $concernedPeopleSearchedOpinion;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
     }
 }

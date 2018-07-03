@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -31,10 +31,12 @@ class PiaController extends RestController
      */
     protected $jsonToEntityTransformer;
 
-    public function __construct(JsonToEntityTransformer $jsonToEntityTransformer, PropertyAccessorInterface $propertyAccessor)
-    {
+    public function __construct(
+        PropertyAccessorInterface $propertyAccessor,
+        JsonToEntityTransformer $jsonToEntityTransformer
+    ) {
+        parent::__construct($propertyAccessor);
         $this->jsonToEntityTransformer = $jsonToEntityTransformer;
-        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
@@ -121,7 +123,7 @@ class PiaController extends RestController
             $folderId = $request->get('folder')['id'];
             $folder = $this->getResource($folderId, Folder::class);
         } else {
-            $folder = $this->getUser()->getStructure()->getRootFolder();
+            $folder = $this->getUser()->getStructure() ? $this->getUser()->getStructure()->getRootFolder() : null;
         }
         $pia->setFolder($folder);
         $pia->setStructure($this->getUser()->getStructure());
@@ -148,7 +150,7 @@ class PiaController extends RestController
         if (($folderId = $request->get('folder')) !== null) {
             $folder = $this->getResource($request->get('folder')['id'], Folder::class);
         } else {
-            $folder = $this->getUser()->getStructure()->getRootFolder();
+            $folder = $this->getUser()->getStructure() ? $this->getUser()->getStructure()->getRootFolder() : null;
         }
         $pia->setFolder($folder);
         $pia->setName($request->get('name', $pia->getName()));
@@ -185,23 +187,24 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
 
         $updatableAttributes = [
-              'name'                              => 'string',
-              'author_name'                       => 'string',
-              'evaluator_name'                    => 'string',
-              'validator_name'                    => 'string',
-              'folder'                            => Folder::class,
-              'dpo_status'                        => 'int',
-              'concerned_people_status'           => 'int',
-              'status'                            => 'int',
-              'dpo_opinion'	                      => 'string',
-              'concerned_people_opinion'	         => 'string',
-              'concerned_people_searched_opinion' => 'boolean',
-              'concerned_people_searched_content' => 'string',
-              'rejection_reason'	                 => 'string',
-              'applied_adjustments'	              => 'string',
-              'dpos_names'                        => 'string',
-              'people_names'                      => 'sring',
-          ];
+            'name'                              => 'string',
+            'author_name'                       => 'string',
+            'evaluator_name'                    => 'string',
+            'validator_name'                    => 'string',
+            'folder'                            => Folder::class,
+            'dpo_status'                        => 'int',
+            'concerned_people_status'           => 'int',
+            'status'                            => 'int',
+            'dpo_opinion'	                      => 'string',
+            'concerned_people_opinion'	         => 'string',
+            'concerned_people_searched_opinion' => 'boolean',
+            'concerned_people_searched_content' => 'string',
+            'rejection_reason'	                 => 'string',
+            'applied_adjustments'	              => 'string',
+            'dpos_names'                        => 'string',
+            'people_names'                      => 'string',
+            'type'                              => 'string',
+        ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);
 
@@ -234,7 +237,7 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
         $this->remove($pia);
 
-        return $this->view($pia, Response::HTTP_OK);
+        return $this->view([], Response::HTTP_OK);
     }
 
     /**

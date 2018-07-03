@@ -14,6 +14,7 @@ services:
         bind:
             # Parameters
             $FOSUserResettingRetryTTL: '%fos_user.resetting.retry_ttl%'
+            $KernelProjectDir: '%kernel.project_dir%'
             # $SecurityRoleHierarchyRoles: '%security.role_hierarchy.roles%'
 
             # Services
@@ -54,6 +55,12 @@ services:
             - '%fos_oauth_server.model.client.class%'
 
     FOS\OAuthServerBundle\Model\ClientManagerInterface: '@PiaApi\Auth\ClientManager'
+
+    api_exception_subscriber:
+        class: PiaApi\EventListener\ApiExceptionSubscriber
+        arguments: []
+        tags:
+            - { name: kernel.event_subscriber }
 
     # Used to fix bug when updating and entity througth REST api
     # jms_serializer.object_constructor:

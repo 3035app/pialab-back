@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -13,13 +13,31 @@ namespace PiaApi\Controller\Pia;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use PiaApi\Exception\Folder\NonEmptyFolderCannotBeDeletedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Folder;
+use PiaApi\Services\FolderService;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use PiaApi\Exception\Folder\RootFolderCannotBeDeletedException;
+use PiaApi\Entity\Pia\Structure;
 
 class FolderController extends RestController
 {
+    /**
+     * @var FolderService
+     */
+    private $folderService;
+
+    public function __construct(
+        PropertyAccessorInterface $propertyAccessor,
+        FolderService $folderService
+    ) {
+        parent::__construct($propertyAccessor);
+        $this->folderService = $folderService;
+    }
+
     /**
      * @FOSRest\Get("/folders")
      * @Security("is_granted('CAN_SHOW_FOLDER')")
@@ -60,17 +78,15 @@ class FolderController extends RestController
      */
     public function createAction(Request $request)
     {
-        if ($request->get('parent_id') === null && $request->get('parent') === null) {
-            return $this->view('Missing parent identification', Response::HTTP_BAD_REQUEST);
-        }
+        $parent = $request->get('parent') !== null ? $this->getResource($request->get('parent')['id'], Folder::class) : null;
 
-        $parentId = $request->get('parent_id', $request->get('parent')['id']);
+        $structure = $this->getUser()->getStructure();
 
-        $parent = $this->getRepository()->find($parentId);
-
-        $folder = $this->newFromRequest($request);
-        $folder->setStructure($this->getUser()->getStructure());
-        $folder->setParent($parent);
+        $folder = $this->folderService->createFolder(
+            $request->get('name'),
+            $structure,
+            $parent
+        );
 
         $this->persist($folder);
 
@@ -111,9 +127,18 @@ class FolderController extends RestController
     {
         $folder = $this->getResource($id);
         $this->canAccessResourceOr403($folder);
+
+        if (count($folder->getPias())) {
+            throw new NonEmptyFolderCannotBeDeletedException();
+        }
+
+        if ($folder->isRoot() && $folder->getStructure() !== null) {
+            throw new RootFolderCannotBeDeletedException();
+        }
+
         $this->remove($folder);
 
-        return $this->view($folder, Response::HTTP_OK);
+        return $this->view([], Response::HTTP_OK);
     }
 
     protected function getEntityClass()
@@ -127,7 +152,7 @@ class FolderController extends RestController
             throw new AccessDeniedHttpException();
         }
 
-        if ($resource->getStructure() !== $this->getUser()->getStructure()) {
+        if ($resource->getStructure() !== null && $resource->getStructure() !== $this->getUser()->getStructure()) {
             throw new AccessDeniedHttpException();
         }
     }
