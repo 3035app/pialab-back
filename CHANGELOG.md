@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.2.1](https://github.com/pia-lab/pialab-back/tree/1.2.1) (2018-07-04)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.0...1.2.1)
+
+**Closed issues:**
+
+-  \[ERROR\] Application with name Â« Default App Â» was not found [\#26](https://github.com/pia-lab/pialab-back/issues/26)
+
+**Merged pull requests:**
+
+- Fix pia import issue caused by folder reference [\#29](https://github.com/pia-lab/pialab-back/pull/29) ([GlennCavarle](https://github.com/GlennCavarle))
+
 ## [1.2.0](https://github.com/pia-lab/pialab-back/tree/1.2.0) (2018-06-28)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.1.0...1.2.0)
 
