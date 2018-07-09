@@ -40,7 +40,7 @@ class PiaController extends RestController
     }
 
     /**
-     * @Swg\Tag(name="Treatment")
+     * @Swg\Tag(name="PIA")
      *
      * @FOSRest\Get("/pias")
      *
@@ -68,7 +68,7 @@ class PiaController extends RestController
     }
 
     /**
-     * @Swg\Tag(name="Treatment")
+     * @Swg\Tag(name="PIA")
      *
      * @FOSRest\Get("/pias/{id}", requirements={"id"="\d+"})
      *
@@ -98,13 +98,13 @@ class PiaController extends RestController
     }
 
     /**
-     * @Swg\Tag(name="Treatment")
+     * @Swg\Tag(name="PIA")
      *
      * @FOSRest\Post("/pias")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates a treatment",
+     *     description="Creates a PIA",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
@@ -133,7 +133,19 @@ class PiaController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="PIA")
+     *
      * @FOSRest\Post("/pias/new-from-template/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Create a PIA from a template",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_CREATE_PIA')")
      *
      * @return array
@@ -164,11 +176,11 @@ class PiaController extends RestController
     }
 
     /**
-     * @Swg\Tag(name="Treatment")
+     * @Swg\Tag(name="PIA")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Update a treatment",
+     *     description="Update a PIA",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
@@ -214,13 +226,13 @@ class PiaController extends RestController
     }
 
     /**
-     * @Swg\Tag(name="Treatment")
+     * @Swg\Tag(name="PIA")
      *
      * @FOSRest\Delete("/pias/{id}", requirements={"id"="\d+"})
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete a treatment",
+     *     description="Delete a PIA",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
@@ -241,7 +253,15 @@ class PiaController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="PIA")
+     *
      * @FOSRest\Post("/pias/import")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Import a PIA"
+     * )
+     *
      * @Security("is_granted('CAN_IMPORT_PIA')")
      *
      * @return array
@@ -262,7 +282,19 @@ class PiaController extends RestController
     }
 
     /**
-     * @FOSRest\Get("/pias/export/{id}", requirements={"id"="\d+"})
+     * @Swg\Tag(name="PIA")
+     *
+     * @FOSRest\Get("/pias/{id}/export", requirements={"id"="\d+"})
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Export a PIA",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_EXPORT_PIA')")
      *
      * @return array

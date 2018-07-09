@@ -1,30 +1,41 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>{{ swagger_data.spec.info.title }}</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ swagger_data.spec.info.title }}</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700">
-    <link rel="stylesheet" href="{{ asset('bundles/nelmioapidoc/swagger-ui/swagger-ui.css') }}">
-    <link rel="stylesheet" href="{{ asset('bundles/nelmioapidoc/style.css') }}">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700">
+        <link rel="stylesheet" href="{{ asset('bundles/nelmioapidoc/swagger-ui/swagger-ui.css') }}">
+        <link rel="stylesheet" href="{{ asset('bundles/nelmioapidoc/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/swagger-ui-styles.css') }}">
 
-    {# json_encode(65) is for JSON_UNESCAPED_SLASHES|JSON_HEX_TAG to avoid JS XSS #}
-    <script id="swagger-data" type="application/json">{{ swagger_data|json_encode(65)|raw }}</script>
-</head>
-<body>
+        {# json_encode(65) is for JSON_UNESCAPED_SLASHES|JSON_HEX_TAG to avoid JS XSS #}
+        <script id="swagger-data" type="application/json">
+            {{ swagger_data|json_encode(65)|raw }}
+        </script>
+    </head>
+    <body>
 
-    <header>
-        <a id="logo" href="http://www.pialab.io"><img src="{{ asset('assets/img/pia-lab-small.png') }}" alt="Pialab API"></a>
-    </header>
+        <header>
+        <ul class="area-menu">
+                <li>
+                    <a class="area-menu-item" href="/api/doc">Domain API</a>
+                    <a class="area-menu-item" href="/api/doc/admin">Admin API</a>
+                </li>
+            </ul>
+            <a id="logo" href="http://www.pialab.io"><img src="{{ asset('assets/img/pia-lab-small.png') }}" alt="Pialab API"></a>
 
-    <div id="swagger-ui" class="api-platform"></div>
+            
+        </header>
 
-    <div class="swagger-ui-wrap" style="margin-top: 20px; margin-bottom: 20px;">
-      <a href="http://www.pialab.io">pialab.io</a>
-    </div>
+        <div id="swagger-ui" class="api-platform"></div>
 
-    <script src="{{ asset('bundles/nelmioapidoc/swagger-ui/swagger-ui-bundle.js') }}"></script>
-    <script src="{{ asset('bundles/nelmioapidoc/swagger-ui/swagger-ui-standalone-preset.js') }}"></script>
-    <script src="{{ asset('bundles/nelmioapidoc/init-swagger-ui.js') }}"></script>
-</body>
+        <div class="swagger-ui-wrap" style="margin-top: 20px; margin-bottom: 20px;">
+            <a href="http://www.pialab.io">pialab.io</a>
+        </div>
+
+        <script src="{{ asset('bundles/nelmioapidoc/swagger-ui/swagger-ui-bundle.js') }}"></script>
+        <script src="{{ asset('bundles/nelmioapidoc/swagger-ui/swagger-ui-standalone-preset.js') }}"></script>
+        <script src="{{ asset('bundles/nelmioapidoc/init-swagger-ui.js') }}"></script>
+    </body>
 </html>
