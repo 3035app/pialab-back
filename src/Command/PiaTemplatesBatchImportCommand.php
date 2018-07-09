@@ -64,7 +64,6 @@ class PiaTemplatesBatchImportCommand extends Command
         $this->entityManager = $entityManager;
         $this->jsonToEntityTransformer = $jsonToEntityTransformer;
         $this->piaTemplateService = $piaTemplateService;
-        
     }
 
     protected function configure()
@@ -86,7 +85,7 @@ class PiaTemplatesBatchImportCommand extends Command
         $enableAll = $input->getOption('enable-all');
         $dryRun = $input->getOption('dry-run');
         $noInteract = $input->getOption('no-interaction');
-        
+
         if (!is_dir($templatesFolder)) {
             $templatesFolder = $this->extractArchive($templatesFolder);
         }
@@ -100,12 +99,11 @@ class PiaTemplatesBatchImportCommand extends Command
 
             return;
         }
-        
+
         // Transforming from json to entities
 
         if ($noInteract || $this->io->confirm(sprintf('confirm importing %d template(s) ?', count($fileInfos)))) {
             foreach ($fileInfos as $fileInfo) {
-
                 $template = $this->buildTemplate($fileInfo['path'], $fileInfo['filename'], $enableAll);
 
                 if ($dryRun) {
@@ -116,8 +114,7 @@ class PiaTemplatesBatchImportCommand extends Command
                 $this->entityManager->flush($template);
             }
         }
-        $this->io->success(sprintf(' %d templates imported',count($fileInfos))); 
-
+        $this->io->success(sprintf(' %d templates imported', count($fileInfos)));
     }
 
     private function extractArchive(string $archivePath): string
@@ -137,13 +134,12 @@ class PiaTemplatesBatchImportCommand extends Command
         $tar->extract($tempDir);
 
         return $tempDir;
-
     }
 
     private function buildTemplate(string $filePath, string $fileName, bool $enabled = false): PiaTemplate
     {
         $templateJson = file_get_contents($filePath);
-        
+
         // Fetching template json as entity in order to get target template name only
         $pia = $this->fetchDataAsEntities($templateJson);
 
@@ -154,7 +150,7 @@ class PiaTemplatesBatchImportCommand extends Command
         );
 
         $template->setEnabled($enabled);
-        
+
         $this->io->comment(
             sprintf('[FILE]   : %s', $filePath) .
             "\n" .
@@ -186,7 +182,7 @@ class PiaTemplatesBatchImportCommand extends Command
         $files = [];
 
         $this->io->text(sprintf('Listing json files found in folder %s', $templatesFolder));
-        
+
         $finder = new Finder();
         $finder
             ->files()
@@ -195,16 +191,15 @@ class PiaTemplatesBatchImportCommand extends Command
             })
             ->depth('< 1')
             ->in($templatesFolder);
-        
 
         /** @var SplFileInfo $file */
         foreach ($finder as $file) {
             $files[] = [
-                'path' => $file->getRealPath(),
+                'path'     => $file->getRealPath(),
                 'filename' => $file->getFilename(),
             ];
         }
-        
+
         return $files;
     }
 

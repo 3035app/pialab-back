@@ -21,6 +21,8 @@ use PiaApi\Entity\Pia\Pia;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\Entity\Pia\Folder;
+use Swagger\Annotations as Swg;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 
 class PiaController extends RestController
 {
@@ -38,7 +40,19 @@ class PiaController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="PIA")
+     *
      * @FOSRest\Get("/pias")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns all PIAs",
+     *     @Swg\Schema(
+     *         type="array",
+     *         @Swg\Items(ref=@Nelmio\Model(type=Pia::class, groups={"Default"}))
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_PIA')")
      *
      * @return array
@@ -54,7 +68,19 @@ class PiaController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="PIA")
+     *
      * @FOSRest\Get("/pias/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns one PIA by its id",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_PIA')")
      *
      * @return array
@@ -72,7 +98,19 @@ class PiaController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="PIA")
+     *
      * @FOSRest\Post("/pias")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Creates a PIA",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_CREATE_PIA')")
      *
      * @return array
@@ -95,7 +133,19 @@ class PiaController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="PIA")
+     *
      * @FOSRest\Post("/pias/new-from-template/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Create a PIA from a template",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_CREATE_PIA')")
      *
      * @return array
@@ -126,8 +176,19 @@ class PiaController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="PIA")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Update a PIA",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @FOSRest\Put("/pias/{id}", requirements={"id"="\d+"})
-     * @FOSRest\Post("/pias/{id}", requirements={"id"="\d+"})
+     *
      * @Security("is_granted('CAN_EDIT_PIA')")
      *
      * @return array
@@ -165,7 +226,19 @@ class PiaController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="PIA")
+     *
      * @FOSRest\Delete("/pias/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Delete a PIA",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_DELETE_PIA')")
      *
      * @return array
@@ -180,7 +253,15 @@ class PiaController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="PIA")
+     *
      * @FOSRest\Post("/pias/import")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Import a PIA"
+     * )
+     *
      * @Security("is_granted('CAN_IMPORT_PIA')")
      *
      * @return array
@@ -201,7 +282,19 @@ class PiaController extends RestController
     }
 
     /**
-     * @FOSRest\Get("/pias/export/{id}", requirements={"id"="\d+"})
+     * @Swg\Tag(name="PIA")
+     *
+     * @FOSRest\Get("/pias/{id}/export", requirements={"id"="\d+"})
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Export a PIA",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_EXPORT_PIA')")
      *
      * @return array
