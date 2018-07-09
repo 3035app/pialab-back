@@ -255,6 +255,7 @@ class PiaController extends RestController
 
         $pia = $this->jsonToEntityTransformer->transform($importData);
         $pia->setStructure($this->getUser()->getStructure());
+        $pia->setFolder($this->getUser()->getStructure()->getRootFolder());
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
