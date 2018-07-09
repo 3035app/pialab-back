@@ -19,6 +19,7 @@ pia:
         navbar:
             users: Utilisateurs
             applications: Applications
+            portfolios: Portefeuilles
             structures: Structures
             templates: Gabarits
             logged_in_as: Connecté en tant que
@@ -60,7 +61,7 @@ pia:
                     name: Nom
                     url: URL
                     urls: URLs de redirection
-                    user_number: "Nombre d'utilisateur associé"
+                    user_number: "Utilisateurs associés"
                     tokens: Jetons de connexion
                     currently_valid: en cours de validité
 
@@ -99,8 +100,8 @@ pia:
             filename: Nom du fichier
             created_at: Créé le
             updated_at: Mis à jour le
-            structures_number: Nombre de structure
-            structure_types_number: Nombre de type de structure
+            structures_number: Structures
+            structure_types_number: Types de structure
 
         add:
             title: Ajouter une application
@@ -112,7 +113,7 @@ pia:
                 resume:
                     template: Gabarit
                     name: Nom
-                    pias_number: Nombre de PIA issue de ce gabarit
+                    pias_number: PIA issues de ce gabarit
 
         forms:
             create:
@@ -138,8 +139,8 @@ pia:
             id: "#"
             name: Nom
             type: Type
-            users_number: "Nb d'utilisateur"
-            pias_number: Nb de PIA
+            users_number: "Utilisateurs"
+            pias_number: PIA
             created_at: Créé le
 
         add:
@@ -152,8 +153,8 @@ pia:
                 resume:
                     structure: Structure
                     name: Nom
-                    users_number: "Nombre d'utilisateur associé"
-                    pias_number: Nombre de PIA associée
+                    users_number: "Utilisateurs associés"
+                    pias_number: PIA associées
 
         forms:
             create:
@@ -175,7 +176,7 @@ pia:
         list:
             id: "#"
             name: Nom
-            structures_number: "Nb de structure"
+            structures_number: "Structures"
 
         add:
             title: Ajouter un type de structure
@@ -187,7 +188,7 @@ pia:
                 resume:
                     structure_type: Type de structure
                     name: Nom
-                    structures_number: Nombre de structure associée
+                    structures_number: Structures associées
 
         forms:
             create:
@@ -268,6 +269,7 @@ pia:
                 ROLE_USER : Invité
                 ROLE_CONTROLLER : Responsable de Traitement
                 ROLE_DPO : DPO
+                ROLE_DPO_MANAGER : DPO Manager
                 ROLE_ADMIN : Administrateur Fonctionnel
                 ROLE_TECHNICAL_ADMIN  : Administrateur Technique
                 ROLE_SUPER_ADMIN  : Super Administrateur
@@ -295,3 +297,33 @@ pia:
                 return_to_application: Retouner vers l'application
             request:
                 back: Retour
+
+    portfolios:
+        title: Portefeuilles
+
+        list:
+            id: "#"
+            name: Libellé
+            structures_number: "Structures"
+
+        add:
+            title: Ajouter un portefeuille
+
+        modals:
+            remove:
+                title: Êtes vous certain de vouloir supprimer ce portefeuille ?
+                sub_title: (cliquez sur ce message pour annuler)
+                resume:
+                    structure_type: portefeuille
+                    name: Libellé
+                    structures_number: Structures associées
+
+        forms:
+            create:
+                name: Libellé
+                submit: Créer le portefeuille
+            edit:
+                cancel: Annuler
+                submit: Enregistrer le portefeuille
+            remove:
+                submit: Supprimer le portefeuille

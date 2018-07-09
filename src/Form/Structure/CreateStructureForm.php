@@ -16,7 +16,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Form\Structure\Transformer\StructureTypeTransformer;
+use PiaApi\Form\Structure\Transformer\PortfolioTransformer;
 use PiaApi\Entity\Pia\StructureType;
+use PiaApi\Entity\Pia\Portfolio;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CreateStructureForm extends BaseForm
@@ -31,10 +33,19 @@ class CreateStructureForm extends BaseForm
      */
     protected $structureTypeTransformer;
 
-    public function __construct(RegistryInterface $doctrine, StructureTypeTransformer $structureTypeTransformer)
-    {
+    /**
+     * @var PortfolioTransformer
+     */
+    protected $portfolioTransformer;
+
+    public function __construct(
+        RegistryInterface $doctrine,
+        StructureTypeTransformer $structureTypeTransformer,
+        PortfolioTransformer $portfolioTransformer
+        ) {
         $this->doctrine = $doctrine;
         $this->structureTypeTransformer = $structureTypeTransformer;
+        $this->portfolioTransformer = $portfolioTransformer;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -50,7 +61,22 @@ class CreateStructureForm extends BaseForm
                 'expanded' => false,
                 'choices'  => $this->getStructureTypes(),
                 'label'    => 'pia.structures.forms.create.type',
-            ])
+            ]);
+
+        $portfolios = $this->getPortfolios();
+        if (count($portfolios) > 0) {
+            $builder
+                ->add('portfolio', ChoiceType::class, [
+                    'required' => false,
+                    'multiple' => false,
+                    'expanded' => false,
+                    'choices'  => $portfolios,
+                    'label'    => 'pia.structures.forms.create.portfolio',
+                ]);
+            $builder->get('portfolio')->addModelTransformer($this->portfolioTransformer);
+        }
+
+        $builder
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'fluid',
@@ -71,5 +97,16 @@ class CreateStructureForm extends BaseForm
         }
 
         return array_flip($structureTypes);
+    }
+
+    private function getPortfolios(): array
+    {
+        $portfolios = [];
+
+        foreach ($this->doctrine->getManager()->getRepository(Portfolio::class)->findAll() as $portfolio) {
+            $portfolios[$portfolio->getId()] = $portfolio->getName() ?? $portfolio->getId();
+        }
+
+        return array_flip($portfolios);
     }
 }

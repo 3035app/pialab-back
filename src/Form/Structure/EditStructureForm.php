@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use PiaApi\Entity\Pia\PiaTemplate;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Form\Structure\Transformer\StructureTypeTransformer;
+use PiaApi\Form\Structure\Transformer\PortfolioTransformer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class EditStructureForm extends CreateStructureForm
@@ -25,9 +26,12 @@ class EditStructureForm extends CreateStructureForm
      */
     protected $arrayToCollectionTransformer;
 
-    public function __construct(RegistryInterface $doctrine, StructureTypeTransformer $structureTypeTransformer)
+    public function __construct(
+        RegistryInterface $doctrine,
+        StructureTypeTransformer $structureTypeTransformer,
+        PortfolioTransformer $portfolioTransformer)
     {
-        parent::__construct($doctrine, $structureTypeTransformer);
+        parent::__construct($doctrine, $structureTypeTransformer, $portfolioTransformer);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

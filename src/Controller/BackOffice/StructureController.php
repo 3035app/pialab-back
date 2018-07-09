@@ -181,7 +181,6 @@ class StructureController extends BackOfficeAbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $structure = $form->getData();
-
             $this->getDoctrine()->getManager()->persist($structure);
             $this->getDoctrine()->getManager()->flush();
 

@@ -15,6 +15,11 @@
         <i class="user icon"></i>{{ 'pia.layout.navbar.users'|trans }}
       </a>
     {% endif %}
+    {% if is_granted('CAN_MANAGE_PORTFOLIOS') %}
+      <a class="{{ menu.activeMenu(activeItem, 'portfolios') }} item" href="{{ path('manage_portfolios') }}">
+        <i class="building icon"></i>{{ 'pia.layout.navbar.portfolios'|trans }}
+      </a>
+    {% endif %}
     {% if is_granted('CAN_MANAGE_STRUCTURES') %}
       <a class="{{ menu.activeMenu(activeItem, 'structures') }} item" href="{{ path('manage_structures') }}">
         <i class="building icon"></i>{{ 'pia.layout.navbar.structures'|trans }}

@@ -44,6 +44,14 @@ class Structure implements Timestampable
     protected $type;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Portfolio", inversedBy="structures", cascade={"persist"})
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var Portfolio
+     */
+    protected $portfolio;
+
+    /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="structure", cascade={"remove"})
      * @JMS\Exclude()
      *
@@ -99,6 +107,22 @@ class Structure implements Timestampable
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return Portfolio
+     */
+    public function getPortfolio(): ?Portfolio
+    {
+        return $this->portfolio;
+    }
+
+    /**
+     * @param Portfolio $portfolio
+     */
+    public function setPortfolio(?Portfolio $portfolio): void
+    {
+        $this->portfolio = $portfolio;
     }
 
     /**
