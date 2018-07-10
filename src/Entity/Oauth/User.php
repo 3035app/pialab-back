@@ -10,11 +10,15 @@
 
 namespace PiaApi\Entity\Oauth;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use FOS\UserBundle\Model\User as BaseUser;
+use JMS\Serializer\Annotation as JMS;
+use PiaApi\Entity\Pia\Portfolio;
 use PiaApi\Entity\Pia\Structure;
 use PiaApi\Entity\Pia\UserProfile;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="PiaApi\Repository\UserRepository")
@@ -73,6 +77,19 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
      */
     protected $structure;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="PiaApi\Entity\Pia\Portfolio", inversedBy="users")
+     * @ORM\JoinTable(
+     *      name="pia_users__portfolios",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_portfolio_id", referencedColumnName="id")}
+     * )
+     * @JMS\Exclude()
+     *
+     * @var Collection
+     */
+    protected $portfolios;
+
     public function __construct(?string $email = null)
     {
         $this->email = $email;
@@ -82,6 +99,7 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         $this->expirationDate = new \DateTimeImmutable('+1 Year');
         $this->enabled = true;
         $this->profile = new UserProfile();
+        $this->portfolios = new ArrayCollection();
     }
 
     /**
@@ -173,6 +191,27 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     public function setUsername($username)
     {
         $this->username = $username;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPortfolios(): array
+    {
+        return $this->portfolios->getValues();
+    }
+
+    /**
+     * @return Collection
+     */
+    public function setPortfolios(array $portfolios): void
+    {
+        $this->portfolios = new ArrayCollection($portfolios);
+    }
+
+    public function removePortfolio(Portfolio $portfolio): void
+    {
+        $this->portfolios->removeElement($portfolio);
     }
 
     public function eraseCredentials()

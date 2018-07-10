@@ -160,6 +160,7 @@ pia:
             create:
                 name: Nom
                 type: Type de structure
+                portfolio: Portefeuille client
                 submit: Créer la structure
             edit:
                 templates: Gabarits de PIA disponibles
@@ -244,6 +245,7 @@ pia:
                 email: Adresse email
                 password: Mot de passe
                 roles: Rôles
+                portfolios: Portefeuilles client
                 sendResettingEmail: "Envoyer l'email de RàZ de mot de passe ?"
                 sendResettingEmail_help: "Envoyer automatiquement l'email de réinitialisation de mot de passe à l'adresse email saisie"
                 submit: "Créer l'utilisateur"

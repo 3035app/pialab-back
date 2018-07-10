@@ -35,7 +35,7 @@ class RolesType extends AbstractType
           'multiple' => true,
           'expanded' => true,
           'choices'  => $this->roles,
-          'label'    => 'Rôles',
+          'label'    => '',
     ));
     }
 

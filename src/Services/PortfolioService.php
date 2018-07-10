@@ -10,13 +10,19 @@
 
 namespace PiaApi\Services;
 
+use Doctrine\ORM\EntityManagerInterface;
 use PiaApi\Entity\Pia\Portfolio;
+use PiaApi\Repository\PortfolioRepository;
 
-class PortfolioService
+final class PortfolioService
 {
-    public function getEntityClass(): string
+    private $entityManager;
+    private $repository;
+
+    public function __construct(EntityManagerInterface $entityManager, PortfolioRepository $portfolioRepository)
     {
-        return Portfolio::class;
+        $this->entityManager = $entityManager;
+        $this->repository = $portfolioRepository;
     }
 
     /**
@@ -24,8 +30,37 @@ class PortfolioService
      *
      * @return Portfolio
      */
-    public function createPortfolio(string $name): Portfolio
+    public function newPortfolio(string $name): Portfolio
     {
         return new Portfolio($name);
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return Portfolio
+     */
+    public function getById($id)
+    {
+        return $this->repository->find($id);
+    }
+
+    public function save(Portfolio $portfolio): void
+    {
+        $this->entityManager->flush($portfolio);
+    }
+
+    public function remove(Portfolio $portfolio): void
+    {
+        foreach ($portfolio->getUsers() as $user) {
+            $user->removePortfolio($portfolio);
+        }
+
+        foreach ($portfolio->getStructures() as $structure) {
+            $structure->setPortfolio(null);
+        }
+
+        $this->repository->remove($portfolio);
+        $this->entityManager->flush();
     }
 }

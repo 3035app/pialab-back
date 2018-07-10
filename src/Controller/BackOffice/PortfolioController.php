@@ -10,8 +10,8 @@
 
 namespace PiaApi\Controller\BackOffice;
 
-use PiaApi\Entity\Pia\Portfolio;
 use PiaApi\Entity\Oauth\User;
+use PiaApi\Entity\Pia\Portfolio;
 use PiaApi\Form\Portfolio\CreatePortfolioForm;
 use PiaApi\Form\Portfolio\EditPortfolioForm;
 use PiaApi\Form\Portfolio\RemovePortfolioForm;
@@ -42,7 +42,7 @@ class PortfolioController extends BackOfficeAbstractController
         $pagerfanta = $this->buildPager($request, Portfolio::class);
 
         return $this->render('pia/Portfolio/managePortfolios.html.twig', [
-            'portfolios'     => $pagerfanta,
+            'portfolios' => $pagerfanta,
         ]);
     }
 
@@ -60,8 +60,8 @@ class PortfolioController extends BackOfficeAbstractController
         }
 
         $userPager = $this->getDoctrine()
-          ->getRepository(User::class)
-          ->getPaginatedUsersByPortfolio($portfolio);
+            ->getRepository(User::class)
+            ->getPaginatedUsersByPortfolio($portfolio);
 
         $userPage = $request->get('page', 1);
         $userLimit = $request->get('limit', $userPager->getMaxPerPage());
@@ -70,14 +70,14 @@ class PortfolioController extends BackOfficeAbstractController
         $userPager->setCurrentPage($userPager->getNbPages() < $userPage ? $userPager->getNbPages() : $userPage);
 
         $userForm = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
-            'action'      => $this->generateUrl('manage_users_add_user'),
-            'portfolio'   => $portfolio,
+            'action'    => $this->generateUrl('manage_users_add_user'),
+            'portfolio' => $portfolio,
         ]);
 
         return $this->render('pia/Portfolio/showPortfolio.html.twig', [
-            'portfolio'     => $portfolio,
-            'users'         => $userPager,
-            'userForm'      => $userForm->createView(),
+            'portfolio' => $portfolio,
+            'users'     => $userPager,
+            'userForm'  => $userForm->createView(),
         ]);
     }
 
@@ -121,8 +121,8 @@ class PortfolioController extends BackOfficeAbstractController
      */
     public function editPortfolioAction(Request $request)
     {
-        $portfolioId = $request->get('portfolioId');
-        $portfolio = $this->getDoctrine()->getRepository(Portfolio::class)->find($portfolioId);
+        $id = $request->get('portfolioId');
+        $portfolio = $this->portfolioService->getById($id);
 
         if ($portfolio === null) {
             throw new NotFoundHttpException(sprintf('Portfolio « %s » does not exist', $portfolioId));
@@ -136,9 +136,7 @@ class PortfolioController extends BackOfficeAbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $portfolio = $form->getData();
-
-            $this->getDoctrine()->getManager()->persist($portfolio);
-            $this->getDoctrine()->getManager()->flush();
+            $this->portfolioService->save($portfolio);
 
             return $this->redirect($this->generateUrl('manage_portfolios'));
         }
@@ -156,8 +154,8 @@ class PortfolioController extends BackOfficeAbstractController
      */
     public function removePortfolioAction(Request $request)
     {
-        $portfolioId = $request->get('portfolioId');
-        $portfolio = $this->getDoctrine()->getRepository(Portfolio::class)->find($portfolioId);
+        $id = $request->get('portfolioId');
+        $portfolio = $this->portfolioService->getById($id);
 
         if ($portfolio === null) {
             throw new NotFoundHttpException(sprintf('Portfolio « %s » does not exist', $portfolioId));
@@ -172,12 +170,7 @@ class PortfolioController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $portfolio = $form->getData();
 
-            foreach ($portfolio->getUsers() as $user) {
-                $user->setPortfolio(null);
-            }
-
-            $this->getDoctrine()->getManager()->remove($portfolio);
-            $this->getDoctrine()->getManager()->flush();
+            $this->portfolioService->remove($portfolio);
 
             return $this->redirect($this->generateUrl('manage_portfolios'));
         }

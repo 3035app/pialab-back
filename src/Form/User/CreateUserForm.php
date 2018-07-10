@@ -21,10 +21,13 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Form\Application\Transformer\ApplicationTransformer;
 use PiaApi\Form\Structure\Transformer\StructureTransformer;
+use PiaApi\Form\User\Transformer\PortfoliosTransformer;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Pia\Portfolio;
 use PiaApi\Entity\Oauth\Client;
 use PiaApi\Form\Type\RolesType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use PiaApi\Form\Type\SearchChoiceType;
 
 class CreateUserForm extends BaseForm
 {
@@ -44,6 +47,11 @@ class CreateUserForm extends BaseForm
     protected $structureTransformer;
 
     /**
+     * @var PortfoliosTransformer
+     */
+    protected $portfolioTransformer;
+
+    /**
      * @var Security
      */
     protected $security;
@@ -51,11 +59,13 @@ class CreateUserForm extends BaseForm
     public function __construct(
       RegistryInterface $doctrine,
        ApplicationTransformer $applicationTransformer,
-       StructureTransformer $structureTransformer)
+       StructureTransformer $structureTransformer,
+       PortfoliosTransformer $portfoliosTransformer)
     {
         $this->doctrine = $doctrine;
         $this->applicationTransformer = $applicationTransformer;
         $this->structureTransformer = $structureTransformer;
+        $this->portfoliosTransformer = $portfoliosTransformer;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -94,6 +104,15 @@ class CreateUserForm extends BaseForm
                       'data_class' => null,
                   ]);
         }
+
+        $builder
+            ->add('portfolios', SearchChoiceType::class, [
+                'label'    => 'pia.users.forms.create.portfolios',
+                'multiple' => true,
+                'choices'  => $this->getPortfolios(),
+            ]);
+        $builder->get('portfolios')->addModelTransformer($this->portfoliosTransformer);
+
         $builder
             ->add('profile', UserProfileForm::class, [
                 'label'   => false,
@@ -158,6 +177,17 @@ class CreateUserForm extends BaseForm
         }
 
         return array_flip($structures);
+    }
+
+    private function getPortfolios(): array
+    {
+        $portfolios = [];
+
+        foreach ($this->doctrine->getManager()->getRepository(Portfolio::class)->findAll() as $portfolio) {
+            $portfolios[$portfolio->getId()] = $portfolio->getName() ?? $portfolio->getId();
+        }
+
+        return array_flip($portfolios);
     }
 
     public function configureOptions(OptionsResolver $resolver)

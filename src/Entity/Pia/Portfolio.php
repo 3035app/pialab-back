@@ -10,13 +10,14 @@
 
 namespace PiaApi\Entity\Pia;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use PiaApi\Entity\Oauth\User;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="PiaApi\Repository\PortfolioRepository")
@@ -43,10 +44,19 @@ class Portfolio implements Timestampable
      */
     protected $structures;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="PiaApi\Entity\Oauth\User", mappedBy="portfolios")
+     * @JMS\Exclude()
+     *
+     * @var Collection
+     */
+    protected $users;
+
     public function __construct(string $name)
     {
         $this->name = $name;
         $this->structures = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getName()
@@ -55,10 +65,31 @@ class Portfolio implements Timestampable
     }
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getStructures(): Collection
+    public function getStructures(): array
     {
-        return $this->structures;
+        return $this->structures->getValues();
+    }
+
+    /**
+     * @return array
+     */
+    public function getUsers(): array
+    {
+        return $this->users->getValues();
+    }
+
+    /**
+     * @return array
+     */
+    public function setUsers(array $users): void
+    {
+        $this->users = new ArrayCollection($users);
+    }
+
+    public function removeUser(User $user): array
+    {
+        $this->users->removeElement($user);
     }
 }
