@@ -135,4 +135,17 @@ class UserProfile implements Timestampable
     {
         return $this->user->getRoles();
     }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\Type("array<string>")
+     * @JMS\SerializedName("portfolios")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return array
+     */
+    public function getPortfolios()
+    {
+        return $this->user->getPortfolios();
+    }
 }

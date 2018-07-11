@@ -11,7 +11,9 @@
 namespace PiaApi\Form\Structure;
 
 use PiaApi\Form\BaseForm;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -43,11 +45,20 @@ class CreateStructureForm extends BaseForm
                 'label'    => 'pia.structures.forms.create.type',
             ]);
 
-        $builder
-            ->add('portfolio', PortfolioChoiceType::class, [
-                'required' => false,
-                'label'    => 'pia.structures.forms.create.portfolio',
-            ]);
+        if (!$options['portfolio']) {
+            $builder
+                    ->add('portfolio', PortfolioChoiceType::class, [
+                        'required' => false,
+                        'label'    => 'pia.structures.forms.create.portfolio',
+                    ]);
+        } else {
+            $builder
+                    ->add('portfolio', HiddenType::class, [
+                        'required'   => true,
+                        'data'       => $options['portfolio']->getId(),
+                        'data_class' => null,
+                    ]);
+        }
 
         $builder
             ->add('submit', SubmitType::class, [
@@ -57,8 +68,17 @@ class CreateStructureForm extends BaseForm
                 'label' => 'pia.structures.forms.create.submit',
             ]);
 
-        if (!count($builder->get('portfolio')->getOption('choices'))) {
+        if (!$options['portfolio'] && !count($builder->get('portfolio')->getOption('choices'))) {
             $builder->remove('portfolio');
         }
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults([
+            'portfolio' => false,
+        ]);
     }
 }

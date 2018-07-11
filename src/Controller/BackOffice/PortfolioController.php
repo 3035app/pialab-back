@@ -10,11 +10,12 @@
 
 namespace PiaApi\Controller\BackOffice;
 
-use PiaApi\Entity\Oauth\User;
 use PiaApi\Entity\Pia\Portfolio;
+use PiaApi\Entity\Pia\Structure;
 use PiaApi\Form\Portfolio\CreatePortfolioForm;
 use PiaApi\Form\Portfolio\EditPortfolioForm;
 use PiaApi\Form\Portfolio\RemovePortfolioForm;
+use PiaApi\Form\Structure\CreateStructureForm;
 use PiaApi\Services\PortfolioService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -59,25 +60,25 @@ class PortfolioController extends BackOfficeAbstractController
             throw new NotFoundHttpException(sprintf('Portfolio « %s » does not exist', $portfolioId));
         }
 
-        $userPager = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->getPaginatedUsersByPortfolio($portfolio);
+        $structurePager = $this->getDoctrine()
+            ->getRepository(Structure::class)
+            ->getPaginatedStructuresByPortfolio($portfolio);
 
-        $userPage = $request->get('page', 1);
-        $userLimit = $request->get('limit', $userPager->getMaxPerPage());
+        $structurePage = $request->get('page', 1);
+        $structureLimit = $request->get('limit', $structurePager->getMaxPerPage());
 
-        $userPager->setMaxPerPage($userLimit);
-        $userPager->setCurrentPage($userPager->getNbPages() < $userPage ? $userPager->getNbPages() : $userPage);
+        $structurePager->setMaxPerPage($structureLimit);
+        $structurePager->setCurrentPage($structurePager->getNbPages() < $structurePage ? $structurePager->getNbPages() : $structurePage);
 
-        $userForm = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
-            'action'    => $this->generateUrl('manage_users_add_user'),
+        $structureForm = $this->createForm(CreateStructureForm::class, [], [
+            'action'    => $this->generateUrl('manage_structures_add_structure'),
             'portfolio' => $portfolio,
         ]);
 
         return $this->render('pia/Portfolio/showPortfolio.html.twig', [
-            'portfolio' => $portfolio,
-            'users'     => $userPager,
-            'userForm'  => $userForm->createView(),
+            'portfolio'      => $portfolio,
+            'structures'     => $structurePager,
+            'structureForm'  => $structureForm->createView(),
         ]);
     }
 

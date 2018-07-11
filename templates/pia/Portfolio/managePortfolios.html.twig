@@ -53,6 +53,9 @@
 
                                     <td class="right aligned">
                                         <div class="ui small buttons">
+                                            <a class="ui blue tiny icon button" title="{{ 'pia.actions.show'|trans }}" href="{{ path('manage_portfolios_show_portfolio', {'portfolioId':portfolio.id}) }}">
+                                                <i class="eye icon"></i>
+                                            </a>
                                             <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_portfolios_edit_portfolio', {'portfolioId':portfolio.id}) }}">
                                                 <i class="pencil icon"></i>
                                             </a>
