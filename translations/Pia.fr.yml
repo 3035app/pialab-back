@@ -271,7 +271,7 @@ pia:
                 ROLE_USER : Invité
                 ROLE_CONTROLLER : Responsable de Traitement
                 ROLE_DPO : DPO
-                ROLE_DPO_MANAGER : DPO Manager
+                ROLE_SHARED_DPO : DPO Mutualisé
                 ROLE_ADMIN : Administrateur Fonctionnel
                 ROLE_TECHNICAL_ADMIN  : Administrateur Technique
                 ROLE_SUPER_ADMIN  : Super Administrateur
@@ -323,6 +323,7 @@ pia:
         forms:
             create:
                 name: Libellé
+                structures: Structures associées
                 submit: Créer le portefeuille
             edit:
                 cancel: Annuler

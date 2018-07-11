@@ -10,37 +10,17 @@
 
 namespace PiaApi\Form\User;
 
-use PiaApi\Form\Application\Transformer\ApplicationTransformer;
-use PiaApi\Form\Structure\Transformer\StructureTransformer;
-use PiaApi\Form\Type\RolesType;
-use PiaApi\Form\User\Transformer\PortfoliosTransformer;
-use PiaApi\Form\User\Transformer\UserProfileTransformer;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use PiaApi\Form\User\Type\RolesType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use PiaApi\Form\Portfolio\Type\PortfolioChoiceType;
 
 class EditUserForm extends CreateUserForm
 {
-    /**
-     * @var UserProfileTransformer
-     */
-    protected $profileTransformer;
-
-    public function __construct(
-        RegistryInterface $doctrine,
-        UserProfileTransformer $profileTransformer,
-        ApplicationTransformer $applicationTransformer,
-        StructureTransformer $structureTransformer,
-        PortfoliosTransformer $portfoliosTransformer
-    ) {
-        parent::__construct($doctrine, $applicationTransformer, $structureTransformer, $portfoliosTransformer);
-        $this->profileTransformer = $profileTransformer;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
@@ -74,6 +54,13 @@ class EditUserForm extends CreateUserForm
                 'required' => false,
                 'label'    => 'pia.users.forms.edit.locked',
             ])
+
+            ->add('portfolios', PortfolioChoiceType::class, [
+                'required' => false,
+                'multiple' => true,
+                'label'    => 'pia.users.forms.create.portfolios',
+            ])
+
             ->add('cancel', ButtonType::class, [
                 'attr' => [
                     'class' => 'red cancel',
@@ -89,6 +76,8 @@ class EditUserForm extends CreateUserForm
                 'label' => 'pia.users.forms.edit.submit',
             ]);
 
-        $builder->get('profile')->addModelTransformer($this->profileTransformer);
+        if (!count($builder->get('portfolios')->getOption('choices'))) {
+            $builder->remove('portfolios');
+        }
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
@@ -7,8 +6,7 @@
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
-
-namespace PiaApi\Form\User\Transformer;
+namespace PiaApi\Form\User\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -21,7 +19,6 @@ class UserProfileTransformer implements DataTransformerInterface
      * @var RegistryInterface
      */
     protected $doctrine;
-
     /**
      * @param RegistryInterface $doctrine
      */
@@ -29,7 +26,6 @@ class UserProfileTransformer implements DataTransformerInterface
     {
         $this->doctrine = $doctrine;
     }
-
     /**
      * @param UserProfile $profile
      *
@@ -39,20 +35,16 @@ class UserProfileTransformer implements DataTransformerInterface
     {
         if ($profile instanceof UserProfile) {
             $user = $profile->getUser();
-
             $array = [
             'id'            => $profile->getId(),
             'user'          => $profile->getUser()->getId(),
             'firstName'     => $profile->getFirstName(),
             'lastName'      => $profile->getLastName(),
           ];
-
             return $array;
         }
-
         return $profile;
     }
-
     /**
      * @param string $value
      *
@@ -61,27 +53,19 @@ class UserProfileTransformer implements DataTransformerInterface
     public function reverseTransform($value)
     {
         $profile = new UserProfile();
-
-        $userRepository = $this->doctrine->getRepository(User::class);
-        $user = $userRepository->find($value['user']);
-
+        
         $profileRepository = $this->doctrine->getRepository(UserProfile::class);
 
-        if ($value['id']) {
+        if (isset($value['id'])) {
             $profile = $profileRepository->find($value['id']);
         }
-
         if (isset($value['firstName'])) {
             $profile->setFirstName($value['firstName']);
         }
-
         if (isset($value['lastName'])) {
             $profile->setLastName($value['lastName']);
         }
-
-        $user->setProfile($profile);
-        $profile->setUser($user);
-
+       
         return $profile;
     }
 }

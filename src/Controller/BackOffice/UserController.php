@@ -124,8 +124,7 @@ class UserController extends BackOfficeAbstractController
                 $user->addRole($role);
             }
 
-            $user->getProfile()->setFirstName($userData['profile']['firstName']);
-            $user->getProfile()->setLastName($userData['profile']['lastName']);
+            $user->setProfile($userData['profile']);
 
             $user->setUsername($this->generateUsername($user));
             $user->setApplication($userData['application']);

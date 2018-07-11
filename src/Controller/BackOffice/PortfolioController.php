@@ -96,11 +96,9 @@ class PortfolioController extends BackOfficeAbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $portfolioData = $form->getData();
+            $data = $form->getData();
 
-            $portfolio = $this->portfolioService->createPortfolio(
-                $portfolioData['name']
-            );
+            $portfolio = $this->portfolioService->newFromFormData($data);
 
             $this->getDoctrine()->getManager()->persist($portfolio);
             $this->getDoctrine()->getManager()->flush();
@@ -136,6 +134,10 @@ class PortfolioController extends BackOfficeAbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $portfolio = $form->getData();
+            if (empty($form->get('structures')->getData())) {
+                $portfolio->setStructures([]);
+            }
+
             $this->portfolioService->save($portfolio);
 
             return $this->redirect($this->generateUrl('manage_portfolios'));

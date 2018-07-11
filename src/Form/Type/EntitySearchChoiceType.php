@@ -12,29 +12,37 @@ namespace PiaApi\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\Common\Persistence\ObjectRepository;
 
-class StructureChoiceType extends AbstractType
+abstract class EntitySearchChoiceType extends AbstractType
 {
-    public function __construct()
+    private $repository;
+
+    public function __construct(ObjectRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'required' => false,
+            'class' => $this->repository->getClassName(),
+            'choice_label' => 'name',
             'multiple' => false,
             'expanded' => false,
-            'choices'  => $this->getStructures(),
-        ));
+            'choices'  => $this->getChoices(),
+        ]);
     }
 
-    protected function getStructures()
+    private function getChoices(): array
     {
+        return $this->repository->findAll();
     }
 
     public function getParent()
     {
-        return SearchChoiceType::class;
+        return EntityType::class;
     }
 }

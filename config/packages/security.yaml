@@ -119,12 +119,12 @@ security:
             - CAN_IMPORT_PIA
             - CAN_MANAGE_FOLDERS
         
-        ROLE_DPO_MANAGER:
+        ROLE_SHARED_DPO:
             - ROLE_DPO
             - CAN_MANAGE_PORTFOLIOS
 
         ROLE_ADMIN:
-            - ROLE_DPO_MANAGER
+            - ROLE_SHARED_DPO
             - CAN_MANAGE_ONLY_OWNED_USERS
 
         ROLE_TECHNICAL_ADMIN:

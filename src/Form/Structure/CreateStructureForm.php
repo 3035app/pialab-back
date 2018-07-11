@@ -15,11 +15,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use PiaApi\Form\Structure\Transformer\StructureTypeTransformer;
-use PiaApi\Form\Structure\Transformer\PortfolioTransformer;
-use PiaApi\Entity\Pia\StructureType;
+use PiaApi\Form\Portfolio\Type\PortfolioChoiceType;
+use PiaApi\Form\Structure\Type\StructureTypeChoiceType;
 use PiaApi\Entity\Pia\Portfolio;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CreateStructureForm extends BaseForm
 {
@@ -28,24 +26,9 @@ class CreateStructureForm extends BaseForm
      */
     protected $doctrine;
 
-    /**
-     * @var StructureTypeTransformer
-     */
-    protected $structureTypeTransformer;
-
-    /**
-     * @var PortfolioTransformer
-     */
-    protected $portfolioTransformer;
-
-    public function __construct(
-        RegistryInterface $doctrine,
-        StructureTypeTransformer $structureTypeTransformer,
-        PortfolioTransformer $portfolioTransformer
-        ) {
+    public function __construct(RegistryInterface $doctrine)
+    {
         $this->doctrine = $doctrine;
-        $this->structureTypeTransformer = $structureTypeTransformer;
-        $this->portfolioTransformer = $portfolioTransformer;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -55,26 +38,16 @@ class CreateStructureForm extends BaseForm
                 'required' => true,
                 'label'    => 'pia.structures.forms.create.name',
             ])
-            ->add('type', ChoiceType::class, [
+            ->add('type', StructureTypeChoiceType::class, [
                 'required' => false,
-                'multiple' => false,
-                'expanded' => false,
-                'choices'  => $this->getStructureTypes(),
                 'label'    => 'pia.structures.forms.create.type',
             ]);
 
-        $portfolios = $this->getPortfolios();
-        if (count($portfolios) > 0) {
-            $builder
-                ->add('portfolio', ChoiceType::class, [
-                    'required' => false,
-                    'multiple' => false,
-                    'expanded' => false,
-                    'choices'  => $portfolios,
-                    'label'    => 'pia.structures.forms.create.portfolio',
-                ]);
-            $builder->get('portfolio')->addModelTransformer($this->portfolioTransformer);
-        }
+        $builder
+            ->add('portfolio', PortfolioChoiceType::class, [
+                'required' => false,
+                'label'    => 'pia.structures.forms.create.portfolio',
+            ]);
 
         $builder
             ->add('submit', SubmitType::class, [
@@ -82,31 +55,10 @@ class CreateStructureForm extends BaseForm
                     'class' => 'fluid',
                 ],
                 'label' => 'pia.structures.forms.create.submit',
-            ])
-        ;
+            ]);
 
-        $builder->get('type')->addModelTransformer($this->structureTypeTransformer);
-    }
-
-    private function getStructureTypes(): array
-    {
-        $structureTypes = [];
-
-        foreach ($this->doctrine->getManager()->getRepository(StructureType::class)->findAll() as $structureType) {
-            $structureTypes[$structureType->getId()] = $structureType->getName() ?? $structureType->getId();
+        if (!count($builder->get('portfolio')->getOption('choices'))) {
+            $builder->remove('portfolio');
         }
-
-        return array_flip($structureTypes);
-    }
-
-    private function getPortfolios(): array
-    {
-        $portfolios = [];
-
-        foreach ($this->doctrine->getManager()->getRepository(Portfolio::class)->findAll() as $portfolio) {
-            $portfolios[$portfolio->getId()] = $portfolio->getName() ?? $portfolio->getId();
-        }
-
-        return array_flip($portfolios);
     }
 }

@@ -14,9 +14,21 @@ use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use PiaApi\Form\User\DataTransformer\UserProfileTransformer;
 
 class UserProfileForm extends BaseForm
 {
+    /**
+     * @var UserProfileTransformer
+     */
+    protected $profileTransformer;
+
+    public function __construct(
+        UserProfileTransformer $profileTransformer
+    ) {
+        $this->profileTransformer = $profileTransformer;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -31,5 +43,6 @@ class UserProfileForm extends BaseForm
                 'label'    => 'pia.users.forms.profile.firstName',
             ])
         ;
+        $builder->addModelTransformer($this->profileTransformer);
     }
 }

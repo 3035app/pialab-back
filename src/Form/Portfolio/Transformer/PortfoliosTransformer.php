@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Form\User\Transformer;
+namespace PiaApi\Form\Portfolio\Transformer;
 
 use PiaApi\Entity\Pia\Portfolio;
 use Symfony\Bridge\Doctrine\RegistryInterface;

@@ -14,6 +14,7 @@ use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use PiaApi\Form\Structure\Type\StructureChoiceType;
 
 class CreatePortfolioForm extends BaseForm
 {
@@ -23,6 +24,11 @@ class CreatePortfolioForm extends BaseForm
             ->add('name', TextType::class, [
                 'required' => true,
                 'label'    => 'pia.portfolios.forms.create.name',
+            ])
+            ->add('structures', StructureChoiceType::class, [
+                'required' => false,
+                'multiple' => true,
+                'label'    => 'pia.portfolios.forms.create.structures',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

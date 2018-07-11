@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Form\Structure\Transformer;
+namespace PiaApi\Form\Portfolio\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Pia\Portfolio;
 
-class StructureTransformer implements DataTransformerInterface
+class PortfolioTransformer implements DataTransformerInterface
 {
     /**
      * @var RegistryInterface
@@ -28,11 +28,11 @@ class StructureTransformer implements DataTransformerInterface
 
     public function transform($value)
     {
-        if ($value instanceof Structure) {
+        if ($value instanceof Portfolio) {
             return $value->getId();
         }
 
-        return -1;
+        return null;
     }
 
     public function reverseTransform($value)
@@ -41,6 +41,6 @@ class StructureTransformer implements DataTransformerInterface
             return null;
         }
 
-        return $this->doctrine->getManager()->getRepository(Structure::class)->find($value);
+        return $this->doctrine->getManager()->getRepository(Portfolio::class)->find($value);
     }
 }

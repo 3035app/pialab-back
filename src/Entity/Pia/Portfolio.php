@@ -75,6 +75,28 @@ class Portfolio implements Timestampable
     /**
      * @return array
      */
+    public function setStructures(array $structures): void
+    {
+        foreach ($structures as $structure) {
+            $this->addStructure($structure);
+        }
+    }
+
+    public function addStructure(Structure $structure)
+    {
+        $structure->setPortfolio($this);
+        $this->structures->add($structure);
+    }
+
+    public function removeStructure(Structure $structure)
+    {
+        $structure->setPortfolio(null);
+        $this->structures->removeElement($structure);
+    }
+
+    /**
+     * @return array
+     */
     public function getUsers(): array
     {
         return $this->users->getValues();

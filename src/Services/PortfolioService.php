@@ -36,6 +36,19 @@ final class PortfolioService
     }
 
     /**
+     * @param string $name
+     *
+     * @return Portfolio
+     */
+    public function newFromFormData(array $data): Portfolio
+    {
+        $p = new Portfolio($data['name']);
+        $p->setStructures($data['structures'] ?? []);
+
+        return $p;
+    }
+
+    /**
      * @param string $id
      *
      * @return Portfolio
@@ -47,7 +60,7 @@ final class PortfolioService
 
     public function save(Portfolio $portfolio): void
     {
-        $this->entityManager->flush($portfolio);
+        $this->entityManager->flush();
     }
 
     public function remove(Portfolio $portfolio): void
@@ -60,7 +73,7 @@ final class PortfolioService
             $structure->setPortfolio(null);
         }
 
-        $this->repository->remove($portfolio);
+        $this->entityManager->remove($portfolio);
         $this->entityManager->flush();
     }
 }
