@@ -10,11 +10,18 @@
 
 namespace PiaApi\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\Entity\Pia\Structure;
 
-class PiaTemplateRepository extends EntityRepository
+class PiaTemplateRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, PiaTemplate::class);
+    }
+
     public function findAvailablePiaTemplatesForStructure(?Structure $structure): array
     {
         $qb = $this->createQueryBuilder('pt');

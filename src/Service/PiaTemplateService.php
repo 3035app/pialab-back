@@ -10,23 +10,11 @@
 
 namespace PiaApi\Service;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Entity\Pia\PiaTemplate;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class PiaTemplateService extends AbstractService
+class PiaTemplateService
 {
-    public function __construct(
-        RegistryInterface $doctrine
-    ) {
-        parent::__construct($doctrine);
-    }
-
-    public function getEntityClass(): string
-    {
-        return PiaTemplate::class;
-    }
-
     /**
      * @param string      $name
      * @param string      $jsonContent

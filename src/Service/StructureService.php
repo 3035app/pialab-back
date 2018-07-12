@@ -12,26 +12,17 @@ namespace PiaApi\Service;
 
 use PiaApi\Entity\Pia\Structure;
 use PiaApi\Entity\Pia\StructureType;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class StructureService extends AbstractService
+class StructureService
 {
     /**
      * @var FolderService
      */
     private $folderService;
 
-    public function __construct(
-        RegistryInterface $doctrine,
-        FolderService $folderService
-    ) {
-        parent::__construct($doctrine);
-        $this->folderService = $folderService;
-    }
-
-    public function getEntityClass(): string
+    public function __construct(FolderService $folderService)
     {
-        return Structure::class;
+        $this->folderService = $folderService;
     }
 
     /**

@@ -161,7 +161,7 @@ class UserController extends BackOfficeAbstractController
      */
     public function editUserAction(Request $request, $userId)
     {
-        $user = $this->userService->getRepository()->find($userId);
+        $user = $this->userService->getById($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
@@ -202,7 +202,7 @@ class UserController extends BackOfficeAbstractController
      */
     public function removeUserAction(Request $request, $userId)
     {
-        $user = $this->userService->getRepository()->find($userId);
+        $user = $this->userService->getById($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
@@ -243,7 +243,7 @@ class UserController extends BackOfficeAbstractController
     {
         $this->canAccess();
 
-        $user = $this->userService->getRepository()->find($userId);
+        $user = $this->userService->getById($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));

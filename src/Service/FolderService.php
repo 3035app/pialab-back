@@ -13,13 +13,8 @@ namespace PiaApi\Service;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\Entity\Pia\Structure;
 
-class FolderService extends AbstractService
+class FolderService
 {
-    public function getEntityClass(): string
-    {
-        return Folder::class;
-    }
-
     /**
      * @param string         $name
      * @param Structure|null $structure
