@@ -81,7 +81,7 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         $this->creationDate = new \DateTime();
         $this->expirationDate = new \DateTimeImmutable('+1 Year');
         $this->enabled = true;
-        $this->profile = new UserProfile();
+        $this->setProfile(new UserProfile());
     }
 
     /**
@@ -177,39 +177,6 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
 
     public function eraseCredentials()
     {
-    }
-
-    /** @see \Serializable::serialize() */
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-            $this->email,
-            $this->username,
-            $this->password,
-            $this->roles,
-            $this->creationDate,
-            $this->expirationDate,
-            $this->enabled,
-            $this->locked,
-            $this->application,
-        ));
-    }
-
-    /** @see \Serializable::unserialize() */
-    public function unserialize($serialized)
-    {
-        list(
-            $this->id,
-            $this->email,
-            $this->username,
-            $this->password,
-            $this->roles,
-            $this->creationDate,
-            $this->expirationDate,
-            $this->enabled,
-            $this->locked,
-            $this->application) = unserialize($serialized);
     }
 
     /**
@@ -341,5 +308,38 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     {
         $profile->setUser($this);
         $this->profile = $profile;
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->email,
+            $this->username,
+            $this->password,
+            $this->roles,
+            $this->creationDate,
+            $this->expirationDate,
+            $this->enabled,
+            $this->locked,
+            $this->application,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->email,
+            $this->username,
+            $this->password,
+            $this->roles,
+            $this->creationDate,
+            $this->expirationDate,
+            $this->enabled,
+            $this->locked,
+            $this->application) = unserialize($serialized);
     }
 }

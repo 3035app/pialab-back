@@ -16,7 +16,6 @@ use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use PiaApi\Entity\Oauth\User;
 use PiaApi\Entity\Pia\Structure;
-use PiaApi\Entity\Pia\UserProfile;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use PiaApi\Repository\UserRepository;
 
@@ -86,20 +85,9 @@ class UserService
     public function newUser(string $email, string $password, ?Structure $structure = null, ?ClientInterface $application = null): User
     {
         $user = new User($email);
-
         $this->encodePassword($user, $password);
-
-        $profile = new UserProfile();
-        $profile->setUser($user);
-        $user->setProfile($profile);
-
-        if ($structure !== null) {
-            $user->setStructure($structure);
-        }
-
-        if ($application !== null) {
-            $user->setApplication($application);
-        }
+        $user->setStructure($structure);
+        $user->setApplication($application);
 
         return $user;
     }
