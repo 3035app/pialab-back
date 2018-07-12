@@ -201,12 +201,16 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         return $this->portfolios->getValues();
     }
 
-    /**
-     * @return Collection
-     */
-    public function setPortfolios(array $portfolios): void
+    public function setPortfolios(iterable $portfolios): void
     {
-        $this->portfolios = new ArrayCollection($portfolios);
+        foreach ($portfolios as $portfolio) {
+            $this->addPortfolio($portfolio);
+        }
+    }
+
+    public function addPortfolio(Portfolio $portfolio)
+    {
+        $this->portfolios->add($portfolio);
     }
 
     public function removePortfolio(Portfolio $portfolio): void

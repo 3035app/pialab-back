@@ -10,7 +10,6 @@
 
 namespace PiaApi\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use PiaApi\Entity\Pia\StructureType;
 
