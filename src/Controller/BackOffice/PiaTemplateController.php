@@ -65,7 +65,7 @@ class PiaTemplateController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $piaTemplateData = $form->getData();
 
-            $piaTemplate = $this->piaTemplateService->createTemplateWithFile(
+            $piaTemplate = $this->piaTemplateService->newTemplateWithFile(
                 $piaTemplateData['name'],
                 $piaTemplateData['data'],
                 isset($piaTemplateData['description']) ? $piaTemplateData['description'] : null

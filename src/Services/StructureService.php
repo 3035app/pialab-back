@@ -40,11 +40,11 @@ class StructureService extends AbstractService
      *
      * @return Structure
      */
-    public function createStructure(string $name, ?StructureType $structureType = null): Structure
+    public function newStructure(string $name, ?StructureType $structureType = null): Structure
     {
         $structure = new Structure($name);
 
-        $this->folderService->createFolder('root', $structure);
+        $this->folderService->newFolder('root', $structure);
 
         if ($structureType !== null) {
             $structure->setType($structureType);

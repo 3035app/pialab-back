@@ -35,7 +35,7 @@ class PiaTemplateService extends AbstractService
      *
      * @return PiaTemplate
      */
-    public function createTemplate(string $name, string $jsonContent, string $importedFileName, ?string $description = null): PiaTemplate
+    public function newTemplate(string $name, string $jsonContent, string $importedFileName, ?string $description = null): PiaTemplate
     {
         $template = new PiaTemplate($name);
         $template->setData($jsonContent);
@@ -55,7 +55,7 @@ class PiaTemplateService extends AbstractService
      *
      * @return PiaTemplate
      */
-    public function createTemplateWithFile(string $name, UploadedFile $file, ?string $description = null): PiaTemplate
+    public function newTemplateWithFile(string $name, UploadedFile $file, ?string $description = null): PiaTemplate
     {
         $template = new PiaTemplate($name);
         $template->addFile($file);

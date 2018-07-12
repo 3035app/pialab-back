@@ -82,7 +82,7 @@ class FolderController extends RestController
 
         $structure = $this->getUser()->getStructure();
 
-        $folder = $this->folderService->createFolder(
+        $folder = $this->folderService->newFolder(
             $request->get('name'),
             $structure,
             $parent

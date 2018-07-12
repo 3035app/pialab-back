@@ -27,7 +27,7 @@ class FolderService extends AbstractService
      *
      * @return Folder
      */
-    public function createFolder(string $name, ?Structure $structure = null, ?Folder $parent = null): Folder
+    public function newFolder(string $name, ?Structure $structure = null, ?Folder $parent = null): Folder
     {
         $folder = new Folder($name, $structure);
 

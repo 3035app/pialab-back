@@ -24,7 +24,7 @@ class StructureTypeService
      *
      * @return StructureType
      */
-    public function createStructureType(string $name): StructureType
+    public function newStructureType(string $name): StructureType
     {
         return new StructureType($name);
     }

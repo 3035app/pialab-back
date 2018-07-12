@@ -113,7 +113,7 @@ class UserController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userData = $form->getData();
 
-            $user = $this->userService->createUser(
+            $user = $this->userService->newUser(
                 $userData['email'],
                 $userData['password'],
                 $userData['structure'],

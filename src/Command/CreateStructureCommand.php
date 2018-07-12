@@ -80,10 +80,10 @@ EOT
         $structTypeRepo = $this->entityManager->getRepository(StructureType::class);
         $structType = $structTypeRepo->findOneBy(['name' => $type]);
         if ($structType === null) {
-            $structType = $this->structureTypeService->createStructureType($type);
+            $structType = $this->structureTypeService->newStructureType($type);
         }
 
-        $structure = $this->structureService->createStructure($name, $structType);
+        $structure = $this->structureService->newStructure($name, $structType);
 
         $this->entityManager->persist($structure);
         $this->entityManager->flush();

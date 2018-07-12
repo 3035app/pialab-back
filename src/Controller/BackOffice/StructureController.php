@@ -112,7 +112,7 @@ class StructureController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $structureData = $form->getData();
 
-            $structure = $this->structureService->createStructure(
+            $structure = $this->structureService->newStructure(
                 $structureData['name'],
                 $structureData['type']
             );
@@ -145,7 +145,7 @@ class StructureController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $structureTypeData = $form->getData();
 
-            $structureType = $this->structureTypeService->createStructureType($structureTypeData['name']);
+            $structureType = $this->structureTypeService->newStructureType($structureTypeData['name']);
 
             $this->getDoctrine()->getManager()->persist($structureType);
             $this->getDoctrine()->getManager()->flush();

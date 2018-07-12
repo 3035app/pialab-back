@@ -77,7 +77,7 @@ class UserService extends AbstractService
      *
      * @return User
      */
-    public function createUser(string $email, string $password, ?Structure $structure = null, ?ClientInterface $application = null): User
+    public function newUser(string $email, string $password, ?Structure $structure = null, ?ClientInterface $application = null): User
     {
         $user = new User($email);
 

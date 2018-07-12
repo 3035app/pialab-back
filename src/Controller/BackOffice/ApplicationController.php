@@ -70,7 +70,7 @@ class ApplicationController extends BackOfficeAbstractController
             if ($form->isValid()) {
                 $applicationData = $form->getData();
 
-                $application = $this->applicationService->createApplication(
+                $application = $this->applicationService->newApplication(
                     $applicationData['name'],
                     $applicationData['url'],
                     $applicationData['allowedGrantTypes']

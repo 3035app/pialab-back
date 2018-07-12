@@ -127,7 +127,7 @@ class CreateUserCommand extends Command
             }
         }
 
-        $user = $this->userService->createUser(
+        $user = $this->userService->newUser(
             $email,
             $password,
             $structure,

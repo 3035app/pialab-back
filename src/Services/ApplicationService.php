@@ -44,7 +44,7 @@ class ApplicationService extends AbstractService
      *
      * @return Client
      */
-    public function createApplication(string $name, string $url, ?array $grantTypes = ['password', 'token', 'refresh_token'], ?string $clientId = null, ?string $clientSecret = null): Client
+    public function newApplication(string $name, string $url, ?array $grantTypes = ['password', 'token', 'refresh_token'], ?string $clientId = null, ?string $clientSecret = null): Client
     {
         /** @var Client $application */
         $application = $this->clientManager->createClient();

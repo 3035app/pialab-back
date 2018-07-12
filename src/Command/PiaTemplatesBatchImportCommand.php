@@ -143,7 +143,7 @@ class PiaTemplatesBatchImportCommand extends Command
         // Fetching template json as entity in order to get target template name only
         $pia = $this->fetchDataAsEntities($templateJson);
 
-        $template = $this->piaTemplateService->createTemplate(
+        $template = $this->piaTemplateService->newTemplate(
             $pia->getName(),
             $templateJson,
             $fileName
