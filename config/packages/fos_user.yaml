@@ -3,7 +3,7 @@ fos_user:
     firewall_name: main
     user_class: PiaApi\Entity\Oauth\User
     from_email: 
-        address: "accounts@pialab.io"
+        address: '%env(MAILER_SENDER)%'
         sender_name: PiaLab Account Manager
     use_flash_notifications: false
     service:
