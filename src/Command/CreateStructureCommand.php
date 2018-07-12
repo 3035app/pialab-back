@@ -19,7 +19,7 @@ use PiaApi\Entity\Pia\StructureType;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use PiaApi\Services\StructureService;
+use PiaApi\Service\StructureService;
 
 class CreateStructureCommand extends Command
 {

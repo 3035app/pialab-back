@@ -15,7 +15,7 @@ use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\Entity\Pia\Structure;
-use PiaApi\Services\PiaTemplateService;
+use PiaApi\Service\PiaTemplateService;
 use splitbrain\PHPArchive\Tar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

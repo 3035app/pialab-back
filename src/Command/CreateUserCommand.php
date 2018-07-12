@@ -13,7 +13,7 @@ namespace PiaApi\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use PiaApi\Entity\Oauth\User;
 use PiaApi\Entity\Pia\Structure;
-use PiaApi\Services\UserService;
+use PiaApi\Service\UserService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

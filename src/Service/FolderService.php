@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Services;
+namespace PiaApi\Service;
 
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\Entity\Pia\Structure;

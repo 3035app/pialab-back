@@ -19,7 +19,7 @@ use PiaApi\Form\User\EditUserForm;
 use PiaApi\Form\User\RemoveUserForm;
 use PiaApi\Form\User\SendResetPasswordEmailForm;
 use PiaApi\Security\Role\RoleHierarchy;
-use PiaApi\Services\UserService;
+use PiaApi\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;

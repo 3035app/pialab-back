@@ -18,7 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use PiaApi\Entity\Pia\Folder;
-use PiaApi\Services\FolderService;
+use PiaApi\Service\FolderService;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\Exception\Folder\RootFolderCannotBeDeletedException;
 use PiaApi\Entity\Pia\Structure;
