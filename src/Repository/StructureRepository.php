@@ -11,6 +11,7 @@
 namespace PiaApi\Repository;
 
 use PiaApi\Entity\Pia\Structure;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use PiaApi\Entity\Pia\Portfolio;
 use Pagerfanta\PagerfantaInterface;
