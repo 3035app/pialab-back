@@ -1,6 +1,16 @@
 # Change Log
 
-## [1.2.1](https://github.com/pia-lab/pialab-back/tree/1.2.1) (2018-07-04)
+## [1.2.3](https://github.com/pia-lab/pialab-back/tree/1.2.3) (2018-07-12)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.2...1.2.3)
+
+## [1.2.2](https://github.com/pia-lab/pialab-back/tree/1.2.2) (2018-07-12)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.1...1.2.2)
+
+**Merged pull requests:**
+
+- API documentation using Nelmio and Swagger [\#23](https://github.com/pia-lab/pialab-back/pull/23) ([GlennCavarle](https://github.com/GlennCavarle))
+
+## [1.2.1](https://github.com/pia-lab/pialab-back/tree/1.2.1) (2018-07-05)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.0...1.2.1)
 
 **Closed issues:**
