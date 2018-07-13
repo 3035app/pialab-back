@@ -16,12 +16,11 @@ use PiaApi\Entity\Pia\Structure;
 
 class StructureRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Structure::class);
     }
-{
+
     /**
      * Fetch a structure from name or Id.
      *
