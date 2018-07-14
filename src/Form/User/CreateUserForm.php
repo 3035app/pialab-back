@@ -26,6 +26,8 @@ class CreateUserForm extends BaseForm
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildForm($builder, $options);
+
         if (!$options['application']) {
             $builder
             ->add('application', ApplicationChoiceType::class, [

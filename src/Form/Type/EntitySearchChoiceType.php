@@ -14,7 +14,9 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 
 abstract class EntitySearchChoiceType extends AbstractType
 {
@@ -31,13 +33,22 @@ abstract class EntitySearchChoiceType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $me = $this;
         $resolver->setDefaults([
-            'required'     => false,
-            'class'        => $this->repository->getClassName(),
-            'choice_label' => 'name',
-            'multiple'     => false,
-            'expanded'     => false,
-            'choices'      => $this->getChoices(),
+            'required'       => false,
+            'class'          => $this->repository->getClassName(),
+            'choice_label'   => 'name',
+            'multiple'       => false,
+            'expanded'       => false,
+            'choices'        => $this->getChoices(),
+            'hidden_choices' => [],
+            'choice_loader'  => function (Options $options) use ($me) {
+                return new CallbackChoiceLoader(function () use ($me, $options) {
+                    return array_filter($me->getChoices(), function ($choice) use ($options) {
+                        return !in_array($choice, $options['hidden_choices']);
+                    });
+                });
+            },
         ]);
     }
 

@@ -10,16 +10,30 @@
 
 namespace PiaApi\Form;
 
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 abstract class BaseForm extends AbstractType
 {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+                ->add('redirect', HiddenType::class, [
+                    'data'   => $options['redirect'] ?? null,
+                    'mapped' => false,
+                ]);
+    }
+
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('translation_domain', 'Pia');
+        $resolver->setDefaults([
+            'translation_domain'=> 'Pia',
+            'redirect'          => null,
+            ]);
     }
 }

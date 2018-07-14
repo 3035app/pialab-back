@@ -86,6 +86,7 @@ class StructureController extends BackOfficeAbstractController
         $userForm = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
             'action'      => $this->generateUrl('manage_users_add_user'),
             'structure'   => $structure,
+            'redirect'    => $this->generateUrl('manage_structures_show_structure', ['structureId' => $structureId]),
         ]);
 
         return $this->render('pia/Structure/showStructure.html.twig', [
@@ -104,7 +105,8 @@ class StructureController extends BackOfficeAbstractController
     public function addStructureAction(Request $request)
     {
         $form = $this->createForm(CreateStructureForm::class, [], [
-            'action' => $this->generateUrl('manage_structures_add_structure'),
+            'action'   => $this->generateUrl('manage_structures_add_structure'),
+            'redirect' => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -114,13 +116,17 @@ class StructureController extends BackOfficeAbstractController
 
             $structure = $this->structureService->createStructure(
                 $structureData['name'],
-                $structureData['type']
+                $structureData['type'],
+                $structureData['portfolio']
             );
 
             $this->getDoctrine()->getManager()->persist($structure);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirect($this->generateUrl('manage_structures'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_structures');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/Layout/form.html.twig', [
@@ -137,7 +143,8 @@ class StructureController extends BackOfficeAbstractController
     public function addStructureTypeAction(Request $request)
     {
         $form = $this->createForm(CreateStructureTypeForm::class, [], [
-            'action' => $this->generateUrl('manage_structures_add_structure_type'),
+            'action'   => $this->generateUrl('manage_structures_add_structure_type'),
+            'redirect' => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -150,7 +157,10 @@ class StructureController extends BackOfficeAbstractController
             $this->getDoctrine()->getManager()->persist($structureType);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirect($this->generateUrl('manage_structures'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_structures');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/Layout/form.html.twig', [
@@ -174,7 +184,8 @@ class StructureController extends BackOfficeAbstractController
         }
 
         $form = $this->createForm(EditStructureForm::class, $structure, [
-            'action' => $this->generateUrl('manage_structures_edit_structure', ['structureId' => $structure->getId()]),
+            'action'   => $this->generateUrl('manage_structures_edit_structure', ['structureId' => $structure->getId()]),
+            'redirect' => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -184,7 +195,10 @@ class StructureController extends BackOfficeAbstractController
             $this->getDoctrine()->getManager()->persist($structure);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirect($this->generateUrl('manage_structures'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_structures');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/Layout/form.html.twig', [
@@ -208,7 +222,8 @@ class StructureController extends BackOfficeAbstractController
         }
 
         $form = $this->createForm(EditStructureTypeForm::class, $structureType, [
-            'action' => $this->generateUrl('manage_structures_edit_structure_type', ['structureTypeId' => $structureType->getId()]),
+            'action'   => $this->generateUrl('manage_structures_edit_structure_type', ['structureTypeId' => $structureType->getId()]),
+            'redirect' => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -219,7 +234,10 @@ class StructureController extends BackOfficeAbstractController
             $this->getDoctrine()->getManager()->persist($structureType);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirect($this->generateUrl('manage_structures'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_structures');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/Layout/form.html.twig', [
@@ -243,7 +261,8 @@ class StructureController extends BackOfficeAbstractController
         }
 
         $form = $this->createForm(RemoveStructureForm::class, $structure, [
-            'action' => $this->generateUrl('manage_structures_remove_structure', ['structureId' => $structure->getId()]),
+            'action'   => $this->generateUrl('manage_structures_remove_structure', ['structureId' => $structure->getId()]),
+            'redirect' => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -258,7 +277,10 @@ class StructureController extends BackOfficeAbstractController
             $this->getDoctrine()->getManager()->remove($structure);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirect($this->generateUrl('manage_structures'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_structures');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/Structure/removeStructure.html.twig', [
@@ -282,7 +304,8 @@ class StructureController extends BackOfficeAbstractController
         }
 
         $form = $this->createForm(RemoveStructureTypeForm::class, $structureType, [
-            'action' => $this->generateUrl('manage_structures_remove_structure_type', ['structureTypeId' => $structureType->getId()]),
+            'action'   => $this->generateUrl('manage_structures_remove_structure_type', ['structureTypeId' => $structureType->getId()]),
+            'redirect' => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -297,11 +320,38 @@ class StructureController extends BackOfficeAbstractController
             $this->getDoctrine()->getManager()->remove($structureType);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirect($this->generateUrl('manage_structures'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_structures');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/Structure/removeStructureType.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/manageStructures/dissociateStructure/{structureId}", name="manage_structures_dissociate_structure")
+     * @Security("is_granted('CAN_EDIT_STRUCTURE')")
+     *
+     * @param Request $request
+     */
+    public function dissociateStructureAction(Request $request)
+    {
+        $structureId = $request->get('structureId');
+        $structure = $this->getDoctrine()->getRepository(Structure::class)->find($structureId);
+
+        if ($structure === null) {
+            throw new NotFoundHttpException(sprintf('Structure « %s » does not exist', $structureId));
+        }
+        $structure->setPortfolio(null);
+        $this->getDoctrine()->getManager()->persist($structure);
+        $this->getDoctrine()->getManager()->flush();
+
+        $customRedirect = $this->getQueryRedirectUrl($request);
+        $redirectUrl = $customRedirect ?? $this->generateUrl('manage_structures');
+
+        return $this->redirect($redirectUrl);
     }
 }

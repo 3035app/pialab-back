@@ -14,65 +14,47 @@ use PiaApi\Form\BaseForm;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Form\Portfolio\Type\PortfolioChoiceType;
-use PiaApi\Form\Structure\Type\StructureTypeChoiceType;
+use PiaApi\Form\Structure\Type\StructureChoiceType;
 use PiaApi\Entity\Pia\Portfolio;
 
-class CreateStructureForm extends BaseForm
+class StructurePortfolioAssocForm extends BaseForm
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $doctrine;
-
-    public function __construct(RegistryInterface $doctrine)
-    {
-        $this->doctrine = $doctrine;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
+        $portfolio = $options['portfolio'];
 
-        $builder
-            ->add('name', TextType::class, [
-                'required' => true,
-                'label'    => 'pia.structures.forms.create.name',
-            ])
-            ->add('type', StructureTypeChoiceType::class, [
-                'required' => false,
-                'label'    => 'pia.structures.forms.create.type',
-            ]);
-
-        if (!$options['portfolio']) {
+        if (!$portfolio) {
             $builder
                     ->add('portfolio', PortfolioChoiceType::class, [
                         'required' => false,
-                        'label'    => 'pia.structures.forms.create.portfolio',
+                        'label'    => 'pia.structures.forms.assoc.portfolio',
                     ]);
         } else {
             $builder
                     ->add('portfolio', HiddenType::class, [
                         'required'   => true,
-                        'data'       => $options['portfolio']->getId(),
+                        'data'       => $portfolio->getId(),
                         'data_class' => null,
                     ]);
         }
+        $builder
+            ->add('structures', StructureChoiceType::class, [
+                'required'       => false,
+                'multiple'       => true,
+                'label'          => 'pia.structures.forms.assoc.structures',
+                'hidden_choices' => $portfolio ? $portfolio->getStructures() : [],
+            ]);
 
         $builder
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'fluid',
                 ],
-                'label' => 'pia.structures.forms.create.submit',
+                'label' => 'pia.structures.forms.assoc.submit',
             ]);
-
-        if (!$options['portfolio'] && !count($builder->get('portfolio')->getOption('choices'))) {
-            $builder->remove('portfolio');
-        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

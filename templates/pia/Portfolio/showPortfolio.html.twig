@@ -2,47 +2,51 @@
 
 {% import 'pia/Layout/_macros.html.twig' as macro %}
 
-{% block title %}PIA User Management{% endblock title %}
+{% block title %}PIA Portfolio Management{% endblock title %}
 
 {% block navbar %}
-  {% include 'pia/Layout/navbar.html.twig' with {
-    'activeItem' : 'my_portfolio'
-  } %}
+    {% include 'pia/Layout/navbar.html.twig' with {
+        'activeItem' : 'my_portfolio'
+    } %}
 {% endblock navbar %}
 
 {% block body %}
 
-  <div class="ui grid">
-    <div class="three wide column">
-      <div class="ui segment">
-        <h2>
-          {{portfolio.name}}
-          <br>
-          {% for user in portfolio.users%}
-            <div>
-              <small>{{user.username}}</small>
+    <div class="ui grid">
+        <div class="three wide column">
+            <div class="ui segment">
+                <h2>
+                    {{portfolio.name}}
+                    <br>
+                    {% for user in portfolio.users%}
+                        <div>
+                            <small>{{user.username}}</small>
+                        </div>
+                    {% endfor %}
+                </h2>
             </div>
-          {% endfor %}
-        </h2>
-      </div>
+        </div>
+
+        <div class="ten wide column">
+            {{ include('pia/Structure/partials/list.html.twig',{'structures':structures, 'portfolio':portfolio}) }}
+        </div>
+
+        <div class="three wide column">
+            <div class="ui segment">
+                <h2>Associer des structures existantes</h2>
+                {{ render(controller('PiaApi\\Controller\\BackOffice\\PortfolioController:assocStructuresAction',{'portfolioId': portfolio.id})) }}
+            </div>
+            <div class="ui segment">
+                <h2>Ajouter une nouvelle structure</h2>
+                {{ include('pia/Layout/form.html.twig',{'form':structureForm}) }}
+
+            </div>
+            
+        </div>
     </div>
-
-    <div class="ten wide column">
-      {{ include('pia/Structure/partials/list.html.twig',{'structures':structures}) }}
-    </div>
-
-    <div class="three wide column">
-      <div class="ui segment">
-        <h2>Ajouter une structure</h2>
-        {{ include('pia/Layout/form.html.twig',{'form':structureForm}) }}
-
-
-      </div>
-    </div>
-  </div>
 
 {% endblock %}
 
 {% block javascripts %}
-  {{ parent() }}
+    {{ parent() }}
 {% endblock javascripts %}

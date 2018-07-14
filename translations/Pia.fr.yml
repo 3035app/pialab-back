@@ -30,7 +30,8 @@ pia:
         add: Ajouter
         display: Afficher
         edit: Modifier
-        remove: Supprimer
+        remove: Supprimer,
+        dissociate: Dissocier
 
     labels:
         yes: Oui
@@ -162,6 +163,10 @@ pia:
                 type: Type de structure
                 portfolio: Portefeuille client
                 submit: Créer la structure
+            assoc:
+                portfolio: Portefeuille client
+                structures: Structures à associer
+                submit: Associer les structures
             edit:
                 templates: Gabarits de PIA disponibles
                 templates_help: Les gabarits sélectionnés seront accessibles à cette structure

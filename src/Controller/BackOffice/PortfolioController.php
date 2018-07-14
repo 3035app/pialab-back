@@ -16,6 +16,7 @@ use PiaApi\Form\Portfolio\CreatePortfolioForm;
 use PiaApi\Form\Portfolio\EditPortfolioForm;
 use PiaApi\Form\Portfolio\RemovePortfolioForm;
 use PiaApi\Form\Structure\CreateStructureForm;
+use PiaApi\Form\Structure\StructurePortfolioAssocForm;
 use PiaApi\Services\PortfolioService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -73,6 +74,7 @@ class PortfolioController extends BackOfficeAbstractController
         $structureForm = $this->createForm(CreateStructureForm::class, [], [
             'action'    => $this->generateUrl('manage_structures_add_structure'),
             'portfolio' => $portfolio,
+            'redirect'  => $this->generateUrl('manage_portfolios_show_portfolio', ['portfolioId' => $portfolioId]),
         ]);
 
         return $this->render('pia/Portfolio/showPortfolio.html.twig', [
@@ -179,6 +181,41 @@ class PortfolioController extends BackOfficeAbstractController
         }
 
         return $this->render('pia/Portfolio/removePortfolio.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/showPortfolio/{portfolioId}/assocStructures", name="manage_portfolios_assoc_structures")
+     * @Security("is_granted('CAN_SHOW_PORTFOLIO')")
+     *
+     * @param Request $request
+     */
+    public function assocStructuresAction(Request $request)
+    {
+        $id = $request->get('portfolioId');
+        $portfolio = $this->portfolioService->getById($id);
+
+        $form = $this->createForm(StructurePortfolioAssocForm::class, [], [
+            'action'    => $this->generateUrl('manage_portfolios_assoc_structures', ['portfolioId' => $portfolio->getId()]),
+            'portfolio' => $portfolio,
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            foreach ($data['structures'] as $structure) {
+                $portfolio->addStructure($structure);
+            }
+
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirect($this->generateUrl('manage_portfolios_show_portfolio', ['portfolioId' => $portfolio->getId()]));
+        }
+
+        return $this->render('pia/Layout/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }
