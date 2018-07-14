@@ -64,6 +64,11 @@ class Portfolio implements Timestampable
         return $this->name;
     }
 
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
     /**
      * @return array
      */

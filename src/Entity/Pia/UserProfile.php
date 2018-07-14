@@ -138,7 +138,22 @@ class UserProfile implements Timestampable
 
     /**
      * @JMS\VirtualProperty
-     * @JMS\Type("array<string>")
+     * @JMS\Type("PiaApi\Entity\Pia\Structure")
+     * @JMS\SerializedName("structure")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return array
+     */
+    public function getStructure()
+    {
+        $structure = $this->user->getStructure();
+
+        return $structure ?: null;
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\Type("array<PiaApi\Entity\Pia\Portfolio>")
      * @JMS\SerializedName("portfolios")
      * @JMS\Groups({"Default", "Export"})
      *
@@ -147,5 +162,24 @@ class UserProfile implements Timestampable
     public function getPortfolios()
     {
         return $this->user->getPortfolios();
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\Type("array<PiaApi\Entity\Pia\Structure>")
+     * @JMS\SerializedName("portfolio_structures")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return array
+     */
+    public function getPortfolioStructures()
+    {
+        $structures = [];
+        $portfolios = $this->getPortfolios();
+        foreach ($portfolios as $portfolio) {
+            $structures = array_merge($structures, $portfolio->getStructures());
+        }
+
+        return array_unique($structures, SORT_REGULAR);
     }
 }

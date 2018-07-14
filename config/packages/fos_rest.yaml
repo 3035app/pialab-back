@@ -5,6 +5,7 @@ fos_rest:
         - { path: ^/profile }
         - { path: ^/pia-templates }
         - { path: ^/folders }
+        - { path: ^/structures }
     body_converter:
         enabled: true
     body_listener:

@@ -23,7 +23,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\Exception\Folder\RootFolderCannotBeDeletedException;
 use PiaApi\Entity\Pia\Structure;
 
-class FolderController extends RestController
+class StructureFolderController extends RestController
 {
     /**
      * @var FolderService
@@ -39,70 +39,74 @@ class FolderController extends RestController
     }
 
     /**
-     * @FOSRest\Get("/folders")
+     * @FOSRest\Get("/structures/{structureId}/folders", requirements={"structureId"="\d+"})
      * @Security("is_granted('CAN_SHOW_FOLDER')")
      *
      * @return View
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, $structureId)
     {
-        $structureId = $this->getUser()->getStructure()->getId();
         $collection = $this->getRepository()->findBy(['structure' => $structureId, 'parent' => null]);
 
         return $this->view($collection, Response::HTTP_OK);
     }
 
     /**
-     * @FOSRest\Get("/folders/{id}")
+     * @FOSRest\Get("/structures/{structureId}/folders/{id}", requirements={"structureId"="\d+","id"="\d+"})
      * @Security("is_granted('CAN_SHOW_FOLDER')")
      *
      * @return View
      */
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request, $structureId, $id)
     {
-        $folder = $this->getResource($id);
+        $folder = $this->getRepository()->findOneBy(['structure' => $structureId, 'id' => $id]);
         if ($folder === null) {
             return $this->view($folder, Response::HTTP_NOT_FOUND);
         }
-
         $this->canAccessResourceOr403($folder);
 
         return $this->view($folder, Response::HTTP_OK);
     }
 
     /**
-     * @FOSRest\Post("/folders")
+     * @FOSRest\Post("/structures/{structureId}/folders",requirements={"structureId"="\d+"})
      * @Security("is_granted('CAN_CREATE_FOLDER')")
      *
      * @return View
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $structureId)
     {
-        $parent = $request->get('parent') !== null ? $this->getResource($request->get('parent')['id'], Folder::class) : null;
+        $parent = $request->get('parent') !== null
+            ? $this->getResource($request->get('parent')['id'], Folder::class)
+            : null;
 
-        $structure = $this->getUser()->getStructure();
+        $structure = $this->getResource($structureId, Structure::class);
 
         $folder = $this->folderService->createFolder(
             $request->get('name'),
             $structure,
             $parent
         );
-
+        $this->canAccessResourceOr403($folder);
         $this->persist($folder);
 
         return $this->view($folder, Response::HTTP_OK);
     }
 
     /**
-     * @FOSRest\Put("/folders/{id}", requirements={"id"="\d+"})
-     * @FOSRest\Post("/folders/{id}", requirements={"id"="\d+"})
+     * @FOSRest\Put("/structures/{structureId}/folders/{id}", requirements={"structureId"="\d+","id"="\d+"})
+     * @FOSRest\Post("/structures/{structureId}/folders/{id}", requirements={"structureId"="\d+","id"="\d+"})
      * @Security("is_granted('CAN_EDIT_FOLDER')")
      *
      * @return View
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $structureId, $id)
     {
-        $folder = $this->getResource($id);
+        $folder = $this->getRepository()->findOneBy(['structure' => $structureId, 'id' => $id]);
+        if ($folder === null) {
+            return $this->view($folder, Response::HTTP_NOT_FOUND);
+        }
+
         $this->canAccessResourceOr403($folder);
 
         $updatableAttributes = [
@@ -118,14 +122,14 @@ class FolderController extends RestController
     }
 
     /**
-     * @FOSRest\Delete("/folders/{id}", requirements={"id"="\d+"})
+     * @FOSRest\Delete("/structures/{structureId}/folders/{id}", requirements={"structureId"="\d+","id"="\d+"})
      * @Security("is_granted('CAN_DELETE_FOLDER')")
      *
      * @return View
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $structureId, $id)
     {
-        $folder = $this->getResource($id);
+        $folder = $this->getRepository()->findOneBy(['structure' => $structureId, 'id' => $id]);
         $this->canAccessResourceOr403($folder);
 
         if (count($folder->getPias())) {
@@ -151,8 +155,12 @@ class FolderController extends RestController
         if (!$resource instanceof Folder) {
             throw new AccessDeniedHttpException();
         }
+        $resourceStructure = $resource->getStructure();
+        $structures = array_merge(
+            [$this->getUser()->getStructure()],
+            $this->getUser()->getProfile()->getPortfolioStructures());
 
-        if ($resource->getStructure() !== null && $resource->getStructure() !== $this->getUser()->getStructure()) {
+        if ($resourceStructure === null || !in_array($resourceStructure, $structures)) {
             throw new AccessDeniedHttpException();
         }
     }

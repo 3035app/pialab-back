@@ -159,7 +159,7 @@ security:
         #         provider: fos_userbundle
 
         api:
-            pattern:    ^/(pias|profile|pia-templates|folders)
+            pattern:    ^/(pias|profile|pia-templates|folders|structures)
             fos_oauth:  true
             stateless:  true
             anonymous:  false # can be omitted as its default value
