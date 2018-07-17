@@ -26,7 +26,7 @@
                     <div class="ui divider"></div>
                     <div class="ui buttons">
                         <a class="ui default button" href="{{ path('fos_user_resetting_request') }}">Rééssayer</a>
-                        {% if app.user && app.user.application and app.user.application.url is not null %}
+                        {% if app.user and app.user.application and app.user.application.url is not null %}
                             <a href="{{ app.user.application.url }}" class="ui teal button">
                                 {{ 'pia.users.resetting.success.return_to_application'|trans({}, 'Pia') }}
                             </a>
