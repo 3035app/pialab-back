@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.2.4](https://github.com/pia-lab/pialab-back/tree/1.2.4) (2018-07-17)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.3...1.2.4)
+
+**Merged pull requests:**
+
+- \[Bug Fix\] Fix wrong and notation in twig template [\#32](https://github.com/pia-lab/pialab-back/pull/32) ([PapsOu](https://github.com/PapsOu))
+
 ## [1.2.3](https://github.com/pia-lab/pialab-back/tree/1.2.3) (2018-07-12)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.2...1.2.3)
 
