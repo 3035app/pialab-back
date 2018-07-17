@@ -17,7 +17,7 @@
     {% endif %}
     {% if is_granted('CAN_MANAGE_PORTFOLIOS') %}
       <a class="{{ menu.activeMenu(activeItem, 'portfolios') }} item" href="{{ path('manage_portfolios') }}">
-        <i class="building icon"></i>{{ 'pia.layout.navbar.portfolios'|trans }}
+        <i class="book icon"></i>{{ 'pia.layout.navbar.portfolios'|trans }}
       </a>
     {% endif %}
     {% if is_granted('CAN_MANAGE_STRUCTURES') %}

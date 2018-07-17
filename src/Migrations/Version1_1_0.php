@@ -17,9 +17,6 @@ use Doctrine\DBAL\Schema\Schema;
 use PiaApi\Migrations\Lib\MigrationTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use PiaApi\Entity\Oauth\User;
-use PiaApi\Entity\Pia\UserProfile;
 
 class Version1_1_0 extends AbstractMigration implements ContainerAwareInterface
 {
@@ -59,29 +56,25 @@ class Version1_1_0 extends AbstractMigration implements ContainerAwareInterface
 
     protected function Version20180619143737_up(Schema $schema): void
     {
-        /** @var RegistryInterface $doctrine */
-        $doctrine = $this->container->get('doctrine');
-        $users = $doctrine->getRepository(User::class)->findAll();
+        // Fetch users without profile
+        $users = $this->connection->executeQuery('
+            SELECT
+                u.id
+            FROM 
+                pia_user u
+            LEFT JOIN 
+                user_profile p ON 
+                    p.user_id = u.id
+            WHERE
+                p.id IS NULL
+        ')->fetchAll();
 
-        /** @var User $user */
         foreach ($users as $user) {
-            if ($user->getProfile() === null) {
-                $profile = new UserProfile();
-                $profile->setUser($user);
-                $user->setProfile($profile);
-
-                $doctrine->getManager()->persist($profile);
-                $doctrine->getManager()->flush();
-            }
+            $this->connection->executeQuery('INSERT INTO user_profile(id, user_id) VALUES (nextval(\'user_profile_id_seq\'), ' . $user['id'] . ')');
         }
 
-        $emptyProfile = $doctrine->getRepository(UserProfile::class)->findBy(['user' => null]);
-
-        /** @var UserProfile $profile */
-        foreach ($emptyProfile as $profile) {
-            $doctrine->getManager()->remove($profile);
-        }
-        $doctrine->getManager()->flush();
+        // Remove profile without users
+        $this->connection->executeQuery('DELETE FROM user_profile WHERE user_id IS NULL');
     }
 
     protected function Version20180619143737_down(Schema $schema): void

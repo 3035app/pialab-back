@@ -30,7 +30,7 @@ pia:
         add: Ajouter
         display: Afficher
         edit: Modifier
-        remove: Supprimer,
+        remove: Supprimer
         dissociate: Dissocier
 
     labels:
