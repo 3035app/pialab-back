@@ -112,7 +112,11 @@ class StructureController extends BackOfficeAbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $structureData = $form->getData();
+            $structureData = array_merge([
+                'name'      => null,
+                'type'      => null,
+                'portfolio' => null,
+            ], $form->getData());
 
             $structure = $this->structureService->createStructure(
                 $structureData['name'],
