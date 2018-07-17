@@ -133,11 +133,11 @@ class Folder implements Timestampable
      * @JMS\SerializedName("structure_id")
      * @JMS\Groups({"Default", "Export"})
      *
-     * @return string
+     * @return string|null
      */
-    public function getStructureId(): string
+    public function getStructureId(): ?string
     {
-        return $this->structure->getId();
+        return $this->structure !== null ? $this->structure->getId() : null;
     }
 
     /**

@@ -252,8 +252,6 @@ class UserController extends BackOfficeAbstractController
      */
     public function sendResetPasswordEmailAction(Request $request, $userId)
     {
-        $this->canAccess();
-
         $user = $this->userService->getRepository()->find($userId);
 
         if ($user === null) {

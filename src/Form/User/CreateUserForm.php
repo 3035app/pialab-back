@@ -21,26 +21,41 @@ use PiaApi\Form\User\Type\RolesType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use PiaApi\Form\Structure\Type\StructureChoiceType;
 use PiaApi\Form\Application\Type\ApplicationChoiceType;
+use PiaApi\Form\DataTransformer\EntityDataTransformer;
+use PiaApi\Entity\Oauth\Client;
+use PiaApi\Entity\Pia\Structure;
 
 class CreateUserForm extends BaseForm
 {
+    /**
+     * @var EntityDataTransformer
+     */
+    private $entityDataTransformer;
+
+    public function __construct(EntityDataTransformer $entityDataTransformer)
+    {
+        $this->entityDataTransformer = $entityDataTransformer;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
 
         if (!$options['application']) {
             $builder
-            ->add('application', ApplicationChoiceType::class, [
-                'required' => true,
-                'label'    => 'pia.users.forms.create.application',
-            ]);
+                ->add('application', ApplicationChoiceType::class, [
+                    'required' => true,
+                    'label'    => 'pia.users.forms.create.application',
+                ]);
         } else {
             $builder
                 ->add('application', HiddenType::class, [
                     'required'   => true,
-                    'data'       => $options['application']->getId(),
+                    'data'       => $options['application'],
                     'data_class' => null,
                 ]);
+
+            $builder->get('application')->addModelTransformer($this->entityDataTransformer->forEntity(Client::class));
         }
         if (!$options['structure']) {
             $builder
@@ -52,9 +67,11 @@ class CreateUserForm extends BaseForm
             $builder
                 ->add('structure', HiddenType::class, [
                     'required'   => true,
-                    'data'       => $options['structure']->getId(),
+                    'data'       => $options['structure'],
                     'data_class' => null,
                 ]);
+
+            $builder->get('structure')->addModelTransformer($this->entityDataTransformer->forEntity(Structure::class));
         }
 
         $builder
