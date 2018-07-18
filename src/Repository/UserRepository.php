@@ -10,15 +10,22 @@
 
 namespace PiaApi\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Oauth\User;
 use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 
-class UserRepository extends EntityRepository
+class UserRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, User::class);
+    }
+
     public function findUserByUsernameOrEmail(string $usernameOrEmail): ?UserInterface
     {
         $qb = $this->createQueryBuilder('u');

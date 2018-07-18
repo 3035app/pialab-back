@@ -18,6 +18,8 @@ class RemoveStructureTypeForm extends BaseForm
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildForm($builder, $options);
+
         $builder
             ->add('submit', ButtonType::class, [
                 'attr' => [

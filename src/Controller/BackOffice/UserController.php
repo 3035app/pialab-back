@@ -106,6 +106,7 @@ class UserController extends BackOfficeAbstractController
             'action'      => $this->generateUrl('manage_users_add_user'),
             'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') ? false : $this->getUser()->getStructure(),
             'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') ? false : $this->getUser()->getApplication(),
+            'redirect'    => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -124,8 +125,7 @@ class UserController extends BackOfficeAbstractController
                 $user->addRole($role);
             }
 
-            $user->getProfile()->setFirstName($userData['profile']['firstName']);
-            $user->getProfile()->setLastName($userData['profile']['lastName']);
+            $user->setProfile($userData['profile']);
 
             $user->setUsername($this->generateUsername($user));
             $user->setApplication($userData['application']);
@@ -145,7 +145,10 @@ class UserController extends BackOfficeAbstractController
                 $this->userService->sendResettingEmail($user);
             }
 
-            return $this->redirect($this->generateUrl('manage_users'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_users');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/Layout/form.html.twig', [
@@ -176,6 +179,7 @@ class UserController extends BackOfficeAbstractController
             'action'      => $this->generateUrl('manage_users_edit_user', ['userId' => $user->getId()]),
             'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') ? false : $this->getUser()->getStructure(),
             'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') ? false : $this->getUser()->getApplication(),
+            'redirect'    => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -186,7 +190,10 @@ class UserController extends BackOfficeAbstractController
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirect($this->generateUrl('manage_users'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_users');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/User/editForm.html.twig', [
@@ -213,7 +220,8 @@ class UserController extends BackOfficeAbstractController
         }
 
         $form = $this->createForm(RemoveUserForm::class, $user, [
-            'action' => $this->generateUrl('manage_users_remove_user', ['userId' => $user->getId()]),
+            'action'   => $this->generateUrl('manage_users_remove_user', ['userId' => $user->getId()]),
+            'redirect' => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -224,7 +232,10 @@ class UserController extends BackOfficeAbstractController
             $this->getDoctrine()->getManager()->remove($user);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirect($this->generateUrl('manage_users'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_users');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/User/removeUser.html.twig', [
@@ -241,8 +252,6 @@ class UserController extends BackOfficeAbstractController
      */
     public function sendResetPasswordEmailAction(Request $request, $userId)
     {
-        $this->canAccess();
-
         $user = $this->userService->getRepository()->find($userId);
 
         if ($user === null) {

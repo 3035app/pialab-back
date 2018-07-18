@@ -29,6 +29,12 @@ security:
           - CAN_CREATE_APPLICATION
           - CAN_EDIT_APPLICATION
           - CAN_DELETE_APPLICATION
+        
+        CAN_MANAGE_PORTFOLIOS:
+          - CAN_SHOW_PORTFOLIO
+          - CAN_CREATE_PORTFOLIO
+          - CAN_EDIT_PORTFOLIO
+          - CAN_DELETE_PORTFOLIO
 
         CAN_MANAGE_PIA_TEMPLATES:
           - CAN_SHOW_PIA_TEMPLATE
@@ -112,9 +118,13 @@ security:
             - CAN_SHOW_PIA_TEMPLATE
             - CAN_IMPORT_PIA
             - CAN_MANAGE_FOLDERS
+        
+        ROLE_SHARED_DPO:
+            - ROLE_DPO
+            - CAN_MANAGE_PORTFOLIOS
 
         ROLE_ADMIN:
-            - ROLE_DPO
+            - ROLE_SHARED_DPO
             - CAN_MANAGE_ONLY_OWNED_USERS
 
         ROLE_TECHNICAL_ADMIN:
@@ -149,7 +159,7 @@ security:
         #         provider: fos_userbundle
 
         api:
-            pattern:    ^/(pias|profile|pia-templates|folders)
+            pattern:    ^/(pias|profile|pia-templates|folders|structures)
             fos_oauth:  true
             stateless:  true
             anonymous:  false # can be omitted as its default value

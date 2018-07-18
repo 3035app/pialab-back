@@ -199,23 +199,23 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
 
         $updatableAttributes = [
-            'name'                              => 'string',
-            'author_name'                       => 'string',
-            'evaluator_name'                    => 'string',
-            'validator_name'                    => 'string',
-            'folder'                            => Folder::class,
-            'dpo_status'                        => 'int',
-            'concerned_people_status'           => 'int',
-            'status'                            => 'int',
-            'dpo_opinion'	                      => 'string',
-            'concerned_people_opinion'	         => 'string',
-            'concerned_people_searched_opinion' => 'boolean',
-            'concerned_people_searched_content' => 'string',
-            'rejection_reason'	                 => 'string',
-            'applied_adjustments'	              => 'string',
-            'dpos_names'                        => 'string',
-            'people_names'                      => 'string',
-            'type'                              => 'string',
+            'name'                               => 'string',
+            'author_name'                        => 'string',
+            'evaluator_name'                     => 'string',
+            'validator_name'                     => 'string',
+            'folder'                             => Folder::class,
+            'dpo_status'                         => 'int',
+            'concerned_people_status'            => 'int',
+            'status'                             => 'int',
+            'dpo_opinion'                        => 'string',
+            'concerned_people_opinion'           => 'string',
+            'concerned_people_searched_opinion'  => 'boolean',
+            'concerned_people_searched_content'  => 'string',
+            'rejection_reason'                   => 'string',
+            'applied_adjustments'                => 'string',
+            'dpos_names'                         => 'string',
+            'people_names'                       => 'string',
+            'type'                               => 'string',
         ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);
@@ -321,8 +321,12 @@ class PiaController extends RestController
         if (!$resource instanceof Pia) {
             throw new AccessDeniedHttpException();
         }
+        $resourceStructure = $resource->getStructure();
+        $structures = array_merge(
+            [$this->getUser()->getStructure()],
+            $this->getUser()->getProfile()->getPortfolioStructures());
 
-        if ($resource->getStructure() !== $this->getUser()->getStructure()) {
+        if (!in_array($resourceStructure, $structures)) {
             throw new AccessDeniedHttpException();
         }
     }

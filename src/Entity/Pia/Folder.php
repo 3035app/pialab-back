@@ -129,6 +129,18 @@ class Folder implements Timestampable
     }
 
     /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("structure_id")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return string|null
+     */
+    public function getStructureId(): ?string
+    {
+        return $this->structure !== null ? $this->structure->getId() : null;
+    }
+
+    /**
      * @return Structure
      */
     public function getStructure(): ?Structure

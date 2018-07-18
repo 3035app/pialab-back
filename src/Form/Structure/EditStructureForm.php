@@ -14,22 +14,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use PiaApi\Entity\Pia\PiaTemplate;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use PiaApi\Form\Structure\Transformer\StructureTypeTransformer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class EditStructureForm extends CreateStructureForm
 {
-    /**
-     * @var PiaTemplatesTransformer
-     */
-    protected $arrayToCollectionTransformer;
-
-    public function __construct(RegistryInterface $doctrine, StructureTypeTransformer $structureTypeTransformer)
-    {
-        parent::__construct($doctrine, $structureTypeTransformer);
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);

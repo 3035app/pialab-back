@@ -35,10 +35,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-
-    PiaApi\Form\Type\RolesType:
-        tags: [form.type]
-
     PiaApi\Security\Voter\PermissionVoter:
         arguments: ['@security.role_hierarchy']
         tags: [security.voter]

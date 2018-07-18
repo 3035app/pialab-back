@@ -155,6 +155,7 @@
     </div>
 {%- endblock choice_row %}
 
+
 {%- block choice_widget_expanded -%}
     <div {{ block('widget_container_attributes') }}>
         <div class="grouped fields">
@@ -174,6 +175,23 @@
     {% set attr = attr|merge({'class': attr.class|default ~ ' ui dropdown'}) %}
     {{ parent() }}
 {%- endblock choice_widget_collapsed -%}
+
+
+
+{% block search_choice_row -%}
+    <div class="{% if required %}required {% endif %}field{% if (not compound or force_error|default(false)) and not valid %} error{% endif %}">
+        {{- form_label(form) -}}
+        {% set attr = attr|merge({'class': attr.class|default ~ ' ui search dropdown'}) %}
+        {{- form_widget(form, {'attr': attr}) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock search_choice_row %}
+
+{% block entity_search_choice_row -%}
+   {{ block('search_choice_row') }}
+{%- endblock entity_search_choice_row %}
+
+
 
 {% block percent_widget -%}
     <div class="ui right labeled input">

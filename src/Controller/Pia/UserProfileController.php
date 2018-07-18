@@ -30,6 +30,18 @@ class UserProfileController extends RestController
         return $this->view($user->getProfile(), Response::HTTP_OK);
     }
 
+    /**
+     * @FOSRest\Get("/profile/structures")
+     *
+     * @return array
+     */
+    public function profileStructuresAction(UserInterface $user = null)
+    {
+        $this->canAccessRouteOr403();
+
+        return $this->view($user->getProfile(), Response::HTTP_OK);
+    }
+
     protected function getEntityClass()
     {
         return UserProfile::class;

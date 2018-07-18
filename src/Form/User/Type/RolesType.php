@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Form\Type;
+namespace PiaApi\Form\User\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,7 +35,7 @@ class RolesType extends AbstractType
           'multiple' => true,
           'expanded' => true,
           'choices'  => $this->roles,
-          'label'    => 'Rôles',
+          'label'    => '',
     ));
     }
 

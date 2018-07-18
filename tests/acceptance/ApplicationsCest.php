@@ -21,7 +21,7 @@ class ApplicationsCest
     {
         $I->login();
 
-        $I->wantTo('Crate new application');
+        $I->wantTo('Create new application');
         $I->amOnPage('/manageApplications');
 
         $I->fillField('input[name="create_application_form[name]"]', $this->application);
