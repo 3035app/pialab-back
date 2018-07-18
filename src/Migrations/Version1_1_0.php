@@ -70,7 +70,7 @@ class Version1_1_0 extends AbstractMigration implements ContainerAwareInterface
         ')->fetchAll();
 
         foreach ($users as $user) {
-            $this->connection->executeQuery('INSERT INTO user_profile(id, user_id) VALUES (nextval(\'user_profile_id_seq\'), ' . $user['id'] . ')');
+            $this->connection->executeQuery('INSERT INTO user_profile(id, user_id, created_at, updated_at) VALUES (nextval(\'user_profile_id_seq\'), ' . $user['id'] . ', NOW(), NOW())');
         }
 
         // Remove profile without users
