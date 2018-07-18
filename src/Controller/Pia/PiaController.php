@@ -326,7 +326,7 @@ class PiaController extends RestController
             [$this->getUser()->getStructure()],
             $this->getUser()->getProfile()->getPortfolioStructures());
 
-        if ($resourceStructure === null || !in_array($resourceStructure, $structures)) {
+        if (!in_array($resourceStructure, $structures)) {
             throw new AccessDeniedHttpException();
         }
     }
