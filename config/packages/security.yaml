@@ -1,3 +1,6 @@
+parameters:
+    api_pattern: ^/(pias|profile|pia-templates|folders|structures|users)
+
 security:
     access_decision_manager:
         strategy: unanimous
@@ -159,7 +162,7 @@ security:
         #         provider: fos_userbundle
 
         api:
-            pattern:    ^/(pias|profile|pia-templates|folders|structures)
+            pattern:    '%api_pattern%'
             fos_oauth:  true
             stateless:  true
             anonymous:  false # can be omitted as its default value
@@ -179,4 +182,4 @@ security:
     access_control:
         - { path: ^/login, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/resetting, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
-        - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
+        - { path: '%api_pattern%', roles: [ IS_AUTHENTICATED_FULLY ] }

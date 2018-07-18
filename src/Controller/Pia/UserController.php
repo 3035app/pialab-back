@@ -3,24 +3,43 @@
 /*
  * Copyright (C) 2015-2018 Libre Informatique
  *
- * This file is licenced under the GNU LGPL v3.
+ * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use Swagger\Annotations as Swg;
-use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
+use Pagerfanta\Pagerfanta;
+use PiaApi\Entity\Oauth\Client;
 use PiaApi\Entity\Oauth\User;
+use PiaApi\Entity\Pia\Structure;
+use PiaApi\Services\UserService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as Swg;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class UserController extends RestController
 {
+    /**
+     * @var UserService
+     */
+    private $userService;
+
+    public function __construct(
+        PropertyAccessorInterface $propertyAccessor,
+        UserService $userService
+    ) {
+        parent::__construct($propertyAccessor);
+        $this->userService = $userService;
+    }
+
     /**
      * @Swg\Tag(name="User")
      *
@@ -41,7 +60,22 @@ class UserController extends RestController
      */
     public function listAction(Request $request)
     {
-        return $this->view([], Response::HTTP_OK);
+        $criteria = array_merge($this->extractCriteria($request), ['limit' => 20, 'page' => 1]);
+        /* @var Pagerfanta $userPager */
+        $userPager;
+
+        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_USERS')) {
+            $structure = $this->getUser()->getStructure();
+            $userPager = $this->getDoctrine()
+              ->getRepository($this->getEntityClass())
+              ->getPaginatedUsersByStructure($structure, $criteria['limit'], $criteria['page']);
+        } else {
+            $userPager = $this->getDoctrine()
+              ->getRepository($this->getEntityClass())
+              ->getPaginatedUsers($criteria['limit'], $criteria['page']);
+        }
+
+        return $this->view($userPager->getCurrentPageResults()->getArrayCopy(), Response::HTTP_OK);
     }
 
     /**
@@ -64,7 +98,15 @@ class UserController extends RestController
      */
     public function showAction(Request $request, $id)
     {
-        return $this->view([], Response::HTTP_OK);
+        $entity = $this->getRepository()->find($id);
+
+        if ($entity === null) {
+            return $this->view($entity, Response::HTTP_NOT_FOUND);
+        }
+
+        $this->canAccessResourceOr403($entity);
+
+        return $this->view($entity, Response::HTTP_OK);
     }
 
     /**
@@ -87,7 +129,35 @@ class UserController extends RestController
      */
     public function createAction(Request $request)
     {
-        return $this->view([], Response::HTTP_OK);
+        $structure = $this->getRepository(Structure::class)->find($request->get('structure', -1));
+        $application = $this->getRepository(Client::class)->find($request->get('application', -1));
+
+        $user = $this->userService->createUser(
+            $request->get('email'),
+            $request->get('password'),
+            $structure,
+            $application
+        );
+
+        foreach ($request->get('roles', []) as $role) {
+            if ($role !== 'ROLE_SUPER_ADMIN') { // Never create a super admin via API
+                $user->addRole($role);
+            }
+        }
+
+        //a ROLE_ADMIN (which contains CAN_MANAGE_ONLY_OWNED_USERS) must have a structure
+        if ($structure === null && $user->hasRole('ROLE_ADMIN')) {
+            throw new \DomainException('A Functional Administrator must be assigned to a Structure');
+        }
+
+        $this->getDoctrine()->getManager()->persist($user);
+        $this->getDoctrine()->getManager()->flush();
+
+        if ($request->get('sendResettingEmail') === true) {
+            $this->userService->sendResettingEmail($user);
+        }
+
+        return $this->view($user, Response::HTTP_OK);
     }
 
     /**
@@ -133,11 +203,23 @@ class UserController extends RestController
      */
     public function deleteAction(Request $request, $id)
     {
+        $user = $this->getResource($id);
+
+        $this->getDoctrine()->getManager()->remove($user);
+        $this->getDoctrine()->getManager()->flush($user);
+
         return $this->view([], Response::HTTP_OK);
     }
 
     protected function getEntityClass()
     {
         return User::class;
+    }
+
+    public function canAccessResourceOr403($resource): void
+    {
+        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_USERS') && !$this->getUser()->getStructure()->getUsers()->contains($resource)) {
+            throw new AccessDeniedHttpException('Resource not found');
+        }
     }
 }

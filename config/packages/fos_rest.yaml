@@ -6,6 +6,7 @@ fos_rest:
         - { path: ^/pia-templates }
         - { path: ^/folders }
         - { path: ^/structures }
+        - { path: ^/users }
     body_converter:
         enabled: true
     body_listener:

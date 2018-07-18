@@ -38,14 +38,16 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\Column(name="creationDate", type="datetime")
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $creationDate;
 
     /**
-     * @ORM\Column(name="expirationDate", type="datetime")
+     * @ORM\Column(name="expirationDate", type="datetime_immutable")
      *
-     * @var \DateTime
+     * @JMS\Type("DateTimeImmutable")
+     *
+     * @var \DateTimeImmutable
      */
     protected $expirationDate;
 
@@ -59,6 +61,8 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\OneToOne(targetEntity="PiaApi\Entity\Pia\UserProfile", mappedBy="user", cascade={"persist", "remove"})
      *
+     * @JMS\MaxDepth(2)
+     *
      * @var bool
      */
     protected $profile;
@@ -66,12 +70,16 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\ManyToOne(targetEntity="Client", inversedBy="users")
      *
+     * @JMS\MaxDepth(1)
+     *
      * @var Client
      */
     protected $application;
 
     /**
      * @ORM\ManyToOne(targetEntity="PiaApi\Entity\Pia\Structure", inversedBy="users")
+     *
+     * @JMS\MaxDepth(1)
      *
      * @var Structure
      */
@@ -292,15 +300,15 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     /**
      * @return \DateTime
      */
-    public function getExpirationDate(): \DateTime
+    public function getExpirationDate(): \DateTimeImmutable
     {
         return $this->expirationDate;
     }
 
     /**
-     * @param \DateTime $expirationDate
+     * @param \DateTimeImmutable $expirationDate
      */
-    public function setExpirationDate(\DateTime $expirationDate): void
+    public function setExpirationDate(\DateTimeImmutable $expirationDate): void
     {
         $this->expirationDate = $expirationDate;
     }
