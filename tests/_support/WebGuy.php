@@ -47,7 +47,7 @@ class WebGuy extends \Codeception\Actor
     public function getBaseUrl()
     {
         if (!isset($this->baseurl)) {
-            $this->baseurl = "";
+            $this->baseurl = '';
             if (getenv('TEST_URL') !== false) {
                 $this->baseurl = getenv('TEST_URL');
             }
@@ -59,7 +59,7 @@ class WebGuy extends \Codeception\Actor
     public function getUser()
     {
         if (!isset($this->user)) {
-            $this->user = "ci@pialab.io";
+            $this->user = 'ci@pialab.io';
             if (getenv('TEST_USER')) {
                 $this->user = getenv('TEST_USER');
             }
@@ -144,10 +144,13 @@ class WebGuy extends \Codeception\Actor
         return $this->clickOriginal($element);
     }
 
-    public function selectOptionFromSUISelect($selectName, $optionLabel)
+    public function selectOptionFromSUISelect($selectName, $optionLabel, bool $blur = true)
     {
         $this->click('//select[@name="' . $selectName . '"]/ancestor::div[contains(@class,"ui dropdown")]');
         $this->click('//select[@name="' . $selectName . '"]/ancestor::div[contains(@class,"ui dropdown")]/div[contains(@class, "menu")]/div[contains(@class, "item")][contains(text(), "' . str_replace('"', '\"', $optionLabel) . '")]');
+        if ($blur) {
+            $this->click('body'); // Trigger blur event after selecting option
+        }
     }
 
     public function dontSeeNavMenuWithHref($href)

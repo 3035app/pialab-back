@@ -29,21 +29,23 @@ class StructurePage
         $I->amOnPage('/manageStructures');
         $I->fillField('input[name="create_structure_type_form[name]"]', $structureType);
         $I->click('[name="create_structure_type_form[submit]"]');
-        $I->canSee($structureType, '//td');
+        $I->canSeeElement('//tr/td[2][text()="' . $structureType . '"]');
 
         return $this;
     }
 
-    public function createStructure($structure, $structureType)
+    public function createStructure($structure, $structureType = null)
     {
         $I = $this->tester;
-        $I->wantTo(sprintf('Create a new structure named "%s" of type "%s"', $structure, $structureType));
+        $I->wantTo(sprintf('Create a new structure named "%s" of type "%s"', $structure, $structureType === null ? 'none' : $structureType));
         $I->amOnPage('/manageStructures');
         $I->fillField('input[name="create_structure_form[name]"]', $structure);
-        $I->selectOptionFromSUISelect('create_structure_form[type]', $structureType);
+        if ($structureType !== null) {
+            $I->selectOptionFromSUISelect('create_structure_form[type]', $structureType);
+        }
         $I->click('[name="create_structure_form[submit]"]');
 
-        $I->canSee($structure, '//td');
+        $I->canSeeElement('//tr/td[2][text()="' . $structure . '"]');
 
         return $this;
     }
@@ -53,7 +55,7 @@ class StructurePage
         $I = $this->tester;
         $I->wantTo(sprintf('Remove the structure named "%s"', $structure));
         $I->amOnPage('/manageStructures');
-        $I->click('//td[contains(text(), "' . $structure . '")]/ancestor::tr/descendant::a[contains(@href,"/manageStructures/removeStructure/")]');
+        $I->click('//td[text()="' . $structure . '"]/ancestor::tr/descendant::a[contains(@href,"/manageStructures/removeStructure/")]');
 
         $formName = 'form[name="remove_structure_form"]';
         $I->waitForElementVisible($formName . ' input[type="submit"]');
@@ -61,7 +63,7 @@ class StructurePage
 
         $I->click($formName . ' input[type="submit"]');
 
-        $I->dontSee($structure, '//td');
+        $I->cantSeeElement('//tr/td[2][text()="' . $structure . '"]');
     }
 
     public function removeStructureType($structureType)
@@ -69,7 +71,7 @@ class StructurePage
         $I = $this->tester;
         $I->wantTo(sprintf('Remove the structure type named "%s"', $structureType));
         $I->amOnPage('/manageStructures');
-        $I->click('//td[contains(text(), "' . $structureType . '")]/ancestor::tr/descendant::a[contains(@href,"/manageStructures/removeStructureType/")]');
+        $I->click('//td[text()="' . $structureType . '"]/ancestor::tr/descendant::a[contains(@href,"/manageStructures/removeStructureType/")]');
 
         $formName = 'form[name="remove_structure_type_form"]';
         $I->waitForElementVisible($formName . ' input[type="submit"]');
@@ -77,6 +79,6 @@ class StructurePage
 
         $I->click($formName . ' input[type="submit"]');
 
-        $I->dontSee($structureType, '//td');
+        $I->cantSeeElement('//tr/td[2][text()="' . $structureType . '"]');
     }
 }
