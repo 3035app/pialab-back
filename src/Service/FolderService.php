@@ -8,18 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Services;
+namespace PiaApi\Service;
 
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\Entity\Pia\Structure;
 
-class FolderService extends AbstractService
+class FolderService
 {
-    public function getEntityClass(): string
-    {
-        return Folder::class;
-    }
-
     /**
      * @param string         $name
      * @param Structure|null $structure
@@ -27,7 +22,7 @@ class FolderService extends AbstractService
      *
      * @return Folder
      */
-    public function createFolder(string $name, ?Structure $structure = null, ?Folder $parent = null): Folder
+    public function newFolder(string $name, ?Structure $structure = null, ?Folder $parent = null): Folder
     {
         $folder = new Folder($name, $structure);
 

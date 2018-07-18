@@ -8,30 +8,21 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Services;
+namespace PiaApi\Service;
 
 use PiaApi\Entity\Pia\Structure;
 use PiaApi\Entity\Pia\StructureType;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class StructureService extends AbstractService
+class StructureService
 {
     /**
      * @var FolderService
      */
     private $folderService;
 
-    public function __construct(
-        RegistryInterface $doctrine,
-        FolderService $folderService
-    ) {
-        parent::__construct($doctrine);
-        $this->folderService = $folderService;
-    }
-
-    public function getEntityClass(): string
+    public function __construct(FolderService $folderService)
     {
-        return Structure::class;
+        $this->folderService = $folderService;
     }
 
     /**
@@ -40,11 +31,11 @@ class StructureService extends AbstractService
      *
      * @return Structure
      */
-    public function createStructure(string $name, ?StructureType $structureType = null): Structure
+    public function newStructure(string $name, ?StructureType $structureType = null): Structure
     {
         $structure = new Structure($name);
 
-        $this->folderService->createFolder('root', $structure);
+        $this->folderService->newFolder('root', $structure);
 
         if ($structureType !== null) {
             $structure->setType($structureType);

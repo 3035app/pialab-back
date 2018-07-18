@@ -10,7 +10,7 @@
 
 namespace PiaApi\Command;
 
-use PiaApi\Services\ApplicationService;
+use PiaApi\Service\ApplicationService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -98,7 +98,7 @@ EOT
         $clientSecret = $input->getOption('client-secret', false);
 
         if ($clientId && $clientSecret) {
-            $application = $this->applicationService->createApplication(
+            $application = $this->applicationService->newApplication(
                 $applicationName,
                 $applicationUrl,
                 $applicationGrantTypes,
@@ -112,7 +112,7 @@ EOT
 
             return;
         } else {
-            $application = $this->applicationService->createApplication(
+            $application = $this->applicationService->newApplication(
                 $applicationName,
                 $applicationUrl,
                 $applicationGrantTypes

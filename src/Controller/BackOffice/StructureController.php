@@ -20,8 +20,8 @@ use PiaApi\Form\Structure\EditStructureTypeForm;
 use PiaApi\Form\Structure\RemoveStructureForm;
 use PiaApi\Form\Structure\RemoveStructureTypeForm;
 use PiaApi\Form\User\CreateUserForm;
-use PiaApi\Services\StructureService;
-use PiaApi\Services\StructureTypeService;
+use PiaApi\Service\StructureService;
+use PiaApi\Service\StructureTypeService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,7 +112,7 @@ class StructureController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $structureData = $form->getData();
 
-            $structure = $this->structureService->createStructure(
+            $structure = $this->structureService->newStructure(
                 $structureData['name'],
                 $structureData['type']
             );
@@ -145,7 +145,7 @@ class StructureController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $structureTypeData = $form->getData();
 
-            $structureType = $this->structureTypeService->createStructureType($structureTypeData['name']);
+            $structureType = $this->structureTypeService->newStructureType($structureTypeData['name']);
 
             $this->getDoctrine()->getManager()->persist($structureType);
             $this->getDoctrine()->getManager()->flush();

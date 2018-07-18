@@ -14,7 +14,7 @@ use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\Form\PiaTemplate\CreatePiaTemplateForm;
 use PiaApi\Form\PiaTemplate\EditPiaTemplateForm;
 use PiaApi\Form\PiaTemplate\RemovePiaTemplateForm;
-use PiaApi\Services\PiaTemplateService;
+use PiaApi\Service\PiaTemplateService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,7 +65,7 @@ class PiaTemplateController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $piaTemplateData = $form->getData();
 
-            $piaTemplate = $this->piaTemplateService->createTemplateWithFile(
+            $piaTemplate = $this->piaTemplateService->newTemplateWithFile(
                 $piaTemplateData['name'],
                 $piaTemplateData['data'],
                 isset($piaTemplateData['description']) ? $piaTemplateData['description'] : null

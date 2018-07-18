@@ -19,7 +19,7 @@ use PiaApi\Entity\Pia\StructureType;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use PiaApi\Services\StructureService;
+use PiaApi\Service\StructureService;
 
 class CreateStructureCommand extends Command
 {
@@ -80,10 +80,10 @@ EOT
         $structTypeRepo = $this->entityManager->getRepository(StructureType::class);
         $structType = $structTypeRepo->findOneBy(['name' => $type]);
         if ($structType === null) {
-            $structType = $this->structureTypeService->createStructureType($type);
+            $structType = $this->structureTypeService->newStructureType($type);
         }
 
-        $structure = $this->structureService->createStructure($name, $structType);
+        $structure = $this->structureService->newStructure($name, $structType);
 
         $this->entityManager->persist($structure);
         $this->entityManager->flush();

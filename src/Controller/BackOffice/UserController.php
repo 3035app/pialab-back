@@ -19,7 +19,7 @@ use PiaApi\Form\User\EditUserForm;
 use PiaApi\Form\User\RemoveUserForm;
 use PiaApi\Form\User\SendResetPasswordEmailForm;
 use PiaApi\Security\Role\RoleHierarchy;
-use PiaApi\Services\UserService;
+use PiaApi\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -113,7 +113,7 @@ class UserController extends BackOfficeAbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userData = $form->getData();
 
-            $user = $this->userService->createUser(
+            $user = $this->userService->newUser(
                 $userData['email'],
                 $userData['password'],
                 $userData['structure'],
@@ -161,7 +161,7 @@ class UserController extends BackOfficeAbstractController
      */
     public function editUserAction(Request $request, $userId)
     {
-        $user = $this->userService->getRepository()->find($userId);
+        $user = $this->userService->getById($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
@@ -202,7 +202,7 @@ class UserController extends BackOfficeAbstractController
      */
     public function removeUserAction(Request $request, $userId)
     {
-        $user = $this->userService->getRepository()->find($userId);
+        $user = $this->userService->getById($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));
@@ -243,7 +243,7 @@ class UserController extends BackOfficeAbstractController
     {
         $this->canAccess();
 
-        $user = $this->userService->getRepository()->find($userId);
+        $user = $this->userService->getById($userId);
 
         if ($user === null) {
             throw new NotFoundHttpException(sprintf('User « %s » does not exist', $userId));

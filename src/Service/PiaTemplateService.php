@@ -8,25 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Services;
+namespace PiaApi\Service;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use PiaApi\Entity\Pia\PiaTemplate;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class PiaTemplateService extends AbstractService
+class PiaTemplateService
 {
-    public function __construct(
-        RegistryInterface $doctrine
-    ) {
-        parent::__construct($doctrine);
-    }
-
-    public function getEntityClass(): string
-    {
-        return PiaTemplate::class;
-    }
-
     /**
      * @param string      $name
      * @param string      $jsonContent
@@ -35,7 +23,7 @@ class PiaTemplateService extends AbstractService
      *
      * @return PiaTemplate
      */
-    public function createTemplate(string $name, string $jsonContent, string $importedFileName, ?string $description = null): PiaTemplate
+    public function newTemplate(string $name, string $jsonContent, string $importedFileName, ?string $description = null): PiaTemplate
     {
         $template = new PiaTemplate($name);
         $template->setData($jsonContent);
@@ -55,7 +43,7 @@ class PiaTemplateService extends AbstractService
      *
      * @return PiaTemplate
      */
-    public function createTemplateWithFile(string $name, UploadedFile $file, ?string $description = null): PiaTemplate
+    public function newTemplateWithFile(string $name, UploadedFile $file, ?string $description = null): PiaTemplate
     {
         $template = new PiaTemplate($name);
         $template->addFile($file);

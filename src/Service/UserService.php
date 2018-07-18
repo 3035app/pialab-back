@@ -8,25 +8,27 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Services;
+namespace PiaApi\Service;
 
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use PiaApi\Entity\Oauth\User;
 use FOS\OAuthServerBundle\Model\ClientInterface;
-use PiaApi\Entity\Pia\Structure;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
-use PiaApi\Entity\Pia\UserProfile;
+use PiaApi\Entity\Oauth\User;
+use PiaApi\Entity\Pia\Structure;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use PiaApi\Repository\UserRepository;
 
-class UserService extends AbstractService
+class UserService
 {
     /**
      * @var EncoderFactoryInterface
      */
     private $encoderFactory;
-
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
     /**
      * @var StructureService
      */
@@ -48,15 +50,14 @@ class UserService extends AbstractService
     private $tokenGenerator;
 
     public function __construct(
-        RegistryInterface $doctrine,
+        UserRepository $userRepository,
         EncoderFactoryInterface $encoderFactory,
         StructureService $structureService,
         ApplicationService $applicationService,
         MailerInterface $mailer,
         TokenGeneratorInterface $tokenGenerator
     ) {
-        parent::__construct($doctrine);
-
+        $this->userRepository = $userRepository;
         $this->encoderFactory = $encoderFactory;
         $this->structureService = $structureService;
         $this->applicationService = $applicationService;
@@ -64,9 +65,13 @@ class UserService extends AbstractService
         $this->tokenGenerator = $tokenGenerator;
     }
 
-    public function getEntityClass(): string
+    /**
+     * @return User
+     */
+    public function getById($id)
     {
-        return User::class;
+        return $this->userRepository->find($id);
+        //@todo throw exception if user is null
     }
 
     /**
@@ -77,23 +82,12 @@ class UserService extends AbstractService
      *
      * @return User
      */
-    public function createUser(string $email, string $password, ?Structure $structure = null, ?ClientInterface $application = null): User
+    public function newUser(string $email, string $password, ?Structure $structure = null, ?ClientInterface $application = null): User
     {
         $user = new User($email);
-
         $this->encodePassword($user, $password);
-
-        $profile = new UserProfile();
-        $profile->setUser($user);
-        $user->setProfile($profile);
-
-        if ($structure !== null) {
-            $user->setStructure($structure);
-        }
-
-        if ($application !== null) {
-            $user->setApplication($application);
-        }
+        $user->setStructure($structure);
+        $user->setApplication($application);
 
         return $user;
     }
@@ -110,7 +104,7 @@ class UserService extends AbstractService
         }
         $this->mailer->sendResettingEmailMessage($user);
         $user->setPasswordRequestedAt(new \DateTime());
-        $this->doctrineRegistry->getManager()->flush($user);
+        $this->userRepository->save($user);
     }
 
     /**
@@ -119,7 +113,7 @@ class UserService extends AbstractService
      * @param User   $user
      * @param string $password
      */
-    public function encodePassword(User &$user, string $password): void
+    public function encodePassword(User $user, string $password): void
     {
         $encoder = $this->encoderFactory->getEncoder($user);
         $user->setPassword($encoder->encodePassword($password, $user->getSalt()));

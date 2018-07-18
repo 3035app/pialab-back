@@ -15,7 +15,7 @@ use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\Entity\Pia\Structure;
-use PiaApi\Services\PiaTemplateService;
+use PiaApi\Service\PiaTemplateService;
 use splitbrain\PHPArchive\Tar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -143,7 +143,7 @@ class PiaTemplatesBatchImportCommand extends Command
         // Fetching template json as entity in order to get target template name only
         $pia = $this->fetchDataAsEntities($templateJson);
 
-        $template = $this->piaTemplateService->createTemplate(
+        $template = $this->piaTemplateService->newTemplate(
             $pia->getName(),
             $templateJson,
             $fileName

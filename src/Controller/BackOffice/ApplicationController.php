@@ -19,7 +19,7 @@ use PiaApi\Form\Application\RemoveApplicationForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use PiaApi\Services\ApplicationService;
+use PiaApi\Service\ApplicationService;
 
 class ApplicationController extends BackOfficeAbstractController
 {
@@ -70,7 +70,7 @@ class ApplicationController extends BackOfficeAbstractController
             if ($form->isValid()) {
                 $applicationData = $form->getData();
 
-                $application = $this->applicationService->createApplication(
+                $application = $this->applicationService->newApplication(
                     $applicationData['name'],
                     $applicationData['url'],
                     $applicationData['allowedGrantTypes']
