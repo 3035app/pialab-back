@@ -20,7 +20,7 @@ class PiaTemplatesCest
     {
         $I->login();
 
-        $I->wantTo('Crate new PIA template');
+        $I->wantTo('Create new PIA template');
         $I->amOnPage('/managePiaTemplates');
 
         $I->fillField('input[name="create_pia_template_form[name]"]', $this->piaTemplateName);
