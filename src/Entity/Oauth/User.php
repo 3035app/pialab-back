@@ -43,11 +43,11 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     protected $creationDate;
 
     /**
-     * @ORM\Column(name="expirationDate", type="datetime_immutable")
+     * @ORM\Column(name="expirationDate", type="datetime")
      *
-     * @JMS\Type("DateTimeImmutable")
+     * @JMS\Type("DateTime")
      *
-     * @var \DateTimeImmutable
+     * @var \DateTime
      */
     protected $expirationDate;
 
@@ -113,7 +113,7 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         $this->username = $email;
         $this->roles = ['ROLE_USER'];
         $this->creationDate = new \DateTime();
-        $this->expirationDate = new \DateTimeImmutable('+1 Year');
+        $this->expirationDate = new \DateTime('+1 Year');
         $this->enabled = true;
         $this->profile = new UserProfile();
         $this->portfolios = new ArrayCollection();
