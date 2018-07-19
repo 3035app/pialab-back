@@ -122,7 +122,7 @@ class StructureController extends RestController
      *     description="Creates a structure",
      *     @Swg\Schema(
      *         type="object",
-     *         ref=@Nelmio\Model(type=STRUCTURE::class, groups={"Default"})
+     *         ref=@Nelmio\Model(type=Structure::class, groups={"Default"})
      *     )
      * )
      *

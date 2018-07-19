@@ -107,12 +107,16 @@ class Portfolio implements Timestampable
         return $this->users->getValues();
     }
 
-    /**
-     * @return array
-     */
     public function setUsers(array $users): void
     {
         $this->users = new ArrayCollection($users);
+    }
+
+    public function addUser(User $user): void
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
     }
 
     public function removeUser(User $user): array

@@ -1,5 +1,5 @@
 parameters:
-    api_pattern: ^/(pias|profile|pia-templates|folders|structures|users)
+    api_pattern: ^/(pias|profile|pia-templates|folders|structures|users|portfolios)
 
 security:
     access_decision_manager:
@@ -103,11 +103,19 @@ security:
             - CAN_EDIT_USER
             - CAN_DELETE_USER
 
+        #Special permission which limit to owned structures  (from the owned portfolios)
         CAN_MANAGE_ONLY_OWNED_STRUCTURES:
             - CAN_SHOW_STRUCTURE
             - CAN_CREATE_STRUCTURE
             - CAN_EDIT_STRUCTURE
             - CAN_DELETE_STRUCTURE
+
+        #Special permission which limit to owned portfolios  (from the user)
+        CAN_MANAGE_ONLY_OWNED_PORTFOLIOS:
+            - CAN_SHOW_PORTFOLIO
+            - CAN_CREATE_PORTFOLIO
+            - CAN_EDIT_PORTFOLIO
+            - CAN_DELETE_PORTFOLIO
 
         #ROLE DEFINITIONS
         ROLE_USER:
@@ -130,10 +138,11 @@ security:
         
         ROLE_SHARED_DPO:
             - ROLE_DPO
-            - CAN_MANAGE_PORTFOLIOS
+            - CAN_MANAGE_ONLY_OWNED_PORTFOLIOS
 
         ROLE_ADMIN:
             - ROLE_SHARED_DPO
+            - CAN_MANAGE_PORTFOLIOS
             - CAN_MANAGE_ONLY_OWNED_USERS
             - CAN_MANAGE_ONLY_OWNED_STRUCTURES
 

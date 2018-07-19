@@ -13,7 +13,7 @@ use Codeception\Util\HttpCode;
 /**
  * @group all
  * @group api
- * @group api_admin_structure
+ * @group api_admin_structures
  */
 class AdminStructuresCest
 {

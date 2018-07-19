@@ -10,14 +10,17 @@
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
+use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\Entity\Pia\Portfolio;
 use PiaApi\Services\PortfolioService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as Swg;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use PiaApi\DataHandler\RequestDataHandler;
 
 class PortfolioController extends RestController
 {
@@ -35,10 +38,21 @@ class PortfolioController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="Portfolio")
+     *
      * @FOSRest\Get("/portfolios")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns all portfolios",
+     *     @Swg\Schema(
+     *         type="array",
+     *         @Swg\Items(ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"}))
+     *     )
+     * )
      * @Security("is_granted('CAN_SHOW_PORTFOLIO')")
      *
-     * @return View
+     * @return array
      */
     public function listAction(Request $request)
     {
@@ -48,10 +62,22 @@ class PortfolioController extends RestController
     }
 
     /**
-     * @FOSRest\Get("/portfolios/{id}")
+     * @Swg\Tag(name="Portfolio")
+     *
+     * @FOSRest\Get("/portfolios/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns one Portfolio by its id",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_PORTFOLIO')")
      *
-     * @return View
+     * @return array
      */
     public function showAction(Request $request, $id)
     {
@@ -63,8 +89,116 @@ class PortfolioController extends RestController
         return $this->view($portfolio, Response::HTTP_OK);
     }
 
+    /**
+     * @Swg\Tag(name="Portfolio")
+     *
+     * @FOSRest\Post("/portfolios")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Creates a Portfolio",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"})
+     *     )
+     * )
+     *
+     * @Security("is_granted('CAN_CREATE_PORTFOLIO')")
+     *
+     * @return array
+     */
+    public function createAction(Request $request)
+    {
+        $user = $this->getUser();
+        $structure = $user->getStructure();
+
+        $portfolio = $this->portfolioService->newPortfolio($request->get('name'));
+        $portfolio->addUser($user);
+        $user->addPortfolio($portfolio);
+
+        if ($structure !== null) {
+            $portfolio->addStructure($structure);
+        }
+
+        $this->persist($portfolio);
+
+        return $this->view($portfolio, Response::HTTP_OK);
+    }
+
+    /**
+     * @Swg\Tag(name="Portfolio")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Update a Portfolio",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"})
+     *     )
+     * )
+     *
+     * @FOSRest\Put("/portfolios/{id}", requirements={"id"="\d+"})
+     *
+     * @Security("is_granted('CAN_EDIT_PORTFOLIO')")
+     *
+     * @return array
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $portfolio = $this->getResource($id);
+        $this->canAccessResourceOr403($portfolio);
+
+        $updatableAttributes = [
+            'name' => RequestDataHandler::TYPE_STRING,
+        ];
+
+        $this->mergeFromRequest($portfolio, $updatableAttributes, $request);
+
+        $this->update($portfolio);
+
+        return $this->view($portfolio, Response::HTTP_OK);
+    }
+
+    /**
+     * @Swg\Tag(name="Portfolio")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Delete a Portfolio",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"})
+     *     )
+     * )
+     *
+     * @FOSRest\Delete("/portfolios/{id}", requirements={"id"="\d+"})
+     *
+     * @Security("is_granted('CAN_DELETE_PORTFOLIO')")
+     *
+     * @return array
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $portfolio = $this->getResource($id);
+
+        foreach ($portfolio->getStructures() as $structure) {
+            $structure->setPortfolio(null);
+        }
+
+        $this->remove($portfolio);
+
+        return $this->view([], Response::HTTP_OK);
+    }
+
     protected function getEntityClass()
     {
         return Portfolio::class;
+    }
+
+    public function canAccessResourceOr403($resource): void
+    {
+        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_PORTFOLIOS') && count($this->getUser()->getPortfolios()) > 0 && in_array($resource, $this->getUser()->getPortfolioStructures())) {
+            throw new AccessDeniedHttpException('Resource not found');
+        }
     }
 }
