@@ -63,18 +63,23 @@ class UserController extends RestController
     public function listAction(Request $request)
     {
         $criteria = array_merge($this->extractCriteria($request), ['limit' => 20, 'page' => 1]);
+
         /* @var Pagerfanta $userPager */
         $userPager;
+        $structure;
 
         if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_USERS')) {
             $structure = $this->getUser()->getStructure();
+        }
+
+        if ($structure !== null) {
             $userPager = $this->getDoctrine()
-              ->getRepository($this->getEntityClass())
-              ->getPaginatedUsersByStructure($structure, $criteria['limit'], $criteria['page']);
+                ->getRepository($this->getEntityClass())
+                ->getPaginatedUsersByStructure($structure, $criteria['limit'], $criteria['page']);
         } else {
             $userPager = $this->getDoctrine()
-              ->getRepository($this->getEntityClass())
-              ->getPaginatedUsers($criteria['limit'], $criteria['page']);
+                ->getRepository($this->getEntityClass())
+                ->getPaginatedUsers($criteria['limit'], $criteria['page']);
         }
 
         return $this->view($userPager->getCurrentPageResults()->getArrayCopy(), Response::HTTP_OK);
@@ -238,7 +243,7 @@ class UserController extends RestController
 
     public function canAccessResourceOr403($resource): void
     {
-        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_USERS') && !$this->getUser()->getStructure()->getUsers()->contains($resource)) {
+        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_USERS') && $this->getUser()->getStructure() !== null && !$this->getUser()->getStructure()->getUsers()->contains($resource)) {
             throw new AccessDeniedHttpException('Resource not found');
         }
     }
