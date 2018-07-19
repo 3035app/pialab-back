@@ -59,6 +59,15 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     protected $locked = false;
 
     /**
+     * Encrypted password. Must be persisted.
+     *
+     * @JMS\Exclude()
+     *
+     * @var string
+     */
+    protected $password;
+
+    /**
      * @ORM\OneToOne(targetEntity="PiaApi\Entity\Pia\UserProfile", mappedBy="user", cascade={"persist", "remove"})
      *
      * @JMS\MaxDepth(2)

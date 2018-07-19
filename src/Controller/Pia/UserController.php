@@ -17,6 +17,7 @@ use Pagerfanta\Pagerfanta;
 use PiaApi\Entity\Oauth\Client;
 use PiaApi\Entity\Oauth\User;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Pia\UserProfile;
 use PiaApi\Services\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as Swg;
@@ -24,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use PiaApi\DataHandler\RequestDataHandler;
 
 class UserController extends RestController
 {
@@ -180,7 +182,26 @@ class UserController extends RestController
      */
     public function updateAction(Request $request, $id)
     {
-        return $this->view([], Response::HTTP_OK);
+        $user = $this->getResource($id);
+        $this->canAccessResourceOr403($user);
+
+        $updatableAttributes = [
+            'username'        => RequestDataHandler::TYPE_STRING,
+            'email'           => RequestDataHandler::TYPE_STRING,
+            'enabled'         => RequestDataHandler::TYPE_BOOL,
+            'password'        => RequestDataHandler::TYPE_STRING,
+            'roles'           => RequestDataHandler::TYPE_ARRAY,
+            'expiration_date' => \DateTimeImmutable::class,
+            'locked'          => RequestDataHandler::TYPE_BOOL,
+            'profile'         => UserProfile::class,
+            'structure'       => Structure::class,
+        ];
+
+        $this->mergeFromRequest($user, $updatableAttributes, $request);
+
+        $this->update($user);
+
+        return $this->view($user, Response::HTTP_OK);
     }
 
     /**
@@ -205,8 +226,7 @@ class UserController extends RestController
     {
         $user = $this->getResource($id);
 
-        $this->getDoctrine()->getManager()->remove($user);
-        $this->getDoctrine()->getManager()->flush($user);
+        $this->remove($user);
 
         return $this->view([], Response::HTTP_OK);
     }

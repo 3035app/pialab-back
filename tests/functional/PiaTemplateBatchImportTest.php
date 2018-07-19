@@ -8,38 +8,55 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Tests\Unit\Command;
+namespace PiaApi\Tests\functionnal;
 
 use PiaApi\Command\PiaTemplatesBatchImportCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
+use PiaApi\Kernel;
+use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
+use PiaApi\Services\PiaTemplateService;
 
 class PiaTemplateBatchImportTest extends WebTestCase
 {
+    /**
+     * @return string The Kernel class name
+     *
+     * @throws \RuntimeException
+     * @throws \LogicException
+     */
+    protected static function getKernelClass()
+    {
+        return Kernel::class;
+    }
+
     public function testExecute()
     {
         $kernel = self::bootKernel();
-        $di = $kernel->getContainer();
+
+        $di = self::$container;
 
         $application = new Application($kernel);
 
-        $application->add(new PiaTemplatesBatchImportCommand(
-            $di->get('doctrine')->getManager(),
-            $di->get('JsonToEntityTransformer'),
-            $di->get('PiaTemplateService')
-        ));
+        $application->add(
+            new PiaTemplatesBatchImportCommand(
+                $di->get('doctrine')->getManager(),
+                $di->get(JsonToEntityTransformer::class),
+                $di->get(PiaTemplateService::class)
+            )
+        );
 
         $command = $application->find(PiaTemplatesBatchImportCommand::NAME);
 
         $commandTester = new CommandTester($command);
 
-        $commandTester->execute(array(
+        $commandTester->execute([
             'command'          => $command->getName(),
             'path'             => __DIR__ . '/fixtures',
             '--dry-run'        => null,
             '--no-interaction' => null,
-        ));
+        ]);
 
         // the output of the command in the console
         $output = $commandTester->getDisplay();
