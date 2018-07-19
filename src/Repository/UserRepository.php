@@ -50,7 +50,7 @@ class UserRepository extends ServiceEntityRepository
     public function getPaginatedUsersByStructure(
         Structure $structure,
         ?int $defaultLimit = 20,
-        ?int $page = 0
+        ?int $page = 1
     ): PagerfantaInterface {
         $queryBuilder = $this->createQueryBuilder('e');
 
@@ -74,7 +74,7 @@ class UserRepository extends ServiceEntityRepository
      *
      * @return PagerfantaInterface
      */
-    public function getPaginatedUsers(?int $defaultLimit = 20, ?int $page = 0): PagerfantaInterface
+    public function getPaginatedUsers(?int $defaultLimit = 20, ?int $page = 1): PagerfantaInterface
     {
         $queryBuilder = $this->createQueryBuilder('e');
 

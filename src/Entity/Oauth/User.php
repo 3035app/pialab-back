@@ -309,15 +309,15 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     /**
      * @return \DateTime
      */
-    public function getExpirationDate(): \DateTimeImmutable
+    public function getExpirationDate(): \DateTime
     {
         return $this->expirationDate;
     }
 
     /**
-     * @param \DateTimeImmutable $expirationDate
+     * @param \DateTime $expirationDate
      */
-    public function setExpirationDate(\DateTimeImmutable $expirationDate): void
+    public function setExpirationDate(\DateTime $expirationDate): void
     {
         $this->expirationDate = $expirationDate;
     }

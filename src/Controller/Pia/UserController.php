@@ -195,7 +195,7 @@ class UserController extends RestController
             'enabled'         => RequestDataHandler::TYPE_BOOL,
             'password'        => RequestDataHandler::TYPE_STRING,
             'roles'           => RequestDataHandler::TYPE_ARRAY,
-            'expiration_date' => \DateTimeImmutable::class,
+            'expiration_date' => \DateTime::class,
             'locked'          => RequestDataHandler::TYPE_BOOL,
             'profile'         => UserProfile::class,
             'structure'       => Structure::class,
