@@ -62,7 +62,7 @@ class StructureController extends RestController
 
         /* @var Pagerfanta $structuresPager */
         $structuresPager;
-        $portfolios;
+        $portfolios = null;
 
         if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES')) {
             $portfolios = $this->getUser()->getPortfolios();

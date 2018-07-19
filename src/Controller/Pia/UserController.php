@@ -66,7 +66,7 @@ class UserController extends RestController
 
         /* @var Pagerfanta $userPager */
         $userPager;
-        $structure;
+        $structure = null;
 
         if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_USERS')) {
             $structure = $this->getUser()->getStructure();
