@@ -49,13 +49,15 @@ class StructureRepository extends ServiceEntityRepository
 
     /**
      * @param Portfolio $portfolio
-     * @param int       $defaultLimit
+     * @param int|null  $defaultLimit
+     * @param int|null  $page
      *
      * @return PagerfantaInterface
      */
     public function getPaginatedStructuresByPortfolio(
         Portfolio $portfolio,
-        ?int $defaultLimit = 20
+        ?int $defaultLimit = 20,
+        ?int $page = 1
     ): PagerfantaInterface {
         $queryBuilder = $this->createQueryBuilder('e');
 
@@ -68,6 +70,59 @@ class StructureRepository extends ServiceEntityRepository
 
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($defaultLimit);
+        $pagerfanta->setCurrentPage($page);
+
+        return $pagerfanta;
+    }
+
+    /**
+     * @param array    $portfolios
+     * @param int|null $defaultLimit
+     * @param int|null $page
+     *
+     * @return PagerfantaInterface
+     */
+    public function getPaginatedStructuresForPortfolios(
+        array $portfolios,
+        ?int $defaultLimit = 20,
+        ?int $page = 1
+    ): PagerfantaInterface {
+        $queryBuilder = $this->createQueryBuilder('s');
+
+        $queryBuilder
+            ->orderBy('s.id', 'DESC')
+            ->where($queryBuilder->expr()->in('s.portfolio', ':portfolios'))
+            ->setParameter('portfolios', $portfolios);
+
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($defaultLimit);
+        $pagerfanta->setCurrentPage($page);
+
+        return $pagerfanta;
+    }
+
+    /**
+     * @param int|null $defaultLimit
+     * @param int|null $page
+     *
+     * @return PagerfantaInterface
+     */
+    public function getPaginatedStructures(
+        ?int $defaultLimit = 20,
+        ?int $page = 1
+    ): PagerfantaInterface {
+        $queryBuilder = $this->createQueryBuilder('e');
+
+        $queryBuilder
+            ->orderBy('e.id', 'DESC');
+
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($defaultLimit);
+        $pagerfanta->setCurrentPage($page);
 
         return $pagerfanta;
     }

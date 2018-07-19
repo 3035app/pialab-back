@@ -402,4 +402,20 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         $profile->setUser($this);
         $this->profile = $profile;
     }
+
+    public function getPortfolioStructures(): array
+    {
+        $allStructures = new ArrayCollection();
+
+        foreach ($this->portfolios as $portfolio) {
+            $structures = $portfolio->getStructures();
+            foreach ($structures as $structure) {
+                if (!$allStructures->contains($structure)) {
+                    $allStructures->add($structure);
+                }
+            }
+        }
+
+        return $allStructures->toArray();
+    }
 }

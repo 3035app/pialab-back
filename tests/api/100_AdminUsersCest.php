@@ -15,7 +15,7 @@ use Codeception\Util\HttpCode;
  * @group api
  * @group api_admin_users
  */
-class AdminUserCest
+class AdminUsersCest
 {
     /**
      * @var array

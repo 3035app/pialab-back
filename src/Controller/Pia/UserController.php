@@ -157,8 +157,7 @@ class UserController extends RestController
             throw new \DomainException('A Functional Administrator must be assigned to a Structure');
         }
 
-        $this->getDoctrine()->getManager()->persist($user);
-        $this->getDoctrine()->getManager()->flush();
+        $this->persist($user);
 
         if ($request->get('sendResettingEmail') === true) {
             $this->userService->sendResettingEmail($user);
