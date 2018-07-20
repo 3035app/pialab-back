@@ -22,6 +22,7 @@ use PiaApi\Services\FolderService;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\Exception\Folder\RootFolderCannotBeDeletedException;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\DataHandler\RequestDataHandler;
 
 class FolderController extends RestController
 {
@@ -106,7 +107,7 @@ class FolderController extends RestController
         $this->canAccessResourceOr403($folder);
 
         $updatableAttributes = [
-            'name'   => 'string',
+            'name'   => RequestDataHandler::TYPE_STRING,
             'parent' => Folder::class,
         ];
 

@@ -42,14 +42,16 @@ class UserRepository extends ServiceEntityRepository
 
     /**
      * @param Structure $structure
-     * @param int       $defaultLimit
+     * @param int|null  $defaultLimit
+     * @param int|null  $page
      *
      * @return PagerfantaInterface
      */
     public function getPaginatedUsersByStructure(
-            Structure $structure,
-            ?int $defaultLimit = 20
-        ): PagerfantaInterface {
+        Structure $structure,
+        ?int $defaultLimit = 20,
+        ?int $page = 1
+    ): PagerfantaInterface {
         $queryBuilder = $this->createQueryBuilder('e');
 
         $queryBuilder
@@ -61,6 +63,29 @@ class UserRepository extends ServiceEntityRepository
 
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($defaultLimit);
+        $pagerfanta->setCurrentPage($page);
+
+        return $pagerfanta;
+    }
+
+    /**
+     * @param int|null $defaultLimit
+     * @param int|null $page
+     *
+     * @return PagerfantaInterface
+     */
+    public function getPaginatedUsers(?int $defaultLimit = 20, ?int $page = 1): PagerfantaInterface
+    {
+        $queryBuilder = $this->createQueryBuilder('e');
+
+        $queryBuilder
+            ->orderBy('e.id', 'DESC');
+
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($defaultLimit);
+        $pagerfanta->setCurrentPage($page);
 
         return $pagerfanta;
     }

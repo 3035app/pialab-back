@@ -23,6 +23,7 @@ use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\Entity\Pia\Folder;
 use Swagger\Annotations as Swg;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
+use PiaApi\DataHandler\RequestDataHandler;
 
 class PiaController extends RestController
 {
@@ -199,23 +200,23 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
 
         $updatableAttributes = [
-            'name'                               => 'string',
-            'author_name'                        => 'string',
-            'evaluator_name'                     => 'string',
-            'validator_name'                     => 'string',
+            'name'                               => RequestDataHandler::TYPE_STRING,
+            'author_name'                        => RequestDataHandler::TYPE_STRING,
+            'evaluator_name'                     => RequestDataHandler::TYPE_STRING,
+            'validator_name'                     => RequestDataHandler::TYPE_STRING,
             'folder'                             => Folder::class,
-            'dpo_status'                         => 'int',
-            'concerned_people_status'            => 'int',
-            'status'                             => 'int',
-            'dpo_opinion'                        => 'string',
-            'concerned_people_opinion'           => 'string',
-            'concerned_people_searched_opinion'  => 'boolean',
-            'concerned_people_searched_content'  => 'string',
-            'rejection_reason'                   => 'string',
-            'applied_adjustments'                => 'string',
-            'dpos_names'                         => 'string',
-            'people_names'                       => 'string',
-            'type'                               => 'string',
+            'dpo_status'                         => RequestDataHandler::TYPE_INT,
+            'concerned_people_status'            => RequestDataHandler::TYPE_INT,
+            'status'                             => RequestDataHandler::TYPE_INT,
+            'dpo_opinion'                        => RequestDataHandler::TYPE_STRING,
+            'concerned_people_opinion'           => RequestDataHandler::TYPE_STRING,
+            'concerned_people_searched_opinion'  => RequestDataHandler::TYPE_BOOL,
+            'concerned_people_searched_content'  => RequestDataHandler::TYPE_STRING,
+            'rejection_reason'                   => RequestDataHandler::TYPE_STRING,
+            'applied_adjustments'                => RequestDataHandler::TYPE_STRING,
+            'dpos_names'                         => RequestDataHandler::TYPE_STRING,
+            'people_names'                       => RequestDataHandler::TYPE_STRING,
+            'type'                               => RequestDataHandler::TYPE_STRING,
         ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);

@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
+use PiaApi\DataHandler\RequestDataHandler;
 
 abstract class RestController extends FOSRestController
 {
@@ -119,6 +120,9 @@ abstract class RestController extends FOSRestController
                 if ($resourceId !== null) {
                     $attributeData = $this->getResource($resourceId, $attributeType);
                 }
+            } else {
+                $requestDataHandler = new RequestDataHandler($attributeData, $attributeType);
+                $attributeData = $requestDataHandler->getValue();
             }
 
             $this->propertyAccessor->setValue($entity, $attributeToMerge, $attributeData);

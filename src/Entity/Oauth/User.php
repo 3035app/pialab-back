@@ -38,12 +38,14 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\Column(name="creationDate", type="datetime")
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $creationDate;
 
     /**
      * @ORM\Column(name="expirationDate", type="datetime")
+     *
+     * @JMS\Type("DateTime")
      *
      * @var \DateTime
      */
@@ -57,7 +59,18 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     protected $locked = false;
 
     /**
+     * Encrypted password. Must be persisted.
+     *
+     * @JMS\Exclude()
+     *
+     * @var string
+     */
+    protected $password;
+
+    /**
      * @ORM\OneToOne(targetEntity="PiaApi\Entity\Pia\UserProfile", mappedBy="user", cascade={"persist", "remove"})
+     *
+     * @JMS\MaxDepth(2)
      *
      * @var bool
      */
@@ -66,12 +79,16 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\ManyToOne(targetEntity="Client", inversedBy="users")
      *
+     * @JMS\MaxDepth(1)
+     *
      * @var Client
      */
     protected $application;
 
     /**
      * @ORM\ManyToOne(targetEntity="PiaApi\Entity\Pia\Structure", inversedBy="users")
+     *
+     * @JMS\MaxDepth(1)
      *
      * @var Structure
      */
@@ -96,7 +113,7 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         $this->username = $email;
         $this->roles = ['ROLE_USER'];
         $this->creationDate = new \DateTime();
-        $this->expirationDate = new \DateTimeImmutable('+1 Year');
+        $this->expirationDate = new \DateTime('+1 Year');
         $this->enabled = true;
         $this->profile = new UserProfile();
         $this->portfolios = new ArrayCollection();
@@ -384,5 +401,21 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     {
         $profile->setUser($this);
         $this->profile = $profile;
+    }
+
+    public function getPortfolioStructures(): array
+    {
+        $allStructures = new ArrayCollection();
+
+        foreach ($this->portfolios as $portfolio) {
+            $structures = $portfolio->getStructures();
+            foreach ($structures as $structure) {
+                if (!$allStructures->contains($structure)) {
+                    $allStructures->add($structure);
+                }
+            }
+        }
+
+        return $allStructures->toArray();
     }
 }

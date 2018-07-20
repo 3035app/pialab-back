@@ -95,6 +95,8 @@ class UserService extends AbstractService
             $user->setApplication($application);
         }
 
+        $user->setUsername($this->generateUsername($user));
+
         return $user;
     }
 
@@ -123,5 +125,20 @@ class UserService extends AbstractService
     {
         $encoder = $this->encoderFactory->getEncoder($user);
         $user->setPassword($encoder->encodePassword($password, $user->getSalt()));
+    }
+
+    /**
+     * Generates a username.
+     *
+     * @param User $user
+     *
+     * @return string
+     */
+    public function generateUsername(User $user): string
+    {
+        $emailParts = explode('@', $user->getEmail());
+        $str = preg_replace('/[^a-z0-9]+/i', ' ', $emailParts[0]);
+
+        return '@' . str_replace(' ', '', ucwords($str));
     }
 }
