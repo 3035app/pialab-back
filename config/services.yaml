@@ -19,6 +19,7 @@ services:
 
             # Services
             FOS\UserBundle\Mailer\MailerInterface: '@fos_user.mailer.twig_swift'
+            Nelmio\ApiDocBundle\ApiDocGenerator: '@nelmio_api_doc.generator.default'
 
     PiaApi\:
         resource: '../src/*'
