@@ -159,6 +159,7 @@ $ETCDCTLCMD put $Prefix/postgres/default/username $DatabaseUser $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/password $DatabasePassword $ETCDENDPOINT
 
 $ETCDCTLCMD put $Prefix/smtp/default/url $MailerUrl $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/smtp/default/sender $MailerSender $ETCDENDPOINT
 
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT
