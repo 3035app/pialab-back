@@ -10,16 +10,30 @@
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Request;
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\Entity\Pia\Comment;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as Swg;
+use Symfony\Component\HttpFoundation\Request;
 
 class CommentController extends PiaSubController
 {
     /**
+     * @Swg\Tag(name="Comment")
+     *
      * @FOSRest\Get("/pias/{piaId}/comments")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns all comments for a specific Treatment",
+     *     @Swg\Schema(
+     *         type="array",
+     *         @Swg\Items(ref=@Nelmio\Model(type=Comment::class, groups={"Default"}))
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_COMMENT')")
      */
     public function listAction(Request $request, $piaId)
@@ -28,7 +42,19 @@ class CommentController extends PiaSubController
     }
 
     /**
+     * @Swg\Tag(name="Comment")
+     *
      * @FOSRest\Get("/pias/{piaId}/comments/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns one Comment by its id and for a specific Treatment",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Comment::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_COMMENT')")
      */
     public function showAction(Request $request, $piaId, $id)
@@ -37,7 +63,19 @@ class CommentController extends PiaSubController
     }
 
     /**
+     * @Swg\Tag(name="Comment")
+     *
      * @FOSRest\Post("/pias/{piaId}/comments")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Creates an Comment for a specific Treatment",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Comment::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_CREATE_COMMENT')")
      */
     public function createAction(Request $request, $piaId)
@@ -46,9 +84,19 @@ class CommentController extends PiaSubController
     }
 
     /**
+     * @Swg\Tag(name="Comment")
+     *
      * @FOSRest\Put("/pias/{piaId}/comments/{id}")
-     * @FOSRest\Patch("/pias/{piaId}/comments/{id}")
-     * @FOSRest\Post("/pias/{piaId}/comments/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Update an Comment for a specific Treatment",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Comment::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_EDIT_COMMENT')")
      */
     public function updateAction(Request $request, $piaId, $id)
@@ -57,7 +105,19 @@ class CommentController extends PiaSubController
     }
 
     /**
+     * @Swg\Tag(name="Comment")
+     *
      * @FOSRest\Delete("pias/{piaId}/comments/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Delete an Comment for a specific Treatment",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Comment::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_DELETE_COMMENT')")
      *
      * @return array

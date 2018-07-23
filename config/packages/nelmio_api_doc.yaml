@@ -5,14 +5,9 @@ nelmio_api_doc:
         info:
             title: Pialab API
             description: API documentation for Pialab
-            version: 1.0.0-beta
+            version: 1.2.4
 
     areas:
         default:
             path_patterns:
-                - ^/pias
-                - ^/folders
-        admin:
-            path_patterns:
-                - ^/users
-                - ^/structures
+                - '%api_pattern%' # see services.yaml

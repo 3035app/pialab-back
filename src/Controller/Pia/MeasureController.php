@@ -10,16 +10,30 @@
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
+use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\Entity\Pia\Measure;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as Swg;
+use Symfony\Component\HttpFoundation\Request;
 
 class MeasureController extends PiaSubController
 {
     /**
+     * @Swg\Tag(name="Measure")
+     *
      * @FOSRest\Get("/pias/{piaId}/measures")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns all Answsers for a specific Treatment",
+     *     @Swg\Schema(
+     *         type="array",
+     *         @Swg\Items(ref=@Nelmio\Model(type=Measure::class, groups={"Default"}))
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_MEASURE')")
      */
     public function listAction(Request $request, $piaId)
@@ -28,7 +42,19 @@ class MeasureController extends PiaSubController
     }
 
     /**
+     * @Swg\Tag(name="Measure")
+     *
      * @FOSRest\Get("/pias/{piaId}/measures/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns one Measure by its id and for a specific Treatment",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Measure::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_MEASURE')")
      */
     public function showAction(Request $request, $piaId, $id)
@@ -37,7 +63,19 @@ class MeasureController extends PiaSubController
     }
 
     /**
+     * @Swg\Tag(name="Measure")
+     *
      * @FOSRest\Post("/pias/{piaId}/measures")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Creates a Measure for a specific Treatment",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Measure::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_CREATE_MEASURE')")
      */
     public function createAction(Request $request, $piaId)
@@ -46,9 +84,19 @@ class MeasureController extends PiaSubController
     }
 
     /**
+     * @Swg\Tag(name="Measure")
+     *
      * @FOSRest\Put("/pias/{piaId}/measures/{id}")
-     * @FOSRest\Patch("/pias/{piaId}/measures/{id}")
-     * @FOSRest\Post("/pias/{piaId}/measures/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Update a Measure for a specific Treatment",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Measure::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_EDIT_MEASURE')")
      */
     public function updateAction(Request $request, $piaId, $id)
@@ -57,7 +105,19 @@ class MeasureController extends PiaSubController
     }
 
     /**
+     * @Swg\Tag(name="Measure")
+     *
      * @FOSRest\Delete("pias/{piaId}/measures/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Delete a Measure for a specific Treatment",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Measure::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_DELETE_MEASURE')")
      *
      * @return array

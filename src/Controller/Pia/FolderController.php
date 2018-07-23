@@ -10,19 +10,21 @@
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use PiaApi\Exception\Folder\NonEmptyFolderCannotBeDeletedException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use PiaApi\Entity\Pia\Folder;
-use PiaApi\Services\FolderService;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use PiaApi\Exception\Folder\RootFolderCannotBeDeletedException;
-use PiaApi\Entity\Pia\Structure;
+use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\DataHandler\RequestDataHandler;
+use PiaApi\Entity\Pia\Folder;
+use PiaApi\Entity\Pia\Structure;
+use PiaApi\Exception\Folder\NonEmptyFolderCannotBeDeletedException;
+use PiaApi\Exception\Folder\RootFolderCannotBeDeletedException;
+use PiaApi\Services\FolderService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as Swg;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class FolderController extends RestController
 {
@@ -40,7 +42,19 @@ class FolderController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="Folder")
+     *
      * @FOSRest\Get("/folders")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns all Answsers",
+     *     @Swg\Schema(
+     *         type="array",
+     *         @Swg\Items(ref=@Nelmio\Model(type=Folder::class, groups={"Default"}))
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_FOLDER')")
      *
      * @return View
@@ -54,7 +68,19 @@ class FolderController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="Folder")
+     *
      * @FOSRest\Get("/folders/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns one Folder by its id",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Folder::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_FOLDER')")
      *
      * @return View
@@ -72,7 +98,19 @@ class FolderController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="Folder")
+     *
      * @FOSRest\Post("/folders")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Creates a Folder",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Folder::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_CREATE_FOLDER')")
      *
      * @return View
@@ -95,8 +133,19 @@ class FolderController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="Folder")
+     *
      * @FOSRest\Put("/folders/{id}", requirements={"id"="\d+"})
-     * @FOSRest\Post("/folders/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Update a Folder",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Folder::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_EDIT_FOLDER')")
      *
      * @return View
@@ -119,7 +168,19 @@ class FolderController extends RestController
     }
 
     /**
+     * @Swg\Tag(name="Folder")
+     *
      * @FOSRest\Delete("/folders/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Delete a Folder",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Folder::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_DELETE_FOLDER')")
      *
      * @return View
