@@ -71,7 +71,11 @@ fi
 if [ -z "$MailerUrl" ]
 then
     MailerUrl=smtp://127.0.0.1:1025
+fi
 
+if [ -z "$MailerSender" ]
+then
+    MailerSender=no-reply@pialab.io
 fi
 
 if [ -z "${CLIENTURL}" ]
