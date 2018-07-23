@@ -21,13 +21,15 @@ use Symfony\Component\HttpFoundation\Request;
 class EvaluationController extends PiaSubController
 {
     /**
+     * Lists all Answers for a specific Treatment.
+     *
      * @Swg\Tag(name="Evaluation")
      *
      * @FOSRest\Get("/pias/{piaId}/evaluations")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all Answsers for a specific Treatment",
+     *     description="Returns all Answers of given Treatment",
      *     @Swg\Schema(
      *         type="array",
      *         @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))
@@ -42,13 +44,15 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Shows one Evaluation by its ID and specific Treatment.
+     *
      * @Swg\Tag(name="Evaluation")
      *
      * @FOSRest\Get("/pias/{piaId}/evaluations/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one Evaluation by its id and for a specific Treatment",
+     *     description="Returns one Evaluation",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"})
@@ -63,13 +67,15 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Creates an Evaluation for a specific Treatment.
+     *
      * @Swg\Tag(name="Evaluation")
      *
      * @FOSRest\Post("/pias/{piaId}/evaluations")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates an Evaluation for a specific Treatment",
+     *     description="Returns the newly created Evaluation",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"})
@@ -84,13 +90,15 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Updates an Evaluation for a specific Treatment.
+     *
      * @Swg\Tag(name="Evaluation")
      *
      * @FOSRest\Put("/pias/{piaId}/evaluations/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Update an Evaluation for a specific Treatment",
+     *     description="Returns the updated Evaluation",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"})
@@ -105,17 +113,15 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Deletes an Evaluation for a specific Treatment.
+     *
      * @Swg\Tag(name="Evaluation")
      *
      * @FOSRest\Delete("pias/{piaId}/evaluations/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete an Evaluation for a specific Treatment",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @Security("is_granted('CAN_DELETE_EVALUATION')")

@@ -43,6 +43,8 @@ class UserController extends RestController
     }
 
     /**
+     * Lists all users.
+     *
      * @Swg\Tag(name="User")
      *
      * @FOSRest\Get("/users")
@@ -86,13 +88,15 @@ class UserController extends RestController
     }
 
     /**
+     * Shows one User by its ID.
+     *
      * @Swg\Tag(name="User")
      *
      * @FOSRest\Get("/users/{id}", requirements={"id"="\d+"})
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one User by its id",
+     *     description="Returns one User",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=User::class, groups={"Default"})
@@ -117,13 +121,15 @@ class UserController extends RestController
     }
 
     /**
+     * Creates a User.
+     *
      * @Swg\Tag(name="User")
      *
      * @FOSRest\Post("/users")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates a user",
+     *     description="Returns the newly created User",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=User::class, groups={"Default"})
@@ -167,13 +173,15 @@ class UserController extends RestController
     }
 
     /**
+     * Updates a User.
+     *
      * @Swg\Tag(name="User")
      *
      * @FOSRest\Put("/users/{id}", requirements={"id"="\d+"})
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Update a user",
+     *     description="Returns the updated User",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=User::class, groups={"Default"})
@@ -209,17 +217,15 @@ class UserController extends RestController
     }
 
     /**
+     * Deletes a User.
+     *
      * @Swg\Tag(name="User")
      *
      * @FOSRest\Delete("/users/{id}", requirements={"id"="\d+"})
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete a user",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=User::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @Security("is_granted('CAN_DELETE_USER')")

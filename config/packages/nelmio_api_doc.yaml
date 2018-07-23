@@ -6,6 +6,14 @@ nelmio_api_doc:
             title: Pialab API
             description: API documentation for Pialab
             version: 1.2.4
+        securityDefinitions:
+            Bearer:
+                type: apiKey
+                description: 'Value: Bearer {YourToken}'
+                name: Authorization
+                in: header
+        security:
+            - Bearer: []
 
     areas:
         default:

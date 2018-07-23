@@ -21,13 +21,15 @@ use Symfony\Component\HttpFoundation\Request;
 class MeasureController extends PiaSubController
 {
     /**
+     * Lists all Answers for a specific Treatment.
+     *
      * @Swg\Tag(name="Measure")
      *
      * @FOSRest\Get("/pias/{piaId}/measures")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all Answsers for a specific Treatment",
+     *     description="Returns all Answers for given Treatment",
      *     @Swg\Schema(
      *         type="array",
      *         @Swg\Items(ref=@Nelmio\Model(type=Measure::class, groups={"Default"}))
@@ -42,13 +44,15 @@ class MeasureController extends PiaSubController
     }
 
     /**
+     * Shows one Measure by its ID and specific Treatment.
+     *
      * @Swg\Tag(name="Measure")
      *
      * @FOSRest\Get("/pias/{piaId}/measures/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one Measure by its id and for a specific Treatment",
+     *     description="Returns one Measure",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Measure::class, groups={"Default"})
@@ -63,13 +67,15 @@ class MeasureController extends PiaSubController
     }
 
     /**
+     * Creates a Measure for a specific Treatment.
+     *
      * @Swg\Tag(name="Measure")
      *
      * @FOSRest\Post("/pias/{piaId}/measures")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates a Measure for a specific Treatment",
+     *     description="Returns the newly created Measure",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Measure::class, groups={"Default"})
@@ -84,13 +90,15 @@ class MeasureController extends PiaSubController
     }
 
     /**
+     * Updates a Measure for a specific Treatment.
+     *
      * @Swg\Tag(name="Measure")
      *
      * @FOSRest\Put("/pias/{piaId}/measures/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Update a Measure for a specific Treatment",
+     *     description="Returns the updated Measure",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Measure::class, groups={"Default"})
@@ -105,17 +113,15 @@ class MeasureController extends PiaSubController
     }
 
     /**
+     * Deletes a Measure for a specific Treatment.
+     *
      * @Swg\Tag(name="Measure")
      *
      * @FOSRest\Delete("pias/{piaId}/measures/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete a Measure for a specific Treatment",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Measure::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @Security("is_granted('CAN_DELETE_MEASURE')")

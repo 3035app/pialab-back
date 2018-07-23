@@ -164,7 +164,7 @@ class PiaFoldersCest
         ];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('/folders/' . $folderToBeMoved['id'], $folderToBeMoved);
+        $I->sendPUT('/folders/' . $folderToBeMoved['id'], $folderToBeMoved);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();

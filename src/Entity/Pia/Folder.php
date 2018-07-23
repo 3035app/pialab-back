@@ -90,7 +90,7 @@ class Folder implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Folder", mappedBy="parent")
-     * @ORM\OrderBy({"lft" = "ASC"})
+     * @ORM\OrderBy({"name" = "ASC"})
      * @JMS\Groups({"Default"})
      * @JMS\MaxDepth(2)
      *

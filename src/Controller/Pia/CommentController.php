@@ -21,13 +21,15 @@ use Symfony\Component\HttpFoundation\Request;
 class CommentController extends PiaSubController
 {
     /**
+     * Lists all Comments for a specific Treatment.
+     *
      * @Swg\Tag(name="Comment")
      *
      * @FOSRest\Get("/pias/{piaId}/comments")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all comments for a specific Treatment",
+     *     description="Returns all Comments of given Treatment",
      *     @Swg\Schema(
      *         type="array",
      *         @Swg\Items(ref=@Nelmio\Model(type=Comment::class, groups={"Default"}))
@@ -42,13 +44,15 @@ class CommentController extends PiaSubController
     }
 
     /**
+     * Shows one Comment by its ID and specific Treatment.
+     *
      * @Swg\Tag(name="Comment")
      *
      * @FOSRest\Get("/pias/{piaId}/comments/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one Comment by its id and for a specific Treatment",
+     *     description="Returns one Comment",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Comment::class, groups={"Default"})
@@ -63,13 +67,15 @@ class CommentController extends PiaSubController
     }
 
     /**
+     * Creates a Comment for a specific Treatment.
+     *
      * @Swg\Tag(name="Comment")
      *
      * @FOSRest\Post("/pias/{piaId}/comments")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates an Comment for a specific Treatment",
+     *     description="Returns the newly created Comment",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Comment::class, groups={"Default"})
@@ -84,13 +90,15 @@ class CommentController extends PiaSubController
     }
 
     /**
+     * Updates a Comment for a specific Treatment.
+     *
      * @Swg\Tag(name="Comment")
      *
      * @FOSRest\Put("/pias/{piaId}/comments/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Update an Comment for a specific Treatment",
+     *     description="Returns the updated Comment",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Comment::class, groups={"Default"})
@@ -105,17 +113,15 @@ class CommentController extends PiaSubController
     }
 
     /**
+     * Deletes a Comment for a specific Treatment.
+     *
      * @Swg\Tag(name="Comment")
      *
      * @FOSRest\Delete("pias/{piaId}/comments/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete an Comment for a specific Treatment",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Comment::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @Security("is_granted('CAN_DELETE_COMMENT')")

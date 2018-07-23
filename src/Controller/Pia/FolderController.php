@@ -42,13 +42,15 @@ class FolderController extends RestController
     }
 
     /**
+     * Lists all Folders of User's structure.
+     *
      * @Swg\Tag(name="Folder")
      *
      * @FOSRest\Get("/folders")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all Answsers",
+     *     description="Returns all Folders",
      *     @Swg\Schema(
      *         type="array",
      *         @Swg\Items(ref=@Nelmio\Model(type=Folder::class, groups={"Default"}))
@@ -62,19 +64,21 @@ class FolderController extends RestController
     public function listAction(Request $request)
     {
         $structureId = $this->getUser()->getStructure() !== null ? $this->getUser()->getStructure()->getId() : null;
-        $collection = $this->getRepository()->findBy(['structure' => $structureId, 'parent' => null]);
+        $collection = $this->getRepository()->findBy(['structure' => $structureId, 'parent' => null], ['name' => 'ASC']);
 
         return $this->view($collection, Response::HTTP_OK);
     }
 
     /**
+     * Shows one Folder by its ID.
+     *
      * @Swg\Tag(name="Folder")
      *
      * @FOSRest\Get("/folders/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one Folder by its id",
+     *     description="Returns one Folder",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Folder::class, groups={"Default"})
@@ -98,13 +102,15 @@ class FolderController extends RestController
     }
 
     /**
+     * Creates a Folder.
+     *
      * @Swg\Tag(name="Folder")
      *
      * @FOSRest\Post("/folders")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates a Folder",
+     *     description="Returns the newly created Folder",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Folder::class, groups={"Default"})
@@ -129,17 +135,24 @@ class FolderController extends RestController
 
         $this->persist($folder);
 
+        $this->getRepository()->verify();
+        $this->getRepository()->recover();
+
+        $this->getDoctrine()->getManager()->flush();
+
         return $this->view($folder, Response::HTTP_OK);
     }
 
     /**
+     * Updates a Folder.
+     *
      * @Swg\Tag(name="Folder")
      *
      * @FOSRest\Put("/folders/{id}", requirements={"id"="\d+"})
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Update a Folder",
+     *     description="Returns the updated Folder",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Folder::class, groups={"Default"})
@@ -164,21 +177,24 @@ class FolderController extends RestController
 
         $this->update($folder);
 
+        $this->getRepository()->verify();
+        $this->getRepository()->recover();
+
+        $this->getDoctrine()->getManager()->flush();
+
         return $this->view($folder, Response::HTTP_OK);
     }
 
     /**
+     * Deletes a Folder.
+     *
      * @Swg\Tag(name="Folder")
      *
      * @FOSRest\Delete("/folders/{id}", requirements={"id"="\d+"})
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete a Folder",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Folder::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @Security("is_granted('CAN_DELETE_FOLDER')")
@@ -199,6 +215,11 @@ class FolderController extends RestController
         }
 
         $this->remove($folder);
+
+        $this->getRepository()->verify();
+        $this->getRepository()->recover();
+
+        $this->getDoctrine()->getManager()->flush();
 
         return $this->view([], Response::HTTP_OK);
     }

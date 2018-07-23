@@ -44,13 +44,15 @@ class PiaTemplateController extends RestController
     }
 
     /**
+     * Lists all PiaTemplates, for a Structure if User is not a Technical admin.
+     *
      * @Swg\Tag(name="PiaTemplate")
      *
      * @FOSRest\Get("/pia-templates")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all PiaTemplates, for a Structure if User is not a Technical admin",
+     *     description="Returns all PiaTemplates",
      *     @Swg\Schema(
      *         type="array",
      *         @Swg\Items(ref=@Nelmio\Model(type=PiaTemplate::class, groups={"Default"}))
@@ -76,13 +78,15 @@ class PiaTemplateController extends RestController
     }
 
     /**
+     * Shows one PiaTemplate by its ID.
+     *
      * @Swg\Tag(name="PiaTemplate")
      *
      * @FOSRest\Get("/pia-templates/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one PiaTemplate by its id",
+     *     description="Returns one PiaTemplate",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=PiaTemplate::class, groups={"Default"})
@@ -110,17 +114,19 @@ class PiaTemplateController extends RestController
     }
 
     /**
+     * Imports PiaTemplates contained in a given archive.
+     *
      * @Swg\Tag(name="PiaTemplate")
      *
      * @FOSRest\Post("/pia-templates/importCollection")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Import PiaTemplates contained in a given archive"
+     *     description="Empty content, Import PiaTemplates is OK"
      * )
      * @Swg\Response(
      *     response=500,
-     *     description="Import PiaTemplates fails"
+     *     description="Empty content, Import PiaTemplates fails"
      * )
      *
      * @Security("is_granted('CAN_CREATE_PIA_TEMPLATE')")
