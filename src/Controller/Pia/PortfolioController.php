@@ -38,13 +38,15 @@ class PortfolioController extends RestController
     }
 
     /**
+     * Lists all portfolios.
+     *
      * @Swg\Tag(name="Portfolio")
      *
      * @FOSRest\Get("/portfolios")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all portfolios",
+     *     description="Returns all Portfolios",
      *     @Swg\Schema(
      *         type="array",
      *         @Swg\Items(ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"}))
@@ -62,13 +64,15 @@ class PortfolioController extends RestController
     }
 
     /**
+     * Shows one Portfolio by its ID.
+     *
      * @Swg\Tag(name="Portfolio")
      *
      * @FOSRest\Get("/portfolios/{id}", requirements={"id"="\d+"})
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one Portfolio by its id",
+     *     description="Returns one Portfolio",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"})
@@ -90,13 +94,15 @@ class PortfolioController extends RestController
     }
 
     /**
+     * Creates a Portfolio.
+     *
      * @Swg\Tag(name="Portfolio")
      *
      * @FOSRest\Post("/portfolios")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates a Portfolio",
+     *     description="Returns the newly created Portfolio",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"})
@@ -126,11 +132,13 @@ class PortfolioController extends RestController
     }
 
     /**
+     * Updates a Portfolio.
+     *
      * @Swg\Tag(name="Portfolio")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Update a Portfolio",
+     *     description="Returns the updated Portfolio",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"})
@@ -160,15 +168,13 @@ class PortfolioController extends RestController
     }
 
     /**
+     * Deletes a Portfolio.
+     *
      * @Swg\Tag(name="Portfolio")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete a Portfolio",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @FOSRest\Delete("/portfolios/{id}", requirements={"id"="\d+"})

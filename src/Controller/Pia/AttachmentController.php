@@ -21,13 +21,15 @@ use PiaApi\Entity\Pia\Attachment;
 class AttachmentController extends PiaSubController
 {
     /**
+     * Lists all Attachments for a specific Treatment.
+     *
      * @Swg\Tag(name="Attachment")
      *
      * @FOSRest\Get("/pias/{piaId}/attachments")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all Attachments for a specific Treatment",
+     *     description="Returns all Attachments of given Treatment",
      *     @Swg\Schema(
      *         type="array",
      *         @Swg\Items(ref=@Nelmio\Model(type=Attachment::class, groups={"Default"}))
@@ -42,13 +44,15 @@ class AttachmentController extends PiaSubController
     }
 
     /**
+     * Shows one Attachment by its ID and specific Treatment.
+     *
      * @Swg\Tag(name="Attachment")
      *
      * @FOSRest\Get("/pias/{piaId}/attachments/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one Attachment by its id and for a specific Treatment",
+     *     description="Returns one Attachment",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})
@@ -63,13 +67,15 @@ class AttachmentController extends PiaSubController
     }
 
     /**
+     * Creates an Attachment for a specific Treatment.
+     *
      * @Swg\Tag(name="Attachment")
      *
      * @FOSRest\Post("/pias/{piaId}/attachments")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates an Attachment for a specific Treatment",
+     *     description="Returns the newly created Attachment",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})
@@ -84,13 +90,15 @@ class AttachmentController extends PiaSubController
     }
 
     /**
+     * Updates an Attachment for a specific Treatment.
+     *
      * @Swg\Tag(name="Attachment")
      *
      * @FOSRest\Put("/pias/{piaId}/attachments/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Update an Attachment for a specific Treatment",
+     *     description="Return the updated Attachment",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})
@@ -105,18 +113,15 @@ class AttachmentController extends PiaSubController
     }
 
     /**
+     * Deletes an Attachment for a specific Treatment.
+     *
      * @Swg\Tag(name="Attachment")
      *
      * @FOSRest\Delete("pias/{piaId}/attachments/{id}")
-
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete an Attachment for a specific Treatment",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @Security("is_granted('CAN_EDIT_PIA')")

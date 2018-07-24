@@ -40,13 +40,15 @@ class StructureController extends RestController
     }
 
     /**
+     * Lists all Structures.
+     *
      * @Swg\Tag(name="Structure")
      *
      * @FOSRest\Get("/structures")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all structures",
+     *     description="Returns all Structures",
      *     @Swg\Schema(
      *         type="array",
      *         @Swg\Items(ref=@Nelmio\Model(type=Structure::class, groups={"Default"}))
@@ -82,13 +84,15 @@ class StructureController extends RestController
     }
 
     /**
+     * Shows one Structure by its ID.
+     *
      * @Swg\Tag(name="Structure")
      *
      * @FOSRest\Get("/structures/{id}", requirements={"id"="\d+"})
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one Structure by its id",
+     *     description="Returns one Structure",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Structure::class, groups={"Default"})
@@ -113,13 +117,15 @@ class StructureController extends RestController
     }
 
     /**
+     * Creates a Structure.
+     *
      * @Swg\Tag(name="Structure")
      *
      * @FOSRest\Post("/structures")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates a structure",
+     *     description="Returns the newly created Structure",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Structure::class, groups={"Default"})
@@ -147,11 +153,13 @@ class StructureController extends RestController
     }
 
     /**
+     * Updates a structure.
+     *
      * @Swg\Tag(name="Structure")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Update a structure",
+     *     description="Returns the updated Structure",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Structure::class, groups={"Default"})
@@ -183,15 +191,13 @@ class StructureController extends RestController
     }
 
     /**
+     * Deletes a structure.
+     *
      * @Swg\Tag(name="Structure")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete a structure",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Structure::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @FOSRest\Delete("/structures/{id}", requirements={"id"="\d+"})

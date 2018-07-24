@@ -21,13 +21,15 @@ use PiaApi\Entity\Pia\Answer;
 class AnswerController extends PiaSubController
 {
     /**
+     * Lists all Answers for a specific Treatment.
+     *
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Get("/pias/{piaId}/answers")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all Answsers for a specific Treatment",
+     *     description="Returns all Answers of given Treatment",
      *     @Swg\Schema(
      *         type="array",
      *         @Swg\Items(ref=@Nelmio\Model(type=Answer::class, groups={"Default"}))
@@ -42,13 +44,15 @@ class AnswerController extends PiaSubController
     }
 
     /**
+     * Shows a specific Answer by its ID and specific Treatment.
+     *
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Get("/pias/{piaId}/answers/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one Answer by its id and for a specific Treatment",
+     *     description="Returns one Answer",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Answer::class, groups={"Default"})
@@ -63,13 +67,15 @@ class AnswerController extends PiaSubController
     }
 
     /**
+     * Creates an Answer for a specific Treatment.
+     *
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Post("/pias/{piaId}/answers")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates an Answer for a specific Treatment",
+     *     description="Returns the newly created Answer",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Answer::class, groups={"Default"})
@@ -84,13 +90,15 @@ class AnswerController extends PiaSubController
     }
 
     /**
+     * Updates an Answer for a specific Treatment.
+     *
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Put("/pias/{piaId}/answers/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Update an Answer for a specific Treatment",
+     *     description="Returns the updated Answer",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Answer::class, groups={"Default"})
@@ -105,17 +113,15 @@ class AnswerController extends PiaSubController
     }
 
     /**
+     * Delete an Answer for a specific Treatment.
+     *
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Delete("pias/{piaId}/answers/{id}")
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete an Answer for a specific Treatment",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Answer::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @Security("is_granted('CAN_DELETE_ANSWER')")

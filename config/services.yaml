@@ -5,6 +5,7 @@ imports:
 
 parameters:
     locale: 'fr'
+    api_pattern: ^/(pias|profile|pia-templates|folders|structures|users|portfolios)
 
 services:
     _defaults:

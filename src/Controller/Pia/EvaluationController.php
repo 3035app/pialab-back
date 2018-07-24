@@ -10,16 +10,32 @@
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
+use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\Entity\Pia\Evaluation;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as Swg;
+use Symfony\Component\HttpFoundation\Request;
 
 class EvaluationController extends PiaSubController
 {
     /**
+     * Lists all Answers for a specific Treatment.
+     *
+     * @Swg\Tag(name="Evaluation")
+     *
      * @FOSRest\Get("/pias/{piaId}/evaluations")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns all Answers of given Treatment",
+     *     @Swg\Schema(
+     *         type="array",
+     *         @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_EVALUATION')")
      */
     public function listAction(Request $request, $piaId)
@@ -28,7 +44,21 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Shows one Evaluation by its ID and specific Treatment.
+     *
+     * @Swg\Tag(name="Evaluation")
+     *
      * @FOSRest\Get("/pias/{piaId}/evaluations/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns one Evaluation",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_EVALUATION')")
      */
     public function showAction(Request $request, $piaId, $id)
@@ -37,7 +67,21 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Creates an Evaluation for a specific Treatment.
+     *
+     * @Swg\Tag(name="Evaluation")
+     *
      * @FOSRest\Post("/pias/{piaId}/evaluations")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns the newly created Evaluation",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_CREATE_EVALUATION')")
      */
     public function createAction(Request $request, $piaId)
@@ -46,9 +90,21 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Updates an Evaluation for a specific Treatment.
+     *
+     * @Swg\Tag(name="Evaluation")
+     *
      * @FOSRest\Put("/pias/{piaId}/evaluations/{id}")
-     * @FOSRest\Patch("/pias/{piaId}/evaluations/{id}")
-     * @FOSRest\Post("/pias/{piaId}/evaluations/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns the updated Evaluation",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_EDIT_EVALUATION')")
      */
     public function updateAction(Request $request, $piaId, $id)
@@ -57,7 +113,17 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Deletes an Evaluation for a specific Treatment.
+     *
+     * @Swg\Tag(name="Evaluation")
+     *
      * @FOSRest\Delete("pias/{piaId}/evaluations/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Empty content"
+     * )
+     *
      * @Security("is_granted('CAN_DELETE_EVALUATION')")
      *
      * @return array

@@ -12,18 +12,20 @@ namespace PiaApi\Controller\Pia;
 
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\Command\ImportPiaTemplatesCommand;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\Entity\Pia\PiaTemplate;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as Swg;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class PiaTemplateController extends RestController
@@ -42,7 +44,21 @@ class PiaTemplateController extends RestController
     }
 
     /**
+     * Lists all PiaTemplates, for a Structure if User is not a Technical admin.
+     *
+     * @Swg\Tag(name="PiaTemplate")
+     *
      * @FOSRest\Get("/pia-templates")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns all PiaTemplates",
+     *     @Swg\Schema(
+     *         type="array",
+     *         @Swg\Items(ref=@Nelmio\Model(type=PiaTemplate::class, groups={"Default"}))
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
      *
      * @return View
@@ -62,7 +78,25 @@ class PiaTemplateController extends RestController
     }
 
     /**
+     * Shows one PiaTemplate by its ID.
+     *
+     * @Swg\Tag(name="PiaTemplate")
+     *
      * @FOSRest\Get("/pia-templates/{id}")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns one PiaTemplate",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=PiaTemplate::class, groups={"Default"})
+     *     )
+     * )
+     * @Swg\Response(
+     *     response=404,
+     *     description="PiaTemplate does not exists"
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
      *
      * @return View
@@ -80,7 +114,21 @@ class PiaTemplateController extends RestController
     }
 
     /**
+     * Imports PiaTemplates contained in a given archive.
+     *
+     * @Swg\Tag(name="PiaTemplate")
+     *
      * @FOSRest\Post("/pia-templates/importCollection")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Empty content, Import PiaTemplates is OK"
+     * )
+     * @Swg\Response(
+     *     response=500,
+     *     description="Empty content, Import PiaTemplates fails"
+     * )
+     *
      * @Security("is_granted('CAN_CREATE_PIA_TEMPLATE')")
      *
      * @return View
