@@ -71,7 +71,11 @@ fi
 if [ -z "$MailerUrl" ]
 then
     MailerUrl=smtp://127.0.0.1:1025
+fi
 
+if [ -z "$MailerSender" ]
+then
+    MailerSender=no-reply@pialab.io
 fi
 
 if [ -z "${CLIENTURL}" ]
@@ -155,6 +159,7 @@ $ETCDCTLCMD put $Prefix/postgres/default/username $DatabaseUser $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/password $DatabasePassword $ETCDENDPOINT
 
 $ETCDCTLCMD put $Prefix/smtp/default/url $MailerUrl $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/smtp/default/sender $MailerSender $ETCDENDPOINT
 
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT
