@@ -69,7 +69,7 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers", name="manage_users")
-     * @Security("is_granted('CAN_SHOW_USER')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_USER')")
      *
      * @param Request $request
      */
@@ -97,7 +97,7 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/addUser", name="manage_users_add_user")
-     * @Security("is_granted('CAN_CREATE_USER')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_CREATE_USER')")
      *
      * @param Request $request
      */
@@ -160,7 +160,7 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/editUser/{userId}", name="manage_users_edit_user")
-     * @Security("is_granted('CAN_EDIT_USER')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_EDIT_USER')")
      *
      * @param Request $request
      */
@@ -205,7 +205,7 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/removeUser/{userId}", name="manage_users_remove_user")
-     * @Security("is_granted('CAN_DELETE_USER')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_DELETE_USER')")
      *
      * @param Request $request
      */
@@ -247,7 +247,7 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/sendResetPasswordEmail/{userId}", name="manage_users_send_reset_password_email")
-     * @Security("is_granted('CAN_SHOW_USER')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_USER')")
      *
      * @param Request $request
      * @param string  $username

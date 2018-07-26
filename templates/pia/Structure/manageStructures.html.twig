@@ -5,49 +5,55 @@
 {% import 'pia/Layout/_macros.html.twig' as macro %}
 
 {% block title %}
-  {{ 'pia.structures.title'|trans }}
+    {{ 'pia.structures.title'|trans }}
 {% endblock title %}
 
 {% block navbar %}
-  {% include 'pia/Layout/navbar.html.twig' with {
-    'activeItem' : 'structures'
-  } %}
+    {% include 'pia/Layout/navbar.html.twig' with {
+        'activeItem' : 'structures'
+    } %}
 {% endblock navbar %}
 
 {% block body %}
 
-  <div class="ui grid">
+    <div class="ui grid">
 
-    <div class="twelve wide column">
+        <div class="twelve wide column">
 
-      <div class="ui grid">
+            <div class="ui grid">
 
-        <div class="ten wide column">
-          {{ include('pia/Structure/partials/list.html.twig',{'structures':structures}) }}
+                <div class="ten wide column">
+                    {{ include('pia/Structure/partials/list.html.twig',{'structures':structures}) }}
+                </div>
+
+                <div class="six wide column">
+                    {{ include('pia/StructureType/partials/list.html.twig',{'structureTypes':structureTypes}) }}
+                </div>
+            </div>
         </div>
 
-        <div class="six wide column">
-          {{ include('pia/StructureType/partials/list.html.twig',{'structureTypes':structureTypes}) }}
+        <div class="four wide column">
+
+            {% if is_granted('CAN_CREATE_STRUCTURE') %}
+                <div class="ui segment">
+
+                    <h2>{{ 'pia.structures.add.title'|trans }}</h2>
+
+                    {{ render(controller('PiaApi\\Controller\\BackOffice\\StructureController:addStructureAction')) }}
+
+                </div>
+            {% endif %}
+
+            {% if is_granted('CAN_CREATE_STRUCTURE_TYPE') %}
+                <div class="ui segment">
+
+                    <h2>{{ 'pia.structure_types.add.title'|trans }}</h2>
+
+                    {{ render(controller('PiaApi\\Controller\\BackOffice\\StructureController:addStructureTypeAction')) }}
+
+                </div>
+            {% endif %}
         </div>
-      </div>
     </div>
-
-    <div class="four wide column">
-      <div class="ui segment">
-
-        <h2>{{ 'pia.structures.add.title'|trans }}</h2>
-
-        {{ render(controller('PiaApi\\Controller\\BackOffice\\StructureController:addStructureAction')) }}
-
-      </div>
-      <div class="ui segment">
-
-        <h2>{{ 'pia.structure_types.add.title'|trans }}</h2>
-
-        {{ render(controller('PiaApi\\Controller\\BackOffice\\StructureController:addStructureTypeAction')) }}
-
-      </div>
-    </div>
-  </div>
 
 {% endblock %}

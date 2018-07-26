@@ -37,7 +37,7 @@ class PortfolioController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePortfolios", name="manage_portfolios")
-     * @Security("is_granted('CAN_SHOW_PORTFOLIO')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_PORTFOLIO')")
      */
     public function managePortfoliosAction(Request $request)
     {
@@ -50,7 +50,7 @@ class PortfolioController extends BackOfficeAbstractController
 
     /**
      * @Route("/showPortfolio/{portfolioId}", name="manage_portfolios_show_portfolio")
-     * @Security("is_granted('CAN_SHOW_PORTFOLIO')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_PORTFOLIO')")
      */
     public function showPortfolioAction(Request $request)
     {
@@ -86,7 +86,7 @@ class PortfolioController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePortfolios/addPortfolio", name="manage_portfolios_add_portfolio")
-     * @Security("is_granted('CAN_CREATE_PORTFOLIO')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_CREATE_PORTFOLIO')")
      *
      * @param Request $request
      */
@@ -116,7 +116,7 @@ class PortfolioController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePortfolios/editPortfolio/{portfolioId}", name="manage_portfolios_edit_portfolio")
-     * @Security("is_granted('CAN_EDIT_PORTFOLIO')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_EDIT_PORTFOLIO')")
      *
      * @param Request $request
      */
@@ -153,7 +153,7 @@ class PortfolioController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePortfolios/removePortfolio/{portfolioId}", name="manage_portfolios_remove_portfolio")
-     * @Security("is_granted('CAN_DELETE_PORTFOLIO')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_DELETE_PORTFOLIO')")
      *
      * @param Request $request
      */
@@ -187,7 +187,7 @@ class PortfolioController extends BackOfficeAbstractController
 
     /**
      * @Route("/showPortfolio/{portfolioId}/assocStructures", name="manage_portfolios_assoc_structures")
-     * @Security("is_granted('CAN_SHOW_PORTFOLIO')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_PORTFOLIO')")
      *
      * @param Request $request
      */
