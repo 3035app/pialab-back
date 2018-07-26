@@ -1,0 +1,31 @@
+{% block flash_message %}
+
+    {% set icons = {
+        'success': 'check circle',
+        'error': 'times circle',
+        'warning': 'exclamation circle',
+        'notice': 'lightbulb',
+        'info': 'info circle'
+    } %}
+
+    {% if label is not defined %}
+        {% set label = '' %}
+        {% set icon = 'lightbulb' %}
+    {% else %}
+        {% set icon = icons[label] %}
+    {% endif %}
+
+    {% if message is not defined %}
+        {% set message = '%%message%%' %}
+    {% endif %}
+
+    <div class="ui compact {{ label }} message">
+        <i class="close icon"></i>
+        <div class="content">
+            <i class="{{ icon }} icon"></i>
+            <p>
+                {{ message|trans|raw }}
+            </p>
+        </div>
+    </div>
+{% endblock flash_message %}

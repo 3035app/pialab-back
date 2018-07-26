@@ -24,6 +24,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class UserController extends BackOfficeAbstractController
 {
@@ -133,7 +134,14 @@ class UserController extends BackOfficeAbstractController
             }
 
             $this->getDoctrine()->getManager()->persist($user);
-            $this->getDoctrine()->getManager()->flush();
+
+            try {
+                $this->getDoctrine()->getManager()->flush();
+            } catch (UniqueConstraintViolationException $e) {
+                $this->addFlash('error', sprintf('A user with email « %s » already exists. Emails must be unique', $userData['email']));
+
+                return $this->redirect($this->generateUrl('manage_users'));
+            }
 
             if (isset($userData['sendResettingEmail']) && $userData['sendResettingEmail'] === true) {
                 $this->userService->sendResettingEmail($user);
