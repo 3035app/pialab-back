@@ -1,0 +1,7 @@
+<div class="ui flash-container">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            {% include 'pia/Layout/Block/flash_message.html.twig' with {label: label, message: message} %}
+        {% endfor %}
+    {% endfor %}
+</div>

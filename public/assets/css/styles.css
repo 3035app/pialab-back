@@ -13,3 +13,44 @@ body ul.ui.list li::before {
 body .table.responsive.wrapper {
     overflow-y: auto;
 }
+
+body .ui.flash-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    top: 1em;
+    position: absolute;
+    right: 1em;
+}
+
+body .ui.flash-container .ui.message,
+body .ui.global-flash-container .ui.message {
+    box-shadow: 0 1px 2px 0 #222;
+    opacity: 0;
+}
+
+body .ui.flash-container .ui.message.info,
+body .ui.flash-container .ui.message.warning,
+body .ui.global-flash-container .ui.message.info,
+body .ui.global-flash-container .ui.message.warning {
+    color: #222;
+}
+
+body .ui.flash-container .ui.message.info .content .icon,
+body .ui.flash-container .ui.message.warning .content .icon,
+body .ui.global-flash-container .ui.message.info .content .icon,
+body .ui.global-flash-container .ui.message.warning .content .icon {
+    color: #FFF;
+}
+
+body .ui.flash-container .ui.message .content p,
+body .ui.flash-container .ui.message .content .icon,
+body .ui.global-flash-container .ui.message .content p,
+body .ui.global-flash-container .ui.message .content .icon {
+    display: inline;
+}
+
+body .ui.flash-container .ui.message .content p,
+body .ui.global-flash-container .ui.message .content p {
+    padding-right: 1em;
+}
