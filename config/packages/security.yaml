@@ -152,11 +152,14 @@ security:
 
         ROLE_TECHNICAL_ADMIN:
             - ROLE_ADMIN
-            - CAN_EXPORT_PIA
-            - CAN_MANAGE_PIA_TEMPLATES
             - CAN_MANAGE_APPLICATIONS
+        
+        # SUADMIN has all rights by default
+        # This section just make rights explicit
         ROLE_SUPER_ADMIN:
             - ROLE_TECHNICAL_ADMIN
+            - CAN_EXPORT_PIA
+            - CAN_MANAGE_PIA_TEMPLATES
 
 
     encoders:
