@@ -1,7 +1,3 @@
-# fos_oauth_server_token:
-#     resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
-#     methods:  [GET, POST, OPTIONS]
-
 fos_oauth_server_authorize:
     resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
 
@@ -11,3 +7,9 @@ fos_user_security:
 fos_user_resetting:
     resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
     prefix: /resetting
+
+fos_oauth_server_token:
+    path: /oauth/v2/token
+    defaults:
+        _controller: PiaApi\Controller\Pia\OauthController:tokenAction
+    methods:  [POST]

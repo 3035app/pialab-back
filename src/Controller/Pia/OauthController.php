@@ -16,7 +16,6 @@ use OAuth2\OAuth2ServerException;
 use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class OauthController
 {
@@ -37,8 +36,6 @@ class OauthController
      * Authenticate User to the API.
      *
      * @Swg\Tag(name="Auth")
-     *
-     * @Route("/oauth/v2/token", methods={"POST"})
      *
      * @Swg\Parameter(
      *     name="client_id",

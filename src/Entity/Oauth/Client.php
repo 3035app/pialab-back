@@ -14,6 +14,7 @@ use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity
@@ -53,6 +54,8 @@ class Client extends BaseClient
 
     /**
      * @ORM\OneToMany(targetEntity="PiaApi\Entity\Oauth\AccessToken", mappedBy="client", cascade={"remove"})
+     *
+     * @JMS\Exclude()
      *
      * @var Collection
      */

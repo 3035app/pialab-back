@@ -18,5 +18,5 @@ nelmio_api_doc:
     areas:
         default:
             path_patterns:
-                - '%api_pattern%' # see services.yaml
                 - '/oauth/v2/token'
+                - '%api_pattern%' # see services.yaml

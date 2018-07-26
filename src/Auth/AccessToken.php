@@ -11,11 +11,15 @@
 namespace PiaApi\Auth;
 
 use Swagger\Annotations as Swg;
+use JMS\Serializer\Annotation as JMS;
 
 class AccessToken
 {
     /**
      * @Swg\Property(description="The access token")
+     *
+     * @JMS\Groups({"Default"})
+     * @JMS\Type("string")
      *
      * @var string
      */
@@ -24,12 +28,18 @@ class AccessToken
     /**
      * @Swg\Property(description="The expiry date of the generated token")
      *
+     * @JMS\Groups({"Default"})
+     * @JMS\Type("DateTime")
+     *
      * @var string
      */
     private $expires_in;
 
     /**
      * @Swg\Property(description="The type of the token. Usually « bearer »")
+     *
+     * @JMS\Groups({"Default"})
+     * @JMS\Type("string")
      *
      * @var string
      */
@@ -38,12 +48,18 @@ class AccessToken
     /**
      * @Swg\Property(description="The OpenID scope (unused)")
      *
+     * @JMS\Groups({"Default"})
+     * @JMS\Type("string")
+     *
      * @var string
      */
     private $scope;
 
     /**
      * @Swg\Property(description="The token that must be used to refresh the token")
+     *
+     * @JMS\Groups({"Default"})
+     * @JMS\Type("string")
      *
      * @var string
      */
