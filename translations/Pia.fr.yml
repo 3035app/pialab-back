@@ -47,8 +47,8 @@ pia:
             url: URL
             urls: URLs
             grant_types: Autorisations
-            client_id: Identifiant Client
-            client_secret: Clé Client
+            client_id: Client ID
+            client_secret: Client Secret
 
         add:
             title: Ajouter une application
