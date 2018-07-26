@@ -12,4 +12,4 @@ fos_oauth_server_token:
     path: /oauth/v2/token
     defaults:
         _controller: PiaApi\Controller\Pia\OauthController:tokenAction
-    methods:  [POST]
+    methods:  [GET, POST]
