@@ -38,7 +38,7 @@ class Portfolio implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Structure", mappedBy="portfolio")
-     * @JMS\Exclude()
+     * @JMS\MaxDepth(2)
      *
      * @var Collection
      */
@@ -82,6 +82,8 @@ class Portfolio implements Timestampable
      */
     public function setStructures(iterable $structures): void
     {
+        $this->structures->clear();
+
         foreach ($structures as $structure) {
             $this->addStructure($structure);
         }

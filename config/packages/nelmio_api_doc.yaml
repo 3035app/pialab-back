@@ -19,3 +19,4 @@ nelmio_api_doc:
         default:
             path_patterns:
                 - '%api_pattern%' # see services.yaml
+                - '/oauth/v2/token'

@@ -46,6 +46,11 @@ services:
     PiaApi\Security\Role\RoleHierarchy:
         arguments: ['@security.token_storage', '%security.role_hierarchy.roles%', '@security.role_hierarchy']
 
+    FOS\OAuthServerBundle\Controller\TokenController: '@PiaApi\Controller\Pia\OauthController'
+    PiaApi\Controller\Pia\OauthController:
+        arguments:
+            - '@fos_oauth_server.server'
+        public: true
 
     PiaApi\Auth\ClientManager:
         arguments:

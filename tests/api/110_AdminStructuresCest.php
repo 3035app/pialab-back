@@ -138,4 +138,9 @@ class AdminStructuresCest
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }
+
+    public function getStructure(): ?array
+    {
+        return $this->structure;
+    }
 }

@@ -97,7 +97,7 @@ class AdminPortfoliosCest
     /**
      * @depends create_portfolio_test
      */
-    public function edit_portfolio_test(ApiTester $I)
+    public function edit_portfolio_name_test(ApiTester $I)
     {
         $I->amGoingTo('Edit newly created Portfolio, with id: ' . $this->portfolio['id']);
 
@@ -119,6 +119,39 @@ class AdminPortfoliosCest
         $I->seeResponseContainsJson([
             'name' => $name,
         ]);
+    }
+
+    /**
+     * @depends create_portfolio_test
+     */
+    public function edit_portfolio_add_structure_test(ApiTester $I)
+    {
+        $I->amGoingTo('Edit newly created Portfolio add structure, with id: ' . $this->portfolio['id']);
+
+        $I->login();
+
+        $structureCest = new AdminStructuresCest();
+        $structureCest->create_structure_test($I);
+
+        $structure = $structureCest->getStructure();
+        $this->portfolio['structures'][] = $structure;
+
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPUT('/portfolios/' . $this->portfolio['id'], $this->portfolio);
+
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeResponseIsJson();
+
+        $I->seeResponseMatchesJsonType($this->portfolioJsonType);
+        $I->seeResponseContainsJson([
+            'structures' => [
+                [
+                    'id' => $structure['id'],
+                ],
+            ],
+        ]);
+
+        $structureCest->remove_structure_test($I);
     }
 
     /*

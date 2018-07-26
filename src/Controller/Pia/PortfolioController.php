@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\DataHandler\RequestDataHandler;
+use PiaApi\Entity\Pia\Structure;
 
 class PortfolioController extends RestController
 {
@@ -159,6 +160,12 @@ class PortfolioController extends RestController
         $updatableAttributes = [
             'name' => RequestDataHandler::TYPE_STRING,
         ];
+
+        $targetStructures = $request->get('structures', []);
+        $portfolio->setStructures([]);
+        foreach ($targetStructures as $structureData) {
+            $portfolio->addStructure($this->getResource($structureData['id'], Structure::class));
+        }
 
         $this->mergeFromRequest($portfolio, $updatableAttributes, $request);
 
