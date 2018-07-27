@@ -81,7 +81,7 @@ class UsersFunctionalAdminCest
 
         //Function Admin should not see other menus
         $I->expect('All super_admin menus are not visible');
-        $I->dontSeeNavMenuWithHref('/manageStructures');
+        // $I->dontSeeNavMenuWithHref('/manageStructures');
         $I->dontSeeNavMenuWithHref('/managePiaTemplates');
         $I->dontSeeNavMenuWithHref('/manageApplications');
 
