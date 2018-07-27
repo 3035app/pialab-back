@@ -181,10 +181,11 @@ class UserController extends BackOfficeAbstractController
         }
 
         $form = $this->createForm(EditUserForm::class, $user, [
-            'action'      => $this->generateUrl('manage_users_edit_user', ['userId' => $user->getId()]),
-            'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES') ? false : $this->getUser()->getStructure(),
-            'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_APPLICATIONS') ? false : $this->getUser()->getApplication(),
-            'redirect'    => $this->getQueryRedirectUrl($request),
+            'action'       => $this->generateUrl('manage_users_edit_user', ['userId' => $user->getId()]),
+            'structure'    => $this->isGranted('CAN_MANAGE_STRUCTURES') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES') ? false : $this->getUser()->getStructure(),
+            'application'  => $this->isGranted('CAN_MANAGE_APPLICATIONS') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_APPLICATIONS') ? false : $this->getUser()->getApplication(),
+            'redirect'     => $this->getQueryRedirectUrl($request),
+            'hasPortfolio' => $this->isGranted('CAN_MANAGE_PORTFOLIOS') && $this->roleHierarchy->isGranted($user, 'ROLE_SHARED_DPO'),
         ]);
 
         $form->handleRequest($request);
