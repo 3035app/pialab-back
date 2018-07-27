@@ -144,11 +144,13 @@ security:
             - CAN_SHOW_APPLICATION
 
         ROLE_ADMIN:
-            - ROLE_SHARED_DPO
+            - ROLE_DPO
+            - CAN_ACCESS_BACK_OFFICE
             - CAN_MANAGE_PORTFOLIOS
             - CAN_MANAGE_USERS
             - CAN_MANAGE_STRUCTURES
             - CAN_MANAGE_STRUCTURE_TYPES
+            - CAN_SHOW_APPLICATION
 
         ROLE_TECHNICAL_ADMIN:
             - ROLE_ADMIN

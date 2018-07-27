@@ -78,8 +78,8 @@ class UserController extends BackOfficeAbstractController
         if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_USERS')) {
             $structure = $this->getUser()->getStructure();
             $userPager = $this->getDoctrine()
-              ->getRepository(User::class)
-              ->getPaginatedUsersByStructure($structure);
+                ->getRepository(User::class)
+                ->getPaginatedUsersByStructure($structure);
 
             $userPage = $request->get('page', 1);
             $userLimit = $request->get('limit', $userPager->getMaxPerPage());

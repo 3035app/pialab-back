@@ -15,6 +15,10 @@
 {% endblock navbar %}
 
 {% block body %}
+    {% set cols = 2 %}
+    {% if not is_granted('CAN_SHOW_STRUCTURE') or not is_granted('CAN_SHOW_STRUCTURE_TYPE') %}
+        {% set cols = 1 %}
+    {% endif %}
 
     <div class="ui grid">
 
@@ -22,12 +26,16 @@
 
             <div class="ui grid">
 
-                <div class="ten wide column">
-                    {{ include('pia/Structure/partials/list.html.twig',{'structures':structures}) }}
+                <div class="{{ cols == 2 ? 'ten' : 'sixteen' }} wide column">
+                    {% if is_granted('CAN_SHOW_STRUCTURE') %}
+                        {{ include('pia/Structure/partials/list.html.twig',{'structures':structures}) }}
+                    {% endif %}
                 </div>
 
-                <div class="six wide column">
-                    {{ include('pia/StructureType/partials/list.html.twig',{'structureTypes':structureTypes}) }}
+                <div class="{{ cols == 2 ? 'six' : 'sixteen' }} wide column">
+                    {% if is_granted('CAN_SHOW_STRUCTURE_TYPE') %}
+                        {{ include('pia/StructureType/partials/list.html.twig',{'structureTypes':structureTypes}) }}
+                    {% endif %}
                 </div>
             </div>
         </div>
