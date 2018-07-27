@@ -37,16 +37,15 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    PiaApi\Security\Voter\PermissionVoter:
-        arguments: ['@security.role_hierarchy']
-        tags: [security.voter]
-    PiaApi\Security\Voter\CanManageUsersVoter:
+    PiaApi\Security\Voter\:
+        resource: '../src/Security/Voter/*'
         tags: [security.voter]
 
     PiaApi\Security\Role\RoleHierarchy:
         arguments: ['@security.token_storage', '%security.role_hierarchy.roles%', '@security.role_hierarchy']
 
     FOS\OAuthServerBundle\Controller\TokenController: '@PiaApi\Controller\Pia\OauthController'
+
     PiaApi\Controller\Pia\OauthController:
         arguments:
             - '@fos_oauth_server.server'

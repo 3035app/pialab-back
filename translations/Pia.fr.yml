@@ -38,6 +38,10 @@ pia:
         no: Non
         n_a: N/A
 
+    flashes:
+        a_functional_administrator_must_be_assigned_to_a_structure: Un administrateur fonctionnel doit être assigné à une structure
+        user_emails_must_be_unique: Un utilisateur avec cette addresse email existe déjà. Les addresses emails doivent être uniques
+
     applications:
         title: Applications
 

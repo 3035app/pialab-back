@@ -144,13 +144,14 @@ security:
             - CAN_SHOW_APPLICATION
 
         ROLE_ADMIN:
-            - ROLE_DPO
-            - CAN_ACCESS_BACK_OFFICE
+            - ROLE_SHARED_DPO
+            # - ROLE_DPO
+            # - CAN_ACCESS_BACK_OFFICE
             - CAN_MANAGE_PORTFOLIOS
             - CAN_MANAGE_USERS
             - CAN_MANAGE_STRUCTURES
             - CAN_MANAGE_STRUCTURE_TYPES
-            - CAN_SHOW_APPLICATION
+            # - CAN_SHOW_APPLICATION
 
         ROLE_TECHNICAL_ADMIN:
             - ROLE_ADMIN
@@ -175,13 +176,6 @@ security:
         oauth_token:
             pattern:    ^/oauth/v2/token
             security:   false
-
-        # oauth_authorize:
-        #     pattern:    ^/oauth/v2/auth
-        #     form_login:
-        #         # login_path: /login
-        #         # check_path: /login_check
-        #         provider: fos_userbundle
 
         api:
             pattern:    '%api_pattern%' # see services.yaml

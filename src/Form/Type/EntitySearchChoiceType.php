@@ -20,7 +20,9 @@ use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 
 abstract class EntitySearchChoiceType extends AbstractType
 {
-    private $repository;
+    protected $repository;
+
+    protected $choices = [];
 
     public function __construct(ObjectRepository $repository)
     {
@@ -29,6 +31,7 @@ abstract class EntitySearchChoiceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->choices = $options['choices'] ?? $this->repository->findAll();
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -54,7 +57,7 @@ abstract class EntitySearchChoiceType extends AbstractType
 
     private function getChoices(): array
     {
-        return $this->repository->findAll();
+        return $this->choices;
     }
 
     public function getParent()

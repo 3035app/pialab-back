@@ -105,8 +105,8 @@ class UserController extends BackOfficeAbstractController
     {
         $form = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
             'action'      => $this->generateUrl('manage_users_add_user'),
-            'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') ? false : $this->getUser()->getStructure(),
-            'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') ? false : $this->getUser()->getApplication(),
+            'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES') ? false : $this->getUser()->getStructure(),
+            'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_APPLICATIONS') ? false : $this->getUser()->getApplication(),
             'redirect'    => $this->getQueryRedirectUrl($request),
         ]);
 
@@ -128,9 +128,12 @@ class UserController extends BackOfficeAbstractController
 
             $user->setProfile($userData['profile']);
 
-            //a ROLE_ADMIN (which contains CAN_MANAGE_ONLY_OWNED_USERS) must have a structure
+            //a ROLE_ADMIN (which contains CAN_MANAGE_ONLY_OWNED_USERS) must have a structure <= PapsOu: Why ?
             if (!$userData['structure'] && $user->hasRole('ROLE_ADMIN')) {
-                throw new \DomainException('A Functional Administrator must be assigned to a Structure');
+                // throw new \DomainException('A Functional Administrator must be assigned to a Structure'); // <= Removed exception because, in prod env, a 500 error page, without the message, will be displayed
+                $this->addFlash('error', 'pia.flashes.a_functional_administrator_must_be_assigned_to_a_structure');
+
+                return $this->redirect($this->generateUrl('manage_users'));
             }
 
             $this->getDoctrine()->getManager()->persist($user);
@@ -138,7 +141,7 @@ class UserController extends BackOfficeAbstractController
             try {
                 $this->getDoctrine()->getManager()->flush();
             } catch (UniqueConstraintViolationException $e) {
-                $this->addFlash('error', sprintf('A user with email « %s » already exists. Emails must be unique', $userData['email']));
+                $this->addFlash('error', 'pia.flashes.user_emails_must_be_unique');
 
                 return $this->redirect($this->generateUrl('manage_users'));
             }
@@ -179,8 +182,8 @@ class UserController extends BackOfficeAbstractController
 
         $form = $this->createForm(EditUserForm::class, $user, [
             'action'      => $this->generateUrl('manage_users_edit_user', ['userId' => $user->getId()]),
-            'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') ? false : $this->getUser()->getStructure(),
-            'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') ? false : $this->getUser()->getApplication(),
+            'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES') ? false : $this->getUser()->getStructure(),
+            'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_APPLICATIONS') ? false : $this->getUser()->getApplication(),
             'redirect'    => $this->getQueryRedirectUrl($request),
         ]);
 
