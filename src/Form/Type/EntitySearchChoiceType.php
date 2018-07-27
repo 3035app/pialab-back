@@ -22,7 +22,7 @@ abstract class EntitySearchChoiceType extends AbstractType
 {
     protected $repository;
 
-    protected $choices = [];
+    protected $choices = null;
 
     public function __construct(ObjectRepository $repository)
     {
@@ -31,7 +31,9 @@ abstract class EntitySearchChoiceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->choices = $options['choices'] ?? $this->repository->findAll();
+        if ($this->choices === null) {
+            $this->choices = $this->repository->findAll();
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -57,7 +59,7 @@ abstract class EntitySearchChoiceType extends AbstractType
 
     private function getChoices(): array
     {
-        return $this->choices;
+        return $this->choices ?? [];
     }
 
     public function getParent()

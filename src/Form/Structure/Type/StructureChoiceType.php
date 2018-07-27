@@ -44,8 +44,8 @@ class StructureChoiceType extends EntitySearchChoiceType
             // Limit structures to owned ones in order to allow shared DPO to move user from one structure to another of its portfolios.
             $user = $this->tokenStorage->getToken()->getUser();
             $this->choices = $this->repository->getStructuresForPortfolios($user->getPortfolios());
-        } else {
-            $this->choices = $this->repository->findAll();
         }
+
+        parent::buildForm($builder, $options);
     }
 }
