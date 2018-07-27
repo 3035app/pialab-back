@@ -54,13 +54,11 @@ class EditUserForm extends CreateUserForm
                 'required' => false,
                 'label'    => 'pia.users.forms.edit.locked',
             ])
-
             ->add('portfolios', PortfolioChoiceType::class, [
                 'required' => false,
                 'multiple' => true,
                 'label'    => 'pia.users.forms.create.portfolios',
             ])
-
             ->add('cancel', ButtonType::class, [
                 'attr' => [
                     'class' => 'red cancel',

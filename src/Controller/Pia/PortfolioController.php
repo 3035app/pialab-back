@@ -210,7 +210,7 @@ class PortfolioController extends RestController
 
     public function canAccessResourceOr403($resource): void
     {
-        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_PORTFOLIOS') && count($this->getUser()->getPortfolios()) > 0 && in_array($resource, $this->getUser()->getPortfolioStructures())) {
+        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_PORTFOLIOS') && in_array($resource, $this->getUser()->getPortfolios())) {
             throw new AccessDeniedHttpException('Resource not found');
         }
     }
