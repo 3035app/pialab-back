@@ -193,6 +193,7 @@ class PortfolioController extends RestController
     public function deleteAction(Request $request, $id)
     {
         $portfolio = $this->getResource($id);
+        $this->canAccessResourceOr403($portfolio);
 
         foreach ($portfolio->getStructures() as $structure) {
             $structure->setPortfolio(null);

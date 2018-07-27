@@ -209,6 +209,7 @@ class StructureController extends RestController
     public function deleteAction(Request $request, $id)
     {
         $structure = $this->getResource($id);
+        $this->canAccessResourceOr403($structure);
 
         $this->remove($structure);
 

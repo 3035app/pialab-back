@@ -236,6 +236,7 @@ class UserController extends RestController
     public function deleteAction(Request $request, $id)
     {
         $user = $this->getResource($id);
+        $this->canAccessResourceOr403($user);
 
         $this->remove($user);
 
