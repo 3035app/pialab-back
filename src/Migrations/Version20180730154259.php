@@ -23,6 +23,9 @@ class Version20180730154259 extends AbstractMigration implements ContainerAwareI
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
+        $this->addSql('CREATE SEQUENCE pia_processing_id_seq INCREMENT BY 1 MINVALUE 1 START 1;');
+        $this->addSql('CREATE SEQUENCE pia_processing_data_type_id_seq INCREMENT BY 1 MINVALUE 1 START 1;');
+        $this->addSql('CREATE SEQUENCE pia_processing__pia_processing_data_type_id_seq INCREMENT BY 1 MINVALUE 1 START 1;');
         $this->addSql('CREATE TABLE pia_processing (id INT NOT NULL, folder_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, description TEXT NOT NULL, life_cycle_description TEXT NOT NULL, data_medium_description TEXT NOT NULL, standards_description TEXT NOT NULL, processors TEXT NOT NULL, controllers TEXT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_81E5D0EC162CB942 ON pia_processing (folder_id)');
         $this->addSql('CREATE TABLE pia_processing__pia_processing_data_type (id INT NOT NULL, processing_id INT DEFAULT NULL, processing_data_type_id INT DEFAULT NULL, specific_data_retention_period VARCHAR(255) NOT NULL, sensitive_data BOOLEAN NOT NULL, PRIMARY KEY(id))');
@@ -47,6 +50,9 @@ class Version20180730154259 extends AbstractMigration implements ContainerAwareI
         $this->addSql('ALTER TABLE pia DROP CONSTRAINT FK_253A30625BAE24E8');
         $this->addSql('ALTER TABLE pia_processing__pia_processing_data_type DROP CONSTRAINT FK_8DBB6DB25BAE24E8');
         $this->addSql('ALTER TABLE pia_processing__pia_processing_data_type DROP CONSTRAINT FK_8DBB6DB29D31181');
+        $this->addSql('DROP SEQUENCE pia_processing_id_seq;');
+        $this->addSql('DROP SEQUENCE pia_processing_data_type_id_seq;');
+        $this->addSql('DROP SEQUENCE pia_processing__pia_processing_data_type_id_seq;');
         $this->addSql('DROP TABLE pia_processing');
         $this->addSql('DROP TABLE pia_processing__pia_processing_data_type');
         $this->addSql('DROP TABLE pia_processing_data_type');
