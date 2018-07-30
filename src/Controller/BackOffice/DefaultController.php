@@ -23,10 +23,16 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+        if ($this->getUser() == null) {
+            return $this->redirectToRoute('fos_user_security_login');
+        }
+
         $roles = $this->getUser()->getRoles();
 
         if (in_array('ROLE_SHARED_DPO', $roles)) {
             return  $this->redirectToRoute('manage_portfolios');
         }
+
+        return  $this->redirectToRoute('manage_users');
     }
 }

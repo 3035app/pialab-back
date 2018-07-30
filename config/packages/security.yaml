@@ -132,6 +132,7 @@ security:
             - CAN_SHOW_PIA_TEMPLATE
             - CAN_IMPORT_PIA
             - CAN_MANAGE_FOLDERS
+            - CAN_MANAGE_ONLY_OWNED_USERS
         
         ROLE_SHARED_DPO:
             - ROLE_DPO
