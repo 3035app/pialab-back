@@ -16,7 +16,7 @@ use PiaApi\Entity\Pia\Traits\ResourceTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="processing__processing_data_type")
+ * @ORM\Table(name="pia_processing__pia_processing_data_type")
  */
 class ProcessedDataType
 {

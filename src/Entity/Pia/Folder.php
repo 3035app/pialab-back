@@ -17,7 +17,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use JMS\Serializer\Annotation as JMS;
-use PiaApi\Entity\Pia\Traits\HasManyPiasTrait;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
 
 /**
@@ -29,7 +28,6 @@ use PiaApi\Entity\Pia\Traits\ResourceTrait;
 class Folder implements Timestampable
 {
     use ResourceTrait,
-        HasManyPiasTrait,
         TimestampableEntity;
 
     /**
@@ -99,15 +97,6 @@ class Folder implements Timestampable
     private $children;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pia", mappedBy="folder",cascade={"remove"})
-     * @JMS\Groups({"Default", "Export"})
-     * @JMS\MaxDepth(2)
-     *
-     * @var Collection
-     */
-    protected $pias;
-
-    /**
      * @ORM\OneToMany(targetEntity="Processing", mappedBy="folder",cascade={"remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
@@ -133,7 +122,6 @@ class Folder implements Timestampable
             $structure->getFolders()->add($this);
         }
 
-        $this->pias = new ArrayCollection();
         $this->children = new ArrayCollection();
         $this->processings = new ArrayCollection();
     }

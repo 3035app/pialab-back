@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="processing_data_type")
+ * @ORM\Table(name="pia_processing_data_type")
  */
 class ProcessingDataType
 {

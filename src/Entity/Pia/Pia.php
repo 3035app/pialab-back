@@ -205,15 +205,6 @@ class Pia implements Timestampable
     protected $template;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Folder", inversedBy="pias")
-     * @JMS\Groups({"Default", "Export"})
-     * @JMS\MaxDepth(1)
-     *
-     * @var Folder
-     */
-    protected $folder;
-
-    /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Full"})
      *
@@ -434,22 +425,6 @@ class Pia implements Timestampable
     public function setValidatorName(string $validatorName): void
     {
         $this->validatorName = $validatorName;
-    }
-
-    /**
-     * @return Folder
-     */
-    public function getFolder(): ?Folder
-    {
-        return $this->folder;
-    }
-
-    /**
-     * @param Folder $folder
-     */
-    public function setFolder(?Folder $folder): void
-    {
-        $this->folder = $folder;
     }
 
     /**

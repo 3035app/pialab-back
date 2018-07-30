@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="processing")
+ * @ORM\Table(name="pia_processing")
  */
 class Processing
 {
