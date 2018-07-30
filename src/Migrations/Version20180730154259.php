@@ -34,7 +34,8 @@ class Version20180730154259 extends AbstractMigration implements ContainerAwareI
         $this->addSql('ALTER TABLE pia_processing__pia_processing_data_type ADD CONSTRAINT FK_8DBB6DB29D31181 FOREIGN KEY (processing_data_type_id) REFERENCES pia_processing_data_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE pia DROP CONSTRAINT fk_253a3062162cb942');
         $this->addSql('DROP INDEX idx_253a3062162cb942');
-        $this->addSql('ALTER TABLE pia RENAME COLUMN folder_id TO processing_id');
+        $this->addSql('ALTER TABLE pia DROP COLUMN folder_id');
+        $this->addSql('ALTER TABLE pia ADD processing_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE pia ADD CONSTRAINT FK_253A30625BAE24E8 FOREIGN KEY (processing_id) REFERENCES pia_processing (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_253A30625BAE24E8 ON pia (processing_id)');
     }
@@ -50,7 +51,8 @@ class Version20180730154259 extends AbstractMigration implements ContainerAwareI
         $this->addSql('DROP TABLE pia_processing__pia_processing_data_type');
         $this->addSql('DROP TABLE pia_processing_data_type');
         $this->addSql('DROP INDEX IDX_253A30625BAE24E8');
-        $this->addSql('ALTER TABLE pia RENAME COLUMN processing_id TO folder_id');
+        $this->addSql('ALTER TABLE pia DROP COLUMN processing_id');
+        $this->addSql('ALTER TABLE pia ADD folder_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE pia ADD CONSTRAINT fk_253a3062162cb942 FOREIGN KEY (folder_id) REFERENCES pia_folder (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX idx_253a3062162cb942 ON pia (folder_id)');
     }
