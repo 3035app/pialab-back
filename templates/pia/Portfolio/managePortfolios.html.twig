@@ -74,15 +74,17 @@
             </div>
         </div>
 
-        <div class="four wide column">
-            <div class="ui segment">
+        {% if is_granted('CAN_MANAGE_PORTFOLIOS') %}
+            <div class="four wide column">
+                <div class="ui segment">
 
-                <h2>{{ 'pia.portfolios.add.title'|trans }}</h2>
+                    <h2>{{ 'pia.portfolios.add.title'|trans }}</h2>
 
-                {{ render(controller('PiaApi\\Controller\\BackOffice\\PortfolioController:addPortfolioAction')) }}
+                    {{ render(controller('PiaApi\\Controller\\BackOffice\\PortfolioController:addPortfolioAction')) }}
 
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 
 {% endblock %}

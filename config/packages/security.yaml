@@ -136,12 +136,11 @@ security:
         ROLE_SHARED_DPO:
             - ROLE_DPO
             - CAN_MANAGE_ONLY_OWNED_PORTFOLIOS
-
+            - CAN_MANAGE_ONLY_OWNED_STRUCTURES
+        
         ROLE_ADMIN:
             - ROLE_SHARED_DPO
             - CAN_MANAGE_PORTFOLIOS
-            - CAN_MANAGE_ONLY_OWNED_USERS
-            - CAN_MANAGE_ONLY_OWNED_STRUCTURES
 
         ROLE_TECHNICAL_ADMIN:
             - ROLE_ADMIN
@@ -151,6 +150,7 @@ security:
             - CAN_MANAGE_STRUCTURE_TYPES
             - CAN_MANAGE_PIA_TEMPLATES
             - CAN_MANAGE_APPLICATIONS
+
         ROLE_SUPER_ADMIN:
             - ROLE_TECHNICAL_ADMIN
 

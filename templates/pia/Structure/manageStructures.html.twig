@@ -22,13 +22,15 @@
 
       <div class="ui grid">
 
-        <div class="ten wide column">
+        <div class=" {% if is_granted("CAN_MANAGE_STRUCTURES") %} ten {% endif %} wide column">
           {{ include('pia/Structure/partials/list.html.twig',{'structures':structures}) }}
         </div>
 
-        <div class="six wide column">
-          {{ include('pia/StructureType/partials/list.html.twig',{'structureTypes':structureTypes}) }}
-        </div>
+        {% if is_granted("CAN_MANAGE_STRUCTURE_TYPES")%}
+          <div class="six wide column">
+            {{ include('pia/StructureType/partials/list.html.twig',{'structureTypes':structureTypes}) }}
+          </div>
+        {% endif %}
       </div>
     </div>
 
@@ -40,13 +42,15 @@
         {{ render(controller('PiaApi\\Controller\\BackOffice\\StructureController:addStructureAction')) }}
 
       </div>
-      <div class="ui segment">
+      {% if is_granted("CAN_MANAGE_STRUCTURE_TYPES")%}
+        <div class="ui segment">
 
-        <h2>{{ 'pia.structure_types.add.title'|trans }}</h2>
+          <h2>{{ 'pia.structure_types.add.title'|trans }}</h2>
 
-        {{ render(controller('PiaApi\\Controller\\BackOffice\\StructureController:addStructureTypeAction')) }}
+          {{ render(controller('PiaApi\\Controller\\BackOffice\\StructureController:addStructureTypeAction')) }}
 
-      </div>
+        </div>
+      {% endif %}
     </div>
   </div>
 
