@@ -221,6 +221,14 @@ class Pia implements Timestampable
      */
     protected $type = self::TYPE_ADVANCED;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Processing", inversedBy="pias")
+     * @JMS\Groups({"Full"})
+     *
+     * @var Processing
+     */
+    protected $processing;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -538,5 +546,21 @@ class Pia implements Timestampable
     public function setType(?string $type): void
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return Processing
+     */
+    public function getProcessing(): Processing
+    {
+        return $this->processing;
+    }
+
+    /**
+     * @param Processing $processing
+     */
+    public function setProcessing(Processing $processing): void
+    {
+        $this->processing = $processing;
     }
 }

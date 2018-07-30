@@ -108,6 +108,15 @@ class Folder implements Timestampable
     protected $pias;
 
     /**
+     * @ORM\OneToMany(targetEntity="Processing", mappedBy="folder",cascade={"remove"})
+     * @JMS\Groups({"Default", "Export"})
+     * @JMS\MaxDepth(2)
+     *
+     * @var Collection|Processing[]
+     */
+    protected $processings;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Structure", inversedBy="folders").
      * @JMS\Groups({"Full"})
      *
@@ -126,6 +135,7 @@ class Folder implements Timestampable
 
         $this->pias = new ArrayCollection();
         $this->children = new ArrayCollection();
+        $this->processings = new ArrayCollection();
     }
 
     /**
@@ -302,5 +312,39 @@ class Folder implements Timestampable
         ];
 
         return $ancestorHierarchy;
+    }
+
+    /**
+     * @return array|Processing[]
+     */
+    public function getProcessings(): array
+    {
+        return $this->processings->getValues();
+    }
+
+    /**
+     * @param Processing $processing
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addProcessing(Processing $processing): void
+    {
+        if ($this->processings->contains($processing)) {
+            throw new \InvalidArgumentException(sprintf('Processing « %s » is already in Folder « #%d »', $processing, $this->getId()));
+        }
+        $this->processings->add($processing);
+    }
+
+    /**
+     * @param Processing $processing
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function removeProcessing(Processing $processing): void
+    {
+        if (!$this->processings->contains($processing)) {
+            throw new \InvalidArgumentException(sprintf('Processing « %s » is not in Folder « #%d »', $processing, $this->getId()));
+        }
+        $this->processings->removeElement($processing);
     }
 }
