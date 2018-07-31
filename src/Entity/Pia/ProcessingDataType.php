@@ -13,7 +13,6 @@ namespace PiaApi\Entity\Pia;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
-use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity
@@ -29,7 +28,7 @@ class ProcessingDataType
      *
      * @var string
      */
-    protected $name;
+    protected $reference;
 
     /**
      * @ORM\Column(type="string")
@@ -37,7 +36,7 @@ class ProcessingDataType
      *
      * @var string
      */
-    protected $description;
+    protected $data;
 
     /**
      * @ORM\Column(type="string")
@@ -45,100 +44,90 @@ class ProcessingDataType
      *
      * @var string
      */
-    protected $initialDataRetentionPeriod;
+    protected $retentionPeriod;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProcessedDataType", mappedBy="processingDataType")
+     * @ORM\Column(type="boolean")
      * @JMS\Groups({"Default", "Export"})
-     * @JMS\MaxDepth(2)
      *
-     * @var Collection|ProcessedDataType[]
+     * @var bool
      */
-    protected $processedDataTypes;
+    protected $sensitive = false;
 
-    public function __construct()
+    /**
+     * @ORM\ManyToOne(targetEntity="Processing", inversedBy="processingDataTypes")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var Processing
+     */
+    protected $processing;
+
+    public function __construct(Processing $processing)
     {
+        $this->processing = $processing;
     }
 
     /**
      * @return string
      */
-    public function getName(): string
+    public function getData(): string
     {
-        return $this->name;
+        return $this->data;
     }
 
     /**
-     * @param string $name
+     * @param string $data
      */
-    public function setName(string $name): void
+    public function setData(string $data): void
     {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
+        $this->data = $data;
     }
 
     /**
      * @return string
      */
-    public function getInitialDataRetentionPeriod(): string
+    public function getRetentionPeriod(): string
     {
-        return $this->initialDataRetentionPeriod;
+        return $this->retentionPeriod;
     }
 
     /**
-     * @param string $initialDataRetentionPeriod
+     * @param string $retentionPeriod
      */
-    public function setInitialDataRetentionPeriod(string $initialDataRetentionPeriod): void
+    public function setRetentionPeriod(string $retentionPeriod): void
     {
-        $this->initialDataRetentionPeriod = $initialDataRetentionPeriod;
+        $this->retentionPeriod = $retentionPeriod;
     }
 
     /**
-     * @return array|ProcessedDataType[]
+     * @return bool
      */
-    public function getProcessedDataTypes(): array
+    public function isSensitive(): bool
     {
-        return $this->processedDataTypes->getValues();
+        return $this->sensitive;
     }
 
     /**
-     * @param ProcessedDataType $processedDataType
-     *
-     * @throws \InvalidArgumentException
+     * @param bool $sensitive
      */
-    public function addProcessedDataType(ProcessedDataType $processedDataType): void
+    public function setSensitive(?bool $sensitive = true): void
     {
-        if ($this->processedDataTypes->contains($processedDataType)) {
-            throw new \InvalidArgumentException(sprintf('ProcessedDataType « %s » is already linked to ProcessingDataType « #%d »', $processedDataType, $this->getId()));
-        }
-        $this->processedDataTypes->add($processedDataType);
+        $this->sensitive = $sensitive;
     }
 
     /**
-     * @param ProcessedDataType $processedDataType
-     *
-     * @throws \InvalidArgumentException
+     * @return Processing
      */
-    public function removeProcessedDataType(ProcessedDataType $processedDataType): void
+    public function getProcessing(): Processing
     {
-        if (!$this->processedDataTypes->contains($processedDataType)) {
-            throw new \InvalidArgumentException(sprintf('ProcessedDataType « %s » is not linked to ProcessingDataType « #%d »', $processedDataType, $this->getId()));
-        }
-        $this->processedDataTypes->removeElement($processedDataType);
+        return $this->processing;
+    }
+
+    /**
+     * @param Processing $processing
+     */
+    public function setProcessing(Processing $processing): void
+    {
+        $this->processing = $processing;
     }
 }

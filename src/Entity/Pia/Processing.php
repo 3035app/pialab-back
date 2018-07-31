@@ -89,13 +89,21 @@ class Processing
     protected $controllers;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProcessedDataType", mappedBy="processing")
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string
+     */
+    protected $dataTransferOutsideEU;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing")
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
      *
-     * @var Collection|ProcessedDataType[]
+     * @var Collection|ProcessingDataType[]
      */
-    protected $processedDataTypes;
+    protected $processingDataTypes;
 
     /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing")
@@ -115,9 +123,11 @@ class Processing
      */
     protected $folder;
 
-    public function __construct()
+    public function __construct(string $name, Folder $folder)
     {
-        $this->processedDataTypes = new ArrayCollection();
+        $this->name = $name;
+        $this->folder = $folder;
+        $this->processingDataTypes = new ArrayCollection();
         $this->pias = new ArrayCollection();
     }
 
@@ -250,37 +260,37 @@ class Processing
     }
 
     /**
-     * @return array|ProcessedDataType[]
+     * @return array|ProcessingDataType[]
      */
-    public function getProcessedDataTypes(): array
+    public function getProcessingDataTypes(): array
     {
-        return $this->processedDataType->getValues();
+        return $this->processingDataTypes->getValues();
     }
 
     /**
-     * @param ProcessedDataType $processedDataType
+     * @param ProcessingDataType $processingDataType
      *
      * @throws \InvalidArgumentException
      */
-    public function addProcessedDataType(ProcessedDataType $processedDataType): void
+    public function addProcessingDataType(ProcessingDataType $processingDataType): void
     {
-        if ($this->processedDataType->contains($processedDataType)) {
-            throw new \InvalidArgumentException(sprintf('ProcessedDataType « %s » already belongs to Processing « #%d »', $processedDataType, $this->getId()));
+        if ($this->processingDataTypes->contains($processingDataType)) {
+            throw new \InvalidArgumentException(sprintf('ProcessingDataType « %s » already belongs to Processing « #%d »', $processingDataType->getId(), $this->getId()));
         }
-        $this->processedDataType->add($processedDataType);
+        $this->processingDataTypes->add($processingDataType);
     }
 
     /**
-     * @param ProcessedDataType $processedDataType
+     * @param ProcessingDataType $processingDataType
      *
      * @throws \InvalidArgumentException
      */
-    public function removeProcessedDataType(ProcessedDataType $processedDataType): void
+    public function removeProcessingDataType(ProcessingDataType $processingDataType): void
     {
-        if (!$this->processedDataType->contains($processedDataType)) {
-            throw new \InvalidArgumentException(sprintf('ProcessedDataType « %s » does not belong to Processing « #%d »', $processedDataType, $this->getId()));
+        if (!$this->processingDataTypes->contains($processingDataType)) {
+            throw new \InvalidArgumentException(sprintf('ProcessingDataType « %s » does not belong to Processing « #%d »', $processingDataType->getId(), $this->getId()));
         }
-        $this->processedDataType->removeElement($processedDataType);
+        $this->processingDataTypes->removeElement($processingDataType);
     }
 
     /**
@@ -299,7 +309,7 @@ class Processing
     public function addPia(Pia $pia): void
     {
         if ($this->pias->contains($pia)) {
-            throw new \InvalidArgumentException(sprintf('Pia « %s » is already linked to Processing « #%d »', $pia, $this->getId()));
+            throw new \InvalidArgumentException(sprintf('Pia « %s » is already linked to Processing « #%d »', $pia->getId(), $this->getId()));
         }
         $this->pias->add($pia);
     }
@@ -312,7 +322,7 @@ class Processing
     public function removePia(Pia $pia): void
     {
         if (!$this->pias->contains($pia)) {
-            throw new \InvalidArgumentException(sprintf('Pia « %s » is not linked to Processing « #%s »', $pia, $this->getId()));
+            throw new \InvalidArgumentException(sprintf('Pia « %s » is not linked to Processing « #%s »', $pia->getId(), $this->getId()));
         }
         $this->pias->removeElement($pia);
     }
@@ -331,5 +341,21 @@ class Processing
     public function setFolder(Folder $folder): void
     {
         $this->folder = $folder;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDataTransferOutsideEU(): string
+    {
+        return $this->dataTransferOutsideEU;
+    }
+
+    /**
+     * @param string $dataTransferOutsideEU
+     */
+    public function setDataTransferOutsideEU(string $dataTransferOutsideEU): void
+    {
+        $this->dataTransferOutsideEU = $dataTransferOutsideEU;
     }
 }
