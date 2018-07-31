@@ -25,7 +25,8 @@ class Version20180731100339 extends AbstractMigration implements ContainerAwareI
 
         $this->addSql('CREATE TABLE pia_processing (id INT NOT NULL, folder_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, description TEXT NOT NULL, life_cycle_description TEXT NOT NULL, data_medium_description TEXT NOT NULL, standards_description TEXT NOT NULL, processors TEXT NOT NULL, controllers TEXT NOT NULL, data_transfer_outside_eu TEXT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_81E5D0EC162CB942 ON pia_processing (folder_id)');
-        $this->addSql('CREATE TABLE pia_processing_data_type (id INT NOT NULL, processing_id INT DEFAULT NULL, reference VARCHAR(255) NOT NULL, data VARCHAR(255) NOT NULL, retention_period VARCHAR(255) NOT NULL, sensitive BOOLEAN NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE pia_processing_data_type (id INT NOT NULL, processing_id INT DEFAULT NULL, reference VARCHAR(255) NOT NULL, data TEXT NOT NULL, retention_period VARCHAR(255) NOT NULL, sensitive BOOLEAN NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('COMMENT ON COLUMN pia_processing_data_type.data IS \'(DC2Type:json)\';');
         $this->addSql('CREATE INDEX IDX_A6855B535BAE24E8 ON pia_processing_data_type (processing_id)');
         $this->addSql('ALTER TABLE pia_processing ADD CONSTRAINT FK_81E5D0EC162CB942 FOREIGN KEY (folder_id) REFERENCES pia_folder (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE pia_processing_data_type ADD CONSTRAINT FK_A6855B535BAE24E8 FOREIGN KEY (processing_id) REFERENCES pia_processing (id) NOT DEFERRABLE INITIALLY IMMEDIATE');

@@ -31,12 +31,13 @@ class ProcessingDataType
     protected $reference;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="json")
+     * @JMS\Type("array")
      * @JMS\Groups({"Default", "Export"})
      *
-     * @var string
+     * @var array
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * @ORM\Column(type="string")
@@ -68,17 +69,17 @@ class ProcessingDataType
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getData(): string
+    public function getData(): array
     {
         return $this->data;
     }
 
     /**
-     * @param string $data
+     * @param array|null $data
      */
-    public function setData(string $data): void
+    public function setData(?array $data = []): void
     {
         $this->data = $data;
     }
