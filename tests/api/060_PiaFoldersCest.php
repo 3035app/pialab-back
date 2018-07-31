@@ -30,7 +30,6 @@ class PiaFoldersCest
         'rgt'        => 'integer',
         'parent'     => 'array|null',
         'children'   => 'array',
-        'pias'       => 'array',
         'id'         => 'integer',
         'created_at' => 'string',
         'updated_at' => 'string',

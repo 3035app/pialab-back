@@ -209,7 +209,7 @@ class StructureFolderController extends RestController
         $folder = $this->getRepository()->findOneBy(['structure' => $structureId, 'id' => $id]);
         $this->canAccessResourceOr403($folder);
 
-        if (count($folder->getPias())) {
+        if (count($folder->getProcessings())) {
             throw new NonEmptyFolderCannotBeDeletedException();
         }
 

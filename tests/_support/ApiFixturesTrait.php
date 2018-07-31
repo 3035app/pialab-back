@@ -39,7 +39,6 @@ trait ApiFixturesTrait
         'dpos_names'                        => 'string|null',
         'people_names'                      => 'string|null',
         'is_example'                        => 'boolean',
-        'folder'                            => 'array|null',
         'id'                                => 'integer',
         'created_at'                        => 'string',
         'updated_at'                        => 'string',

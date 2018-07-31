@@ -20,7 +20,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\Entity\Pia\PiaTemplate;
-use PiaApi\Entity\Pia\Folder;
 use Swagger\Annotations as Swg;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\DataHandler\RequestDataHandler;
@@ -125,14 +124,6 @@ class PiaController extends RestController
     public function createAction(Request $request)
     {
         $pia = $this->newFromRequest($request);
-
-        if ($request->get('folder') !== null) {
-            $folderId = $request->get('folder')['id'];
-            $folder = $this->getResource($folderId, Folder::class);
-        } else {
-            $folder = $this->getUser()->getStructure() ? $this->getUser()->getStructure()->getRootFolder() : null;
-        }
-        $pia->setFolder($folder);
         $pia->setStructure($this->getUser()->getStructure());
         $this->persist($pia);
 
@@ -168,12 +159,6 @@ class PiaController extends RestController
         }
 
         $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
-        if (($folderId = $request->get('folder')) !== null) {
-            $folder = $this->getResource($request->get('folder')['id'], Folder::class);
-        } else {
-            $folder = $this->getUser()->getStructure() ? $this->getUser()->getStructure()->getRootFolder() : null;
-        }
-        $pia->setFolder($folder);
         $pia->setName($request->get('name', $pia->getName()));
         $pia->setAuthorName($request->get('author_name', $pia->getAuthorName()));
         $pia->setEvaluatorName($request->get('evaluator_name', $pia->getEvaluatorName()));
@@ -214,7 +199,6 @@ class PiaController extends RestController
             'author_name'                        => RequestDataHandler::TYPE_STRING,
             'evaluator_name'                     => RequestDataHandler::TYPE_STRING,
             'validator_name'                     => RequestDataHandler::TYPE_STRING,
-            'folder'                             => Folder::class,
             'dpo_status'                         => RequestDataHandler::TYPE_INT,
             'concerned_people_status'            => RequestDataHandler::TYPE_INT,
             'status'                             => RequestDataHandler::TYPE_INT,
@@ -286,7 +270,6 @@ class PiaController extends RestController
 
         $pia = $this->jsonToEntityTransformer->transform($importData);
         $pia->setStructure($this->getUser()->getStructure());
-        $pia->setFolder($this->getUser()->getStructure()->getRootFolder());
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);

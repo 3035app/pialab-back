@@ -22,8 +22,5 @@ trait _FixturesTrait
         'pia' => [
             'name' => 'test-pia',
         ],
-        'processing_data_type' => [
-            'name' => 'test-processing-data-type',
-        ],
     ];
 }
