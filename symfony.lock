@@ -237,7 +237,7 @@
         }
     },
     "phpunit/phpunit-mock-objects": {
-        "version": "6.1.1"
+        "version": "6.1.2"
     },
     "pimple/pimple": {
         "version": "v3.2.3"
