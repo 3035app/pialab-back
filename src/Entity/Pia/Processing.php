@@ -54,7 +54,7 @@ class Processing
      *
      * @var string
      */
-    protected $lifeCycleDescription;
+    protected $lifeCycle;
 
     /**
      * @ORM\Column(type="text")
@@ -62,7 +62,7 @@ class Processing
      *
      * @var string
      */
-    protected $dataMediumDescription;
+    protected $storage;
 
     /**
      * @ORM\Column(type="text")
@@ -70,7 +70,7 @@ class Processing
      *
      * @var string
      */
-    protected $standardsDescription;
+    protected $standards;
 
     /**
      * @ORM\Column(type="text")
@@ -92,9 +92,9 @@ class Processing
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
      *
-     * @var string
+     * @var string|null
      */
-    protected $dataTransferOutsideEU;
+    protected $nonEuTransfer;
 
     /**
      * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing")
@@ -182,49 +182,49 @@ class Processing
     /**
      * @return string
      */
-    public function getLifeCycleDescription(): string
+    public function getLifeCycle(): string
     {
-        return $this->lifeCycleDescription;
+        return $this->lifeCycle;
     }
 
     /**
-     * @param string $lifeCycleDescription
+     * @param string $lifeCycle
      */
-    public function setLifeCycleDescription(string $lifeCycleDescription): void
+    public function setLifeCycle(string $lifeCycle): void
     {
-        $this->lifeCycleDescription = $lifeCycleDescription;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDataMediumDescription(): string
-    {
-        return $this->dataMediumDescription;
-    }
-
-    /**
-     * @param string $dataMediumDescription
-     */
-    public function setDataMediumDescription(string $dataMediumDescription): void
-    {
-        $this->dataMediumDescription = $dataMediumDescription;
+        $this->lifeCycle = $lifeCycle;
     }
 
     /**
      * @return string
      */
-    public function getStandardsDescription(): string
+    public function getDataMedium(): string
     {
-        return $this->standardsDescription;
+        return $this->dataMedium;
     }
 
     /**
-     * @param string $standardsDescription
+     * @param string $dataMedium
      */
-    public function setStandardsDescription(string $standardsDescription): void
+    public function setDataMedium(string $dataMedium): void
     {
-        $this->standardsDescription = $standardsDescription;
+        $this->dataMedium = $dataMedium;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStandards(): string
+    {
+        return $this->standards;
+    }
+
+    /**
+     * @param string $standards
+     */
+    public function setStandards(string $standards): void
+    {
+        $this->standards = $standards;
     }
 
     /**
@@ -346,16 +346,16 @@ class Processing
     /**
      * @return string
      */
-    public function getDataTransferOutsideEU(): string
+    public function getNonEuTransfer(): ?string
     {
-        return $this->dataTransferOutsideEU;
+        return $this->nonEuTransfer;
     }
 
     /**
-     * @param string $dataTransferOutsideEU
+     * @param string $nonEuTransfer
      */
-    public function setDataTransferOutsideEU(string $dataTransferOutsideEU): void
+    public function setNonEuTransfer(?string $nonEuTransfer): void
     {
-        $this->dataTransferOutsideEU = $dataTransferOutsideEU;
+        $this->nonEuTransfer = $nonEuTransfer;
     }
 }
