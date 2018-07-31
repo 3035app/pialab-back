@@ -24,6 +24,9 @@ class Processing
 {
     use ResourceTrait;
 
+    const STATUS_DOING = 0;
+    const STATUS_ARCHIVED = 1;
+
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -39,6 +42,14 @@ class Processing
      * @var string
      */
     protected $author;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var int
+     */
+    protected $status = self::STATUS_DOING;
 
     /**
      * @ORM\Column(type="text")
@@ -357,5 +368,24 @@ class Processing
     public function setNonEuTransfer(?string $nonEuTransfer): void
     {
         $this->nonEuTransfer = $nonEuTransfer;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus(int $status): void
+    {
+        if ($status !== self::STATUS_DOING && $status !== self::STATUS_ARCHIVED) {
+            throw new \InvalidArgumentException(sprintf('Status « %d » is not valid', $status));
+        }
+        $this->status = $status;
     }
 }

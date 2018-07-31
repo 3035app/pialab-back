@@ -23,10 +23,16 @@ class ProcessingTest extends \Codeception\Test\Unit
      */
     protected $tester;
 
-    public function test_create()
+    private function getProcessing(): Processing
     {
         $folder = new Folder($this->data['folder']['name']);
-        $processing = new Processing($this->data['processing']['name'], $folder);
+
+        return new Processing($this->data['processing']['name'], $folder);
+    }
+
+    public function test_create()
+    {
+        $processing = $this->getProcessing();
 
         $this->assertEquals($this->data['processing']['name'], $processing->getName());
     }
@@ -40,8 +46,7 @@ class ProcessingTest extends \Codeception\Test\Unit
 
     public function test_add_pia()
     {
-        $folder = new Folder($this->data['folder']['name']);
-        $processing = new Processing($this->data['processing']['name'], $folder);
+        $processing = $this->getProcessing();
         $pia = new Pia();
         $pia->setName($this->data['pia']['name']);
 
@@ -52,8 +57,7 @@ class ProcessingTest extends \Codeception\Test\Unit
 
     public function test_add_pia_twice_should_throw_exception()
     {
-        $folder = new Folder($this->data['folder']['name']);
-        $processing = new Processing($this->data['processing']['name'], $folder);
+        $processing = $this->getProcessing();
         $pia = new Pia();
         $pia->setName($this->data['pia']['name']);
 
@@ -66,55 +70,68 @@ class ProcessingTest extends \Codeception\Test\Unit
         $processing->addPia($pia);
     }
 
-    public function test_add_processed_data_type()
+    public function test_add_processing_data_type()
     {
-        $folder = new Folder($this->data['folder']['name']);
-        $processing = new Processing($this->data['processing']['name'], $folder);
-        $processedDataType = new ProcessingDataType($processing);
+        $processing = $this->getProcessing();
+        $processingDataType = new ProcessingDataType($processing);
 
-        $processing->addProcessingDataType($processedDataType);
+        $processing->addProcessingDataType($processingDataType);
 
-        $this->assertContains($processedDataType, $processing->getProcessingDataTypes());
+        $this->assertContains($processingDataType, $processing->getProcessingDataTypes());
     }
 
-    public function test_remove_processed_data_type()
+    public function test_remove_processing_data_type()
     {
-        $folder = new Folder($this->data['folder']['name']);
-        $processing = new Processing($this->data['processing']['name'], $folder);
-        $processedDataType = new ProcessingDataType($processing);
+        $processing = $this->getProcessing();
+        $processingDataType = new ProcessingDataType($processing);
 
-        $processing->addProcessingDataType($processedDataType);
+        $processing->addProcessingDataType($processingDataType);
 
-        $this->assertContains($processedDataType, $processing->getProcessingDataTypes());
+        $this->assertContains($processingDataType, $processing->getProcessingDataTypes());
 
-        $processing->removeProcessingDataType($processedDataType);
+        $processing->removeProcessingDataType($processingDataType);
 
-        $this->assertNotContains($processedDataType, $processing->getProcessingDataTypes());
+        $this->assertNotContains($processingDataType, $processing->getProcessingDataTypes());
     }
 
-    public function test_add_processed_data_type_twice_should_throw_exception()
+    public function test_add_processing_data_type_twice_should_throw_exception()
     {
-        $folder = new Folder($this->data['folder']['name']);
-        $processing = new Processing($this->data['processing']['name'], $folder);
-        $processedDataType = new ProcessingDataType($processing);
+        $processing = $this->getProcessing();
+        $processingDataType = new ProcessingDataType($processing);
 
-        $processing->addProcessingDataType($processedDataType);
+        $processing->addProcessingDataType($processingDataType);
 
-        $this->assertContains($processedDataType, $processing->getProcessingDataTypes());
+        $this->assertContains($processingDataType, $processing->getProcessingDataTypes());
 
         $this->expectException(\InvalidArgumentException::class);
 
-        $processing->addProcessingDataType($processedDataType);
+        $processing->addProcessingDataType($processingDataType);
     }
 
-    public function test_remove_inexistant_processed_data_type_should_throw_exception()
+    public function test_remove_inexistant_processing_data_type_should_throw_exception()
     {
-        $folder = new Folder($this->data['folder']['name']);
-        $processing = new Processing($this->data['processing']['name'], $folder);
-        $processedDataType = new ProcessingDataType($processing);
+        $processing = $this->getProcessing();
+        $processingDataType = new ProcessingDataType($processing);
 
         $this->expectException(\InvalidArgumentException::class);
 
-        $processing->removeProcessingDataType($processedDataType);
+        $processing->removeProcessingDataType($processingDataType);
+    }
+
+    public function test_set_processing_status_to_archived()
+    {
+        $processing = $this->getProcessing();
+        $processing->setStatus(Processing::STATUS_ARCHIVED);
+
+        $this->assertEquals(Processing::STATUS_ARCHIVED, $processing->getStatus());
+    }
+
+    public function test_set_processing_status_to_inexisting_one()
+    {
+        $processing = $this->getProcessing();
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $processing->setStatus(-1);
     }
 }
