@@ -51,7 +51,22 @@ class StructureController extends BackOfficeAbstractController
      */
     public function manageStructuresAction(Request $request)
     {
-        $pagerfanta = $this->buildPager($request, Structure::class);
+        $pagerfanta = null;
+        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES')) {
+            $user = $this->getUser();
+            $pagerfanta = $this->getDoctrine()
+              ->getRepository(Structure::class)
+              ->getPaginatedStructuresForPortfolios($user->getPortfolios());
+        } else {
+            $pagerfanta = $this->buildPager($request, Structure::class);
+        }
+
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', $pagerfanta->getMaxPerPage());
+
+        $pagerfanta->setMaxPerPage($limit);
+        $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
+
         $pagerfantaSt = $this->buildPager($request, StructureType::class, 20, 'pageSt', 'limitSt');
 
         return $this->render('pia/Structure/manageStructures.html.twig', [
