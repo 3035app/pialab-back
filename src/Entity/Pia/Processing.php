@@ -52,7 +52,7 @@ class Processing
     protected $status = self::STATUS_DOING;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
      *
      * @var string
@@ -60,7 +60,7 @@ class Processing
     protected $description;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
      *
      * @var string
@@ -68,7 +68,7 @@ class Processing
     protected $lifeCycle;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
      *
      * @var string
@@ -76,7 +76,7 @@ class Processing
     protected $storage;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
      *
      * @var string
@@ -134,10 +134,19 @@ class Processing
      */
     protected $folder;
 
-    public function __construct(string $name, Folder $folder)
-    {
+    public function __construct(
+        string $name,
+        Folder $folder,
+        string $author,
+        string $processors,
+        string $controllers
+    ) {
         $this->name = $name;
         $this->folder = $folder;
+        $this->author = $author;
+        $this->processors = $processors;
+        $this->controllers = $controllers;
+
         $this->processingDataTypes = new ArrayCollection();
         $this->pias = new ArrayCollection();
     }

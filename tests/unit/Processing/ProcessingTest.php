@@ -23,11 +23,17 @@ class ProcessingTest extends \Codeception\Test\Unit
      */
     protected $tester;
 
-    private function getProcessing(): Processing
+    public function getProcessing(): Processing
     {
         $folder = new Folder($this->data['folder']['name']);
 
-        return new Processing($this->data['processing']['name'], $folder);
+        return new Processing(
+            $this->data['processing']['name'],
+            $folder,
+            $this->data['processing']['author'],
+            $this->data['processing']['processors'],
+            $this->data['processing']['controllers']
+        );
     }
 
     public function test_create()

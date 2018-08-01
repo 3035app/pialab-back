@@ -17,7 +17,10 @@ trait _FixturesTrait
             'name' => 'test-root',
         ],
         'processing' => [
-            'name' => 'test-processing',
+            'name'        => 'test-processing',
+            'author'      => 'test-author',
+            'processors'  => 'test-processors',
+            'controllers' => 'test-controllers',
         ],
         'pia' => [
             'name' => 'test-pia',

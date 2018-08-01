@@ -8,8 +8,6 @@
  * file that was distributed with this source code.
  */
 
-use PiaApi\Entity\Pia\Folder;
-use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\ProcessingDataType;
 use PiaApi\Tests\unit\Processing\_FixturesTrait;
 
@@ -24,8 +22,7 @@ class ProcessingDataTypeTest extends \Codeception\Test\Unit
 
     public function test_create()
     {
-        $folder = new Folder($this->data['folder']['name']);
-        $processing = new Processing($this->data['processing']['name'], $folder);
+        $processing = (new ProcessingTest())->getProcessing();
         $processingDataType = new ProcessingDataType($processing);
 
         $this->assertEquals($processing, $processingDataType->getProcessing());
