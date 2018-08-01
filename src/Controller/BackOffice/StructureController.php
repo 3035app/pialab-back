@@ -52,6 +52,7 @@ class StructureController extends BackOfficeAbstractController
     public function manageStructuresAction(Request $request)
     {
         $pagerfanta = null;
+
         if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES')) {
             $user = $this->getUser();
             $pagerfanta = $this->getDoctrine()

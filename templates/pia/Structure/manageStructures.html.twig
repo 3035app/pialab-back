@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        {% if is_granted('CAN_MANAGE_STRUCTURES') %}
+        {% if is_granted('CAN_MANAGE_STRUCTURES') and is_granted('CAN_MANAGE_STRUCTURE_TYPES')  %}
             <div class="four wide column">
 
                 <div class="ui segment">

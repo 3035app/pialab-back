@@ -77,7 +77,7 @@ class UserRepository extends ServiceEntityRepository
         if ($user->hasStructure()) {
             $queryBuilder
                 ->where('e.structure = :structure')
-                ->setParameter('structure', $structure);
+                ->setParameter('structure', $user->getStructure());
         }
 
         $portfolioStructures = $user->getProfile()->getPortfolioStructures();

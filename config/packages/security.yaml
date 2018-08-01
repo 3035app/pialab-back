@@ -148,6 +148,8 @@ security:
             #includes - ROLE_DPO
             #includes - CAN_ACCESS_BACK_OFFICE
             - CAN_MANAGE_PORTFOLIOS
+            - CAN_MANAGE_STRUCTURES
+            - CAN_MANAGE_STRUCTURE_TYPES
 
 
         ROLE_TECHNICAL_ADMIN:
