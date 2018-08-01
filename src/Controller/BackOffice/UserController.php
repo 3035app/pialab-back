@@ -218,6 +218,10 @@ class UserController extends BackOfficeAbstractController
             throw new NotFoundHttpException('You cannot delete yourself !');
         }
 
+        if (!$this->roleHierarchy->hasHigherRole($this->getUser(), $user)) {
+            throw new NotFoundHttpException('You cannot delete user with an higher role !');
+        }
+
         $form = $this->createForm(RemoveUserForm::class, $user, [
             'action'   => $this->generateUrl('manage_users_remove_user', ['userId' => $user->getId()]),
             'redirect' => $this->getQueryRedirectUrl($request),
