@@ -96,9 +96,8 @@ class UsersFunctionalAdminCest
         $I->amOnPage('/manageUsers');
 
         // No Application Choice
-        $I->expect('Application and Structure are not selectable');
+        $I->expect('Application is not selectable');
         $I->dontSeeElement('//select[@name="create_user_form[application]"]');
-        $I->dontSeeElement('//select[@name="create_user_form[structure]"]');
 
         $I->fillField('input[name="create_user_form[profile][firstName]"]', $this->dpoFirstname);
         $I->fillField('input[name="create_user_form[profile][lastName]"]', $this->dpoLastname);
