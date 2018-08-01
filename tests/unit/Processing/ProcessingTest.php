@@ -31,7 +31,6 @@ class ProcessingTest extends \Codeception\Test\Unit
             $this->data['processing']['name'],
             $folder,
             $this->data['processing']['author'],
-            $this->data['processing']['processors'],
             $this->data['processing']['controllers']
         );
     }
