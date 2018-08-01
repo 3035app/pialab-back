@@ -10,11 +10,12 @@
 
 namespace PiaApi\Entity\Pia;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -22,7 +23,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Processing
 {
-    use ResourceTrait;
+    use
+        ResourceTrait,
+        TimestampableEntity;
 
     const STATUS_DOING = 0;
     const STATUS_ARCHIVED = 1;
