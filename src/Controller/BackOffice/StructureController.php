@@ -51,27 +51,27 @@ class StructureController extends BackOfficeAbstractController
      */
     public function manageStructuresAction(Request $request)
     {
+        $pagerfanta = null;
         if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES')) {
-            $portfolios = $this->getUser()->getPortfolios();
-
-            $pagerFanta = $this->getDoctrine()
-                ->getRepository(Structure::class)
-                ->getPaginatedStructuresForPortfolios($portfolios);
-
-            $page = $request->get('page', 1);
-            $limit = $request->get('limit', $pagerFanta->getMaxPerPage());
-
-            $pagerFanta->setMaxPerPage($limit);
-            $pagerFanta->setCurrentPage($pagerFanta->getNbPages() < $page ? $pagerFanta->getNbPages() : $page);
-            $pagerFantaSt = null;
+            $user = $this->getUser();
+            $pagerfanta = $this->getDoctrine()
+              ->getRepository(Structure::class)
+              ->getPaginatedStructuresForPortfolios($user->getPortfolios());
         } else {
-            $pagerFanta = $this->buildPager($request, Structure::class);
-            $pagerFantaSt = $this->buildPager($request, StructureType::class, 20, 'pageSt', 'limitSt');
+            $pagerfanta = $this->buildPager($request, Structure::class);
         }
 
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', $pagerfanta->getMaxPerPage());
+
+        $pagerfanta->setMaxPerPage($limit);
+        $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
+
+        $pagerfantaSt = $this->buildPager($request, StructureType::class, 20, 'pageSt', 'limitSt');
+
         return $this->render('pia/Structure/manageStructures.html.twig', [
-            'structures'     => $pagerFanta,
-            'structureTypes' => $pagerFantaSt,
+            'structures'     => $pagerfanta,
+            'structureTypes' => $pagerfantaSt,
         ]);
     }
 

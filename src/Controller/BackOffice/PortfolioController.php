@@ -41,7 +41,21 @@ class PortfolioController extends BackOfficeAbstractController
      */
     public function managePortfoliosAction(Request $request)
     {
-        $pagerfanta = $this->buildPager($request, Portfolio::class);
+        $pagerfanta = null;
+        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_PORTFOLIOS')) {
+            $user = $this->getUser();
+            $pagerfanta = $this->getDoctrine()
+              ->getRepository(Portfolio::class)
+              ->getPaginatedByUser($user);
+        } else {
+            $pagerfanta = $this->buildPager($request, Portfolio::class);
+        }
+
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', $pagerfanta->getMaxPerPage());
+
+        $pagerfanta->setMaxPerPage($limit);
+        $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
 
         return $this->render('pia/Portfolio/managePortfolios.html.twig', [
             'portfolios' => $pagerfanta,

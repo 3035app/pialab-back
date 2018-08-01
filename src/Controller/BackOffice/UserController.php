@@ -75,20 +75,21 @@ class UserController extends BackOfficeAbstractController
      */
     public function manageUsersAction(Request $request)
     {
+        $userPager = null;
         if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_USERS')) {
             $structure = $this->getUser()->getStructure();
             $userPager = $this->getDoctrine()
-                ->getRepository(User::class)
-                ->getPaginatedUsersByStructure($structure);
-
-            $userPage = $request->get('page', 1);
-            $userLimit = $request->get('limit', $userPager->getMaxPerPage());
-
-            $userPager->setMaxPerPage($userLimit);
-            $userPager->setCurrentPage($userPager->getNbPages() < $userPage ? $userPager->getNbPages() : $userPage);
+              ->getRepository(User::class)
+              ->getReachableUsersPaginated($this->getUser());
         } else {
             $userPager = $this->buildPager($request, User::class);
         }
+
+        $userPage = $request->get('page', 1);
+        $userLimit = $request->get('limit', $userPager->getMaxPerPage());
+
+        $userPager->setMaxPerPage($userLimit);
+        $userPager->setCurrentPage($userPager->getNbPages() < $userPage ? $userPager->getNbPages() : $userPage);
 
         return $this->render('pia/User/manageUsers.html.twig', [
             'users' => $userPager,
@@ -127,14 +128,6 @@ class UserController extends BackOfficeAbstractController
             }
 
             $user->setProfile($userData['profile']);
-
-            //a ROLE_ADMIN (which contains CAN_MANAGE_ONLY_OWNED_USERS) must have a structure <= PapsOu: Why ?
-            if (!$userData['structure'] && $user->hasRole('ROLE_ADMIN')) {
-                // throw new \DomainException('A Functional Administrator must be assigned to a Structure'); // <= Removed exception because, in prod env, a 500 error page, without the message, will be displayed
-                $this->addFlash('error', 'pia.flashes.a_functional_administrator_must_be_assigned_to_a_structure');
-
-                return $this->redirect($this->generateUrl('manage_users'));
-            }
 
             $this->getDoctrine()->getManager()->persist($user);
 

@@ -68,6 +68,32 @@ class UserRepository extends ServiceEntityRepository
         return $pagerfanta;
     }
 
+    public function getReachableUsersPaginated(User $user)
+    {
+        $queryBuilder = $this->createQueryBuilder('e');
+        $queryBuilder
+        ->orderBy('e.id', 'DESC');
+
+        if ($user->hasStructure()) {
+            $queryBuilder
+                ->where('e.structure = :structure')
+                ->setParameter('structure', $structure);
+        }
+
+        $portfolioStructures = $user->getProfile()->getPortfolioStructures();
+
+        if (count($portfolioStructures)) {
+            $queryBuilder
+                ->andWhere('e.structure in(:structures)')
+                ->setParameter('structures', $portfolioStructures);
+        }
+
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+        $pagerfanta = new Pagerfanta($adapter);
+
+        return $pagerfanta;
+    }
+
     /**
      * @param int|null $defaultLimit
      * @param int|null $page

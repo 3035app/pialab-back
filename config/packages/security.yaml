@@ -131,34 +131,35 @@ security:
         ROLE_DPO:
             - ROLE_CONTROLLER
             - CAN_MANAGE_PIAS
+            - CAN_ACCESS_BACK_OFFICE
             - CAN_SHOW_PIA_TEMPLATE
             - CAN_IMPORT_PIA
             - CAN_MANAGE_FOLDERS
+            - CAN_MANAGE_ONLY_OWNED_USERS
         
         ROLE_SHARED_DPO:
             - ROLE_DPO
-            - CAN_ACCESS_BACK_OFFICE
-            - CAN_MANAGE_ONLY_OWNED_PORTFOLIOS
             - CAN_MANAGE_ONLY_OWNED_USERS
             - CAN_MANAGE_ONLY_OWNED_STRUCTURES
-            - CAN_SHOW_APPLICATION
-
+            - CAN_MANAGE_ONLY_OWNED_PORTFOLIOS
+        
         ROLE_ADMIN:
             - ROLE_SHARED_DPO
-            # - ROLE_DPO
-            # - CAN_ACCESS_BACK_OFFICE
+            #includes - ROLE_DPO
+            #includes - CAN_ACCESS_BACK_OFFICE
             - CAN_MANAGE_PORTFOLIOS
-            - CAN_MANAGE_USERS
-            - CAN_MANAGE_STRUCTURES
-            - CAN_MANAGE_STRUCTURE_TYPES
-            # - CAN_SHOW_APPLICATION
+
 
         ROLE_TECHNICAL_ADMIN:
             - ROLE_ADMIN
+            - CAN_MANAGE_USERS
+            - CAN_MANAGE_STRUCTURES
+            - CAN_MANAGE_STRUCTURE_TYPES
             - CAN_MANAGE_APPLICATIONS
-        
+  
         # SUADMIN has all rights by default
         # This section just make rights explicit
+
         ROLE_SUPER_ADMIN:
             - ROLE_TECHNICAL_ADMIN
             - CAN_EXPORT_PIA

@@ -1,0 +1,14 @@
+/pias:
+  $ref: ./pias.yaml#pias
+
+/pias/{id}:
+  $ref: ./pias.yaml#pia
+
+/pias/new-from-template/{id}:
+  $ref: ./pias.yaml#pia_from_template
+
+/pias/import:
+  $ref: ./pias.yaml#import
+
+/pias/{id}/export:
+  $ref: ./pias.yaml#export

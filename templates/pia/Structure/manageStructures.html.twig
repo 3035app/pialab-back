@@ -16,16 +16,16 @@
 
 {% block body %}
     {% set cols = 2 %}
-    {% if not is_granted('CAN_SHOW_STRUCTURE') or not is_granted('CAN_SHOW_STRUCTURE_TYPE') %}
+    {% set full = not is_granted('CAN_MANAGE_STRUCTURES') %}
+    {% if not is_granted('CAN_SHOW_STRUCTURE')or not is_granted('CAN_SHOW_STRUCTURE_TYPE') %}
         {% set cols = 1 %}
     {% endif %}
 
     <div class="ui grid">
 
-        <div class="twelve wide column">
+        <div class=" {{ full == true ? '' : 'twelve' }} wide column">
 
             <div class="ui grid">
-
                 <div class="{{ cols == 2 ? 'ten' : 'sixteen' }} wide column">
                     {% if is_granted('CAN_SHOW_STRUCTURE') %}
                         {{ include('pia/Structure/partials/list.html.twig',{'structures':structures}) }}
@@ -40,9 +40,9 @@
             </div>
         </div>
 
-        <div class="four wide column">
+        {% if is_granted('CAN_MANAGE_STRUCTURES') %}
+            <div class="four wide column">
 
-            {% if is_granted('CAN_CREATE_STRUCTURE') %}
                 <div class="ui segment">
 
                     <h2>{{ 'pia.structures.add.title'|trans }}</h2>
@@ -50,9 +50,6 @@
                     {{ render(controller('PiaApi\\Controller\\BackOffice\\StructureController:addStructureAction')) }}
 
                 </div>
-            {% endif %}
-
-            {% if is_granted('CAN_CREATE_STRUCTURE_TYPE') %}
                 <div class="ui segment">
 
                     <h2>{{ 'pia.structure_types.add.title'|trans }}</h2>
@@ -60,8 +57,10 @@
                     {{ render(controller('PiaApi\\Controller\\BackOffice\\StructureController:addStructureTypeAction')) }}
 
                 </div>
-            {% endif %}
-        </div>
+
+            </div>
+        {% endif %}
+
     </div>
 
 {% endblock %}
