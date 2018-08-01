@@ -44,9 +44,8 @@ class UsersFunctionalAdminCest
 
     public function create_new_functional_admin(Webguy $I)
     {
-        $I->login();
-
         $I->wantTo('Create a new functional admin');
+        $I->login();
         $I->amOnPage('/manageUsers');
 
         // Select Application
