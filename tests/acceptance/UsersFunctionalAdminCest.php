@@ -83,8 +83,6 @@ class UsersFunctionalAdminCest
         // $I->dontSeeNavMenuWithHref('/manageStructures');
         $I->dontSeeNavMenuWithHref('/managePiaTemplates');
         $I->dontSeeNavMenuWithHref('/manageApplications');
-
-        $I->logout();
     }
 
     public function create_new_dpo_with_functional_admin(Webguy $I)
@@ -108,7 +106,6 @@ class UsersFunctionalAdminCest
 
         $I->expect('DPO User appears in the list');
         $I->canSee($this->dpoEmail, '//td');
-        $I->logout();
     }
 
     public function remove_newly_created_dpo_with_functional_admin(Webguy $I)
@@ -123,14 +120,12 @@ class UsersFunctionalAdminCest
 
         $I->waitForElementVisible($formName . ' input[type="submit"]');
 
-        $I->canSeeNumberOfElements('//table[@class="ui single line table"]/descendant-or-self::b[contains(text(), "E-mail")]/ancestor::tr/descendant::td[contains(text(), "' . $this->email . '")]', 1);
+        $I->canSeeNumberOfElements('//table[@class="ui single line table"]/descendant-or-self::b[contains(text(), "E-mail")]/ancestor::tr/descendant::td[contains(text(), "' . $this->dpoEmail . '")]', 1);
 
         $I->click($formName . ' input[type="submit"]');
 
         $I->expect('DPO is removed from the list');
         $I->dontSee($this->dpoEmail, '//td');
-
-        $I->logout();
     }
 
     public function remove_newly_created_funtional_admin(Webguy $I)
@@ -151,8 +146,6 @@ class UsersFunctionalAdminCest
 
         $I->expect('Functional Admin is removed from the list');
         $I->dontSee($this->email, '//td');
-
-        $I->logout();
     }
 
     public function remove_structure(Webguy $I)
