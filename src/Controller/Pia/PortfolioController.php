@@ -193,6 +193,7 @@ class PortfolioController extends RestController
     public function deleteAction(Request $request, $id)
     {
         $portfolio = $this->getResource($id);
+        $this->canAccessResourceOr403($portfolio);
 
         foreach ($portfolio->getStructures() as $structure) {
             $structure->setPortfolio(null);
@@ -210,7 +211,7 @@ class PortfolioController extends RestController
 
     public function canAccessResourceOr403($resource): void
     {
-        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_PORTFOLIOS') && count($this->getUser()->getPortfolios()) > 0 && in_array($resource, $this->getUser()->getPortfolioStructures())) {
+        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_PORTFOLIOS') && in_array($resource, $this->getUser()->getPortfolios())) {
             throw new AccessDeniedHttpException('Resource not found');
         }
     }
