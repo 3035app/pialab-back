@@ -16,7 +16,7 @@ class UsersFunctionalAdminCest
 {
     private $firstname = 'John';
     private $lastname = 'Doe';
-    private $email = 'selenium@pialab.io';
+    private $email = 'admin-selenium@pialab.io';
     private $password = 'kFR5C1EGaPZDFJ1A';
 
     private $dpoFirstname = 'DpoJohn';
@@ -90,9 +90,8 @@ class UsersFunctionalAdminCest
 
     public function create_new_dpo_with_functional_admin(Webguy $I)
     {
-        $I->login($this->email, $this->password);
-
         $I->wantTo('Create a new dpo');
+        $I->login($this->email, $this->password);
         $I->amOnPage('/manageUsers');
 
         // No Application Choice
@@ -108,15 +107,15 @@ class UsersFunctionalAdminCest
 
         $I->click('[name="create_user_form[submit]"]');
 
+        $I->expect('DPO User appears in the list');
         $I->canSee($this->dpoEmail, '//td');
         $I->logout();
     }
 
     public function remove_newly_created_dpo_with_functional_admin(Webguy $I)
     {
-        $I->login($this->email, $this->password);
-
         $I->wantTo('Remove newly created dpo');
+        $I->login($this->email, $this->password);
         $I->amOnPage('/manageUsers');
 
         $I->click('//td[contains(text(), "' . $this->dpoEmail . '")]/ancestor::tr/descendant::a[contains(@href,"/manageUsers/removeUser/")]');
@@ -137,9 +136,8 @@ class UsersFunctionalAdminCest
 
     public function remove_newly_created_funtional_admin(Webguy $I)
     {
-        $I->login();
-
         $I->wantTo('Remove newly created function admin');
+        $I->login();
         $I->amOnPage('/manageUsers');
 
         $I->click('//td[contains(text(), "' . $this->email . '")]/ancestor::tr/descendant::a[contains(@href,"/manageUsers/removeUser/")]');
