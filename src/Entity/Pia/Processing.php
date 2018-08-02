@@ -18,7 +18,7 @@ use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PiaApi\Repository\ProcessingRepository")
  * @ORM\Table(name="pia_processing")
  */
 class Processing
