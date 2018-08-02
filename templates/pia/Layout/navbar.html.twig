@@ -3,24 +3,24 @@
 {% import _self as menu %}
 
 {% if activeItem is not defined %}
-  {% set activeItem = null %}
+    {% set activeItem = null %}
 {% endif %}
 
 <div class="ui menu">
-  <div class="item" style="padding:0;width:130px;background:#2B3E50 url({{ asset('assets/img/pia-lab-small.png') }}) no-repeat scroll 50% 50%;background-size:contain;"></div>
-  <div class="menu">
+    <div class="item" style="padding:0;width:130px;background:#2B3E50 url({{ asset('assets/img/pia-lab-small.png') }}) no-repeat scroll 50% 50%;background-size:contain;"></div>
+    <div class="menu">
 
     {% if is_granted('CAN_MANAGE_ONLY_OWNED_USERS') or is_granted('CAN_MANAGE_USERS') %}
       <a class="{{ menu.activeMenu(activeItem, 'users') }} item" href="{{ path('manage_users') }}">
         <i class="user icon"></i>{{ 'pia.layout.navbar.users'|trans }}
       </a>
     {% endif %}
-    {% if is_granted('CAN_MANAGE_PORTFOLIOS') %}
+    {% if is_granted('CAN_MANAGE_ONLY_OWNED_PORTFOLIOS') or is_granted('CAN_MANAGE_PORTFOLIOS') %}
       <a class="{{ menu.activeMenu(activeItem, 'portfolios') }} item" href="{{ path('manage_portfolios') }}">
         <i class="book icon"></i>{{ 'pia.layout.navbar.portfolios'|trans }}
       </a>
     {% endif %}
-    {% if is_granted('CAN_MANAGE_STRUCTURES') %}
+    {% if is_granted('CAN_MANAGE_ONLY_OWNED_STRUCTURES') or is_granted('CAN_MANAGE_STRUCTURES') %}
       <a class="{{ menu.activeMenu(activeItem, 'structures') }} item" href="{{ path('manage_structures') }}">
         <i class="building icon"></i>{{ 'pia.layout.navbar.structures'|trans }}
       </a>
@@ -44,13 +44,20 @@
       </div>
     {% endif %}
 
-    <a class="active item" href="{{ path('fos_user_security_logout') }}">
-      <i class="sign out icon"></i>
-      Logout
-    </a>
-  </div>
+
+        <a class="active item" href="{{ path('fos_user_security_logout') }}">
+            <i class="sign out icon"></i>
+            Logout
+        </a>
+    </div>
 </div>
 
 {% macro activeMenu(activeItem, menuName) %}
-  {% if activeItem == menuName %}active{% endif %}
+    {% spaceless %}
+        {% if menuName is iterable %}
+            {% if activeItem in menuName %}active{% endif %}
+        {% else %}
+            {% if activeItem == menuName %}active{% endif %}
+        {% endif %}
+    {% endspaceless %}
 {% endmacro %}

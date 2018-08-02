@@ -11,10 +11,10 @@
 namespace PiaApi\Form\Portfolio;
 
 use PiaApi\Form\BaseForm;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use PiaApi\Form\Structure\Type\StructureChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class CreatePortfolioForm extends BaseForm
 {

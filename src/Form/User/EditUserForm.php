@@ -18,9 +18,19 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use PiaApi\Form\Portfolio\Type\PortfolioChoiceType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EditUserForm extends CreateUserForm
 {
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults([
+            'hasPortfolio' => false,
+        ]);
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
@@ -54,13 +64,11 @@ class EditUserForm extends CreateUserForm
                 'required' => false,
                 'label'    => 'pia.users.forms.edit.locked',
             ])
-
             ->add('portfolios', PortfolioChoiceType::class, [
                 'required' => false,
                 'multiple' => true,
                 'label'    => 'pia.users.forms.create.portfolios',
             ])
-
             ->add('cancel', ButtonType::class, [
                 'attr' => [
                     'class' => 'red cancel',
@@ -76,7 +84,7 @@ class EditUserForm extends CreateUserForm
                 'label' => 'pia.users.forms.edit.submit',
             ]);
 
-        if (!count($builder->get('portfolios')->getOption('choices'))) {
+        if ($options['hasPortfolio'] === false) {
             $builder->remove('portfolios');
         }
     }

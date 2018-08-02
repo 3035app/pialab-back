@@ -10,20 +10,20 @@
 
 namespace PiaApi\Form\User;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use PiaApi\Form\BaseForm;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use PiaApi\Form\User\Type\RolesType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use PiaApi\Form\Structure\Type\StructureChoiceType;
-use PiaApi\Form\Application\Type\ApplicationChoiceType;
-use PiaApi\Form\DataTransformer\EntityDataTransformer;
 use PiaApi\Entity\Oauth\Client;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Form\Application\Type\ApplicationChoiceType;
+use PiaApi\Form\BaseForm;
+use PiaApi\Form\DataTransformer\EntityDataTransformer;
+use PiaApi\Form\Structure\Type\StructureChoiceType;
+use PiaApi\Form\User\Type\RolesType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateUserForm extends BaseForm
 {

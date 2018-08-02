@@ -35,7 +35,7 @@ class PiaTemplateController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePiaTemplates", name="manage_pia_templates")
-     * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_PIA_TEMPLATE')")
      *
      * @param Request $request
      */
@@ -50,7 +50,7 @@ class PiaTemplateController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePiaTemplates/addPiaTemplate", name="manage_pia_templates_add_pia_template")
-     * @Security("is_granted('CAN_CREATE_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_CREATE_PIA_TEMPLATE')")
      *
      * @param Request $request
      */
@@ -84,7 +84,7 @@ class PiaTemplateController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePiaTemplates/editPiaTemplate/{piaTemplateId}", name="manage_pia_templates_edit_pia_template")
-     * @Security("is_granted('CAN_EDIT_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_EDIT_PIA_TEMPLATE')")
      *
      * @param Request $request
      */
@@ -125,7 +125,7 @@ class PiaTemplateController extends BackOfficeAbstractController
 
     /**
      * @Route("/managePiaTemplates/removePiaTemplate/{piaTemplateId}", name="manage_pia_templates_remove_pia_template")
-     * @Security("is_granted('CAN_DELETE_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_DELETE_PIA_TEMPLATE')")
      *
      * @param Request $request
      */

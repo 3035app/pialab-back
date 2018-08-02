@@ -34,13 +34,13 @@ class UserProfileForm extends BaseForm
         $builder
             ->add('user', HiddenType::class)
 
-            ->add('lastName', TextType::class, [
-                'required' => true,
-                'label'    => 'pia.users.forms.profile.lastName',
-            ])
             ->add('firstName', TextType::class, [
                 'required' => true,
                 'label'    => 'pia.users.forms.profile.firstName',
+            ])
+            ->add('lastName', TextType::class, [
+                'required' => true,
+                'label'    => 'pia.users.forms.profile.lastName',
             ])
         ;
         $builder->addModelTransformer($this->profileTransformer);

@@ -1,0 +1,110 @@
+pias:
+
+  get:
+    responses:
+      '200':
+        description: Returns all PIAs
+        schema:
+          items:
+            "$ref": "#/definitions/Pia"
+          type: array
+    tags:
+    - PIA
+
+  post:
+    responses:
+      '200':
+        description: Creates a PIA
+        schema:
+          "$ref": "#/definitions/Pia"
+    tags:
+    - PIA
+
+
+pia:
+
+  get:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      type: string
+      pattern: "\\d+"
+    responses:
+      '200':
+        description: Returns one PIA by its id
+        schema:
+          "$ref": "#/definitions/Pia"
+    tags:
+    - PIA
+
+  put:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      type: string
+      pattern: "\\d+"
+    responses:
+      '200':
+        description: Update a PIA
+        schema:
+          "$ref": "#/definitions/Pia"
+    tags:
+    - PIA
+
+  delete:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      type: string
+      pattern: "\\d+"
+    responses:
+      '200':
+        description: Delete a PIA
+        schema:
+          "$ref": "#/definitions/Pia"
+    tags:
+    - PIA
+
+pia_from_template:
+  post:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      type: string
+    responses:
+      '200':
+        description: Create a PIA from a template
+        schema:
+          "$ref": "#/definitions/Pia"
+    tags:
+    - PIA
+
+import:
+
+  post:
+    responses:
+      '200':
+        description: Import a PIA
+    tags:
+    - PIA
+
+export:
+
+  get:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      type: string
+      pattern: "\\d+"
+    responses:
+      '200':
+        description: Export a PIA
+        schema:
+          "$ref": "#/definitions/Pia"
+    tags:
+    - PIA

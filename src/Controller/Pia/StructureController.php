@@ -70,7 +70,7 @@ class StructureController extends RestController
             $portfolios = $this->getUser()->getPortfolios();
         }
 
-        if (count($portfolios) > 0) {
+        if ($portfolios && count($portfolios) > 0) {
             $structuresPager = $this->getDoctrine()
                 ->getRepository($this->getEntityClass())
                 ->getPaginatedStructuresForPortfolios($portfolios, $criteria['limit'], $criteria['page']);
@@ -209,6 +209,7 @@ class StructureController extends RestController
     public function deleteAction(Request $request, $id)
     {
         $structure = $this->getResource($id);
+        $this->canAccessResourceOr403($structure);
 
         $this->remove($structure);
 

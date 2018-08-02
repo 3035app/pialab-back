@@ -6,6 +6,7 @@ security:
     role_hierarchy:
 
         #PERMISSONS
+
         CAN_MANAGE_FOLDERS:
             - CAN_SHOW_FOLDER
             - CAN_CREATE_FOLDER
@@ -115,6 +116,7 @@ security:
             - CAN_DELETE_PORTFOLIO
 
         #ROLE DEFINITIONS
+
         ROLE_USER:
             - CAN_EXPLORE_PIAS
 
@@ -129,30 +131,42 @@ security:
         ROLE_DPO:
             - ROLE_CONTROLLER
             - CAN_MANAGE_PIAS
+            - CAN_ACCESS_BACK_OFFICE
             - CAN_SHOW_PIA_TEMPLATE
             - CAN_IMPORT_PIA
             - CAN_MANAGE_FOLDERS
+            - CAN_MANAGE_ONLY_OWNED_USERS
         
         ROLE_SHARED_DPO:
             - ROLE_DPO
-            - CAN_MANAGE_ONLY_OWNED_PORTFOLIOS
-
-        ROLE_ADMIN:
-            - ROLE_SHARED_DPO
-            - CAN_MANAGE_PORTFOLIOS
             - CAN_MANAGE_ONLY_OWNED_USERS
             - CAN_MANAGE_ONLY_OWNED_STRUCTURES
+            - CAN_MANAGE_ONLY_OWNED_PORTFOLIOS
+        
+        ROLE_ADMIN:
+            - ROLE_SHARED_DPO
+            #includes - ROLE_DPO
+            #includes - CAN_ACCESS_BACK_OFFICE
+            - CAN_MANAGE_USERS
+            - CAN_MANAGE_PORTFOLIOS
+            - CAN_MANAGE_STRUCTURES
+            - CAN_MANAGE_STRUCTURE_TYPES
+
 
         ROLE_TECHNICAL_ADMIN:
             - ROLE_ADMIN
             - CAN_MANAGE_USERS
-            - CAN_EXPORT_PIA
             - CAN_MANAGE_STRUCTURES
             - CAN_MANAGE_STRUCTURE_TYPES
-            - CAN_MANAGE_PIA_TEMPLATES
             - CAN_MANAGE_APPLICATIONS
+  
+        # SUADMIN has all rights by default
+        # This section just make rights explicit
+
         ROLE_SUPER_ADMIN:
             - ROLE_TECHNICAL_ADMIN
+            - CAN_EXPORT_PIA
+            - CAN_MANAGE_PIA_TEMPLATES
 
 
     encoders:
@@ -166,13 +180,6 @@ security:
         oauth_token:
             pattern:    ^/oauth/v2/token
             security:   false
-
-        # oauth_authorize:
-        #     pattern:    ^/oauth/v2/auth
-        #     form_login:
-        #         # login_path: /login
-        #         # check_path: /login_check
-        #         provider: fos_userbundle
 
         api:
             pattern:    '%api_pattern%' # see services.yaml
@@ -195,4 +202,4 @@ security:
     access_control:
         - { path: ^/login, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/resetting, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
-        - { path: '%api_pattern%', roles: [ IS_AUTHENTICATED_FULLY ] }
+        - { path: '%api_pattern%', roles: [ IS_AUTHENTICATED_FULLY ] } # %api_pattern% see config/services.yaml

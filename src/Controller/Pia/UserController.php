@@ -160,7 +160,8 @@ class UserController extends RestController
 
         //a ROLE_ADMIN (which contains CAN_MANAGE_ONLY_OWNED_USERS) must have a structure
         if ($structure === null && $user->hasRole('ROLE_ADMIN')) {
-            throw new \DomainException('A Functional Administrator must be assigned to a Structure');
+            // throw new \DomainException('A Functional Administrator must be assigned to a Structure'); <= Removed exception because, in prod env, a 500 error page, without the message, will be displayed
+            return $this->view(['A Functional Administrator must be assigned to a Structure'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $this->persist($user);
@@ -235,6 +236,7 @@ class UserController extends RestController
     public function deleteAction(Request $request, $id)
     {
         $user = $this->getResource($id);
+        $this->canAccessResourceOr403($user);
 
         $this->remove($user);
 
