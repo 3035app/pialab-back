@@ -19,6 +19,25 @@ class ProcessingCest
 {
     use _support\ApiFixturesTrait;
 
+    private $processingJsonType = [
+        'name'                  => 'string',
+        'author'                => 'string',
+        'status'                => 'integer',
+        'description'           => 'string|null',
+        'life_cycle'            => 'string|null',
+        'storage'               => 'string|null',
+        'standards'             => 'string|null',
+        'processors'            => 'string|null',
+        'controllers'           => 'string',
+        'non_eu_transfer'       => 'string|null',
+        'processing_data_types' => 'array',
+        'pias'                  => 'array',
+        'folder'                => 'array',
+        'id'                    => 'integer',
+        'created_at'            => 'string',
+        'updated_at'            => 'string',
+    ];
+
     public function list_processings_test(\ApiTester $I)
     {
         $I->amGoingTo('List available Processings');
@@ -30,5 +49,4 @@ class ProcessingCest
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
     }
-
 }
