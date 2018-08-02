@@ -205,21 +205,20 @@ class Pia implements Timestampable
     protected $template;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Folder", inversedBy="pias")
-     * @JMS\Groups({"Default", "Export"})
-     * @JMS\MaxDepth(1)
-     *
-     * @var Folder
-     */
-    protected $folder;
-
-    /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Full"})
      *
      * @var string
      */
     protected $type = self::TYPE_ADVANCED;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Processing", inversedBy="pias")
+     * @JMS\Groups({"Full"})
+     *
+     * @var Processing
+     */
+    protected $processing;
 
     public function __construct()
     {
@@ -429,22 +428,6 @@ class Pia implements Timestampable
     }
 
     /**
-     * @return Folder
-     */
-    public function getFolder(): ?Folder
-    {
-        return $this->folder;
-    }
-
-    /**
-     * @param Folder $folder
-     */
-    public function setFolder(?Folder $folder): void
-    {
-        $this->folder = $folder;
-    }
-
-    /**
      * @param int $dpoStatus
      */
     public function setDpoStatus(?int $dpoStatus): void
@@ -538,5 +521,21 @@ class Pia implements Timestampable
     public function setType(?string $type): void
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return Processing
+     */
+    public function getProcessing(): Processing
+    {
+        return $this->processing;
+    }
+
+    /**
+     * @param Processing $processing
+     */
+    public function setProcessing(Processing $processing): void
+    {
+        $this->processing = $processing;
     }
 }
