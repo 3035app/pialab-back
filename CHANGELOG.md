@@ -1,5 +1,23 @@
 # Change Log
 
+## [1.3.0](https://github.com/pia-lab/pialab-back/tree/1.3.0) (2018-08-01)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.4...1.3.0)
+
+**Fixed bugs:**
+
+- User creation failed if one user is already exist with the same adresse mail [\#27](https://github.com/pia-lab/pialab-back/issues/27)
+
+**Merged pull requests:**
+
+- \(Role\) - Add a method to compare 2 users roles - refs \#7115 [\#39](https://github.com/pia-lab/pialab-back/pull/39) ([Fabrice-li](https://github.com/Fabrice-li))
+- Check roles behaviours [\#38](https://github.com/pia-lab/pialab-back/pull/38) ([PapsOu](https://github.com/PapsOu))
+- Fix duplicate user email error [\#37](https://github.com/pia-lab/pialab-back/pull/37) ([PapsOu](https://github.com/PapsOu))
+- Wip api documentation [\#36](https://github.com/pia-lab/pialab-back/pull/36) ([PapsOu](https://github.com/PapsOu))
+- Improve API documentation [\#35](https://github.com/pia-lab/pialab-back/pull/35) ([PapsOu](https://github.com/PapsOu))
+- Add CLI command to export swagger.json  [\#34](https://github.com/pia-lab/pialab-back/pull/34) ([GlennCavarle](https://github.com/GlennCavarle))
+- Administration API [\#33](https://github.com/pia-lab/pialab-back/pull/33) ([PapsOu](https://github.com/PapsOu))
+- Add  customer portfolio management [\#31](https://github.com/pia-lab/pialab-back/pull/31) ([GlennCavarle](https://github.com/GlennCavarle))
+
 ## [1.2.4](https://github.com/pia-lab/pialab-back/tree/1.2.4) (2018-07-17)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.3...1.2.4)
 

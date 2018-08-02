@@ -47,11 +47,27 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures", name="manage_structures")
-     * @Security("is_granted('CAN_SHOW_STRUCTURE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_STRUCTURE')")
      */
     public function manageStructuresAction(Request $request)
     {
-        $pagerfanta = $this->buildPager($request, Structure::class);
+        $pagerfanta = null;
+
+        if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES')) {
+            $user = $this->getUser();
+            $pagerfanta = $this->getDoctrine()
+              ->getRepository(Structure::class)
+              ->getPaginatedStructuresForPortfolios($user->getPortfolios());
+        } else {
+            $pagerfanta = $this->buildPager($request, Structure::class);
+        }
+
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', $pagerfanta->getMaxPerPage());
+
+        $pagerfanta->setMaxPerPage($limit);
+        $pagerfanta->setCurrentPage($pagerfanta->getNbPages() < $page ? $pagerfanta->getNbPages() : $page);
+
         $pagerfantaSt = $this->buildPager($request, StructureType::class, 20, 'pageSt', 'limitSt');
 
         return $this->render('pia/Structure/manageStructures.html.twig', [
@@ -62,7 +78,7 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/showStructure/{structureId}", name="manage_structures_show_structure")
-     * @Security("is_granted('CAN_SHOW_STRUCTURE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_STRUCTURE')")
      */
     public function showStructureAction(Request $request)
     {
@@ -98,7 +114,7 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/addStructure", name="manage_structures_add_structure")
-     * @Security("is_granted('CAN_CREATE_STRUCTURE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_CREATE_STRUCTURE')")
      *
      * @param Request $request
      */
@@ -140,7 +156,7 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/addStructureType", name="manage_structures_add_structure_type")
-     * @Security("is_granted('CAN_CREATE_STRUCTURE_TYPE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_CREATE_STRUCTURE_TYPE')")
      *
      * @param Request $request
      */
@@ -174,7 +190,7 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/editStructure/{structureId}", name="manage_structures_edit_structure")
-     * @Security("is_granted('CAN_EDIT_STRUCTURE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_EDIT_STRUCTURE')")
      *
      * @param Request $request
      */
@@ -212,7 +228,7 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/editStructureType/{structureTypeId}", name="manage_structures_edit_structure_type")
-     * @Security("is_granted('CAN_EDIT_STRUCTURE_TYPE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_EDIT_STRUCTURE_TYPE')")
      *
      * @param Request $request
      */
@@ -251,7 +267,7 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/removeStructure/{structureId}", name="manage_structures_remove_structure")
-     * @Security("is_granted('CAN_DELETE_STRUCTURE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_DELETE_STRUCTURE')")
      *
      * @param Request $request
      */
@@ -294,7 +310,7 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/removeStructureType/{structureTypeId}", name="manage_structures_remove_structure_type")
-     * @Security("is_granted('CAN_DELETE_STRUCTURE_TYPE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_DELETE_STRUCTURE_TYPE')")
      *
      * @param Request $request
      */
@@ -337,7 +353,7 @@ class StructureController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageStructures/dissociateStructure/{structureId}", name="manage_structures_dissociate_structure")
-     * @Security("is_granted('CAN_EDIT_STRUCTURE')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_EDIT_STRUCTURE')")
      *
      * @param Request $request
      */

@@ -126,4 +126,22 @@ class StructureRepository extends ServiceEntityRepository
 
         return $pagerfanta;
     }
+
+    /**
+     * @param array $portfolios
+     *
+     * @return array
+     */
+    public function getStructuresForPortfolios(
+        array $portfolios
+    ): array {
+        $queryBuilder = $this->createQueryBuilder('s');
+
+        $queryBuilder
+            ->orderBy('s.id', 'DESC')
+            ->where($queryBuilder->expr()->in('s.portfolio', ':portfolios'))
+            ->setParameter('portfolios', $portfolios);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

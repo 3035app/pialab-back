@@ -174,7 +174,7 @@ class PiaTemplateController extends RestController
             throw new AccessDeniedHttpException();
         }
 
-        if ($resource->getStructure() !== $this->getUser()->getStructure()) {
+        if (!$resource->getStructures()->contains($this->getUser()->getStructure())) {
             throw new AccessDeniedHttpException();
         }
     }

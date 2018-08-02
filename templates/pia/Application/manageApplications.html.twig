@@ -117,13 +117,15 @@
         </div>
 
         <div class="four wide column">
-            <div class="ui segment">
+            {% if is_granted('CAN_CREATE_APPLICATION') %}
+                <div class="ui segment">
 
-                <h2>{{ 'pia.applications.add.title'|trans }}</h2>
+                    <h2>{{ 'pia.applications.add.title'|trans }}</h2>
 
-                {{ render(controller('PiaApi\\Controller\\BackOffice\\ApplicationController:addApplicationAction')) }}
+                    {{ render(controller('PiaApi\\Controller\\BackOffice\\ApplicationController:addApplicationAction')) }}
 
-            </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 

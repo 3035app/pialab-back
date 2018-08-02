@@ -371,6 +371,14 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * @return bool
+     */
+    public function hasStructure(): bool
+    {
+        return $this->structure !== null;
+    }
+
+    /**
      * @return Structure
      */
     public function getStructure(): ?Structure

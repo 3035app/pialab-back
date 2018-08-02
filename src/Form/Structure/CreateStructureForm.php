@@ -49,17 +49,17 @@ class CreateStructureForm extends BaseForm
 
         if (!$options['portfolio']) {
             $builder
-                    ->add('portfolio', PortfolioChoiceType::class, [
-                        'required' => false,
-                        'label'    => 'pia.structures.forms.create.portfolio',
-                    ]);
+                ->add('portfolio', PortfolioChoiceType::class, [
+                    'required' => false,
+                    'label'    => 'pia.structures.forms.create.portfolio',
+                ]);
         } else {
             $builder
-                    ->add('portfolio', HiddenType::class, [
-                        'required'   => true,
-                        'data'       => $options['portfolio']->getId(),
-                        'data_class' => null,
-                    ]);
+                ->add('portfolio', HiddenType::class, [
+                    'required'   => true,
+                    'data'       => $options['portfolio']->getId(),
+                    'data_class' => null,
+                ]);
         }
 
         $builder

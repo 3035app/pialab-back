@@ -35,7 +35,7 @@ class ApplicationController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageApplications", name="manage_applications")
-     * @Security("is_granted('CAN_SHOW_APPLICATION')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_APPLICATION')")
      */
     public function manageApplicationsAction(Request $request)
     {
@@ -48,7 +48,7 @@ class ApplicationController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageApplications/addApplication", name="manage_applications_add_application")
-     * @Security("is_granted('CAN_CREATE_APPLICATION')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_CREATE_APPLICATION')")
      *
      * @param Request $request
      */
@@ -90,7 +90,7 @@ class ApplicationController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageApplications/editApplication/{applicationId}", name="manage_applications_edit_application")
-     * @Security("is_granted('CAN_EDIT_APPLICATION')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_EDIT_APPLICATION')")
      *
      * @param Request $request
      */
@@ -125,7 +125,7 @@ class ApplicationController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageApplications/removeApplication/{applicationId}", name="manage_applications_remove_application")
-     * @Security("is_granted('CAN_DELETE_APPLICATION')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_DELETE_APPLICATION')")
      *
      * @param Request $request
      */
