@@ -122,7 +122,6 @@ class Processing
     /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing")
      * @JMS\Groups({"Default", "Export"})
-     * @JMS\MaxDepth(1)
      *
      * @var Collection|Pia[]
      */

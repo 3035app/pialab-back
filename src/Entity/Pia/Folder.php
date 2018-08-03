@@ -99,7 +99,6 @@ class Folder implements Timestampable
     /**
      * @ORM\OneToMany(targetEntity="Processing", mappedBy="folder",cascade={"remove"})
      * @JMS\Groups({"Default", "Export"})
-     * @JMS\MaxDepth(2)
      *
      * @var Collection|Processing[]
      */
