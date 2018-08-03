@@ -17,6 +17,8 @@ use Codeception\Util\HttpCode;
  */
 class ProcessingDataTypeCest
 {
+    use _support\ApiFixturesTrait;
+
     public const ROUTE = '/processing-data-types';
 
     private $processingDataType = [];
@@ -41,12 +43,12 @@ class ProcessingDataTypeCest
 
     public function create_processing_data_type_test(\ApiTester $I)
     {
-        $processing = ['id' => 10];
+        $this->createTestProcessing($I);
 
         $I->amGoingTo('Create a new ProcessingDataType');
         $I->login();
 
-        $this->processingDataTypeData['processing_id'] = $processing['id'];
+        $this->processingDataTypeData['processing_id'] = $this->processing['id'];
 
         $I->sendJsonToCreate(ProcessingDataTypeCest::ROUTE, $this->processingDataTypeData);
 

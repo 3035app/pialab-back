@@ -68,4 +68,20 @@ trait ApiFixturesTrait
 
         $this->pia = [];
     }
+
+    private function createTestProcessing(\ApiTester $I): void
+    {
+        $I->login();
+
+        $processingData = [
+            'name' => 'Processing CI',
+            'folder_id' => $I->getRootFolderId(),
+            'author' => 'Author 1',
+            'controllers' => 'Controller 1, Controller 2, Controller 3'
+        ];
+
+        $I->sendJsonToCreate('/processings', $processingData);
+
+        $this->processing = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
+    }
 }
