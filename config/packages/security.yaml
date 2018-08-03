@@ -44,12 +44,19 @@ security:
             - CAN_DELETE_PIA_TEMPLATE
 
         CAN_EXPLORE_PIAS:
+            - CAN_SHOW_PROCESSING
             - CAN_SHOW_PIA
             - CAN_SHOW_FOLDER
             - CAN_SHOW_MEASURE
             - CAN_SHOW_EVALUATION
             - CAN_SHOW_ANSWER
             - CAN_SHOW_COMMENT
+
+        CAN_MANAGE_PROCESSINGS:
+            - CAN_SHOW_PROCESSING
+            - CAN_CREATE_PROCESSING
+            - CAN_EDIT_PROCESSING
+            - CAN_DELETE_PROCESSING
 
         CAN_MANAGE_PIAS:
             - CAN_SHOW_PIA
@@ -130,6 +137,7 @@ security:
 
         ROLE_DPO:
             - ROLE_CONTROLLER
+            - CAN_MANAGE_PROCESSINGS
             - CAN_MANAGE_PIAS
             - CAN_ACCESS_BACK_OFFICE
             - CAN_SHOW_PIA_TEMPLATE
