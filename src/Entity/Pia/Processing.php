@@ -122,6 +122,7 @@ class Processing
     /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing")
      * @JMS\Groups({"Default", "Export"})
+     * @JMS\Exclude()
      *
      * @var Collection|Pia[]
      */
@@ -311,6 +312,17 @@ class Processing
             throw new \InvalidArgumentException(sprintf('ProcessingDataType « %s » does not belong to Processing « #%d »', $processingDataType->getId(), $this->getId()));
         }
         $this->processingDataTypes->removeElement($processingDataType);
+    }
+
+    /**
+     * @JMS\VirtualProperty("piasCount")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return int
+     */
+    public function getPiasCount(): int
+    {
+        return $this->pias->count();
     }
 
     /**
