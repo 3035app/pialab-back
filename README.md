@@ -73,12 +73,15 @@ Note: You can create this user in the backend admin UI.
 ### Request a token
 
 ```http
-GET http://localhost:8000/oauth/v2/token
-    ?client_id=3_3vyy0lw26x6o84kgowc48kc4s4oc0gk0g888c0k4gwsko8g08w
-    &client_secret=4lfse5e5wc2s408sss4sgw440kc84kc4ocwo80os0owgkskk4w
-    &grant_type=password
-    &username=api@pia.io
-    &password=pia
+POST http://localhost:8000/oauth/v2/token
+
+Content-Type: application/x-www-form-urlencoded
+
+client_id=3_3vyy0lw26x6o84kgowc48kc4s4oc0gk0g888c0k4gwsko8g08w
+&client_secret=4lfse5e5wc2s408sss4sgw440kc84kc4ocwo80os0owgkskk4w
+&grant_type=password
+&username=api@pia.io
+&password=pia
 ```
 
 Should response something like
