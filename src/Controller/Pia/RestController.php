@@ -12,6 +12,8 @@ namespace PiaApi\Controller\Pia;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\View\View;
 use Doctrine\Common\Util\Inflector as Inflector;
 use PiaApi\Entity\Pia\Pia;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -204,6 +206,19 @@ abstract class RestController extends FOSRestController
     public function canAccessResourceOr403($resource): void
     {
         // Each controllers should define this method to perform a fine access control
+    }
+
+    public function showEntity(int $id): View
+    {
+        $entity = $this->getRepository()->find($id);
+
+        if ($entity === null) {
+            return $this->view($entity, Response::HTTP_NOT_FOUND);
+        }
+
+        $this->canAccessResourceOr403($entity);
+
+        return $this->view($entity, Response::HTTP_OK);
     }
 
     /**
