@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Codeception\Util\HttpCode;
+
 class ApiTester extends \Codeception\Actor
 {
     use _generated\ApiTesterActions;
@@ -156,5 +158,56 @@ class ApiTester extends \Codeception\Actor
     public function getRefreshToken(): ?string
     {
         return $this->refreshToken;
+    }
+
+    public function setJsonHeader()
+    {
+        $this->haveHttpHeader('Content-Type', 'application/json');
+    }
+
+    public function sendJsonToEdit(string $route, array $data)
+    {
+        $this->setJsonHeader();
+        $this->sendPUT($route, $data);
+    }
+
+    public function sendJsonToShow(string $route)
+    {
+        $this->setJsonHeader();
+        $this->sendGET($route);
+    }
+
+    public function sendJsonToCreate(string $route, array $data)
+    {
+        $this->setJsonHeader();
+        $this->sendPOST($route, $data);
+    }
+
+    public function sendJsonToDelete(string $route)
+    {
+        $this->setJsonHeader();
+        $this->sendDELETE($route);
+    }
+
+    public function seeCorrectJsonResponse($processingJsonType)
+    {
+        $this->seeResponseCodeIs(HttpCode::OK);
+        $this->seeResponseIsJson();
+
+        $this->seeResponseMatchesJsonType($processingJsonType);
+    }
+
+    public function getRootFolderId()
+    {
+        $rootData = [
+            'name' => 'codecept-root',
+        ];
+
+        $this->setJsonHeader();
+        $this->sendPOST('/folders', $rootData);
+
+        $id = json_decode(json_encode($this->getPreviousResponse()), JSON_OBJECT_AS_ARRAY)['id'];
+
+        return $id;
     }
 }
