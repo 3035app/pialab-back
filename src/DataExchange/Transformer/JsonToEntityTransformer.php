@@ -151,4 +151,15 @@ class JsonToEntityTransformer
 
         return $serializedPia;
     }
+
+    public function entityToJson($object): string
+    {
+        $context = SerializationContext::create();
+        $context->setGroups(['Export']);
+
+        $serializedObject = $this->serializer->serialize($object, 'json', $context);
+
+        return $serializedObject;
+    }
+
 }

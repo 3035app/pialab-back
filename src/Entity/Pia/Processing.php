@@ -130,7 +130,7 @@ class Processing
 
     /**
      * @ORM\ManyToOne(targetEntity="Folder", inversedBy="processings")
-     * @JMS\Groups({"Default", "Export"})
+     * @JMS\Groups({"Default"})
      * @JMS\MaxDepth(1)
      *
      * @var Folder
