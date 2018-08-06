@@ -21,6 +21,7 @@ use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use PiaApi\DataHandler\RequestDataHandler;
 
 class ProcessingController extends RestController
 {
@@ -97,7 +98,6 @@ class ProcessingController extends RestController
         return $this->showEntity($id);
     }
 
-
     /**
      * Creates a Processing.
      *
@@ -134,7 +134,6 @@ class ProcessingController extends RestController
 
         return $this->view($processing, Response::HTTP_OK);
     }
-
 
     /**
      * Updates a processing.
