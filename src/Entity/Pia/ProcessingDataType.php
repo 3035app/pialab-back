@@ -15,7 +15,7 @@ use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PiaApi\Repository\ProcessingDataTypeRepository")
  * @ORM\Table(name="pia_processing_data_type")
  */
 class ProcessingDataType
@@ -31,7 +31,7 @@ class ProcessingDataType
     protected $reference;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="json", nullable=true)
      * @JMS\Type("array")
      * @JMS\Groups({"Default", "Export"})
      *
@@ -40,7 +40,7 @@ class ProcessingDataType
     protected $data = [];
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @JMS\Groups({"Default", "Export"})
      *
      * @var string
@@ -58,14 +58,16 @@ class ProcessingDataType
     /**
      * @ORM\ManyToOne(targetEntity="Processing", inversedBy="processingDataTypes")
      * @JMS\Groups({"Default", "Export"})
+     * @JMS\Exclude()
      *
      * @var Processing
      */
     protected $processing;
 
-    public function __construct(Processing $processing)
+    public function __construct(Processing $processing, string $reference)
     {
         $this->processing = $processing;
+        $this->reference = $reference;
     }
 
     /**
@@ -130,5 +132,21 @@ class ProcessingDataType
     public function setProcessing(Processing $processing): void
     {
         $this->processing = $processing;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReference(): string
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @param string $reference
+     */
+    public function setReference(string $reference): void
+    {
+        $this->reference = $reference;
     }
 }
