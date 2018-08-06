@@ -12,10 +12,8 @@ namespace PiaApi\Repository;
 
 use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\Structure;
-
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 
@@ -48,5 +46,4 @@ class ProcessingRepository extends ServiceEntityRepository
 
         return $pagerfanta->getCurrentPageResults()->getArrayCopy();
     }
-
 }

@@ -41,13 +41,13 @@ class RoleHierarchy
         }
         $this->roleHierarchy = $roleHierarchy;
     }
-    
+
     protected function getUserRoles(User $user): array
     {
         $userRoles = array_map(function ($roleName) {
             return new Role($roleName);
         }, $user->getRoles());
-        
+
         return $userRoles;
     }
 
@@ -55,18 +55,18 @@ class RoleHierarchy
     {
         // Core roleHierarchy needs a Role array but we use string array
         $userRoles = $this->getUserRoles($user);
-      
+
         $reachableRoleNames = array_map(function ($role) {
             return $role->getRole();
         }, $this->roleHierarchy->getReachableRoles($userRoles));
-        
+
         return $reachableRoleNames;
     }
 
     protected function getAcessibleRoles(User $user): array
     {
         $reachableRoleNames = $this->getReachableRoles($user);
-        
+
         return array_intersect($this->definedRoles, $reachableRoleNames);
     }
 
@@ -81,12 +81,12 @@ class RoleHierarchy
 
         return in_array($roleOrPermission, $reachableRoleNames);
     }
-    
+
     public function hasHigherRole(User $current_user, User $other_user)
     {
         $current_roles = $this->getAcessibleRoles($current_user);
         $other_roles = $this->getAcessibleRoles($other_user);
-        
+
         return count($current_roles) >= count($other_roles);
     }
 }

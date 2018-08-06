@@ -10,11 +10,11 @@
 
 namespace PiaApi\Controller\Pia;
 
-use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Services\ProcessingService;
 use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
+use PiaApi\DataHandler\RequestDataHandler;
 
 use JMS\Serializer\SerializerInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
@@ -24,7 +24,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class ProcessingController extends RestController
@@ -116,7 +115,6 @@ class ProcessingController extends RestController
         return $this->showEntity($id);
     }
 
-
     /**
      * Creates a Processing.
      *
@@ -153,7 +151,6 @@ class ProcessingController extends RestController
 
         return $this->view($processing, Response::HTTP_OK);
     }
-
 
     /**
      * Updates a processing.

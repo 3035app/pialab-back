@@ -47,7 +47,7 @@ class ProcessingCest
         'controllers'           => 'string',
         'non_eu_transfer'       => 'string|null',
         'processing_data_types' => 'array',
-        'pias'                  => 'array',
+        'pias_count'            => 'integer',
         'folder'                => 'array',
         'id'                    => 'integer',
         'created_at'            => 'string',
