@@ -26,7 +26,7 @@ class ProcessingCest
      */
     private $processingData = [
         'name' => 'Processing CI',
-        'folder_id' => null,
+        'folder' => [],
         'author' => 'Author 1',
         'controllers' => 'Controller 1, Controller 2, Controller 3'
     ];
@@ -58,7 +58,7 @@ class ProcessingCest
         $I->amGoingTo('Create a new Processing');
         $I->login();
 
-        $this->processingData['folder_id'] = $I->getRootFolderId();
+        $this->processingData['folder'] = $I->getRootFolder();
 
         $I->sendJsonToCreate(ProcessingCest::ROUTE, $this->processingData);
 
