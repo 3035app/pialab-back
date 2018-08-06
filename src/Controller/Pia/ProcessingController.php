@@ -120,8 +120,8 @@ class ProcessingController extends RestController
      */
     public function createAction(Request $request)
     {
-        
-        $folder = $this->getResource($request->get('folder_id', -1), Folder::class);
+        $entity = $this->get('jms_serializer')->deserialize($request->getContent(), $this->getEntityClass(), 'json');
+        $folder = $this->getResource($entity->getFolder()->getId(), Folder::class);
 
         $processing = $this->processingService->createProcessing(
             $request->get('name'),

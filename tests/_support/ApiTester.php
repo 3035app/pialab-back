@@ -197,7 +197,7 @@ class ApiTester extends \Codeception\Actor
         $this->seeResponseMatchesJsonType($processingJsonType);
     }
 
-    public function getRootFolderId()
+    public function getRootFolder()
     {
         $rootData = [
             'name' => 'codecept-root',
@@ -206,7 +206,7 @@ class ApiTester extends \Codeception\Actor
         $this->setJsonHeader();
         $this->sendPOST('/folders', $rootData);
 
-        $id = json_decode(json_encode($this->getPreviousResponse()), JSON_OBJECT_AS_ARRAY)['id'];
+        $id = json_decode(json_encode($this->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
 
         return $id;
     }
