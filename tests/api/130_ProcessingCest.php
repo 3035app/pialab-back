@@ -20,15 +20,16 @@ class ProcessingCest
     public const ROUTE = '/processings';
 
     private $processing = [];
+    private $route = '';
 
     /**
      * @var array
      */
     private $processingData = [
-        'name' => 'Processing CI',
-        'folder' => [],
-        'author' => 'Author 1',
-        'controllers' => 'Controller 1, Controller 2, Controller 3'
+        'name'        => 'Processing CI',
+        'folder'      => [],
+        'author'      => 'Author 1',
+        'controllers' => 'Controller 1, Controller 2, Controller 3',
     ];
 
     /**
@@ -68,6 +69,8 @@ class ProcessingCest
         ]);
 
         $this->processing = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
+
+        $this->route = ProcessingCest::ROUTE . '/' . $this->processing['id'];
     }
 
     /**
@@ -93,9 +96,26 @@ class ProcessingCest
         $I->amGoingTo('Show newly created Processing, with id: ' . $this->processing['id']);
         $I->login();
 
-        $I->sendJsonToShow(ProcessingCest::ROUTE . '/' . $this->processing['id']);
+        $I->sendJsonToShow($this->route);
 
         $I->seeCorrectJsonResponse($this->processingJsonType);
+        $I->seeResponseContainsJson([
+            'name'  => $this->processingData['name'],
+            'id'    => $this->processing['id'],
+        ]);
+    }
+
+    /*
+     * @depends create_processing_test
+     */
+    public function export_processing_test(ApiTester $I)
+    {
+        $I->amGoingTo('Export a processing with id: ' . $this->processing['id']);
+        $I->login();
+
+        $I->setJsonHeader();
+        $I->sendGET($this->route . '/export');
+
         $I->seeResponseContainsJson([
             'name'  => $this->processingData['name'],
             'id'    => $this->processing['id'],
@@ -116,14 +136,13 @@ class ProcessingCest
             'name' => $name,
         ]);
 
-        $I->sendJsonToEdit(ProcessingCest::ROUTE . '/' . $this->processing['id'], $data);
+        $I->sendJsonToEdit($this->route, $data);
 
         $I->seeCorrectJsonResponse($this->processingJsonType);
         $I->seeResponseContainsJson([
             'name' => $name,
         ]);
     }
-
 
     /*
      * @depends create_processing_test
@@ -133,7 +152,7 @@ class ProcessingCest
         $I->amGoingTo('Remove processing, with id: ' . $this->processing['id']);
         $I->login();
 
-        $I->sendJsonToDelete(ProcessingCest::ROUTE . '/' . $this->processing['id']);
+        $I->sendJsonToDelete($this->route);
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }
