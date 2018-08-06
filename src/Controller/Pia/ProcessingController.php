@@ -10,10 +10,8 @@
 
 namespace PiaApi\Controller\Pia;
 
-use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Services\ProcessingService;
 use PiaApi\Entity\Pia\Processing;
-
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
@@ -21,7 +19,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class ProcessingController extends RestController

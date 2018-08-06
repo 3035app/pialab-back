@@ -21,16 +21,14 @@ class ProcessingService extends AbstractService
     }
 
     /**
-     * 
-     * @param string    $name
-     * @param Folder    $folder
-     * 
+     * @param string $name
+     * @param Folder $folder
+     *
      * @return Processing
      */
     public function createProcessing(string $name, Folder $folder): Processing
     {
         $processing = new Processing($name, $folder);
-
 
         return $processing;
     }
