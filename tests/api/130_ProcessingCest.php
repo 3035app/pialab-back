@@ -25,10 +25,10 @@ class ProcessingCest
      * @var array
      */
     private $processingData = [
-        'name' => 'Processing CI',
-        'folder' => [],
-        'author' => 'Author 1',
-        'controllers' => 'Controller 1, Controller 2, Controller 3'
+        'name'        => 'Processing CI',
+        'folder'      => [],
+        'author'      => 'Author 1',
+        'controllers' => 'Controller 1, Controller 2, Controller 3',
     ];
 
     /**
@@ -46,7 +46,7 @@ class ProcessingCest
         'controllers'           => 'string',
         'non_eu_transfer'       => 'string|null',
         'processing_data_types' => 'array',
-        'pias'                  => 'array',
+        'pias_count'            => 'integer',
         'folder'                => 'array',
         'id'                    => 'integer',
         'created_at'            => 'string',
@@ -123,7 +123,6 @@ class ProcessingCest
             'name' => $name,
         ]);
     }
-
 
     /*
      * @depends create_processing_test

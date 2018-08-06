@@ -32,7 +32,6 @@ class ProcessingService extends AbstractService
     public function createProcessing(string $name, Folder $folder, string $author, string $controllers): Processing
     {
         $processing = new Processing($name, $folder, $author, $controllers);
-        
         return $processing;
     }
 }
