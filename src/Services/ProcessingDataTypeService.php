@@ -26,9 +26,9 @@ class ProcessingDataTypeService extends AbstractService
      * 
      * @return ProcessingDataType
      */
-    public function createProcessingDataType(Processing $processing): ProcessingDataType
+    public function createProcessingDataType(Processing $processing, string $reference): ProcessingDataType
     {
-        $processingDataType = new ProcessingDataType($processing);
+        $processingDataType = new ProcessingDataType($processing, $reference);
         
         return $processingDataType;
     }

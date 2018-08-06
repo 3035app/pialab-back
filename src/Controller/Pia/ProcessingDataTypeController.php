@@ -124,9 +124,11 @@ class ProcessingDataTypeController extends RestController
     public function createAction(Request $request)
     {
         $processing = $this->getResource($request->get('processing_id', -1), Processing::class);
+        $reference = $request->get('reference', null);
 
         $processingDataType = $this->processingDataTypeService->createProcessingDataType(
-            $processing
+            $processing,
+            $reference
         );
 
         $this->persist($processingDataType);

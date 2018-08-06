@@ -23,7 +23,7 @@ class ProcessingDataType
     use ResourceTrait;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
      *
      * @var string
@@ -64,9 +64,10 @@ class ProcessingDataType
      */
     protected $processing;
 
-    public function __construct(Processing $processing)
+    public function __construct(Processing $processing, string $reference)
     {
         $this->processing = $processing;
+        $this->reference = $reference;
     }
 
     /**
