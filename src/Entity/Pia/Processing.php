@@ -392,6 +392,22 @@ class Processing
     }
 
     /**
+     * @return string
+     */
+    public function getStorage() : ?string
+    {
+        return $this->storage;
+    }
+
+    /**
+     * @param string $storage
+     */
+    public function setStorage(?string $storage): void
+    {
+        $this->storage = $storage;
+    }
+
+    /**
      * @return int
      */
     public function getStatus(): int

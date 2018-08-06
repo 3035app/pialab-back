@@ -17,8 +17,23 @@ use Codeception\Util\HttpCode;
  */
 class ProcessingCest
 {
-    use _support\ApiFixturesTrait;
+    public const ROUTE = '/processings';
 
+    private $processing = [];
+
+    /**
+     * @var array
+     */
+    private $processingData = [
+        'name' => 'Processing CI',
+        'folder_id' => null,
+        'author' => 'Author 1',
+        'controllers' => 'Controller 1, Controller 2, Controller 3'
+    ];
+
+    /**
+     * @var array
+     */
     private $processingJsonType = [
         'name'                  => 'string',
         'author'                => 'string',
@@ -38,15 +53,88 @@ class ProcessingCest
         'updated_at'            => 'string',
     ];
 
+    public function create_processing_test(\ApiTester $I)
+    {
+        $I->amGoingTo('Create a new Processing');
+        $I->login();
+
+        $this->processingData['folder_id'] = $I->getRootFolderId();
+
+        $I->sendJsonToCreate(ProcessingCest::ROUTE, $this->processingData);
+
+        $I->seeCorrectJsonResponse($this->processingJsonType);
+        $I->seeResponseContainsJson([
+            'name' => $this->processingData['name'],
+        ]);
+
+        $this->processing = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
+    }
+
+    /**
+     * @depends create_processing_test
+     */
     public function list_processings_test(\ApiTester $I)
     {
         $I->amGoingTo('List available Processings');
 
         $I->login();
 
-        $I->sendGET('/processings');
+        $I->sendGET(ProcessingCest::ROUTE);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
+    }
+
+    /**
+     * @depends create_processing_test
+     */
+    public function show_processing_test(\ApiTester $I)
+    {
+        $I->amGoingTo('Show newly created Processing, with id: ' . $this->processing['id']);
+        $I->login();
+
+        $I->sendJsonToShow(ProcessingCest::ROUTE . '/' . $this->processing['id']);
+
+        $I->seeCorrectJsonResponse($this->processingJsonType);
+        $I->seeResponseContainsJson([
+            'name'  => $this->processingData['name'],
+            'id'    => $this->processing['id'],
+        ]);
+    }
+
+    /**
+     * @depends create_processing_test
+     */
+    public function edit_processing_test(ApiTester $I)
+    {
+        $I->amGoingTo('Edit newly created processing, with id: ' . $this->processing['id']);
+        $I->login();
+
+        $name = $this->processing['name'] . '-edited';
+
+        $data = array_merge($this->processing, [
+            'name' => $name,
+        ]);
+
+        $I->sendJsonToEdit(ProcessingCest::ROUTE . '/' . $this->processing['id'], $data);
+
+        $I->seeCorrectJsonResponse($this->processingJsonType);
+        $I->seeResponseContainsJson([
+            'name' => $name,
+        ]);
+    }
+
+
+    /*
+     * @depends create_processing_test
+     */
+    public function remove_processing_test(ApiTester $I)
+    {
+        $I->amGoingTo('Remove processing, with id: ' . $this->processing['id']);
+        $I->login();
+
+        $I->sendJsonToDelete(ProcessingCest::ROUTE . '/' . $this->processing['id']);
+
+        $I->seeResponseCodeIs(HttpCode::OK);
     }
 }
