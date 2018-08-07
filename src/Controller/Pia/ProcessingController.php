@@ -15,7 +15,6 @@ use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
-
 use JMS\Serializer\SerializerInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
@@ -37,7 +36,7 @@ class ProcessingController extends RestController
      * @var jsonToEntityTransformer
      */
     protected $jsonToEntityTransformer;
-    
+
     /**
      * @var SerializerInterface
      */
@@ -250,12 +249,10 @@ class ProcessingController extends RestController
      */
     public function exportAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
+        $processing = $this->getResource($id);
+        $this->canAccessResourceOr403($processing);
 
-        $pia = $this->getRepository()->find($id);
-        $this->canAccessResourceOr403($pia);
-
-        $serializedPia = $this->jsonToEntityTransformer->entityToJson($pia);
+        $serializedPia = $this->jsonToEntityTransformer->entityToJson($processing);
 
         return new Response($serializedPia, Response::HTTP_OK);
     }
