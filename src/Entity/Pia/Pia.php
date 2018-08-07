@@ -214,7 +214,8 @@ class Pia implements Timestampable
 
     /**
      * @ORM\ManyToOne(targetEntity="Processing", inversedBy="pias")
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Default", "Full"})
+     * @JMS\MaxDepth(1)
      *
      * @var Processing
      */

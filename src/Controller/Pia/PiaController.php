@@ -10,19 +10,20 @@
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use PiaApi\Entity\Pia\Pia;
-use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
-use PiaApi\Entity\Pia\PiaTemplate;
-use Swagger\Annotations as Swg;
+use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
+use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
+use PiaApi\Entity\Pia\Pia;
+use PiaApi\Entity\Pia\PiaTemplate;
+use PiaApi\Entity\Pia\Processing;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as Swg;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class PiaController extends RestController
 {
@@ -64,7 +65,7 @@ class PiaController extends RestController
         $structure = $this->getUser()->getStructure();
 
         $criteria = array_merge($this->extractCriteria($request), ['structure' => $structure]);
-        $collection = $this->getRepository()->findBy($criteria);
+        $collection = $this->getRepository()->findBy($criteria, ['createdAt' => 'DESC']);
 
         return $this->view($collection, Response::HTTP_OK);
     }
@@ -125,6 +126,16 @@ class PiaController extends RestController
     {
         $pia = $this->newFromRequest($request);
         $pia->setStructure($this->getUser()->getStructure());
+
+        $processingId = $request->get('processing', ['id' => -1])['id'];
+
+        $processing = $this->getResource($processingId, Processing::class);
+
+        if ($processing === null) {
+            return $this->view(['You must set Processing to create PIA'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $pia->setProcessing($processing);
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
@@ -211,6 +222,7 @@ class PiaController extends RestController
             'dpos_names'                         => RequestDataHandler::TYPE_STRING,
             'people_names'                       => RequestDataHandler::TYPE_STRING,
             'type'                               => RequestDataHandler::TYPE_STRING,
+            'processing'                         => Processing::class,
         ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);

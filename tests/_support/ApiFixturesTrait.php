@@ -19,6 +19,9 @@ trait ApiFixturesTrait
         'validator_name'                    => 'codecept-validator',
         'type'                              => 'regular',
         'concerned_people_searched_opinion' => 0,
+        'processing'                        => [
+            'id' => null,
+        ],
     ];
 
     private $piaJsonType = [
@@ -51,9 +54,7 @@ trait ApiFixturesTrait
     {
         $I->login();
 
-        $I->amBearerAuthenticated($I->getToken());
-        $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('/pias', $this->piaDatas);
+        $I->sendJsonToCreate('/pias', $this->piaDatas);
 
         $this->pia = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
     }
@@ -62,9 +63,7 @@ trait ApiFixturesTrait
     {
         $I->login();
 
-        $I->amBearerAuthenticated($I->getToken());
-        $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE('/pias/' . $this->pia['id']);
+        $I->sendJsonToDelete('/pias/' . $this->pia['id']);
 
         $this->pia = [];
     }
@@ -83,5 +82,17 @@ trait ApiFixturesTrait
         $I->sendJsonToCreate('/processings', $processingData);
 
         $this->processing = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
+
+        $this->piaDatas['processing']['id'] = $this->processing['id'];
+    }
+
+    private function removeTestProcessing(\ApiTester $I): void
+    {
+        $I->login();
+
+        $I->sendJsonToDelete('/processings/' . $this->processing['id']);
+
+        $this->processing = null;
+        $this->piaDatas['processing']['id'] = null;
     }
 }
