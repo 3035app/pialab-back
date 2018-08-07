@@ -13,4 +13,4 @@ modules:
             populate: true
             cleanup: false
             password: '%DBROOTPASSWORD%'
-            populator: 'psql -U $user $dbname < $dump'
+            # populator: 'psql -U $user $dbname < $dump'
