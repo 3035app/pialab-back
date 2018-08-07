@@ -150,7 +150,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Full", "Export"})
      *
      * @var Collection|Answer[]
      */
@@ -158,7 +158,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Full", "Export"})
      *
      * @var Collection|Comment[]
      */
@@ -166,7 +166,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Full", "Export"})
      *
      * @var Collection|Evaluation[]
      */
@@ -174,7 +174,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Measure", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Full", "Export"})
      *
      * @var Collection|Measure[]
      */
@@ -182,7 +182,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Attachment", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Full", "Export"})
      *
      * @var Collection|Attachment[]
      */

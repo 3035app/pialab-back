@@ -13,6 +13,9 @@ namespace PiaApi\Controller\Pia;
 use PiaApi\Services\ProcessingService;
 use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\Folder;
+use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
+use PiaApi\DataHandler\RequestDataHandler;
+use JMS\Serializer\SerializerInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
@@ -21,21 +24,34 @@ use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use PiaApi\DataHandler\RequestDataHandler;
 
 class ProcessingController extends RestController
 {
     /**
      * @var ProcessingService
      */
-    private $processingService;
+    protected $processingService;
+
+    /**
+     * @var jsonToEntityTransformer
+     */
+    protected $jsonToEntityTransformer;
+
+    /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
 
     public function __construct(
         PropertyAccessorInterface $propertyAccessor,
-        ProcessingService $processingService
+        ProcessingService $processingService,
+        JsonToEntityTransformer $jsonToEntityTransformer,
+        SerializerInterface $serializer
     ) {
         parent::__construct($propertyAccessor);
         $this->processingService = $processingService;
+        $this->jsonToEntityTransformer = $jsonToEntityTransformer;
+        $this->serializer = $serializer;
     }
 
     protected function getEntityClass()
@@ -120,7 +136,7 @@ class ProcessingController extends RestController
      */
     public function createAction(Request $request)
     {
-        $entity = $this->get('jms_serializer')->deserialize($request->getContent(), $this->getEntityClass(), 'json');
+        $entity = $this->serializer->deserialize($request->getContent(), $this->getEntityClass(), 'json');
         $folder = $this->getResource($entity->getFolder()->getId(), Folder::class);
 
         $processing = $this->processingService->createProcessing(
@@ -209,5 +225,35 @@ class ProcessingController extends RestController
         $this->remove($processing);
 
         return $this->view([], Response::HTTP_OK);
+    }
+
+    /**
+     * Exports a PROCESSING.
+     *
+     * @Swg\Tag(name="Processing")
+     *
+     * @FOSRest\Get("/processings/{id}/export", requirements={"id"="\d+"})
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns a PROCESSING",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Processing::class, groups={"Default"})
+     *     )
+     * )
+     *
+     * @Security("is_granted('CAN_EXPORT_PIA')")
+     *
+     * @return array
+     */
+    public function exportAction(Request $request, $id)
+    {
+        $processing = $this->getResource($id);
+        $this->canAccessResourceOr403($processing);
+
+        $serializedPia = $this->jsonToEntityTransformer->entityToJson($processing);
+
+        return new Response($serializedPia, Response::HTTP_OK);
     }
 }
