@@ -65,7 +65,7 @@ class PiaController extends RestController
         $structure = $this->getUser()->getStructure();
 
         $criteria = array_merge($this->extractCriteria($request), ['structure' => $structure]);
-        $collection = $this->getRepository()->findBy($criteria);
+        $collection = $this->getRepository()->findBy($criteria, ['createdAt' => 'DESC']);
 
         return $this->view($collection, Response::HTTP_OK);
     }
