@@ -33,6 +33,8 @@ class PiaCest
 
     public function create_pia_test(\ApiTester $I)
     {
+        $this->createTestProcessing($I);
+
         $I->amGoingTo('Create a PIA');
 
         $I->login();
@@ -103,6 +105,8 @@ class PiaCest
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendDELETE('/pias/' . $this->pia['id']);
+
+        $this->removeTestProcessing($I);
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }
