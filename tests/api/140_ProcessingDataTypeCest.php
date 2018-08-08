@@ -27,8 +27,10 @@ class ProcessingDataTypeCest
      * @var array
      */
     private $processingDataTypeData = [
-        'reference' => 'Reference CI',
-        'processing_id' => null
+        'reference'         => 'Reference CI',
+        'processing_id'     => null,
+        'retention_period'  => 'period',
+        'sensitive'         => true,
     ];
 
     /**
@@ -38,7 +40,7 @@ class ProcessingDataTypeCest
         'reference'         => 'string|null',
         'data'              => 'array',
         'retention_period'  => 'string|null',
-        'sensitive'         => 'boolean'
+        'sensitive'         => 'boolean',
     ];
 
     public function create_processing_data_type_test(\ApiTester $I)
@@ -101,7 +103,7 @@ class ProcessingDataTypeCest
 
         $data = array_merge($this->processingDataType, [
             'reference' => $reference,
-            'data' => $data_field
+            'data'      => $data_field,
         ]);
 
         $I->sendJsonToEdit(ProcessingDataTypeCest::ROUTE . '/' . $this->processingDataType['id'], $data);
@@ -112,8 +114,7 @@ class ProcessingDataTypeCest
         ]);
     }
 
-
-    /**
+    /*
      * @depends create_processing_data_type_test
      */
     public function remove_processing_data_type_test(ApiTester $I)
@@ -125,5 +126,4 @@ class ProcessingDataTypeCest
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }
-
 }
