@@ -239,17 +239,16 @@ class Pia implements Timestampable
      */
     public function computeProgress(): int
     {
-        $questions = 36;
+        $questions = 30;
 
-        if ($this->type == self::TYPE_REGULAR) {
-            $questions = 18;
+        $progress = round((100 / $questions) * count($this->answers ?? []));
+
+        if ($progress > 100) {
+            // Set max progress to 100 for PIAs with more than 30 answers (old ones)
+            $progress = 100;
         }
 
-        if ($this->type == self::TYPE_SIMPLIFIED) {
-            $questions = 6;
-        }
-
-        return round((100 / $questions) * count($this->answers ?? []));
+        return $progress;
     }
 
     /**
