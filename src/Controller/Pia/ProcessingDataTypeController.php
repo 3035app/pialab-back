@@ -122,11 +122,16 @@ class ProcessingDataTypeController extends RestController
     {
         $processing = $this->getResource($request->get('processing_id', -1), Processing::class);
         $reference = $request->get('reference', null);
+        $retention = $request->get('retention_period', null);
+        $sensitive = $request->get('sensitive', null);
 
         $processingDataType = $this->processingDataTypeService->createProcessingDataType(
             $processing,
             $reference
         );
+
+        $processingDataType->setRetentionPeriod($retention);
+        $processingDataType->setSensitive($sensitive);
 
         $this->persist($processingDataType);
 

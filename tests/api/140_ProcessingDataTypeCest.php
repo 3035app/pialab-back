@@ -27,8 +27,10 @@ class ProcessingDataTypeCest
      * @var array
      */
     private $processingDataTypeData = [
-        'reference'     => 'Reference CI',
-        'processing_id' => null,
+        'reference'         => 'Reference CI',
+        'processing_id'     => null,
+        'retention_period'  => 'period',
+        'sensitive'         => true,
     ];
 
     /**
