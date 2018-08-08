@@ -72,7 +72,7 @@ class ProcessingDataType
     /**
      * @return string
      */
-    public function getData(): string
+    public function getData(): ?string
     {
         return $this->data;
     }
