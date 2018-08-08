@@ -32,6 +32,24 @@ class ProcessingCest
         'controllers' => 'Controller 1, Controller 2, Controller 3',
     ];
 
+    private $importData = [
+        'folder_id'  => 1,
+        'processing' => [
+            'name'            => 'ProcessingCI edited',
+            'author'          => 'Author edited',
+            'controllers'     => 'Controllers edited',
+            'description'     => 'Description edited',
+            'processors'      => 'Processors edited',
+            'non_eu_transfer' => 'non eu transfer edited',
+            'life_cycle'      => 'life cycle edited',
+            'storage'         => 'storage edited',
+            'standards'       => 'standards edited',
+            'status'          => 'STATUS_ARCHIVED',
+            'created_at'      => '2018-08-01T17:17:16+0200',
+            'updated_at'      => '2018-08-03T11:55:27+0200',
+        ],
+    ];
+
     /**
      * @var array
      */
@@ -53,6 +71,20 @@ class ProcessingCest
         'created_at'            => 'string',
         'updated_at'            => 'string',
     ];
+
+    public function import_processing_test(\ApiTester $I)
+    {
+        $I->amGoingTo('Import a processing');
+        $I->login();
+
+        $this->importData['folder_id'] = $I->getRootFolder()['id'];
+
+        $I->sendJsonToCreate(ProcessingCest::ROUTE . '/import', $this->importData);
+
+        $I->seeResponseContainsJson([
+            'name'  => $this->importData['processing']['name'],
+        ]);
+    }
 
     public function create_processing_test(\ApiTester $I)
     {
@@ -118,7 +150,6 @@ class ProcessingCest
 
         $I->seeResponseContainsJson([
             'name'  => $this->processingData['name'],
-            'id'    => $this->processing['id'],
         ]);
     }
 

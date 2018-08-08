@@ -30,6 +30,11 @@ class Processing
     const STATUS_DOING = 0;
     const STATUS_ARCHIVED = 1;
 
+    protected const STATUS_NAME = [
+        self::STATUS_DOING      => 'STATUS_DOING',
+        self::STATUS_ARCHIVED   => 'STATUS_ARCHIVED',
+    ];
+
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -185,9 +190,9 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -201,9 +206,9 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLifeCycle(): string
+    public function getLifeCycle(): ?string
     {
         return $this->lifeCycle;
     }
@@ -217,25 +222,9 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDataMedium(): string
-    {
-        return $this->dataMedium;
-    }
-
-    /**
-     * @param string $dataMedium
-     */
-    public function setDataMedium(string $dataMedium): void
-    {
-        $this->dataMedium = $dataMedium;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStandards(): string
+    public function getStandards(): ?string
     {
         return $this->standards;
     }
@@ -249,9 +238,9 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getProcessors(): string
+    public function getProcessors(): ?string
     {
         return $this->processors;
     }
@@ -394,7 +383,7 @@ class Processing
     /**
      * @return string
      */
-    public function getStorage() : ?string
+    public function getStorage(): ?string
     {
         return $this->storage;
     }
@@ -416,6 +405,14 @@ class Processing
     }
 
     /**
+     * @return string
+     */
+    public function getStatusName(): string
+    {
+        return self::STATUS_NAME[$this->status];
+    }
+
+    /**
      * @param int $status
      */
     public function setStatus(int $status): void
@@ -424,5 +421,13 @@ class Processing
             throw new \InvalidArgumentException(sprintf('Status « %d » is not valid', $status));
         }
         $this->status = $status;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getStatusFromName(string $name): int
+    {
+        return array_flip(self::STATUS_NAME)[$name];
     }
 }
