@@ -31,7 +31,7 @@ class ProcessingDataTypeCest
         'processing_id'     => null,
         'retention_period'  => 'period',
         'sensitive'         => true,
-        'data'              => ['data' => 'edited'],
+        'data'              => 'data : edited',
     ];
 
     /**
