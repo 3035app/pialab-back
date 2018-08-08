@@ -13,7 +13,7 @@ use Codeception\Util\HttpCode;
 /**
  * @group all
  * @group api
- * @group api_processing
+ * @group api_processing_data_type
  */
 class ProcessingDataTypeCest
 {
@@ -27,8 +27,8 @@ class ProcessingDataTypeCest
      * @var array
      */
     private $processingDataTypeData = [
-        'reference' => 'Reference CI',
-        'processing_id' => null
+        'reference'     => 'Reference CI',
+        'processing_id' => null,
     ];
 
     /**
@@ -36,9 +36,9 @@ class ProcessingDataTypeCest
      */
     private $processingDataTypeJsonType = [
         'reference'         => 'string|null',
-        'data'              => 'array',
+        'data'              => 'string|null',
         'retention_period'  => 'string|null',
-        'sensitive'         => 'boolean'
+        'sensitive'         => 'boolean',
     ];
 
     public function create_processing_data_type_test(\ApiTester $I)
@@ -84,7 +84,7 @@ class ProcessingDataTypeCest
 
         $I->seeCorrectJsonResponse($this->processingDataTypeJsonType);
         $I->seeResponseContainsJson([
-            'id'    => $this->processingDataType['id'],
+            'id' => $this->processingDataType['id'],
         ]);
     }
 
@@ -97,11 +97,11 @@ class ProcessingDataTypeCest
         $I->login();
 
         $reference = 'Reference edited';
-        $data_field = ['data' => 'edited'];
+        $data_field = 'data-edited';
 
         $data = array_merge($this->processingDataType, [
             'reference' => $reference,
-            'data' => $data_field
+            'data'      => $data_field,
         ]);
 
         $I->sendJsonToEdit(ProcessingDataTypeCest::ROUTE . '/' . $this->processingDataType['id'], $data);
@@ -109,9 +109,9 @@ class ProcessingDataTypeCest
         $I->seeCorrectJsonResponse($this->processingDataTypeJsonType);
         $I->seeResponseContainsJson([
             'reference' => $reference,
+            'data'      => $data_field,
         ]);
     }
-
 
     /**
      * @depends create_processing_data_type_test
@@ -125,5 +125,4 @@ class ProcessingDataTypeCest
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }
-
 }

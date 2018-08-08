@@ -14,7 +14,6 @@ use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Services\ProcessingDataTypeService;
 use PiaApi\Entity\Pia\ProcessingDataType;
 use PiaApi\Entity\Pia\Processing;
-
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
@@ -22,7 +21,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class ProcessingDataTypeController extends RestController
@@ -100,7 +98,6 @@ class ProcessingDataTypeController extends RestController
         return $this->showEntity($id);
     }
 
-
     /**
      * Creates a ProcessingDataType.
      *
@@ -136,7 +133,6 @@ class ProcessingDataTypeController extends RestController
         return $this->view($processingDataType, Response::HTTP_OK);
     }
 
-
     /**
      * Updates a ProcessingDataType.
      *
@@ -164,7 +160,7 @@ class ProcessingDataTypeController extends RestController
 
         $updatableAttributes = [
             'reference'         => RequestDataHandler::TYPE_STRING,
-            'data'              => RequestDataHandler::TYPE_ARRAY,
+            'data'              => RequestDataHandler::TYPE_STRING,
             'retention_period'  => RequestDataHandler::TYPE_STRING,
             'sensitive'         => RequestDataHandler::TYPE_BOOL,
         ];
