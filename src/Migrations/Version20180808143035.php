@@ -25,6 +25,7 @@ class Version20180808143035 extends AbstractMigration implements ContainerAwareI
 
         $this->addSql('ALTER TABLE pia_processing_data_type ALTER data TYPE TEXT');
         $this->addSql('ALTER TABLE pia_processing_data_type ALTER data DROP DEFAULT');
+        $this->addSql('COMMENT ON COLUMN pia_processing_data_type.data IS NULL;');
     }
 
     public function down(Schema $schema)
@@ -33,5 +34,6 @@ class Version20180808143035 extends AbstractMigration implements ContainerAwareI
 
         $this->addSql('ALTER TABLE pia_processing_data_type ALTER data TYPE TEXT');
         $this->addSql('ALTER TABLE pia_processing_data_type ALTER data DROP DEFAULT');
+        $this->addSql('COMMENT ON COLUMN pia_processing_data_type.data IS \'(DC2Type:json)\';');
     }
 }
