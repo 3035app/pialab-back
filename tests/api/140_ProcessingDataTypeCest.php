@@ -13,7 +13,7 @@ use Codeception\Util\HttpCode;
 /**
  * @group all
  * @group api
- * @group api_processing
+ * @group api_processing_data_type
  */
 class ProcessingDataTypeCest
 {
@@ -38,7 +38,7 @@ class ProcessingDataTypeCest
      */
     private $processingDataTypeJsonType = [
         'reference'         => 'string|null',
-        'data'              => 'array',
+        'data'              => 'string|null',
         'retention_period'  => 'string|null',
         'sensitive'         => 'boolean',
     ];
@@ -86,7 +86,7 @@ class ProcessingDataTypeCest
 
         $I->seeCorrectJsonResponse($this->processingDataTypeJsonType);
         $I->seeResponseContainsJson([
-            'id'    => $this->processingDataType['id'],
+            'id' => $this->processingDataType['id'],
         ]);
     }
 
@@ -99,7 +99,7 @@ class ProcessingDataTypeCest
         $I->login();
 
         $reference = 'Reference edited';
-        $data_field = ['data' => 'edited'];
+        $data_field = 'data-edited';
 
         $data = array_merge($this->processingDataType, [
             'reference' => $reference,
@@ -111,10 +111,11 @@ class ProcessingDataTypeCest
         $I->seeCorrectJsonResponse($this->processingDataTypeJsonType);
         $I->seeResponseContainsJson([
             'reference' => $reference,
+            'data'      => $data_field,
         ]);
     }
 
-    /*
+    /**
      * @depends create_processing_data_type_test
      */
     public function remove_processing_data_type_test(ApiTester $I)

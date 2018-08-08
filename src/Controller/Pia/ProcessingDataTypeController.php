@@ -165,7 +165,7 @@ class ProcessingDataTypeController extends RestController
 
         $updatableAttributes = [
             'reference'         => RequestDataHandler::TYPE_STRING,
-            'data'              => RequestDataHandler::TYPE_ARRAY,
+            'data'              => RequestDataHandler::TYPE_STRING,
             'retention_period'  => RequestDataHandler::TYPE_STRING,
             'sensitive'         => RequestDataHandler::TYPE_BOOL,
         ];
