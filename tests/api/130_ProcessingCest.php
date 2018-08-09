@@ -32,7 +32,7 @@ class ProcessingCest
         'controllers' => 'Controller 1, Controller 2, Controller 3',
     ];
 
-    private $importData = [
+    private $importDataPia = [
         'folder_id'  => 1,
         'processing' => [
             'name'            => 'ProcessingCI edited',
@@ -47,6 +47,25 @@ class ProcessingCest
             'status'          => 'STATUS_ARCHIVED',
             'created_at'      => '2018-08-01T17:17:16+0200',
             'updated_at'      => '2018-08-03T11:55:27+0200',
+            'pias'            => [[
+                'name'                              => 'codecept-name-edited',
+                'status'                            => 'SIGNED_VALIDATION',
+                'author_name'                       => 'codecept-author',
+                'evaluator_name'                    => 'codecept-evaluator',
+                'validator_name'                    => 'codecept-validator',
+                'dpo_status'                        => 0,
+                'dpo_opinion'                       => '',
+                'concerned_people_opinion'          => '',
+                'concerned_people_status'           => 0,
+                'concerned_people_searched_opinion' => false,
+                'concerned_people_searched_content' => '',
+                'rejection_reason'                  => '',
+                'applied_adjustments'               => '',
+                'dpos_names'                        => 'dpos',
+                'people_names'                      => '',
+                'is_example'                        => false,
+                'type'                              => 'regular',
+            ]],
         ],
     ];
 
@@ -72,17 +91,17 @@ class ProcessingCest
         'updated_at'            => 'string',
     ];
 
-    public function import_processing_test(\ApiTester $I)
+    public function import_processing_with_pia_test(\ApiTester $I)
     {
-        $I->amGoingTo('Import a processing');
+        $I->amGoingTo('Import a processing with a pia');
         $I->login();
 
-        $this->importData['folder_id'] = $I->getRootFolder()['id'];
+        $this->importDataPia['folder_id'] = $I->getRootFolder()['id'];
 
-        $I->sendJsonToCreate(ProcessingCest::ROUTE . '/import', $this->importData);
+        $I->sendJsonToCreate(ProcessingCest::ROUTE . '/import', $this->importDataPia);
 
         $I->seeResponseContainsJson([
-            'name'  => $this->importData['processing']['name'],
+            'name'  => $this->importDataPia['processing']['name'],
         ]);
     }
 

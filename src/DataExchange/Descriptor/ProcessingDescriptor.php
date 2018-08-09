@@ -13,7 +13,7 @@ namespace PiaApi\DataExchange\Descriptor;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ProcessingDescriptor
+class ProcessingDescriptor extends AbstractDescriptor
 {
     /**
      * @JMS\Type("string")
@@ -114,6 +114,12 @@ class ProcessingDescriptor
      */
     protected $updatedAt = '';
 
+    /**
+     * @JMS\Type("array")
+     * @JMS\Groups({"Default", "Export"})
+     */
+    protected $pias = [];
+
     public function __construct(
         string $name,
         string $author,
@@ -142,39 +148,8 @@ class ProcessingDescriptor
         $this->updatedAt = $updatedAt;
     }
 
-    protected function checkProperty($mode, $method)
+    public function mergePias(array $pias)
     {
-        $attribute = false;
-        $reflect = new \ReflectionClass($this);
-
-        $name = lcfirst(str_replace($mode, '', $method));
-        $properties = array_column($reflect->getProperties(), 'name');
-
-        if (in_array($name, $properties)) {
-            $attribute = $name;
-        }
-
-        return $attribute;
-    }
-
-    public function __call($method, $args)
-    {
-        $value = false;
-
-        if (strpos($method, 'set') !== false) {
-            if ($name = $this->checkProperty('set', $method)) {
-                $this->$name = $args[0];
-            }
-
-            $value = true;
-        }
-
-        if (strpos($method, 'get') !== false) {
-            if ($name = $this->checkProperty('get', $method)) {
-                $value = $this->$name;
-            }
-        }
-
-        return $value;
+        $this->pias = array_merge($this->pias, $pias);
     }
 }

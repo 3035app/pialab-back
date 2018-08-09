@@ -11,15 +11,14 @@
 namespace PiaApi\DataExchange\Transformer;
 
 use PiaApi\Entity\Pia\Processing;
+use PiaApi\Entity\Pia\ProcessingStatus;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\DataExchange\Descriptor\ProcessingDescriptor;
 use PiaApi\Services\ProcessingService;
 use JMS\Serializer\SerializerInterface;
-use JMS\Serializer\SerializationContext;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use PiaApi\Exception\DataImportException;
 
-class ProcessingTransformer
+class ProcessingTransformer extends AbstractTransformer
 {
     /**
      * @var SerializerInterface
@@ -41,14 +40,21 @@ class ProcessingTransformer
      */
     protected $folder = null;
 
+    /**
+     * @var PiaTransformer
+     */
+    protected $piaTransformer;
+
     public function __construct(
         SerializerInterface $serializer,
         ProcessingService $processingService,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        PiaTransformer $piaTransformer
     ) {
         $this->serializer = $serializer;
         $this->processingService = $processingService;
         $this->validator = $validator;
+        $this->piaTransformer = $piaTransformer;
     }
 
     public function setFolder(Folder $folder)
@@ -59,15 +65,6 @@ class ProcessingTransformer
     public function getFolder(): Folder
     {
         return $this->folder;
-    }
-
-    public function toJson(ProcessingDescriptor $descriptor): string
-    {
-        $context = SerializationContext::create();
-        $context->setGroups(['Export']);
-        $context->setSerializeNull(true);
-
-        return $this->serializer->serialize($descriptor, 'json', $context);
     }
 
     public function toProcessing(ProcessingDescriptor $descriptor): Processing
@@ -85,16 +82,9 @@ class ProcessingTransformer
         $processing->setLifeCycle($descriptor->getLifeCycle());
         $processing->setStorage($descriptor->getStorage());
         $processing->setStandards($descriptor->getStandards());
-        $processing->setStatus(Processing::getStatusFromName($descriptor->getStatus()));
+        $processing->setStatus(ProcessingStatus::getStatusFromName($descriptor->getStatus()));
 
         return $processing;
-    }
-
-    public function fromJson(array $json): ProcessingDescriptor
-    {
-        $descriptor = $this->serializer->fromArray($json, ProcessingDescriptor::class);
-
-        return $descriptor;
     }
 
     public function fromProcessing(Processing $processing): ProcessingDescriptor
@@ -114,6 +104,10 @@ class ProcessingTransformer
             $processing->getUpdatedAt()
         );
 
+        $descriptor->mergePias(
+            $this->piaTransformer->importPias($processing->getPias())
+        );
+
         return $descriptor;
     }
 
@@ -126,14 +120,15 @@ class ProcessingTransformer
 
     public function jsonToProcessing(array $json): Processing
     {
-        $descriptor = $this->fromJson($json);
-
-        $errors = $this->validator->validate($descriptor);
-
-        if ($errors->count() > 0) {
-            throw new DataImportException(serialize($errors));
-        }
+        $descriptor = $this->fromJson($json, ProcessingDescriptor::class);
 
         return $this->toProcessing($descriptor);
+    }
+
+    public function extractPia(Processing $processing, array $json)
+    {
+        $this->piaTransformer->setProcessing($processing);
+
+        return $this->piaTransformer->jsonToPia($json);
     }
 }

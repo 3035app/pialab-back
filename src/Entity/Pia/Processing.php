@@ -27,14 +27,6 @@ class Processing
         ResourceTrait,
         TimestampableEntity;
 
-    const STATUS_DOING = 0;
-    const STATUS_ARCHIVED = 1;
-
-    protected const STATUS_NAME = [
-        self::STATUS_DOING      => 'STATUS_DOING',
-        self::STATUS_ARCHIVED   => 'STATUS_ARCHIVED',
-    ];
-
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -57,7 +49,7 @@ class Processing
      *
      * @var int
      */
-    protected $status = self::STATUS_DOING;
+    protected $status = ProcessingStatus::STATUS_DOING;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -125,7 +117,7 @@ class Processing
     protected $processingDataTypes;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing")
+     * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing", cascade={"persist"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\Exclude()
      *
@@ -409,7 +401,7 @@ class Processing
      */
     public function getStatusName(): string
     {
-        return self::STATUS_NAME[$this->status];
+        return ProcessingStatus::getStatusName($this->status);
     }
 
     /**
@@ -417,17 +409,9 @@ class Processing
      */
     public function setStatus(int $status): void
     {
-        if ($status !== self::STATUS_DOING && $status !== self::STATUS_ARCHIVED) {
+        if (!ProcessingStatus::isValid($status)) {
             throw new \InvalidArgumentException(sprintf('Status « %d » is not valid', $status));
         }
         $this->status = $status;
-    }
-
-    /**
-     * @return int
-     */
-    public static function getStatusFromName(string $name): int
-    {
-        return array_flip(self::STATUS_NAME)[$name];
     }
 }

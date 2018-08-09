@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\DataExchange\Transformer\ProcessingTransformer;
 use PiaApi\Exception\DataImportException;
+use PiaApi\DataExchange\Descriptor\ProcessingDescriptor;
 
 class ProcessingController extends RestController
 {
@@ -285,6 +286,12 @@ class ProcessingController extends RestController
             $processing = $this->processingTransformer->jsonToProcessing($data);
         } catch (DataImportException $ex) {
             return $this->view(unserialize($ex->getMessage()), Response::HTTP_OK);
+        }
+
+        $this->persist($processing);
+
+        foreach ($this->processingTransformer->fromJson($data, ProcessingDescriptor::class)->getPias() as $pia) {
+            $processing->addPia($this->processingTransformer->extractPia($processing, $pia));
         }
 
         $this->persist($processing);
