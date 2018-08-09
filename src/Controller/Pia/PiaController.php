@@ -175,6 +175,7 @@ class PiaController extends RestController
         $pia->setEvaluatorName($request->get('evaluator_name', $pia->getEvaluatorName()));
         $pia->setValidatorName($request->get('validator_name', $pia->getValidatorName()));
         $pia->setStructure($this->getUser()->getStructure());
+        $pia->setProcessing($this->getResource($request->get('processing', ['id' => -1])['id'], Processing::class));
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
