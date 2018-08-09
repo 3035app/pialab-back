@@ -55,8 +55,6 @@ class JsonToEntityTransformer
             $objectAsArray = $this->validator->parseAndValidate($jsonOrArray);
         }
 
-        // dump($objectAsArray);
-
         // Creates the PIA
 
         /** @var Pia $pia */
@@ -161,5 +159,4 @@ class JsonToEntityTransformer
 
         return $serializedObject;
     }
-
 }
