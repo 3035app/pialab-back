@@ -109,7 +109,7 @@ pia:
             structure_types_number: Types de structure
 
         add:
-            title: Ajouter une application
+            title: Ajouter un gabarit
 
         modals:
             remove:
