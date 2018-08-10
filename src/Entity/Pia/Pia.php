@@ -31,6 +31,9 @@ class Pia implements Timestampable
     const TYPE_SIMPLIFIED = 'simplified';
     const TYPE_ADVANCED = 'advanced';
 
+    const QUESTION_NUMBER = 30;
+    const OLD_QUESTION_NUMBER = 36;
+
     /**
      * @ORM\Column(type="smallint")
      * @JMS\Groups({"Default", "Export"})
@@ -239,14 +242,14 @@ class Pia implements Timestampable
      */
     public function computeProgress(): int
     {
-        $questions = 30;
+        $currentAnswerCount = count($this->answers ?? []);
+        $currentQuestionCount = Pia::QUESTION_NUMBER;
 
-        $progress = round((100 / $questions) * count($this->answers ?? []));
-
-        if ($progress > 100) {
-            // Set max progress to 100 for PIAs with more than 30 answers (old ones)
-            $progress = 100;
+        if ($currentAnswerCount > $currentQuestionCount) {
+            $currentQuestionCount = Pia::OLD_QUESTION_NUMBER;
         }
+
+        $progress = round((100 / $currentQuestionCount) * $currentAnswerCount);
 
         return $progress;
     }
