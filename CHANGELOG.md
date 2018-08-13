@@ -1,5 +1,28 @@
 # Change Log
 
+## [1.4.0](https://github.com/pia-lab/pialab-back/tree/1.4.0) (2018-08-10)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.3.0...1.4.0)
+
+**Merged pull requests:**
+
+- Fix create PIA from template [\#60](https://github.com/pia-lab/pialab-back/pull/60) ([PapsOu](https://github.com/PapsOu))
+- Add data field to the data type [\#58](https://github.com/pia-lab/pialab-back/pull/58) ([Fabrice-li](https://github.com/Fabrice-li))
+- Add fields to the creation of a data type [\#57](https://github.com/pia-lab/pialab-back/pull/57) ([Fabrice-li](https://github.com/Fabrice-li))
+- Change ProcessingDataType from json to string [\#56](https://github.com/pia-lab/pialab-back/pull/56) ([PapsOu](https://github.com/PapsOu))
+- Fix Pia progress count [\#55](https://github.com/pia-lab/pialab-back/pull/55) ([PapsOu](https://github.com/PapsOu))
+- Try to fix PIA create [\#53](https://github.com/pia-lab/pialab-back/pull/53) ([PapsOu](https://github.com/PapsOu))
+- Fix a bug whith processing testing [\#52](https://github.com/pia-lab/pialab-back/pull/52) ([Fabrice-li](https://github.com/Fabrice-li))
+- Add export action for processing entity [\#51](https://github.com/pia-lab/pialab-back/pull/51) ([Fabrice-li](https://github.com/Fabrice-li))
+- Fix the processing create action [\#50](https://github.com/pia-lab/pialab-back/pull/50) ([Fabrice-li](https://github.com/Fabrice-li))
+- Fix processing serialization [\#49](https://github.com/pia-lab/pialab-back/pull/49) ([PapsOu](https://github.com/PapsOu))
+- Processing Data Type - Add CRUDL methods [\#48](https://github.com/pia-lab/pialab-back/pull/48) ([Fabrice-li](https://github.com/Fabrice-li))
+- Processing - Add Create, Edit, Delete method to the processing API [\#47](https://github.com/pia-lab/pialab-back/pull/47) ([Fabrice-li](https://github.com/Fabrice-li))
+- Fix back button when requesting a password reset [\#45](https://github.com/pia-lab/pialab-back/pull/45) ([GlennCavarle](https://github.com/GlennCavarle))
+- \(Processing\) - Add List action [\#44](https://github.com/pia-lab/pialab-back/pull/44) ([Fabrice-li](https://github.com/Fabrice-li))
+- FOS\_REST - Replace paths with a global tag [\#43](https://github.com/pia-lab/pialab-back/pull/43) ([Fabrice-li](https://github.com/Fabrice-li))
+- Add Processing entity [\#41](https://github.com/pia-lab/pialab-back/pull/41) ([PapsOu](https://github.com/PapsOu))
+- Update /oauth/v2/token example [\#40](https://github.com/pia-lab/pialab-back/pull/40) ([PapsOu](https://github.com/PapsOu))
+
 ## [1.3.0](https://github.com/pia-lab/pialab-back/tree/1.3.0) (2018-08-01)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.4...1.3.0)
 
