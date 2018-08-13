@@ -1,6 +1,9 @@
 # Change Log
 
-## [1.4.0](https://github.com/pia-lab/pialab-back/tree/1.4.0) (2018-08-10)
+## [1.4.1](https://github.com/pia-lab/pialab-back/tree/1.4.1) (2018-08-13)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.0...1.4.1)
+
+## [1.4.0](https://github.com/pia-lab/pialab-back/tree/1.4.0) (2018-08-13)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.3.0...1.4.0)
 
 **Merged pull requests:**
