@@ -136,6 +136,7 @@ class UserService extends AbstractService
      */
     public function generateUsername(User $user): string
     {
+        // TODO: Check if duplicates already exists in databse before serving a username.
         $emailParts = explode('@', $user->getEmail());
         $str = preg_replace('/[^a-z0-9]+/i', ' ', $emailParts[0]);
 
