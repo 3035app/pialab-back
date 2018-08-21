@@ -47,18 +47,18 @@
                         </td>
                         <td class="right aligned">
                             <div class="ui small buttons">
-                                <a class="ui blue tiny icon button" title="{{ 'pia.actions.show'|trans }}" href="{{ path('manage_structures_show_structure', {'structureId':structure.id, 'redirect': app.request.pathinfo}) }}">
+                                <a class="ui blue tiny icon button" title="{{ 'pia.actions.show'|trans }}" href="{{ path('manage_structures_show_structure', {'structureId':structure.id, 'redirect': app.request.requestUri}) }}">
                                     <i class="eye icon"></i>
                                 </a>
-                                <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_edit_structure', {'structureId':structure.id, 'redirect': app.request.pathinfo}) }}">
+                                <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_edit_structure', {'structureId':structure.id, 'redirect': app.request.requestUri}) }}">
                                     <i class="pencil icon"></i>
                                 </a>
                                 {% if portfolio is defined %}
-                                    <a class="ui orange tiny icon button" title="{{ 'pia.actions.dissociate'|trans }}" href="{{ path('manage_structures_dissociate_structure', {'structureId':structure.id, 'redirect': app.request.pathinfo}) }}">
+                                    <a class="ui orange tiny icon button" title="{{ 'pia.actions.dissociate'|trans }}" href="{{ path('manage_structures_dissociate_structure', {'structureId':structure.id, 'redirect': app.request.requestUri}) }}">
                                         <i class="unlink icon"></i>
                                     </a>
                                 {% endif %}
-                                <a class="ui red tiny icon button" title="{{ 'pia.actions.remove'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_remove_structure', {'structureId':structure.id, 'redirect': app.request.pathinfo}) }}">
+                                <a class="ui red tiny icon button" title="{{ 'pia.actions.remove'|trans }}" data-modal="data-modal" href="{{ path('manage_structures_remove_structure', {'structureId':structure.id, 'redirect': app.request.requestUri}) }}">
                                     <i class="trash icon"></i>
                                 </a>
                             </div>
