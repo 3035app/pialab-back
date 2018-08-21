@@ -147,7 +147,7 @@ class CreateUserCommand extends Command
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        if ($input->getOption('sendResetEmail') !== null) {
+        if ($input->getOption('sendResetEmail') === true) {
             $this->userService->sendResettingEmail($user);
         }
 
