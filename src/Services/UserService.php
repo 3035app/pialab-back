@@ -74,11 +74,17 @@ class UserService extends AbstractService
      * @param string               $password
      * @param Structure|null       $structure
      * @param ClientInterface|null $application
+     * @param string|null          $username
      *
      * @return User
      */
-    public function createUser(string $email, string $password, ?Structure $structure = null, ?ClientInterface $application = null): User
-    {
+    public function createUser(
+        string $email,
+        string $password,
+        ?Structure $structure = null,
+        ?ClientInterface $application = null,
+        ?string $username = null
+    ): User {
         $user = new User($email);
 
         $this->encodePassword($user, $password);
@@ -95,7 +101,7 @@ class UserService extends AbstractService
             $user->setApplication($application);
         }
 
-        $user->setUsername($this->generateUsername($user));
+        $user->setUsername($username ?? $this->generateUsername($user));
 
         return $user;
     }
