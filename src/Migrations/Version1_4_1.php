@@ -41,61 +41,6 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
         ],
     ];
 
-    protected function movePiasIntoDedicatedProcessing(): void
-    {
-        $folderId = $this->connection->executeQuery('SELECT * FROM pias WHERE folder_id IS NOT NULL');
-
-        foreach ($rsm->fetchAll() as $data) {
-            // For each PIA we create a Processing with basic informations and put it into the same folder.
-
-            $processingId = $this->connection->executeQuery('SELECT nextval(\'pia_processing_id_seq\')')->fetchColumn(0);
-
-            // Creating the processing
-
-            $this->addSql(
-                sprintf(
-                    'INSERT INTO pia_processing (
-                        id,
-                        name,
-                        author,
-                        controllers,
-                        status,
-                        created_at,
-                        updated_at,
-                        folder_id
-                    ) VALUES (
-                        %d,
-                        \'%s\',
-                        \'%s\',
-                        \'%s\',
-                        %d,
-                        \'%s\',
-                        \'%s\',
-                        %d
-                    )',
-                    $processingId,
-                    $data['name'],
-                    $data['author_name'],
-                    'TBD',
-                    $data['status'] === 4 ? 1 : 0,
-                    $data['created_at'],
-                    $data['updated_at'],
-                    $data['folder_id']
-                )
-            );
-
-            // Updating the pia
-
-            $this->addSql(
-                sprintf(
-                    'UPDATE pia SET processing_id = %d WHERE id = %d',
-                    $processingId,
-                    $data['id']
-                )
-            );
-        }
-    }
-
     // #########################################
     //         OLD VERSIONS BELOW
     // #########################################
@@ -104,7 +49,7 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('CREATE SEQUENCE pia_processing_id_seq INCREMENT BY 1 MINVALUE 1 START 1;');
+        // $this->addSql('CREATE SEQUENCE pia_processing_id_seq INCREMENT BY 1 MINVALUE 1 START 1;');
         $this->addSql('CREATE SEQUENCE pia_processing_data_type_id_seq INCREMENT BY 1 MINVALUE 1 START 1;');
         $this->addSql('CREATE TABLE pia_processing (id INT NOT NULL, folder_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, description TEXT NOT NULL, life_cycle_description TEXT NOT NULL, data_medium_description TEXT NOT NULL, standards_description TEXT NOT NULL, processors TEXT NOT NULL, controllers TEXT NOT NULL, data_transfer_outside_eu TEXT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_81E5D0EC162CB942 ON pia_processing (folder_id)');
@@ -146,9 +91,9 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_processing ADD life_cycle TEXT NOT NULL');
-        $this->addSql('ALTER TABLE pia_processing ADD storage TEXT NOT NULL');
-        $this->addSql('ALTER TABLE pia_processing ADD standards TEXT NOT NULL');
+        $this->addSql('ALTER TABLE pia_processing ADD life_cycle TEXT NULL');
+        $this->addSql('ALTER TABLE pia_processing ADD storage TEXT NULL');
+        $this->addSql('ALTER TABLE pia_processing ADD standards TEXT NULL');
         $this->addSql('ALTER TABLE pia_processing DROP life_cycle_description');
         $this->addSql('ALTER TABLE pia_processing DROP data_medium_description');
         $this->addSql('ALTER TABLE pia_processing DROP standards_description');
@@ -172,7 +117,7 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_processing ADD status INT NOT NULL');
+        $this->addSql('ALTER TABLE pia_processing ADD status INT NOT NULL DEFAULT 0');
     }
 
     protected function Version20180731151014_down(Schema $schema): void
@@ -187,9 +132,6 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('ALTER TABLE pia_processing ALTER description DROP NOT NULL');
-        $this->addSql('ALTER TABLE pia_processing ALTER life_cycle DROP NOT NULL');
-        $this->addSql('ALTER TABLE pia_processing ALTER storage DROP NOT NULL');
-        $this->addSql('ALTER TABLE pia_processing ALTER standards DROP NOT NULL');
     }
 
     protected function Version20180801083559_down(Schema $schema): void
@@ -269,5 +211,55 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
         $this->addSql('ALTER TABLE pia_processing_data_type ALTER data TYPE TEXT');
         $this->addSql('ALTER TABLE pia_processing_data_type ALTER data DROP DEFAULT');
         $this->addSql('COMMENT ON COLUMN pia_processing_data_type.data IS \'(DC2Type:json)\';');
+    }
+
+    protected function movePiasIntoDedicatedProcessing(): void
+    {
+        $this->connection->executeQuery('CREATE SEQUENCE pia_processing_id_seq INCREMENT BY 1 MINVALUE 1 START 1;');
+
+        $rsm = $this->connection->executeQuery('SELECT * FROM pia WHERE folder_id IS NOT NULL');
+
+        foreach ($rsm->fetchAll() as $data) {
+            // For each PIA we create a Processing with basic informations and put it into the same folder.
+
+            $processingId = $this->connection->executeQuery('SELECT nextval(\'pia_processing_id_seq\')')->fetchColumn(0);
+
+            // Creating the processing
+
+            $this->addSql(
+                sprintf(
+                    'INSERT INTO pia_processing (
+                        id,name,description,author,controllers,folder_id,life_cycle_description,data_medium_description,standards_description,processors
+                    ) VALUES (
+                        %d,\'%s\',\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',\'%s\',\'%s\'
+                    )',
+                    $processingId,
+                    $this->escapeString($data['name']),
+                    'migrated Processing from existing PIA',
+                    $this->escapeString($data['author_name']),
+                    'TBD',
+                    $data['folder_id'],
+                    'N/A',
+                    'N/A',
+                    'N/A',
+                    'TBD'
+                )
+            );
+
+            // Updating the pia
+
+            $this->addSql(
+                sprintf(
+                    'UPDATE pia SET processing_id = %d WHERE id = %d',
+                    $processingId,
+                    $data['id']
+                )
+            );
+        }
+    }
+
+    private function escapeString(string $string): string
+    {
+        return preg_replace('/\'/', '\'\'', $string);
     }
 }
