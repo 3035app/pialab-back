@@ -91,12 +91,12 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_processing ADD life_cycle TEXT NULL');
-        $this->addSql('ALTER TABLE pia_processing ADD storage TEXT NULL');
-        $this->addSql('ALTER TABLE pia_processing ADD standards TEXT NULL');
-        $this->addSql('ALTER TABLE pia_processing DROP life_cycle_description');
-        $this->addSql('ALTER TABLE pia_processing DROP data_medium_description');
-        $this->addSql('ALTER TABLE pia_processing DROP standards_description');
+        $this->addSql('ALTER TABLE pia_processing RENAME COLUMN life_cycle_description TO life_cycle');
+        $this->addSql('ALTER TABLE pia_processing RENAME COLUMN data_medium_description TO storage');
+        $this->addSql('ALTER TABLE pia_processing RENAME COLUMN standards_description TO standards');
+        $this->addSql('ALTER TABLE pia_processing ALTER life_cycle DROP NOT NULL');
+        $this->addSql('ALTER TABLE pia_processing ALTER storage DROP NOT NULL');
+        $this->addSql('ALTER TABLE pia_processing ALTER standards DROP NOT NULL');
         $this->addSql('ALTER TABLE pia_processing RENAME COLUMN data_transfer_outside_eu TO non_eu_transfer');
     }
 
@@ -104,12 +104,12 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_processing ADD life_cycle_description TEXT NOT NULL');
-        $this->addSql('ALTER TABLE pia_processing ADD data_medium_description TEXT NOT NULL');
-        $this->addSql('ALTER TABLE pia_processing ADD standards_description TEXT NOT NULL');
-        $this->addSql('ALTER TABLE pia_processing DROP life_cycle');
-        $this->addSql('ALTER TABLE pia_processing DROP storage');
-        $this->addSql('ALTER TABLE pia_processing DROP standards');
+        $this->addSql('ALTER TABLE pia_processing RENAME COLUMN life_cycle TO life_cycle_description');
+        $this->addSql('ALTER TABLE pia_processing RENAME COLUMN storage TO data_medium_description');
+        $this->addSql('ALTER TABLE pia_processing RENAME COLUMN standards TO standards_description');
+        $this->addSql('ALTER TABLE pia_processing ALTER life_cycle SET NOT NULL');
+        $this->addSql('ALTER TABLE pia_processing ALTER storage SET NOT NULL');
+        $this->addSql('ALTER TABLE pia_processing ALTER standards SET NOT NULL');
         $this->addSql('ALTER TABLE pia_processing RENAME COLUMN non_eu_transfer TO data_transfer_outside_eu');
     }
 
@@ -229,20 +229,20 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
             $this->addSql(
                 sprintf(
                     'INSERT INTO pia_processing (
-                        id,name,description,author,controllers,folder_id,life_cycle_description,data_medium_description,standards_description,processors
+                        id,name,author,controllers,folder_id,description,life_cycle_description,data_medium_description,standards_description,processors
                     ) VALUES (
                         %d,\'%s\',\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',\'%s\',\'%s\'
                     )',
                     $processingId,
                     $this->escapeString($data['name']),
-                    'migrated Processing from existing PIA',
                     $this->escapeString($data['author_name']),
                     'TBD',
                     $data['folder_id'],
-                    'N/A',
-                    'N/A',
-                    'N/A',
-                    'TBD'
+                    $this->getAnswer('111', $data['id']),
+                    $this->getAnswer('122', $data['id']),
+                    $this->getAnswer('123', $data['id']),
+                    $this->getAnswer('113', $data['id']),
+                    $this->getAnswer('112', $data['id'])
                 )
             );
 
@@ -261,5 +261,12 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
     private function escapeString(string $string): string
     {
         return preg_replace('/\'/', '\'\'', $string);
+    }
+
+    private function getAnswer(string $ref, int $piaId, ?string $attribute = 'text'): string
+    {
+        $rawData = $this->connection->executeQuery('SELECT data FROM pia_answer WHERE reference_to = \'' . $ref . '\' AND pia_id = ' . $piaId)->fetch();
+
+        return $rawData !== false ? $this->escapeString(json_decode($rawData['data'])->$attribute) : 'TBD';
     }
 }
