@@ -41,6 +41,61 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
         ],
     ];
 
+    protected function movePiasIntoDedicatedProcessing(): void
+    {
+        $folderId = $this->connection->executeQuery('SELECT * FROM pias WHERE folder_id IS NOT NULL');
+
+        foreach ($rsm->fetchAll() as $data) {
+            // For each PIA we create a Processing with basic informations and put it into the same folder.
+
+            $processingId = $this->connection->executeQuery('SELECT nextval(\'pia_processing_id_seq\')')->fetchColumn(0);
+
+            // Creating the processing
+
+            $this->addSql(
+                sprintf(
+                    'INSERT INTO pia_processing (
+                        id,
+                        name,
+                        author,
+                        controllers,
+                        status,
+                        created_at,
+                        updated_at,
+                        folder_id
+                    ) VALUES (
+                        %d,
+                        \'%s\',
+                        \'%s\',
+                        \'%s\',
+                        %d,
+                        \'%s\',
+                        \'%s\',
+                        %d
+                    )',
+                    $processingId,
+                    $data['name'],
+                    $data['author_name'],
+                    'TBD',
+                    $data['status'] === 4 ? 1 : 0,
+                    $data['created_at'],
+                    $data['updated_at'],
+                    $data['folder_id']
+                )
+            );
+
+            // Updating the pia
+
+            $this->addSql(
+                sprintf(
+                    'UPDATE pia SET processing_id = %d WHERE id = %d',
+                    $processingId,
+                    $data['id']
+                )
+            );
+        }
+    }
+
     // #########################################
     //         OLD VERSIONS BELOW
     // #########################################
@@ -61,6 +116,8 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
         $this->addSql('ALTER TABLE pia ADD processing_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE pia ADD CONSTRAINT FK_253A30625BAE24E8 FOREIGN KEY (processing_id) REFERENCES pia_processing (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_253A30625BAE24E8 ON pia (processing_id)');
+
+        $this->movePiasIntoDedicatedProcessing();
 
         $this->addSql('ALTER TABLE pia DROP CONSTRAINT fk_253a3062162cb942;');
         $this->addSql('DROP INDEX idx_253a3062162cb942;');
