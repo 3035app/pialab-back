@@ -47,7 +47,7 @@ class Processing
     protected $author;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default": Processing::STATUS_DOING})
      * @JMS\Groups({"Default", "Export"})
      *
      * @var int
@@ -394,7 +394,7 @@ class Processing
     /**
      * @return string
      */
-    public function getStorage() : ?string
+    public function getStorage(): ?string
     {
         return $this->storage;
     }
