@@ -527,7 +527,7 @@ class Pia implements Timestampable
     /**
      * @param bool $concernedPeopleSearchedOpinion
      */
-    public function setConcernedPeopleSearchedOpinion(bool $concernedPeopleSearchedOpinion): void
+    public function setConcernedPeopleSearchedOpinion(?bool $concernedPeopleSearchedOpinion): void
     {
         $this->concernedPeopleSearchedOpinion = $concernedPeopleSearchedOpinion;
     }
