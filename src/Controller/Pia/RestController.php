@@ -84,9 +84,9 @@ abstract class RestController extends FOSRestController
      *
      * @return EntityRepository
      */
-    protected function getRepository(): EntityRepository
+    protected function getRepository(?string $entityClass = null): EntityRepository
     {
-        return $this->getDoctrine()->getRepository($this->getEntityClass());
+        return $this->getDoctrine()->getRepository($entityClass ?? $this->getEntityClass());
     }
 
     /**
