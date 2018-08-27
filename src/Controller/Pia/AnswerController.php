@@ -27,6 +27,13 @@ class AnswerController extends PiaSubController
      *
      * @FOSRest\Get("/pias/{piaId}/answers")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all Answers of given Treatment",
@@ -49,6 +56,28 @@ class AnswerController extends PiaSubController
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Get("/pias/{piaId}/answers/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Answer"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -73,6 +102,33 @@ class AnswerController extends PiaSubController
      *
      * @FOSRest\Post("/pias/{piaId}/answers")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="Answer",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="data", type="object", @SWG\Property(property="text", type="string")),
+     *         @SWG\Property(property="reference_to", type="string")
+     *     ),
+     *     description="The Answer text content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the newly created Answer",
@@ -96,6 +152,40 @@ class AnswerController extends PiaSubController
      *
      * @FOSRest\Put("/pias/{piaId}/answers/{id}")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Answer"
+     * )
+     * @Swg\Parameter(
+     *     name="Answer",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="data", type="object", @SWG\Property(property="text", type="string")),
+     *         @SWG\Property(property="reference_to", type="string")
+     *     ),
+     *     description="The Answer text content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated Answer",
@@ -118,6 +208,28 @@ class AnswerController extends PiaSubController
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Delete("pias/{piaId}/answers/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Answer"
+     * )
      *
      * @Swg\Response(
      *     response=200,

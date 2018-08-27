@@ -27,6 +27,21 @@ class MeasureController extends PiaSubController
      *
      * @FOSRest\Get("/pias/{piaId}/measures")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all Answers for given Treatment",
@@ -49,6 +64,28 @@ class MeasureController extends PiaSubController
      * @Swg\Tag(name="Measure")
      *
      * @FOSRest\Get("/pias/{piaId}/measures/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Measure"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -73,6 +110,34 @@ class MeasureController extends PiaSubController
      *
      * @FOSRest\Post("/pias/{piaId}/measures")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="Measure",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="title", type="string"),
+     *         @SWG\Property(property="content", type="string"),
+     *         @SWG\Property(property="placeholder", type="string")
+     *     ),
+     *     description="The Measure content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the newly created Measure",
@@ -96,6 +161,41 @@ class MeasureController extends PiaSubController
      *
      * @FOSRest\Put("/pias/{piaId}/measures/{id}")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Measure"
+     * )
+     * @Swg\Parameter(
+     *     name="Measure",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="title", type="string"),
+     *         @SWG\Property(property="content", type="string"),
+     *         @SWG\Property(property="placeholder", type="string")
+     *     ),
+     *     description="The Measure content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated Measure",
@@ -118,6 +218,28 @@ class MeasureController extends PiaSubController
      * @Swg\Tag(name="Measure")
      *
      * @FOSRest\Delete("pias/{piaId}/measures/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Measure"
+     * )
      *
      * @Swg\Response(
      *     response=200,

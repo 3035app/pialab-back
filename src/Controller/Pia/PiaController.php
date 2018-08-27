@@ -18,6 +18,11 @@ use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\Entity\Pia\PiaTemplate;
 use PiaApi\Entity\Pia\Processing;
+use PiaApi\Entity\Pia\Answer;
+use PiaApi\Entity\Pia\Measure;
+use PiaApi\Entity\Pia\Evaluation;
+use PiaApi\Entity\Pia\Comment;
+use PiaApi\Entity\Pia\Attachment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,6 +51,14 @@ class PiaController extends RestController
      * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Get("/pias")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -76,6 +89,21 @@ class PiaController extends RestController
      * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Get("/pias/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -108,6 +136,40 @@ class PiaController extends RestController
      * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Post("/pias")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="PIA",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string"),
+     *         @SWG\Property(property="author_name", type="string"),
+     *         @SWG\Property(property="evaluator_name", type="string"),
+     *         @SWG\Property(property="validator_name", type="string"),
+     *         @SWG\Property(property="status", type="number"),
+     *         @SWG\Property(property="dpo_status", type="number"),
+     *         @SWG\Property(property="dpo_opinion", type="string"),
+     *         @SWG\Property(property="concerned_people_opinion", type="string"),
+     *         @SWG\Property(property="concerned_people_status", type="number"),
+     *         @SWG\Property(property="concerned_people_searched_opinion", type="boolean"),
+     *         @SWG\Property(property="concerned_people_searched_content", type="string"),
+     *         @SWG\Property(property="rejection_reason", type="string"),
+     *         @SWG\Property(property="applied_adjustements", type="string"),
+     *         @SWG\Property(property="dpos_names", type="string"),
+     *         @SWG\Property(property="people_names", type="string"),
+     *         @SWG\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
+     *     ),
+     *     description="The PIA content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -148,6 +210,36 @@ class PiaController extends RestController
      *
      * @FOSRest\Post("/pias/new-from-template/{id}")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA's template"
+     * )
+     * @Swg\Parameter(
+     *     name="PIA",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string"),
+     *         @SWG\Property(property="author_name", type="string"),
+     *         @SWG\Property(property="evaluator_name", type="string"),
+     *         @SWG\Property(property="validator_name", type="string"),
+     *         @SWG\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
+     *     ),
+     *     description="The PIA content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the newly created PIA",
@@ -186,6 +278,49 @@ class PiaController extends RestController
      *
      * @Swg\Tag(name="Pia")
      *
+     * @FOSRest\Put("/pias/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="PIA",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string"),
+     *         @SWG\Property(property="author_name", type="string"),
+     *         @SWG\Property(property="evaluator_name", type="string"),
+     *         @SWG\Property(property="validator_name", type="string"),
+     *         @SWG\Property(property="status", type="number"),
+     *         @SWG\Property(property="dpo_status", type="number"),
+     *         @SWG\Property(property="dpo_opinion", type="string"),
+     *         @SWG\Property(property="concerned_people_opinion", type="string"),
+     *         @SWG\Property(property="concerned_people_status", type="number"),
+     *         @SWG\Property(property="concerned_people_searched_opinion", type="boolean"),
+     *         @SWG\Property(property="concerned_people_searched_content", type="string"),
+     *         @SWG\Property(property="rejection_reason", type="string"),
+     *         @SWG\Property(property="applied_adjustements", type="string"),
+     *         @SWG\Property(property="dpos_names", type="string"),
+     *         @SWG\Property(property="people_names", type="string"),
+     *         @SWG\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
+     *     ),
+     *     description="The PIA content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated PIA",
@@ -195,7 +330,6 @@ class PiaController extends RestController
      *     )
      * )
      *
-     * @FOSRest\Put("/pias/{id}", requirements={"id"="\d+"})
      *
      * @Security("is_granted('CAN_EDIT_PIA')")
      *
@@ -240,6 +374,21 @@ class PiaController extends RestController
      *
      * @FOSRest\Delete("/pias/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Empty content"
@@ -264,6 +413,30 @@ class PiaController extends RestController
      * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Post("/pias/import")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="PIA Data",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="pia", type="object", ref=@Nelmio\Model(type=Pia::class, groups={"Default"})),
+     *         @SWG\Property(property="answers", type="array", @Swg\Items(ref=@Nelmio\Model(type=Answer::class, groups={"Default"}))),
+     *         @SWG\Property(property="measures", type="array", @Swg\Items(ref=@Nelmio\Model(type=Measure::class, groups={"Default"}))),
+     *         @SWG\Property(property="evaluations", type="array", @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))),
+     *         @SWG\Property(property="comments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Comment::class, groups={"Default"}))),
+     *         @SWG\Property(property="attachments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})))
+     *     ),
+     *     description="The PIA content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -295,12 +468,32 @@ class PiaController extends RestController
      *
      * @FOSRest\Get("/pias/{id}/export", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns a PIA",
+     *     description="Returns an export format of PIA",
      *     @Swg\Schema(
      *         type="object",
-     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *         @SWG\Property(property="pia", type="object", ref=@Nelmio\Model(type=Pia::class, groups={"Default"})),
+     *         @SWG\Property(property="answers", type="array", @Swg\Items(ref=@Nelmio\Model(type=Answer::class, groups={"Default"}))),
+     *         @SWG\Property(property="measures", type="array", @Swg\Items(ref=@Nelmio\Model(type=Measure::class, groups={"Default"}))),
+     *         @SWG\Property(property="evaluations", type="array", @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))),
+     *         @SWG\Property(property="comments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Comment::class, groups={"Default"}))),
+     *         @SWG\Property(property="attachments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})))
      *     )
      * )
      *
@@ -333,7 +526,8 @@ class PiaController extends RestController
         $resourceStructure = $resource->getStructure();
         $structures = array_merge(
             [$this->getUser()->getStructure()],
-            $this->getUser()->getProfile()->getPortfolioStructures());
+            $this->getUser()->getProfile()->getPortfolioStructures()
+        );
 
         if (!in_array($resourceStructure, $structures)) {
             throw new AccessDeniedHttpException();

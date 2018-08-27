@@ -46,6 +46,14 @@ class PortfolioController extends RestController
      *
      * @FOSRest\Get("/portfolios")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all Portfolios",
@@ -71,6 +79,21 @@ class PortfolioController extends RestController
      * @Swg\Tag(name="Portfolio")
      *
      * @FOSRest\Get("/portfolios/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Portfolio"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -101,6 +124,38 @@ class PortfolioController extends RestController
      * @Swg\Tag(name="Portfolio")
      *
      * @FOSRest\Post("/portfolios")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="minimal Portfolio",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string")
+     *     ),
+     *     description="The Portfolio content"
+     * )
+     * @Swg\Parameter(
+     *     name="full Portfolio",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string"),
+     *         @SWG\Property(property="user", type="number"),
+     *         @SWG\Property(property="structure", type="number")
+     *     ),
+     *     description="The Portfolio content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -140,6 +195,45 @@ class PortfolioController extends RestController
      * Updates a Portfolio.
      *
      * @Swg\Tag(name="Portfolio")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Portfolio"
+     * )
+     * @Swg\Parameter(
+     *     name="minimal Portfolio",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string")
+     *     ),
+     *     description="The Portfolio content"
+     * )
+     * @Swg\Parameter(
+     *     name="full Portfolio",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string"),
+     *         @SWG\Property(property="user", type="number"),
+     *         @SWG\Property(property="structure", type="number")
+     *     ),
+     *     description="The Portfolio content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -182,6 +276,21 @@ class PortfolioController extends RestController
      * Deletes a Portfolio.
      *
      * @Swg\Tag(name="Portfolio")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Portfolio"
+     * )
      *
      * @Swg\Response(
      *     response=200,

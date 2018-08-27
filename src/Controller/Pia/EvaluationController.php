@@ -27,6 +27,21 @@ class EvaluationController extends PiaSubController
      *
      * @FOSRest\Get("/pias/{piaId}/evaluations")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all Answers of given Treatment",
@@ -49,6 +64,28 @@ class EvaluationController extends PiaSubController
      * @Swg\Tag(name="Evaluation")
      *
      * @FOSRest\Get("/pias/{piaId}/evaluations/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Evaluation"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -73,6 +110,37 @@ class EvaluationController extends PiaSubController
      *
      * @FOSRest\Post("/pias/{piaId}/evaluations")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="Evaluation",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="action_plan_comment", type="string"),
+     *         @SWG\Property(property="evaluation_comment", type="string"),
+     *         @SWG\Property(property="global_status", type="number"),
+     *         @SWG\Property(property="person_in_charge", type="string"),
+     *         @SWG\Property(property="reference_to", type="string"),
+     *         @SWG\Property(property="status", type="number")
+     *     ),
+     *     description="The Evaluation content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the newly created Evaluation",
@@ -96,6 +164,44 @@ class EvaluationController extends PiaSubController
      *
      * @FOSRest\Put("/pias/{piaId}/evaluations/{id}")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Evaluation"
+     * )
+     * @Swg\Parameter(
+     *     name="Evaluation",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="action_plan_comment", type="string"),
+     *         @SWG\Property(property="evaluation_comment", type="string"),
+     *         @SWG\Property(property="global_status", type="number"),
+     *         @SWG\Property(property="person_in_charge", type="string"),
+     *         @SWG\Property(property="reference_to", type="string"),
+     *         @SWG\Property(property="status", type="number")
+     *     ),
+     *     description="The Evaluation content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated Evaluation",
@@ -118,6 +224,28 @@ class EvaluationController extends PiaSubController
      * @Swg\Tag(name="Evaluation")
      *
      * @FOSRest\Delete("pias/{piaId}/evaluations/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Evaluation"
+     * )
      *
      * @Swg\Response(
      *     response=200,

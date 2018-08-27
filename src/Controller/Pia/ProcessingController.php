@@ -15,6 +15,7 @@ use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
+use PiaApi\Entity\Pia\ProcessingDataType;
 use JMS\Serializer\SerializerInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
@@ -66,6 +67,14 @@ class ProcessingController extends RestController
      *
      * @FOSRest\Get("/processings")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all Processings",
@@ -96,6 +105,21 @@ class ProcessingController extends RestController
      *
      * @FOSRest\Get("/processings/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns one Processing",
@@ -120,6 +144,50 @@ class ProcessingController extends RestController
      * @Swg\Tag(name="Processing")
      *
      * @FOSRest\Post("/processings")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="minimal Processing",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string"),
+     *         @SWG\Property(property="author", type="string"),
+     *         @SWG\Property(property="status", type="number")
+     *     ),
+     *     description="The Processing content"
+     * )
+     * @Swg\Parameter(
+     *     name="full Processing",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string"),
+     *         @SWG\Property(property="author", type="string"),
+     *         @SWG\Property(property="status", type="number"),
+     *         @SWG\Property(property="description", type="string"),
+     *         @SWG\Property(property="life_cycle", type="string"),
+     *         @SWG\Property(property="storage", type="string"),
+     *         @SWG\Property(property="standards", type="string"),
+     *         @SWG\Property(property="processors", type="string"),
+     *         @SWG\Property(property="controllers", type="string"),
+     *         @SWG\Property(property="non_eu_transfer", type="string"),
+     *         @SWG\Property(property="processing_data_types", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
+     *         )),
+     *     ),
+     *     description="The Processing content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -155,6 +223,57 @@ class ProcessingController extends RestController
      * Updates a processing.
      *
      * @Swg\Tag(name="Processing")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing"
+     * )
+     * @Swg\Parameter(
+     *     name="minimal Processing",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string"),
+     *         @SWG\Property(property="author", type="string"),
+     *         @SWG\Property(property="status", type="number")
+     *     ),
+     *     description="The Processing content"
+     * )
+     * @Swg\Parameter(
+     *     name="full Processing",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @SWG\Property(property="name", type="string"),
+     *         @SWG\Property(property="author", type="string"),
+     *         @SWG\Property(property="status", type="number"),
+     *         @SWG\Property(property="description", type="string"),
+     *         @SWG\Property(property="life_cycle", type="string"),
+     *         @SWG\Property(property="storage", type="string"),
+     *         @SWG\Property(property="standards", type="string"),
+     *         @SWG\Property(property="processors", type="string"),
+     *         @SWG\Property(property="controllers", type="string"),
+     *         @SWG\Property(property="non_eu_transfer", type="string"),
+     *         @SWG\Property(property="processing_data_types", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
+     *         )),
+     *     ),
+     *     description="The Processing content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -202,12 +321,27 @@ class ProcessingController extends RestController
      *
      * @Swg\Tag(name="Processing")
      *
+     * @FOSRest\Delete("/processings/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Empty content"
      * )
-     *
-     * @FOSRest\Delete("/processings/{id}", requirements={"id"="\d+"})
      *
      * @Security("is_granted('CAN_DELETE_PROCESSING')")
      *
@@ -233,6 +367,21 @@ class ProcessingController extends RestController
      * @Swg\Tag(name="Processing")
      *
      * @FOSRest\Get("/processings/{id}/export", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing"
+     * )
      *
      * @Swg\Response(
      *     response=200,

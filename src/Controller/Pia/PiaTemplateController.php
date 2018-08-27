@@ -50,6 +50,14 @@ class PiaTemplateController extends RestController
      *
      * @FOSRest\Get("/pia-templates")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all PiaTemplates",
@@ -83,6 +91,21 @@ class PiaTemplateController extends RestController
      * @Swg\Tag(name="PiaTemplate")
      *
      * @FOSRest\Get("/pia-templates/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PiaTemplate"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -119,6 +142,28 @@ class PiaTemplateController extends RestController
      * @Swg\Tag(name="PiaTemplate")
      *
      * @FOSRest\Post("/pia-templates/importCollection")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="enableAll",
+     *     in="formData",
+     *     type="boolean",
+     *     required=true,
+     *     description="Auto enable all templates"
+     * )
+     * @Swg\Parameter(
+     *     name="collection",
+     *     in="formData",
+     *     type="file",
+     *     required=true,
+     *     description="The archive of PiaTemplates"
+     * )
      *
      * @Swg\Response(
      *     response=200,
