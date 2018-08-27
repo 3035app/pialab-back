@@ -17,7 +17,6 @@ use Pagerfanta\Pagerfanta;
 use PiaApi\Entity\Oauth\Client;
 use PiaApi\Entity\Oauth\User;
 use PiaApi\Entity\Pia\Structure;
-use PiaApi\Entity\Pia\UserProfile;
 use PiaApi\Services\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as Swg;
@@ -206,7 +205,6 @@ class UserController extends RestController
             'roles'           => RequestDataHandler::TYPE_ARRAY,
             'expiration_date' => \DateTime::class,
             'locked'          => RequestDataHandler::TYPE_BOOL,
-            'profile'         => UserProfile::class,
             'structure'       => Structure::class,
         ];
 

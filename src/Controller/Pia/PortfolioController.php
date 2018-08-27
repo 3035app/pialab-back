@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Oauth\User;
 
 class PortfolioController extends RestController
 {
@@ -116,8 +117,11 @@ class PortfolioController extends RestController
      */
     public function createAction(Request $request)
     {
-        $user = $this->getUser();
-        $structure = $user->getStructure();
+        $userId = $request->get('user', null);
+        $user = $userId !== null ? $this->getRepository(User::class)->find($userId) : $this->getUser();
+
+        $structureId = $request->get('structure', null);
+        $structure = $structureId !== null ? $this->getRepository(Structure::class)->find($structureId) : $user->getStructure();
 
         $portfolio = $this->portfolioService->newPortfolio($request->get('name'));
         $portfolio->addUser($user);

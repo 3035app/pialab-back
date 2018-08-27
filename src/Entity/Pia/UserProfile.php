@@ -70,7 +70,7 @@ class UserProfile implements Timestampable
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -78,7 +78,7 @@ class UserProfile implements Timestampable
     /**
      * @param string $firstName
      */
-    public function setFirstName(string $firstName): void
+    public function setFirstName(?string $firstName): void
     {
         $this->firstName = $firstName;
     }
@@ -86,7 +86,7 @@ class UserProfile implements Timestampable
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -94,7 +94,7 @@ class UserProfile implements Timestampable
     /**
      * @param string $lastName
      */
-    public function setLastName(string $lastName): void
+    public function setLastName(?string $lastName): void
     {
         $this->lastName = $lastName;
     }
