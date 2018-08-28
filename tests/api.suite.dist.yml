@@ -6,3 +6,11 @@ modules:
             url: http://localhost:8000
             part: Json
             depends: PhpBrowser
+        - Db:
+            dsn: 'pgsql:host=%DBHOST%;port=%DBPORT%;dbname=%DBNAME%;user=%DBUSER%;password=%DBPASSWORD%'
+            user: '%DBROOTUSER%'
+            dump: 'tests/_data/api.sql'
+            populate: true
+            cleanup: false
+            password: '%DBROOTPASSWORD%'
+            # populator: 'psql -U $user $dbname < $dump'
