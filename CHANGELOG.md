@@ -1,5 +1,8 @@
 # Change Log
 
+## [1.4.5](https://github.com/pia-lab/pialab-back/tree/1.4.5) (2018-08-28)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.4...1.4.5)
+
 ## [1.4.4](https://github.com/pia-lab/pialab-back/tree/1.4.4) (2018-08-28)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.3...1.4.4)
 
