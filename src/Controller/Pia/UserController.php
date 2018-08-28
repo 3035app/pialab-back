@@ -157,24 +157,13 @@ class UserController extends RestController
      *     description="The API token. e.g.: Bearer <TOKEN>"
      * )
      * @Swg\Parameter(
-     *     name="minimal User",
-     *     in="body",
-     *     type="json",
-     *     required=true,
-     *     @Swg\Schema(
-     *         type="object",
-     *         @Swg\Property(property="email", type="string"),
-     *         @Swg\Property(property="password", type="string")
-     *     ),
-     *     description="The User content"
-     * )
-     * @Swg\Parameter(
-     *     name="full User",
+     *     name="User",
      *     in="body",
      *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
+     *         required={"email", "password"},
      *         @Swg\Property(property="email", type="string"),
      *         @Swg\Property(property="password", type="string"),
      *         @Swg\Property(property="roles", type="array", @Swg\Items(type="string"))

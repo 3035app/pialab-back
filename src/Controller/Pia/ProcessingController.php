@@ -153,25 +153,13 @@ class ProcessingController extends RestController
      *     description="The API token. e.g.: Bearer <TOKEN>"
      * )
      * @Swg\Parameter(
-     *     name="minimal Processing",
+     *     name="Processing",
      *     in="body",
      *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         @Swg\Property(property="name", type="string"),
-     *         @Swg\Property(property="author", type="string"),
-     *         @Swg\Property(property="status", type="number")
-     *     ),
-     *     description="The Processing content"
-     * )
-     * @Swg\Parameter(
-     *     name="full Processing",
-     *     in="body",
-     *     type="json",
-     *     required=false,
-     *     @Swg\Schema(
-     *         type="object",
+     *         required={"name", "author", "status"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author", type="string"),
      *         @Swg\Property(property="status", type="number"),
@@ -239,25 +227,13 @@ class ProcessingController extends RestController
      *     description="The ID of the Processing"
      * )
      * @Swg\Parameter(
-     *     name="minimal Processing",
-     *     in="body",
-     *     type="json",
-     *     required=false,
-     *     @Swg\Schema(
-     *         type="object",
-     *         @Swg\Property(property="name", type="string"),
-     *         @Swg\Property(property="author", type="string"),
-     *         @Swg\Property(property="status", type="number")
-     *     ),
-     *     description="The Processing content"
-     * )
-     * @Swg\Parameter(
      *     name="full Processing",
      *     in="body",
      *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
+     *         required={"name", "author", "status"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author", type="string"),
      *         @Swg\Property(property="status", type="number"),

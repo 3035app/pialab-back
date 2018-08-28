@@ -133,23 +133,13 @@ class PortfolioController extends RestController
      *     description="The API token. e.g.: Bearer <TOKEN>"
      * )
      * @Swg\Parameter(
-     *     name="minimal Portfolio",
+     *     name="Portfolio",
      *     in="body",
      *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @Swg\Property(property="name", type="string")
-     *     ),
-     *     description="The Portfolio content"
-     * )
-     * @Swg\Parameter(
-     *     name="full Portfolio",
-     *     in="body",
-     *     type="json",
-     *     required=false,
-     *     @Swg\Schema(
-     *         type="object",
+     *         required={"name"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="user", type="number"),
      *         @Swg\Property(property="structure", type="number")
@@ -211,18 +201,7 @@ class PortfolioController extends RestController
      *     description="The ID of the Portfolio"
      * )
      * @Swg\Parameter(
-     *     name="minimal Portfolio",
-     *     in="body",
-     *     type="json",
-     *     required=true,
-     *     @Swg\Schema(
-     *         type="object",
-     *         @Swg\Property(property="name", type="string")
-     *     ),
-     *     description="The Portfolio content"
-     * )
-     * @Swg\Parameter(
-     *     name="full Portfolio",
+     *     name="Portfolio",
      *     in="body",
      *     type="json",
      *     required=false,
