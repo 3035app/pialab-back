@@ -46,6 +46,14 @@ class StructureController extends RestController
      *
      * @FOSRest\Get("/structures")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all Structures",
@@ -90,6 +98,21 @@ class StructureController extends RestController
      *
      * @FOSRest\Get("/structures/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns one Structure",
@@ -122,6 +145,26 @@ class StructureController extends RestController
      * @Swg\Tag(name="Structure")
      *
      * @FOSRest\Post("/structures")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="Structure",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="type", type="object", ref=@Nelmio\Model(type=StructureType::class, groups={"Default"}))
+     *     ),
+     *     description="The Structure content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -157,6 +200,35 @@ class StructureController extends RestController
      *
      * @Swg\Tag(name="Structure")
      *
+     * @FOSRest\Put("/structures/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     * @Swg\Parameter(
+     *     name="Structure",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="type", type="object", ref=@Nelmio\Model(type=StructureType::class, groups={"Default"}))
+     *     ),
+     *     description="The Structure content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated Structure",
@@ -165,8 +237,6 @@ class StructureController extends RestController
      *         ref=@Nelmio\Model(type=Structure::class, groups={"Default"})
      *     )
      * )
-     *
-     * @FOSRest\Put("/structures/{id}", requirements={"id"="\d+"})
      *
      * @Security("is_granted('CAN_EDIT_STRUCTURE')")
      *
@@ -195,12 +265,27 @@ class StructureController extends RestController
      *
      * @Swg\Tag(name="Structure")
      *
+     * @FOSRest\Delete("/structures/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Empty content"
      * )
-     *
-     * @FOSRest\Delete("/structures/{id}", requirements={"id"="\d+"})
      *
      * @Security("is_granted('CAN_DELETE_STRUCTURE')")
      *

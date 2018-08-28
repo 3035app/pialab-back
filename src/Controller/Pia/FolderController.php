@@ -145,8 +145,8 @@ class FolderController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="parent", type="object", @SWG\Property(property="id", type="number"))
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The Folder content"
      * )
@@ -214,8 +214,8 @@ class FolderController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="parent", type="object", @SWG\Property(property="id", type="number"))
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The Folder content"
      * )

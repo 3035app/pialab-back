@@ -159,9 +159,9 @@ class ProcessingController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="author", type="string"),
-     *         @SWG\Property(property="status", type="number")
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="author", type="string"),
+     *         @Swg\Property(property="status", type="number")
      *     ),
      *     description="The Processing content"
      * )
@@ -172,17 +172,17 @@ class ProcessingController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="author", type="string"),
-     *         @SWG\Property(property="status", type="number"),
-     *         @SWG\Property(property="description", type="string"),
-     *         @SWG\Property(property="life_cycle", type="string"),
-     *         @SWG\Property(property="storage", type="string"),
-     *         @SWG\Property(property="standards", type="string"),
-     *         @SWG\Property(property="processors", type="string"),
-     *         @SWG\Property(property="controllers", type="string"),
-     *         @SWG\Property(property="non_eu_transfer", type="string"),
-     *         @SWG\Property(property="processing_data_types", type="array", @Swg\Items(
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="author", type="string"),
+     *         @Swg\Property(property="status", type="number"),
+     *         @Swg\Property(property="description", type="string"),
+     *         @Swg\Property(property="life_cycle", type="string"),
+     *         @Swg\Property(property="storage", type="string"),
+     *         @Swg\Property(property="standards", type="string"),
+     *         @Swg\Property(property="processors", type="string"),
+     *         @Swg\Property(property="controllers", type="string"),
+     *         @Swg\Property(property="non_eu_transfer", type="string"),
+     *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
      *         )),
      *     ),
@@ -245,9 +245,9 @@ class ProcessingController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="author", type="string"),
-     *         @SWG\Property(property="status", type="number")
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="author", type="string"),
+     *         @Swg\Property(property="status", type="number")
      *     ),
      *     description="The Processing content"
      * )
@@ -258,17 +258,17 @@ class ProcessingController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="author", type="string"),
-     *         @SWG\Property(property="status", type="number"),
-     *         @SWG\Property(property="description", type="string"),
-     *         @SWG\Property(property="life_cycle", type="string"),
-     *         @SWG\Property(property="storage", type="string"),
-     *         @SWG\Property(property="standards", type="string"),
-     *         @SWG\Property(property="processors", type="string"),
-     *         @SWG\Property(property="controllers", type="string"),
-     *         @SWG\Property(property="non_eu_transfer", type="string"),
-     *         @SWG\Property(property="processing_data_types", type="array", @Swg\Items(
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="author", type="string"),
+     *         @Swg\Property(property="status", type="number"),
+     *         @Swg\Property(property="description", type="string"),
+     *         @Swg\Property(property="life_cycle", type="string"),
+     *         @Swg\Property(property="storage", type="string"),
+     *         @Swg\Property(property="standards", type="string"),
+     *         @Swg\Property(property="processors", type="string"),
+     *         @Swg\Property(property="controllers", type="string"),
+     *         @Swg\Property(property="non_eu_transfer", type="string"),
+     *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
      *         )),
      *     ),

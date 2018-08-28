@@ -27,6 +27,14 @@ class UserProfileController extends RestController
      *
      * @FOSRest\Get("/profile")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the current User's profile",
@@ -51,6 +59,14 @@ class UserProfileController extends RestController
      * @Swg\Tag(name="UserProfile")
      *
      * @FOSRest\Get("/profile/structures")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
      *
      * @Swg\Response(
      *     response=200,

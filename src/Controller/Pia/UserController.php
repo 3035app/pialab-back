@@ -48,6 +48,14 @@ class UserController extends RestController
      *
      * @FOSRest\Get("/users")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all users",
@@ -93,6 +101,21 @@ class UserController extends RestController
      *
      * @FOSRest\Get("/users/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the User"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns one User",
@@ -125,6 +148,39 @@ class UserController extends RestController
      * @Swg\Tag(name="User")
      *
      * @FOSRest\Post("/users")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="minimal User",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="email", type="string"),
+     *         @Swg\Property(property="password", type="string")
+     *     ),
+     *     description="The User content"
+     * )
+     * @Swg\Parameter(
+     *     name="full User",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="email", type="string"),
+     *         @Swg\Property(property="password", type="string"),
+     *         @Swg\Property(property="roles", type="array", @Swg\Items(type="string"))
+     *     ),
+     *     description="The User content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -179,6 +235,39 @@ class UserController extends RestController
      *
      * @FOSRest\Put("/users/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the User"
+     * )
+     * @Swg\Parameter(
+     *     name="User",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="username", type="string"),
+     *         @Swg\Property(property="email", type="string"),
+     *         @Swg\Property(property="password", type="string"),
+     *         @Swg\Property(property="enabled", type="boolean"),
+     *         @Swg\Property(property="locked", type="boolean"),
+     *         @Swg\Property(property="expiration_date", type="string"),
+     *         @Swg\Property(property="structure", type="object", @Swg\Property(property="id", type="number")),
+     *         @Swg\Property(property="roles", type="array", @Swg\Items(type="string"))
+     *     ),
+     *     description="The User content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated User",
@@ -221,6 +310,21 @@ class UserController extends RestController
      * @Swg\Tag(name="User")
      *
      * @FOSRest\Delete("/users/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the User"
+     * )
      *
      * @Swg\Response(
      *     response=200,

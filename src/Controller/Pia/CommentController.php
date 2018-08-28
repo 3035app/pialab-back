@@ -131,9 +131,9 @@ class CommentController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="description", type="string"),
-     *         @SWG\Property(property="for_measure", type="boolean"),
-     *         @SWG\Property(property="reference_to", type="string")
+     *         @Swg\Property(property="description", type="string"),
+     *         @Swg\Property(property="for_measure", type="boolean"),
+     *         @Swg\Property(property="reference_to", type="string")
      *     ),
      *     description="The Comment content"
      * )
@@ -189,9 +189,9 @@ class CommentController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="description", type="string"),
-     *         @SWG\Property(property="for_measure", type="boolean"),
-     *         @SWG\Property(property="reference_to", type="string")
+     *         @Swg\Property(property="description", type="string"),
+     *         @Swg\Property(property="for_measure", type="boolean"),
+     *         @Swg\Property(property="reference_to", type="string")
      *     ),
      *     description="The Comment content"
      * )

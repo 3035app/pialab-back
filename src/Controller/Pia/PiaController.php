@@ -151,22 +151,22 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="author_name", type="string"),
-     *         @SWG\Property(property="evaluator_name", type="string"),
-     *         @SWG\Property(property="validator_name", type="string"),
-     *         @SWG\Property(property="status", type="number"),
-     *         @SWG\Property(property="dpo_status", type="number"),
-     *         @SWG\Property(property="dpo_opinion", type="string"),
-     *         @SWG\Property(property="concerned_people_opinion", type="string"),
-     *         @SWG\Property(property="concerned_people_status", type="number"),
-     *         @SWG\Property(property="concerned_people_searched_opinion", type="boolean"),
-     *         @SWG\Property(property="concerned_people_searched_content", type="string"),
-     *         @SWG\Property(property="rejection_reason", type="string"),
-     *         @SWG\Property(property="applied_adjustements", type="string"),
-     *         @SWG\Property(property="dpos_names", type="string"),
-     *         @SWG\Property(property="people_names", type="string"),
-     *         @SWG\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="author_name", type="string"),
+     *         @Swg\Property(property="evaluator_name", type="string"),
+     *         @Swg\Property(property="validator_name", type="string"),
+     *         @Swg\Property(property="status", type="number"),
+     *         @Swg\Property(property="dpo_status", type="number"),
+     *         @Swg\Property(property="dpo_opinion", type="string"),
+     *         @Swg\Property(property="concerned_people_opinion", type="string"),
+     *         @Swg\Property(property="concerned_people_status", type="number"),
+     *         @Swg\Property(property="concerned_people_searched_opinion", type="boolean"),
+     *         @Swg\Property(property="concerned_people_searched_content", type="string"),
+     *         @Swg\Property(property="rejection_reason", type="string"),
+     *         @Swg\Property(property="applied_adjustements", type="string"),
+     *         @Swg\Property(property="dpos_names", type="string"),
+     *         @Swg\Property(property="people_names", type="string"),
+     *         @Swg\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The PIA content"
      * )
@@ -231,11 +231,11 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="author_name", type="string"),
-     *         @SWG\Property(property="evaluator_name", type="string"),
-     *         @SWG\Property(property="validator_name", type="string"),
-     *         @SWG\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="author_name", type="string"),
+     *         @Swg\Property(property="evaluator_name", type="string"),
+     *         @Swg\Property(property="validator_name", type="string"),
+     *         @Swg\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The PIA content"
      * )
@@ -301,22 +301,22 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="author_name", type="string"),
-     *         @SWG\Property(property="evaluator_name", type="string"),
-     *         @SWG\Property(property="validator_name", type="string"),
-     *         @SWG\Property(property="status", type="number"),
-     *         @SWG\Property(property="dpo_status", type="number"),
-     *         @SWG\Property(property="dpo_opinion", type="string"),
-     *         @SWG\Property(property="concerned_people_opinion", type="string"),
-     *         @SWG\Property(property="concerned_people_status", type="number"),
-     *         @SWG\Property(property="concerned_people_searched_opinion", type="boolean"),
-     *         @SWG\Property(property="concerned_people_searched_content", type="string"),
-     *         @SWG\Property(property="rejection_reason", type="string"),
-     *         @SWG\Property(property="applied_adjustements", type="string"),
-     *         @SWG\Property(property="dpos_names", type="string"),
-     *         @SWG\Property(property="people_names", type="string"),
-     *         @SWG\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="author_name", type="string"),
+     *         @Swg\Property(property="evaluator_name", type="string"),
+     *         @Swg\Property(property="validator_name", type="string"),
+     *         @Swg\Property(property="status", type="number"),
+     *         @Swg\Property(property="dpo_status", type="number"),
+     *         @Swg\Property(property="dpo_opinion", type="string"),
+     *         @Swg\Property(property="concerned_people_opinion", type="string"),
+     *         @Swg\Property(property="concerned_people_status", type="number"),
+     *         @Swg\Property(property="concerned_people_searched_opinion", type="boolean"),
+     *         @Swg\Property(property="concerned_people_searched_content", type="string"),
+     *         @Swg\Property(property="rejection_reason", type="string"),
+     *         @Swg\Property(property="applied_adjustements", type="string"),
+     *         @Swg\Property(property="dpos_names", type="string"),
+     *         @Swg\Property(property="people_names", type="string"),
+     *         @Swg\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The PIA content"
      * )
@@ -428,12 +428,12 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="pia", type="object", ref=@Nelmio\Model(type=Pia::class, groups={"Default"})),
-     *         @SWG\Property(property="answers", type="array", @Swg\Items(ref=@Nelmio\Model(type=Answer::class, groups={"Default"}))),
-     *         @SWG\Property(property="measures", type="array", @Swg\Items(ref=@Nelmio\Model(type=Measure::class, groups={"Default"}))),
-     *         @SWG\Property(property="evaluations", type="array", @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))),
-     *         @SWG\Property(property="comments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Comment::class, groups={"Default"}))),
-     *         @SWG\Property(property="attachments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})))
+     *         @Swg\Property(property="pia", type="object", ref=@Nelmio\Model(type=Pia::class, groups={"Default"})),
+     *         @Swg\Property(property="answers", type="array", @Swg\Items(ref=@Nelmio\Model(type=Answer::class, groups={"Default"}))),
+     *         @Swg\Property(property="measures", type="array", @Swg\Items(ref=@Nelmio\Model(type=Measure::class, groups={"Default"}))),
+     *         @Swg\Property(property="evaluations", type="array", @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))),
+     *         @Swg\Property(property="comments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Comment::class, groups={"Default"}))),
+     *         @Swg\Property(property="attachments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})))
      *     ),
      *     description="The PIA content"
      * )
@@ -488,12 +488,12 @@ class PiaController extends RestController
      *     description="Returns an export format of PIA",
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="pia", type="object", ref=@Nelmio\Model(type=Pia::class, groups={"Default"})),
-     *         @SWG\Property(property="answers", type="array", @Swg\Items(ref=@Nelmio\Model(type=Answer::class, groups={"Default"}))),
-     *         @SWG\Property(property="measures", type="array", @Swg\Items(ref=@Nelmio\Model(type=Measure::class, groups={"Default"}))),
-     *         @SWG\Property(property="evaluations", type="array", @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))),
-     *         @SWG\Property(property="comments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Comment::class, groups={"Default"}))),
-     *         @SWG\Property(property="attachments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})))
+     *         @Swg\Property(property="pia", type="object", ref=@Nelmio\Model(type=Pia::class, groups={"Default"})),
+     *         @Swg\Property(property="answers", type="array", @Swg\Items(ref=@Nelmio\Model(type=Answer::class, groups={"Default"}))),
+     *         @Swg\Property(property="measures", type="array", @Swg\Items(ref=@Nelmio\Model(type=Measure::class, groups={"Default"}))),
+     *         @Swg\Property(property="evaluations", type="array", @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))),
+     *         @Swg\Property(property="comments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Comment::class, groups={"Default"}))),
+     *         @Swg\Property(property="attachments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})))
      *     )
      * )
      *

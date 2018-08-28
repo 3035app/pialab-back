@@ -123,8 +123,8 @@ class AnswerController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="data", type="object", @SWG\Property(property="text", type="string")),
-     *         @SWG\Property(property="reference_to", type="string")
+     *         @Swg\Property(property="data", type="object", @Swg\Property(property="text", type="string")),
+     *         @Swg\Property(property="reference_to", type="string")
      *     ),
      *     description="The Answer text content"
      * )
@@ -180,8 +180,8 @@ class AnswerController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="data", type="object", @SWG\Property(property="text", type="string")),
-     *         @SWG\Property(property="reference_to", type="string")
+     *         @Swg\Property(property="data", type="object", @Swg\Property(property="text", type="string")),
+     *         @Swg\Property(property="reference_to", type="string")
      *     ),
      *     description="The Answer text content"
      * )

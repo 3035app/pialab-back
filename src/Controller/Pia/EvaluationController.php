@@ -131,12 +131,12 @@ class EvaluationController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="action_plan_comment", type="string"),
-     *         @SWG\Property(property="evaluation_comment", type="string"),
-     *         @SWG\Property(property="global_status", type="number"),
-     *         @SWG\Property(property="person_in_charge", type="string"),
-     *         @SWG\Property(property="reference_to", type="string"),
-     *         @SWG\Property(property="status", type="number")
+     *         @Swg\Property(property="action_plan_comment", type="string"),
+     *         @Swg\Property(property="evaluation_comment", type="string"),
+     *         @Swg\Property(property="global_status", type="number"),
+     *         @Swg\Property(property="person_in_charge", type="string"),
+     *         @Swg\Property(property="reference_to", type="string"),
+     *         @Swg\Property(property="status", type="number")
      *     ),
      *     description="The Evaluation content"
      * )
@@ -192,12 +192,12 @@ class EvaluationController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="action_plan_comment", type="string"),
-     *         @SWG\Property(property="evaluation_comment", type="string"),
-     *         @SWG\Property(property="global_status", type="number"),
-     *         @SWG\Property(property="person_in_charge", type="string"),
-     *         @SWG\Property(property="reference_to", type="string"),
-     *         @SWG\Property(property="status", type="number")
+     *         @Swg\Property(property="action_plan_comment", type="string"),
+     *         @Swg\Property(property="evaluation_comment", type="string"),
+     *         @Swg\Property(property="global_status", type="number"),
+     *         @Swg\Property(property="person_in_charge", type="string"),
+     *         @Swg\Property(property="reference_to", type="string"),
+     *         @Swg\Property(property="status", type="number")
      *     ),
      *     description="The Evaluation content"
      * )

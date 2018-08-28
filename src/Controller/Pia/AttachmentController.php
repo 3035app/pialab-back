@@ -131,9 +131,9 @@ class AttachmentController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="file", type="string"),
-     *         @SWG\Property(property="mime_type", type="string"),
-     *         @SWG\Property(property="name", type="string")
+     *         @Swg\Property(property="file", type="string"),
+     *         @Swg\Property(property="mime_type", type="string"),
+     *         @Swg\Property(property="name", type="string")
      *     ),
      *     description="The Attachment content"
      * )
@@ -189,9 +189,9 @@ class AttachmentController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="file", type="string"),
-     *         @SWG\Property(property="mime_type", type="string"),
-     *         @SWG\Property(property="name", type="string")
+     *         @Swg\Property(property="file", type="string"),
+     *         @Swg\Property(property="mime_type", type="string"),
+     *         @Swg\Property(property="name", type="string")
      *     ),
      *     description="The Attachment content"
      * )

@@ -139,7 +139,7 @@ class PortfolioController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string")
+     *         @Swg\Property(property="name", type="string")
      *     ),
      *     description="The Portfolio content"
      * )
@@ -150,9 +150,9 @@ class PortfolioController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="user", type="number"),
-     *         @SWG\Property(property="structure", type="number")
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="user", type="number"),
+     *         @Swg\Property(property="structure", type="number")
      *     ),
      *     description="The Portfolio content"
      * )
@@ -217,7 +217,7 @@ class PortfolioController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string")
+     *         @Swg\Property(property="name", type="string")
      *     ),
      *     description="The Portfolio content"
      * )
@@ -228,9 +228,9 @@ class PortfolioController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         @SWG\Property(property="name", type="string"),
-     *         @SWG\Property(property="user", type="number"),
-     *         @SWG\Property(property="structure", type="number")
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="user", type="number"),
+     *         @Swg\Property(property="structure", type="number")
      *     ),
      *     description="The Portfolio content"
      * )

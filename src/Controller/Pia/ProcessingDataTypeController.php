@@ -50,6 +50,14 @@ class ProcessingDataTypeController extends RestController
      *
      * @FOSRest\Get("/processing-data-types")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all ProcessingDataTypes",
@@ -80,6 +88,21 @@ class ProcessingDataTypeController extends RestController
      *
      * @FOSRest\Get("/processing-data-types/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the ProcessingDataType"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns one ProcessingDataType",
@@ -104,6 +127,28 @@ class ProcessingDataTypeController extends RestController
      * @Swg\Tag(name="ProcessingDataType")
      *
      * @FOSRest\Post("/processing-data-types")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="ProcessingDataType",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="reference", type="string"),
+     *         @Swg\Property(property="data", type="string"),
+     *         @Swg\Property(property="retention_period", type="string"),
+     *         @Swg\Property(property="sensitive", type="boolean")
+     *     ),
+     *     description="The ProcessingDataType content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -145,6 +190,35 @@ class ProcessingDataTypeController extends RestController
      *
      * @Swg\Tag(name="ProcessingDataType")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the ProcessingDataType"
+     * )
+     * @Swg\Parameter(
+     *     name="ProcessingDataType",
+     *     in="body",
+     *     type="json",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="reference", type="string"),
+     *         @Swg\Property(property="data", type="string"),
+     *         @Swg\Property(property="retention_period", type="string"),
+     *         @Swg\Property(property="sensitive", type="boolean")
+     *     ),
+     *     description="The ProcessingDataType content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated ProcessingDataType",
@@ -184,12 +258,27 @@ class ProcessingDataTypeController extends RestController
      *
      * @Swg\Tag(name="ProcessingDataType")
      *
+     * @FOSRest\Delete("/processing-data-types/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the ProcessingDataType"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Empty content"
      * )
-     *
-     * @FOSRest\Delete("/processing-data-types/{id}", requirements={"id"="\d+"})
      *
      * @Security("is_granted('CAN_DELETE_PROCESSING')")
      *
