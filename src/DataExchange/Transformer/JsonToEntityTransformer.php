@@ -66,7 +66,7 @@ class JsonToEntityTransformer
 
         foreach ($objectAsArray['comments'] as $comment) {
             /** @var Comment $piaComment */
-            $piaComment = $this->serializer->fromArray($comment, Comment::class);
+            $piaComment = $this->serializer->fromArray(array_replace_recursive(DataExchangeDescriptor::STRUCTURE['comments'], $comment), Comment::class);
             $piaComment->setPia($pia);
             $pia->getComments()->add($piaComment);
         }
@@ -77,7 +77,13 @@ class JsonToEntityTransformer
 
         foreach ($objectAsArray['answers'] as $answer) {
             /** @var Answer $piaAnswer */
-            $piaAnswer = $this->serializer->fromArray($answer, Answer::class);
+            $piaAnswer = $this->serializer->fromArray(array_replace_recursive(DataExchangeDescriptor::STRUCTURE['answers'], $answer), Answer::class);
+            $data = $piaAnswer->getData();
+            if (count($data['list']) > 0) {
+                // Dirty hack to remove numeric array keys that produce a json object instead of json array
+                $data['list'] = array_values($data['list']);
+            }
+            $piaAnswer->setData($data);
             $piaAnswer->setPia($pia);
             $pia->getAnswers()->add($piaAnswer);
         }
@@ -88,7 +94,7 @@ class JsonToEntityTransformer
 
         foreach ($objectAsArray['evaluations'] as $evaluation) {
             /** @var Evaluation $piaEvaluation */
-            $piaEvaluation = $this->serializer->fromArray($evaluation, Evaluation::class);
+            $piaEvaluation = $this->serializer->fromArray(array_replace_recursive(DataExchangeDescriptor::STRUCTURE['evaluations'], $evaluation), Evaluation::class);
             $piaEvaluation->setPia($pia);
             $pia->getEvaluations()->add($piaEvaluation);
         }
@@ -99,7 +105,7 @@ class JsonToEntityTransformer
 
         foreach ($objectAsArray['measures'] as $measure) {
             /** @var Measure $piaMeasure */
-            $piaMeasure = $this->serializer->fromArray($measure, Measure::class);
+            $piaMeasure = $this->serializer->fromArray(array_replace_recursive(DataExchangeDescriptor::STRUCTURE['measures'], $measure), Measure::class);
             $piaMeasure->setPia($pia);
             $pia->getMeasures()->add($piaMeasure);
         }
@@ -111,7 +117,7 @@ class JsonToEntityTransformer
         if (isset($objectAsArray['attachments'])) {
             foreach ($objectAsArray['attachments'] as $attachment) {
                 /** @var Attachment $piaAttachment */
-                $piaAttachment = $this->serializer->fromArray($attachment, Attachment::class);
+                $piaAttachment = $this->serializer->fromArray(array_replace_recursive(DataExchangeDescriptor::STRUCTURE['attachments'], $attachment), Attachment::class);
                 $piaAttachment->setPia($pia);
                 $pia->getAttachments()->add($piaAttachment);
             }

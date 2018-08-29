@@ -9,13 +9,6 @@
 ## [1.4.3](https://github.com/pia-lab/pialab-back/tree/1.4.3) (2018-08-27)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.5...1.4.3)
 
-## [1.2.5](https://github.com/pia-lab/pialab-back/tree/1.2.5) (2018-08-23)
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.3.1...1.2.5)
-
-**Closed issues:**
-
-- Unable to login after last git updates [\#63](https://github.com/pia-lab/pialab-back/issues/63)
-
 ## [1.3.1](https://github.com/pia-lab/pialab-back/tree/1.3.1) (2018-08-21)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.2...1.3.1)
 
@@ -69,6 +62,14 @@
 - Add CLI command to export swagger.json  [\#34](https://github.com/pia-lab/pialab-back/pull/34) ([GlennCavarle](https://github.com/GlennCavarle))
 - Administration API [\#33](https://github.com/pia-lab/pialab-back/pull/33) ([PapsOu](https://github.com/PapsOu))
 - Add  customer portfolio management [\#31](https://github.com/pia-lab/pialab-back/pull/31) ([GlennCavarle](https://github.com/GlennCavarle))
+
+## [1.2.5](https://github.com/pia-lab/pialab-back/tree/1.2.5) (2018-08-23)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.3.1...1.2.5)
+
+**Closed issues:**
+
+- Unable to login after last git updates [\#63](https://github.com/pia-lab/pialab-back/issues/63)
+
 
 ## [1.2.4](https://github.com/pia-lab/pialab-back/tree/1.2.4) (2018-07-17)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.3...1.2.4)
