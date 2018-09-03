@@ -160,6 +160,7 @@ class StructureController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
+     *         required={"name"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="type", type="object", ref=@Nelmio\Model(type=StructureType::class, groups={"Default"}))
      *     ),

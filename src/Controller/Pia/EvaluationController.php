@@ -131,6 +131,7 @@ class EvaluationController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
+     *         required={"action_plan_comment", "evaluation_comment","person_in_charge","reference_to"},
      *         @Swg\Property(property="action_plan_comment", type="string"),
      *         @Swg\Property(property="evaluation_comment", type="string"),
      *         @Swg\Property(property="global_status", type="number"),

@@ -231,6 +231,7 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
+     *         required={"name", "author_name","evaluator_name","validator_name","processing"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author_name", type="string"),
      *         @Swg\Property(property="evaluator_name", type="string"),

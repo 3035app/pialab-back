@@ -164,6 +164,7 @@ class StructureFolderController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
+     *         required={"name"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
      *     ),

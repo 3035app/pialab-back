@@ -131,6 +131,7 @@ class CommentController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
+     *         required={"description", "reference_to"},
      *         @Swg\Property(property="description", type="string"),
      *         @Swg\Property(property="for_measure", type="boolean"),
      *         @Swg\Property(property="reference_to", type="string")

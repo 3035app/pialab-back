@@ -131,6 +131,7 @@ class MeasureController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
+     *         required={"title", "content","placeholder"},
      *         @Swg\Property(property="title", type="string"),
      *         @Swg\Property(property="content", type="string"),
      *         @Swg\Property(property="placeholder", type="string")

@@ -142,6 +142,7 @@ class ProcessingDataTypeController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
+     *         required={"reference"},
      *         @Swg\Property(property="reference", type="string"),
      *         @Swg\Property(property="data", type="string"),
      *         @Swg\Property(property="retention_period", type="string"),

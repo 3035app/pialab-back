@@ -123,6 +123,7 @@ class AnswerController extends PiaSubController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
+     *         required={"data", "reference_to"},
      *         @Swg\Property(property="data", type="object", @Swg\Property(property="text", type="string")),
      *         @Swg\Property(property="reference_to", type="string")
      *     ),
