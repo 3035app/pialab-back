@@ -240,4 +240,12 @@ class Structure implements Timestampable
 
         return $roots->count() > 0 ? $roots->first() : null;
     }
+
+    /**
+     * @return array
+     */
+    public function getProcessings()
+    {
+        return $this->getRootFolder()->flatCollectProcessings();
+    }
 }

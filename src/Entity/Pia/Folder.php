@@ -335,4 +335,17 @@ class Folder implements Timestampable
         }
         $this->processings->removeElement($processing);
     }
+
+    /**
+     * @return array|Processing[]
+     */
+    public function flatCollectProcessings()
+    {
+        return array_merge(
+            $this->getProcessings(),
+            ...$this->getChildren()->map(function ($folder) {
+                return $folder->flatCollectProcessings();
+            })->getValues()
+        );
+    }
 }
