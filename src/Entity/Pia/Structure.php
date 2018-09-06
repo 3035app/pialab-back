@@ -126,6 +126,8 @@ class Structure implements Timestampable
     }
 
     /**
+     * @deprecated since 1.4
+     *
      * @return Collection
      */
     public function getPias(): Collection
@@ -134,6 +136,8 @@ class Structure implements Timestampable
     }
 
     /**
+     * @deprecated since 1.4
+     *
      * @param Collection $pias
      */
     public function setPias(Collection $pias): void
