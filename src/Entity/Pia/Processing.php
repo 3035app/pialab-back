@@ -111,7 +111,7 @@ class Processing
     protected $nonEuTransfer;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing")
+     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
      *
