@@ -1,7 +1,10 @@
 # Change Log
 
 ## [1.4.7](https://github.com/pia-lab/pialab-back/tree/1.4.7) (2018-09-06)
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.6...1.4.7)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.8...1.4.7)
+
+## [1.4.8](https://github.com/pia-lab/pialab-back/tree/1.4.8) (2018-09-06)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.6...1.4.8)
 
 **Fixed bugs:**
 
