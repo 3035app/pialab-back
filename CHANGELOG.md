@@ -1,6 +1,22 @@
 # Change Log
 
-## [1.4.6](https://github.com/pia-lab/pialab-back/tree/1.4.6) (2018-08-29)
+## [1.4.7](https://github.com/pia-lab/pialab-back/tree/1.4.7) (2018-09-06)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.6...1.4.7)
+
+**Fixed bugs:**
+
+- Twig error runtime  [\#28](https://github.com/pia-lab/pialab-back/issues/28)
+
+**Closed issues:**
+
+- error when i manage users [\#61](https://github.com/pia-lab/pialab-back/issues/61)
+
+**Merged pull requests:**
+
+- Cascading delete ProcessingDataType when deleting a Processing [\#65](https://github.com/pia-lab/pialab-back/pull/65) ([PapsOu](https://github.com/PapsOu))
+- Add missing required object attributes on parameters [\#64](https://github.com/pia-lab/pialab-back/pull/64) ([PapsOu](https://github.com/PapsOu))
+
+## [1.4.6](https://github.com/pia-lab/pialab-back/tree/1.4.6) (2018-08-31)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.6...1.4.6)
 
 ## [1.2.6](https://github.com/pia-lab/pialab-back/tree/1.2.6) (2018-08-29)
