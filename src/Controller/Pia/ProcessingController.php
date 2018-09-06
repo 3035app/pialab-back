@@ -159,7 +159,7 @@ class ProcessingController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         required={"name", "author", "status"},
+     *         required={"name", "author", "controllers"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author", type="string"),
      *         @Swg\Property(property="status", type="number"),
@@ -233,7 +233,6 @@ class ProcessingController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         required={"name", "author", "status"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author", type="string"),
      *         @Swg\Property(property="status", type="number"),
