@@ -79,7 +79,7 @@ class JsonToEntityTransformer
             /** @var Answer $piaAnswer */
             $piaAnswer = $this->serializer->fromArray(array_replace_recursive(DataExchangeDescriptor::STRUCTURE['answers'], $answer), Answer::class);
             $data = $piaAnswer->getData();
-            if (count($data['list']) > 0) {
+            if (is_array($data['list']) && count($data['list']) > 0) {
                 // Dirty hack to remove numeric array keys that produce a json object instead of json array
                 $data['list'] = array_values($data['list']);
             }

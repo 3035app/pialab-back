@@ -17,8 +17,9 @@
       <div class="ui segment">
         <h2>
           {{structure.name}}
-          <br>
-          <small>({{structure.type.name}})</small>
+          {% if structure.type is not null %}
+            <br><small>({{structure.type.name}})</small>
+          {% endif %}
         </h2>
       </div>
     </div>

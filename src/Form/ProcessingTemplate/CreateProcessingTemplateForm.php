@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Form\PiaTemplate;
+namespace PiaApi\Form\ProcessingTemplate;
 
 use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,7 +18,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class CreatePiaTemplateForm extends BaseForm
+class CreateProcessingTemplateForm extends BaseForm
 {
     public function __construct(RegistryInterface $doctrine)
     {

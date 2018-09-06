@@ -10,15 +10,15 @@
 
 namespace PiaApi\Tests\functionnal;
 
-use PiaApi\Command\PiaTemplatesBatchImportCommand;
+use PiaApi\Command\ProcessingTemplatesBatchImportCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use PiaApi\Kernel;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
-use PiaApi\Services\PiaTemplateService;
+use PiaApi\Services\ProcessingTemplateService;
 
-class PiaTemplateBatchImportTest extends WebTestCase
+class ProcessingTemplateBatchImportTest extends WebTestCase
 {
     /**
      * @return string The Kernel class name
@@ -40,14 +40,14 @@ class PiaTemplateBatchImportTest extends WebTestCase
         $application = new Application($kernel);
 
         $application->add(
-            new PiaTemplatesBatchImportCommand(
+            new ProcessingTemplatesBatchImportCommand(
                 $di->get('doctrine')->getManager(),
                 $di->get(JsonToEntityTransformer::class),
-                $di->get(PiaTemplateService::class)
+                $di->get(ProcessingTemplateService::class)
             )
         );
 
-        $command = $application->find(PiaTemplatesBatchImportCommand::NAME);
+        $command = $application->find(ProcessingTemplatesBatchImportCommand::NAME);
 
         $commandTester = new CommandTester($command);
 

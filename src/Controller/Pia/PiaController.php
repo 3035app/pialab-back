@@ -16,7 +16,7 @@ use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\Pia;
-use PiaApi\Entity\Pia\PiaTemplate;
+use PiaApi\Entity\Pia\ProcessingTemplate;
 use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\Answer;
 use PiaApi\Entity\Pia\Measure;
@@ -151,7 +151,6 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author_name", type="string"),
      *         @Swg\Property(property="evaluator_name", type="string"),
      *         @Swg\Property(property="validator_name", type="string"),
@@ -231,8 +230,7 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         required={"name", "author_name","evaluator_name","validator_name","processing"},
-     *         @Swg\Property(property="name", type="string"),
+     *         required={"author_name","evaluator_name","validator_name","processing"},
      *         @Swg\Property(property="author_name", type="string"),
      *         @Swg\Property(property="evaluator_name", type="string"),
      *         @Swg\Property(property="validator_name", type="string"),
@@ -256,14 +254,13 @@ class PiaController extends RestController
      */
     public function createFromTemplateAction(Request $request, $id)
     {
-        /** @var PiaTemplate $piaTemplate */
-        $piaTemplate = $this->getDoctrine()->getRepository(PiaTemplate::class)->find($id);
-        if ($piaTemplate === null) {
-            return $this->view($piaTemplate, Response::HTTP_NOT_FOUND);
+        /** @var ProcessingTemplate $pTemplate */
+        $pTemplate = $this->getDoctrine()->getRepository(ProcessingTemplate::class)->find($id);
+        if ($pTemplate === null) {
+            return $this->view($pTemplate, Response::HTTP_NOT_FOUND);
         }
 
-        $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
-        $pia->setName($request->get('name', $pia->getName()));
+        $pia = $this->jsonToEntityTransformer->transform($pTemplate->getData());
         $pia->setAuthorName($request->get('author_name', $pia->getAuthorName()));
         $pia->setEvaluatorName($request->get('evaluator_name', $pia->getEvaluatorName()));
         $pia->setValidatorName($request->get('validator_name', $pia->getValidatorName()));
@@ -302,7 +299,6 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author_name", type="string"),
      *         @Swg\Property(property="evaluator_name", type="string"),
      *         @Swg\Property(property="validator_name", type="string"),
@@ -342,7 +338,6 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
 
         $updatableAttributes = [
-            'name'                               => RequestDataHandler::TYPE_STRING,
             'author_name'                        => RequestDataHandler::TYPE_STRING,
             'evaluator_name'                     => RequestDataHandler::TYPE_STRING,
             'validator_name'                     => RequestDataHandler::TYPE_STRING,

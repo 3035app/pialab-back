@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Form\PiaTemplate;
+namespace PiaApi\Form\ProcessingTemplate;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
-class EditPiaTemplateForm extends CreatePiaTemplateForm
+class EditProcessingTemplateForm extends CreateProcessingTemplateForm
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
