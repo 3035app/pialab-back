@@ -112,6 +112,9 @@ abstract class RestController extends FOSRestController
     protected function mergeFromRequest($entity, array $attributesToMerge, Request $request): void
     {
         foreach ($attributesToMerge as $attributeToMerge => $attributeType) {
+            if (!$request->request->has($attributeToMerge)) {
+                continue;
+            }
             $attributeData = $request->get($attributeToMerge);
 
             if ($this->isTypeADoctrineEntity($attributeType)) {
