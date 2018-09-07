@@ -73,10 +73,10 @@ trait ApiFixturesTrait
         $I->login();
 
         $processingData = [
-            'name'        => 'Processing CI',
-            'folder'      => $I->getRootFolder(),
-            'author'      => 'Author 1',
-            'controllers' => 'Controller 1, Controller 2, Controller 3',
+            'name'                  => 'Processing CI',
+            'folder'                => $I->getRootFolder(),
+            'author'                => 'Author 1',
+            'designated_controller' => 'Designated controller',
         ];
 
         $I->sendJsonToCreate('/processings', $processingData);
