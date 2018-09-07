@@ -46,43 +46,43 @@
                         </thead>
                         <tbody>
 
-                            {% for piaTemplate in piaTemplates %}
+                            {% for template in templates %}
                                 <tr>
-                                    <td>{{ piaTemplate.id }}</td>
-                                    <td>{{ piaTemplate.name }}</td>
+                                    <td>{{ template.id }}</td>
+                                    <td>{{ template.name }}</td>
                                     <td>
                                         {% set hyphen = '' %}
-                                        {% if piaTemplate.description|length > 32 %}
+                                        {% if template.description|length > 32 %}
                                             {% set hyphen = ' <i>[...]</i>' %}
                                         {% endif %}
                                         
-                                        {{ (piaTemplate.description[:32] ~ hyphen)|raw }}
+                                        {{ (template.description[:32] ~ hyphen)|raw }}
                                     </td>
-                                    <td>{{ piaTemplate.isEnabled() ? ('<span class="ui green label">'~'pia.labels.yes'|trans~'</span>')|raw : ('<span class="ui red label">'~'pia.labels.no'|trans~'</span>')|raw }}</td>
-                                    <td>{{ macro.getOctets(piaTemplate.data) }}</td>
-                                    <td>{{ piaTemplate.importedFileName }}</td>
+                                    <td>{{ template.isEnabled() ? ('<span class="ui green label">'~'pia.labels.yes'|trans~'</span>')|raw : ('<span class="ui red label">'~'pia.labels.no'|trans~'</span>')|raw }}</td>
+                                    <td>{{ macro.getOctets(template.data) }}</td>
+                                    <td>{{ template.importedFileName }}</td>
                                     <td>
-                                        {{ piaTemplate.createdAt|date('d/m/Y H:i')}}
-                                    </td>
-                                    <td>
-                                        {{ piaTemplate.updatedAt|date('d/m/Y H:i')}}
+                                        {{ template.createdAt|date('d/m/Y H:i')}}
                                     </td>
                                     <td>
-                                        <div class="ui teal label" {% if piaTemplate.structures|length == 0 %}style="opacity:0.3;"{% endif %}>
-                                            {{ piaTemplate.structures|length }}
+                                        {{ template.updatedAt|date('d/m/Y H:i')}}
+                                    </td>
+                                    <td>
+                                        <div class="ui teal label" {% if template.structures|length == 0 %}style="opacity:0.3;"{% endif %}>
+                                            {{ template.structures|length }}
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="ui blue label" {% if piaTemplate.structureTypes|length == 0 %}style="opacity:0.3;"{% endif %}>
-                                            {{ piaTemplate.structureTypes|length }}
+                                        <div class="ui blue label" {% if template.structureTypes|length == 0 %}style="opacity:0.3;"{% endif %}>
+                                            {{ template.structureTypes|length }}
                                         </div>
                                     </td>
                                     <td class="right aligned">
                                         <div class="ui small buttons">
-                                            <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_pia_templates_edit_pia_template', {'piaTemplateId':piaTemplate.id}) }}">
+                                            <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_processing_templates_edit_processing_template', {'templateId':template.id}) }}">
                                                 <i class="pencil icon"></i>
                                             </a>
-                                            <a class="ui red tiny icon button" title="{{ 'pia.actions.remove'|trans }}" data-modal="data-modal" href="{{ path('manage_pia_templates_remove_pia_template', {'piaTemplateId':piaTemplate.id}) }}">
+                                            <a class="ui red tiny icon button" title="{{ 'pia.actions.remove'|trans }}" data-modal="data-modal" href="{{ path('manage_processing_templates_remove_processing_template', {'templateId':template.id}) }}">
                                                 <i class="trash icon"></i>
                                             </a>
                                         </div>
@@ -93,7 +93,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{ pagerfanta(piaTemplates, 'semantic_ui') }}
+                {{ pagerfanta(templates, 'semantic_ui') }}
             </div>
 
         </div>
@@ -103,7 +103,7 @@
 
                 <h2>{{ 'pia.templates.add.title'|trans }}</h2>
 
-                {{ render(controller('PiaApi\\Controller\\BackOffice\\PiaTemplateController:addPiaTemplateAction')) }}
+                {{ render(controller('PiaApi\\Controller\\BackOffice\\ProcessingTemplateController:addProcessingTemplateAction')) }}
 
             </div>
         </div>

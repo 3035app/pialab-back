@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace PiaApi\Form\PiaTemplate;
+namespace PiaApi\Form\ProcessingTemplate;
 
 use PiaApi\Form\BaseForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
-class RemovePiaTemplateForm extends BaseForm
+class RemoveProcessingTemplateForm extends BaseForm
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
