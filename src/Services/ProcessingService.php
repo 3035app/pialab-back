@@ -21,17 +21,17 @@ class ProcessingService extends AbstractService
     }
 
     /**
-     * 
-     * @param string    $name
-     * @param Folder    $folder
-     * @param string    $author
-     * @param string    $controllers
-     * 
+     * @param string $name
+     * @param Folder $folder
+     * @param string $author
+     * @param string $designatedController
+     *
      * @return Processing
      */
-    public function createProcessing(string $name, Folder $folder, string $author, string $controllers): Processing
+    public function createProcessing(string $name, Folder $folder, string $author, string $designatedController): Processing
     {
-        $processing = new Processing($name, $folder, $author, $controllers);
+        $processing = new Processing($name, $folder, $author, $designatedController);
+
         return $processing;
     }
 }
