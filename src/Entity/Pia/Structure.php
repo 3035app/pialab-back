@@ -68,7 +68,7 @@ class Structure implements Timestampable
     protected $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="PiaTemplate", mappedBy="structures")
+     * @ORM\ManyToMany(targetEntity="ProcessingTemplate", mappedBy="structures")
      * @JMS\Exclude()
      *
      * @var Collection
@@ -178,7 +178,7 @@ class Structure implements Timestampable
     }
 
     /**
-     * @return array|PiaTemplate[]
+     * @return array|ProcessingTemplate[]
      */
     public function getTemplates(): array
     {
@@ -186,28 +186,32 @@ class Structure implements Timestampable
     }
 
     /**
-     * @param PiaTemplate $template
+     * @param ProcessingTemplate $template
      *
      * @throws InvalidArgumentException
      */
-    public function addTemplate(PiaTemplate $template): void
+    public function addTemplate(ProcessingTemplate $template): void
     {
         if ($this->templates->contains($template)) {
-            throw new InvalidArgumentException(sprintf('Template « %s » is already in THIS', $template));
+            throw new InvalidArgumentException(
+                sprintf('The ProcessingTemplate « %s » is already allowed for Structure « %s »', $template->getName(), $this->name)
+            );
         }
         $template->addStructure($this);
         $this->templates->add($template);
     }
 
     /**
-     * @param PiaTemplate $template
+     * @param ProcessingTemplate $template
      *
      * @throws InvalidArgumentException
      */
-    public function removeTemplate(PiaTemplate $template): void
+    public function removeTemplate(ProcessingTemplate $template): void
     {
         if (!$this->templates->contains($template)) {
-            throw new InvalidArgumentException(sprintf('Template « %s » is not in THIS', $template));
+            throw new InvalidArgumentException(
+                sprintf('The ProcessingTemplate « %s » is not allowed for Structure « %s » and so cannot be disociated', $template->getName(), $this->name)
+                );
         }
         $template->removeStructure($this);
         $this->templates->removeElement($template);
