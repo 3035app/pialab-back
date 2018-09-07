@@ -137,6 +137,14 @@ class Processing
      */
     protected $folder;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="ProcessingTemplate", inversedBy="processings")
+     * @JMS\Groups({"Full"})
+     *
+     * @var ProcessingTemplate
+     */
+    protected $template;
+
     public function __construct(
         string $name,
         Folder $folder,
@@ -424,5 +432,21 @@ class Processing
             throw new \InvalidArgumentException(sprintf('Status « %d » is not valid', $status));
         }
         $this->status = $status;
+    }
+
+    /**
+     * @return ProcessingTemplate
+     */
+    public function getTemplate(): ?ProcessingTemplate
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param ProcessingTemplate $template
+     */
+    public function setTemplate(?ProcessingTemplate $template): void
+    {
+        $this->template = $template;
     }
 }

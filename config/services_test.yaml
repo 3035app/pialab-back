@@ -8,4 +8,4 @@ services:
     #
     # test.App\Service\MyService: '@App\Service\MyService'
     JsonToEntityTransformer: '@PiaApi\DataExchange\Transformer\JsonToEntityTransformer'
-    PiaTemplateService: '@PiaApi\Services\PiaTemplateService'
+    ProcessingTemplateService: '@PiaApi\Services\ProcessingTemplateService'

@@ -13,7 +13,7 @@ namespace PiaApi\Form\Structure;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use PiaApi\Entity\Pia\PiaTemplate;
+use PiaApi\Entity\Pia\ProcessingTemplate;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class EditStructureForm extends CreateStructureForm
@@ -24,7 +24,7 @@ class EditStructureForm extends CreateStructureForm
         $builder
             ->remove('submit')
             ->add('templates', EntityType::class, [
-                'class'        => PiaTemplate::class,
+                'class'        => ProcessingTemplate::class,
                 'choice_label' => 'name',
                 'multiple'     => true,
                 'expanded'     => true,

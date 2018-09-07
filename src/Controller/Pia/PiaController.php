@@ -16,7 +16,7 @@ use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\Pia;
-use PiaApi\Entity\Pia\PiaTemplate;
+use PiaApi\Entity\Pia\ProcessingTemplate;
 use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\Answer;
 use PiaApi\Entity\Pia\Measure;
@@ -256,13 +256,13 @@ class PiaController extends RestController
      */
     public function createFromTemplateAction(Request $request, $id)
     {
-        /** @var PiaTemplate $piaTemplate */
-        $piaTemplate = $this->getDoctrine()->getRepository(PiaTemplate::class)->find($id);
-        if ($piaTemplate === null) {
-            return $this->view($piaTemplate, Response::HTTP_NOT_FOUND);
+        /** @var ProcessingTemplate $pTemplate */
+        $pTemplate = $this->getDoctrine()->getRepository(ProcessingTemplate::class)->find($id);
+        if ($pTemplate === null) {
+            return $this->view($pTemplate, Response::HTTP_NOT_FOUND);
         }
 
-        $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
+        $pia = $this->jsonToEntityTransformer->transform($pTemplate->getData());
         $pia->setName($request->get('name', $pia->getName()));
         $pia->setAuthorName($request->get('author_name', $pia->getAuthorName()));
         $pia->setEvaluatorName($request->get('evaluator_name', $pia->getEvaluatorName()));

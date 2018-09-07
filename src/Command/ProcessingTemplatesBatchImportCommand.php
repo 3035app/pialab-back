@@ -13,9 +13,9 @@ namespace PiaApi\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\Entity\Pia\Pia;
-use PiaApi\Entity\Pia\PiaTemplate;
+use PiaApi\Entity\Pia\ProcessingTemplate;
 use PiaApi\Entity\Pia\Structure;
-use PiaApi\Services\PiaTemplateService;
+use PiaApi\Services\ProcessingTemplateService;
 use splitbrain\PHPArchive\Tar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -26,7 +26,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-class PiaTemplatesBatchImportCommand extends Command
+class ProcessingTemplatesBatchImportCommand extends Command
 {
     const NAME = 'pia:templates:batch-import';
 
@@ -41,9 +41,9 @@ class PiaTemplatesBatchImportCommand extends Command
     protected $entityManager;
 
     /**
-     * @var PiaTemplateService
+     * @var ProcessingTemplateService
      */
-    protected $piaTemplateService;
+    protected $processingTemplateService;
 
     /**
      * @var SymfonyStyle
@@ -58,19 +58,19 @@ class PiaTemplatesBatchImportCommand extends Command
     public function __construct(
         EntityManagerInterface $entityManager,
         JsonToEntityTransformer $jsonToEntityTransformer,
-        PiaTemplateService $piaTemplateService
+        ProcessingTemplateService $processingTemplateService
     ) {
         parent::__construct();
         $this->entityManager = $entityManager;
         $this->jsonToEntityTransformer = $jsonToEntityTransformer;
-        $this->piaTemplateService = $piaTemplateService;
+        $this->processingTemplateService = $processingTemplateService;
     }
 
     protected function configure()
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Imports a collection of PIA templates into backend')
+            ->setDescription('Imports a collection of processing templates into backend')
             ->setHelp('This command allows you to import all json files included in a specific folder as PIA templates')
             ->addArgument('path', InputArgument::REQUIRED, 'The target directory (or archive) that contains templates json files (can be relative or absolute)')
             ->addOption('enable-all', null, InputOption::VALUE_NONE, 'Does the templates imported should be enabled ? By default, all templates are disabled')
@@ -136,14 +136,14 @@ class PiaTemplatesBatchImportCommand extends Command
         return $tempDir;
     }
 
-    private function buildTemplate(string $filePath, string $fileName, bool $enabled = false): PiaTemplate
+    private function buildTemplate(string $filePath, string $fileName, bool $enabled = false): ProcessingTemplate
     {
         $templateJson = file_get_contents($filePath);
 
         // Fetching template json as entity in order to get target template name only
         $pia = $this->fetchDataAsEntities($templateJson);
 
-        $template = $this->piaTemplateService->createTemplate(
+        $template = $this->processingTemplateService->createTemplate(
             $pia->getName(),
             $templateJson,
             $fileName

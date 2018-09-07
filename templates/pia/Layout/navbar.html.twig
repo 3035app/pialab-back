@@ -25,8 +25,8 @@
         <i class="building icon"></i>{{ 'pia.layout.navbar.structures'|trans }}
       </a>
     {% endif %}
-    {% if is_granted('CAN_MANAGE_PIA_TEMPLATES') %}
-      <a class="{{ menu.activeMenu(activeItem, 'pia_templates') }} item" href="{{ path('manage_pia_templates') }}">
+    {% if is_granted('CAN_MANAGE_PROCESSING_TEMPLATES') %}
+      <a class="{{ menu.activeMenu(activeItem, 'processing_templates') }} item" href="{{ path('manage_processing_templates') }}">
         <i class="file alternate outline icon"></i>{{ 'pia.layout.navbar.templates'|trans }}
       </a>
     {% endif %}

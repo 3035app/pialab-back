@@ -200,14 +200,6 @@ class Pia implements Timestampable
     protected $structure;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PiaTemplate", inversedBy="pias")
-     * @JMS\Groups({"Full"})
-     *
-     * @var PiaTemplate
-     */
-    protected $template;
-
-    /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Full"})
      *
@@ -243,10 +235,10 @@ class Pia implements Timestampable
     public function computeProgress(): int
     {
         $currentAnswerCount = count($this->answers ?? []);
-        $currentQuestionCount = Pia::QUESTION_NUMBER;
+        $currentQuestionCount = self::QUESTION_NUMBER;
 
         if ($currentAnswerCount > $currentQuestionCount) {
-            $currentQuestionCount = Pia::OLD_QUESTION_NUMBER;
+            $currentQuestionCount = self::OLD_QUESTION_NUMBER;
         }
 
         $progress = round((100 / $currentQuestionCount) * $currentAnswerCount);
@@ -268,22 +260,6 @@ class Pia implements Timestampable
     public function setStructure(?Structure $structure): void
     {
         $this->structure = $structure;
-    }
-
-    /**
-     * @return PiaTemplate
-     */
-    public function getTemplate(): ?PiaTemplate
-    {
-        return $this->template;
-    }
-
-    /**
-     * @param PiaTemplate $template
-     */
-    public function setTemplate(?PiaTemplate $template): void
-    {
-        $this->template = $template;
     }
 
     /**

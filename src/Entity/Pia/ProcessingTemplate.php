@@ -20,10 +20,10 @@ use PiaApi\Entity\Pia\Traits\ResourceTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * @ORM\Entity(repositoryClass="PiaApi\Repository\PiaTemplateRepository")
+ * @ORM\Entity(repositoryClass="PiaApi\Repository\ProcessingTemplateRepository")
  * @ORM\Table(name="pia_template")
  */
-class PiaTemplate implements Timestampable
+class ProcessingTemplate implements Timestampable
 {
     use ResourceTrait,
         TimestampableEntity;
@@ -69,12 +69,12 @@ class PiaTemplate implements Timestampable
     protected $importedFileName;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pia", mappedBy="template")
+     * @ORM\OneToMany(targetEntity="Processing", mappedBy="template")
      * @JMS\Exclude()
      *
      * @var Collection
      */
-    protected $pias;
+    protected $processings;
 
     /**
      * @ORM\ManyToMany(targetEntity="Structure", inversedBy="templates")
@@ -105,7 +105,7 @@ class PiaTemplate implements Timestampable
     public function __construct(string $name)
     {
         $this->name = $name;
-        $this->pias = new ArrayCollection();
+        $this->processings = new ArrayCollection();
         $this->structures = new ArrayCollection();
         $this->structureTypes = new ArrayCollection();
     }
@@ -174,17 +174,17 @@ class PiaTemplate implements Timestampable
     /**
      * @return Collection
      */
-    public function getPias(): Collection
+    public function getProcessings(): Collection
     {
-        return $this->pias;
+        return $this->processings;
     }
 
     /**
-     * @param Collection $pias
+     * @param Collection $processings
      */
-    public function setPias(Collection $pias): void
+    public function setProcessings(Collection $processings): void
     {
-        $this->pias = $pias;
+        $this->processings = $processings;
     }
 
     /**
@@ -204,7 +204,7 @@ class PiaTemplate implements Timestampable
     }
 
     /**
-     * Add file to the pia_template.
+     * Add file to the template.
      *
      * @param UploadedFile $file
      */
@@ -231,7 +231,9 @@ class PiaTemplate implements Timestampable
     public function addStructure(Structure $structure): void
     {
         if ($this->structures->contains($structure)) {
-            throw new InvalidArgumentException(sprintf('Structure « %s » is already in PiaTemplate', $structure));
+            throw new InvalidArgumentException(
+                sprintf('The ProcessingTemplate « %s » is already allowed for Structure « %s »', $this->name, $structure->getName())
+            );
         }
         $this->structures->add($structure);
     }
@@ -244,7 +246,9 @@ class PiaTemplate implements Timestampable
     public function removeStructure(Structure $structure): void
     {
         if (!$this->structures->contains($structure)) {
-            throw new InvalidArgumentException(sprintf('Structure « %s » is not in PiaTemplate', $structure));
+            throw new InvalidArgumentException(
+                sprintf('The ProcessingTemplate « %s » is not allowed for Structure « %s » and so cannot be disociated', $this->name, $structure->getName())
+            );
         }
         $this->structures->removeElement($structure);
     }
@@ -265,7 +269,9 @@ class PiaTemplate implements Timestampable
     public function addStructureType(StructureType $structureType): void
     {
         if ($this->structureTypes->contains($structureType)) {
-            throw new \InvalidArgumentException(sprintf('StructureType « %s » is already in PiaTemplate', $structureType));
+            throw new \InvalidArgumentException(
+                sprintf('The ProcessingTemplate « %s » is already allowed for StructureType « %s »', $this->name, $structureType)
+            );
         }
         $this->structureTypes->add($structureType);
     }
@@ -278,7 +284,9 @@ class PiaTemplate implements Timestampable
     public function removeStructureType(StructureType $structureType): void
     {
         if (!$this->structureTypes->contains($structureType)) {
-            throw new \InvalidArgumentException(sprintf('StructureType « %s » is not in PiaTemplate', $structureType));
+            throw new \InvalidArgumentException(
+                sprintf('The ProcessingTemplate « %s » is not allowed for StructureType « %s » and so cannot be disociated', $this->name, $structureType)    
+            );
         }
         $this->structureTypes->removeElement($structureType);
     }
