@@ -48,7 +48,7 @@ class ProcessingTemplateController extends RestController
      *
      * @Swg\Tag(name="ProcessingTemplate")
      *
-     * @FOSRest\Get("/pia-templates")
+     * @FOSRest\Get("/processing-templates")
      *
      * @Swg\Parameter(
      *     name="Authorization",
@@ -67,7 +67,7 @@ class ProcessingTemplateController extends RestController
      *     )
      * )
      *
-     * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_SHOW_PROCESSING_TEMPLATE')")
      *
      * @return View
      */
@@ -90,7 +90,7 @@ class ProcessingTemplateController extends RestController
      *
      * @Swg\Tag(name="ProcessingTemplate")
      *
-     * @FOSRest\Get("/pia-templates/{id}")
+     * @FOSRest\Get("/processing-templates/{id}")
      *
      * @Swg\Parameter(
      *     name="Authorization",
@@ -120,20 +120,20 @@ class ProcessingTemplateController extends RestController
      *     description="ProcessingTemplate does not exists"
      * )
      *
-     * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_SHOW_PROCESSING_TEMPLATE')")
      *
      * @return View
      */
     public function showAction(Request $request, $id)
     {
-        $piaTemplate = $this->getRepository()->find($id);
-        if ($piaTemplate === null) {
-            return $this->view($piaTemplate, Response::HTTP_NOT_FOUND);
+        $pTemplate = $this->getRepository()->find($id);
+        if ($pTemplate === null) {
+            return $this->view($pTemplate, Response::HTTP_NOT_FOUND);
         }
 
-        $this->canAccessResourceOr403($piaTemplate);
+        $this->canAccessResourceOr403($pTemplate);
 
-        return $this->view($piaTemplate, Response::HTTP_OK);
+        return $this->view($pTemplate, Response::HTTP_OK);
     }
 
     /**
@@ -141,7 +141,7 @@ class ProcessingTemplateController extends RestController
      *
      * @Swg\Tag(name="ProcessingTemplate")
      *
-     * @FOSRest\Post("/pia-templates/importCollection")
+     * @FOSRest\Post("/processing-templates/importCollection")
      *
      * @Swg\Parameter(
      *     name="Authorization",
@@ -174,7 +174,7 @@ class ProcessingTemplateController extends RestController
      *     description="Empty content, Import ProcessingTemplates fails"
      * )
      *
-     * @Security("is_granted('CAN_CREATE_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_CREATE_PROCESSING_TEMPLATE')")
      *
      * @return View
      */
