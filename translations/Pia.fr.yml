@@ -118,7 +118,7 @@ pia:
                 resume:
                     template: Gabarit
                     name: Nom
-                    pias_number: PIA issues de ce gabarit
+                    processing_number: Traitements issues de ce gabarit
 
         forms:
             create:

@@ -11,10 +11,10 @@
 namespace PiaApi\Services;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use PiaApi\Entity\Pia\PiaTemplate;
+use PiaApi\Entity\Pia\ProcessingTemplate;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class PiaTemplateService extends AbstractService
+class ProcessingTemplateService extends AbstractService
 {
     public function __construct(
         RegistryInterface $doctrine
@@ -24,7 +24,7 @@ class PiaTemplateService extends AbstractService
 
     public function getEntityClass(): string
     {
-        return PiaTemplate::class;
+        return ProcessingTemplate::class;
     }
 
     /**
@@ -33,11 +33,11 @@ class PiaTemplateService extends AbstractService
      * @param string      $importedFileName
      * @param string|null $description
      *
-     * @return PiaTemplate
+     * @return ProcessingTemplate
      */
-    public function createTemplate(string $name, string $jsonContent, string $importedFileName, ?string $description = null): PiaTemplate
+    public function createTemplate(string $name, string $jsonContent, string $importedFileName, ?string $description = null): ProcessingTemplate
     {
-        $template = new PiaTemplate($name);
+        $template = new ProcessingTemplate($name);
         $template->setData($jsonContent);
         $template->setImportedFileName($importedFileName);
 
@@ -53,11 +53,11 @@ class PiaTemplateService extends AbstractService
      * @param UploadedFile $file
      * @param string|null  $description
      *
-     * @return PiaTemplate
+     * @return ProcessingTemplate
      */
-    public function createTemplateWithFile(string $name, UploadedFile $file, ?string $description = null): PiaTemplate
+    public function createTemplateWithFile(string $name, UploadedFile $file, ?string $description = null): ProcessingTemplate
     {
-        $template = new PiaTemplate($name);
+        $template = new ProcessingTemplate($name);
         $template->addFile($file);
 
         if ($description !== null) {
