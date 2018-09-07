@@ -13,9 +13,9 @@ namespace PiaApi\Repository;
 use Doctrine\ORM\EntityRepository;
 use PiaApi\Entity\Pia\Structure;
 
-class PiaTemplateRepository extends EntityRepository
+class ProcessingTemplateRepository extends EntityRepository
 {
-    public function findAvailablePiaTemplatesForStructure(?Structure $structure): array
+    public function findAvailableProcessingTemplatesForStructure(?Structure $structure): array
     {
         $qb = $this->createQueryBuilder('pt');
 

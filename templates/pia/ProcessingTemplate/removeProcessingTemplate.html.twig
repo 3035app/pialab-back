@@ -1,6 +1,6 @@
 {% trans_default_domain 'Pia' %} 
 
-{% set piaTemplate = form.vars.value %}
+{% set template = form.vars.value %}
 
 <div class="ui negative message">
     <div class="ui clearing basic segment">
@@ -25,14 +25,14 @@
                 <i class="building icon"></i>
                 <b>{{ 'pia.templates.modals.remove.resume.name'|trans }}</b>
             </td>
-            <td>{{ piaTemplate.name }}</td>
+            <td>{{ template.name }}</td>
         </tr>
         <tr>
             <td class="collapsing">
                 <i class="folder open icon"></i>
                 <b>{{ 'pia.templates.modals.remove.resume.processing_number'|trans }}</b>
             </td>
-            <td>{{ piaTemplate.pias|length }}</td>
+            <td>{{ template.processings|length }}</td>
         </tr>
     </tbody>
 </table>
