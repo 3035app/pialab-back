@@ -167,6 +167,7 @@ class UserController extends RestController
      *         @Swg\Property(property="email", type="string"),
      *         @Swg\Property(property="password", type="string"),
      *         @Swg\Property(property="roles", type="array", @Swg\Items(type="string"))
+     *         @Swg\Property(property="sendResettingEmail", type="boolean"),
      *     ),
      *     description="The User content"
      * )
