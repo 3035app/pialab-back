@@ -19,7 +19,6 @@ class DataExchangeDescriptor
             'status'                            => null,
             'is_example'                        => null,
             'numberOfQuestions'                 => null,
-            'name'                              => null,
             'author_name'                       => null,
             'evaluator_name'                    => null,
             'validator_name'                    => null,

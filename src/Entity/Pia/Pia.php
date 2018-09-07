@@ -41,13 +41,7 @@ class Pia implements Timestampable
      * @var int
      */
     protected $status = 0;
-    /**
-     * @ORM\Column(type="string")
-     * @JMS\Groups({"Default", "Export"})
-     *
-     * @var string
-     */
-    protected $name;
+
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -55,6 +49,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $authorName = '';
+
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -62,6 +57,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $evaluatorName = '';
+
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -69,6 +65,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $validatorName = '';
+
     /**
      * @ORM\Column(type="smallint")
      * @JMS\Groups({"Default", "Export"})
@@ -76,6 +73,7 @@ class Pia implements Timestampable
      * @var int
      */
     protected $dpoStatus = 0;
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -83,6 +81,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $dpoOpinion = '';
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -90,6 +89,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $concernedPeopleOpinion = '';
+
     /**
      * @ORM\Column(type="smallint")
      * @JMS\Groups({"Default", "Export"})
@@ -97,6 +97,7 @@ class Pia implements Timestampable
      * @var int
      */
     protected $concernedPeopleStatus = 0;
+
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -104,6 +105,7 @@ class Pia implements Timestampable
      * @var bool
      */
     protected $concernedPeopleSearchedOpinion;
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -111,6 +113,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $concernedPeopleSearchedContent;
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -118,6 +121,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $rejectionReason = '';
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -340,22 +344,6 @@ class Pia implements Timestampable
     public function setAttachments(Collection $attachments): void
     {
         $this->attachments = $attachments;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
     }
 
     /**

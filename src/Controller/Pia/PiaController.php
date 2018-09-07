@@ -151,7 +151,6 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author_name", type="string"),
      *         @Swg\Property(property="evaluator_name", type="string"),
      *         @Swg\Property(property="validator_name", type="string"),
@@ -231,8 +230,7 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         required={"name", "author_name","evaluator_name","validator_name","processing"},
-     *         @Swg\Property(property="name", type="string"),
+     *         required={"author_name","evaluator_name","validator_name","processing"},
      *         @Swg\Property(property="author_name", type="string"),
      *         @Swg\Property(property="evaluator_name", type="string"),
      *         @Swg\Property(property="validator_name", type="string"),
@@ -263,7 +261,6 @@ class PiaController extends RestController
         }
 
         $pia = $this->jsonToEntityTransformer->transform($pTemplate->getData());
-        $pia->setName($request->get('name', $pia->getName()));
         $pia->setAuthorName($request->get('author_name', $pia->getAuthorName()));
         $pia->setEvaluatorName($request->get('evaluator_name', $pia->getEvaluatorName()));
         $pia->setValidatorName($request->get('validator_name', $pia->getValidatorName()));
@@ -302,7 +299,6 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author_name", type="string"),
      *         @Swg\Property(property="evaluator_name", type="string"),
      *         @Swg\Property(property="validator_name", type="string"),
@@ -342,7 +338,6 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
 
         $updatableAttributes = [
-            'name'                               => RequestDataHandler::TYPE_STRING,
             'author_name'                        => RequestDataHandler::TYPE_STRING,
             'evaluator_name'                     => RequestDataHandler::TYPE_STRING,
             'validator_name'                     => RequestDataHandler::TYPE_STRING,

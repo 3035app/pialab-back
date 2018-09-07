@@ -15,7 +15,6 @@ trait ApiFixturesTrait
     private $piaDatas = [
         'author_name'                       => 'codecept-author',
         'evaluator_name'                    => 'codecept-evaluator',
-        'name'                              => 'codecept-name',
         'validator_name'                    => 'codecept-validator',
         'type'                              => 'regular',
         'concerned_people_searched_opinion' => 0,
@@ -27,7 +26,6 @@ trait ApiFixturesTrait
     private $piaJsonType = [
         'progress'                          => 'integer',
         'status'                            => 'integer',
-        'name'                              => 'string',
         'author_name'                       => 'string',
         'evaluator_name'                    => 'string',
         'validator_name'                    => 'string',
