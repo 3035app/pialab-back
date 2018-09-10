@@ -150,6 +150,23 @@ class PiaController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
+     *         required={
+     *             "author_name",
+     *             "evaluator_name",
+     *             "validator_name",
+     *             "status",
+     *             "dpo_status",
+     *             "dpo_opinion",
+     *             "concerned_people_opinion",
+     *             "concerned_people_status",
+     *             "concerned_people_searched_opinion",
+     *             "concerned_people_searched_content",
+     *             "rejection_reason",
+     *             "applied_adjustements",
+     *             "dpos_names",
+     *             "people_names",
+     *             "processing"
+     *         },
      *         @Swg\Property(property="author_name", type="string"),
      *         @Swg\Property(property="evaluator_name", type="string"),
      *         @Swg\Property(property="validator_name", type="string"),
@@ -164,7 +181,7 @@ class PiaController extends RestController
      *         @Swg\Property(property="applied_adjustements", type="string"),
      *         @Swg\Property(property="dpos_names", type="string"),
      *         @Swg\Property(property="people_names", type="string"),
-     *         @Swg\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
+     *         @Swg\Property(property="processing", type="object", required={"id"}, @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The PIA content"
      * )
@@ -232,7 +249,7 @@ class PiaController extends RestController
      *         @Swg\Property(property="author_name", type="string"),
      *         @Swg\Property(property="evaluator_name", type="string"),
      *         @Swg\Property(property="validator_name", type="string"),
-     *         @Swg\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
+     *         @Swg\Property(property="processing", type="object", required={"id"}, @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The PIA content"
      * )
@@ -310,7 +327,7 @@ class PiaController extends RestController
      *         @Swg\Property(property="applied_adjustements", type="string"),
      *         @Swg\Property(property="dpos_names", type="string"),
      *         @Swg\Property(property="people_names", type="string"),
-     *         @Swg\Property(property="processing", type="object", @Swg\Property(property="id", type="number"))
+     *         @Swg\Property(property="processing", type="object", required={"id"}, @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The PIA content"
      * )
