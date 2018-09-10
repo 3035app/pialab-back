@@ -119,6 +119,14 @@ class Processing
     protected $nonEuTransfer;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $recipients;
+
+    /**
      * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
@@ -472,5 +480,21 @@ class Processing
     public function setDesignatedController(string $designatedController): void
     {
         $this->designatedController = $designatedController;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRecipients(): ?string
+    {
+        return $this->recipients;
+    }
+
+    /**
+     * @param string|null $recipients
+     */
+    public function setRecipients(?string $recipients = null): void
+    {
+        $this->recipients = $recipients;
     }
 }

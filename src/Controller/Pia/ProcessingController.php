@@ -246,6 +246,7 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
      *         )),
+     *         @Swg\Property(property="recipients", type="string")
      *     ),
      *     description="The Processing content"
      * )
@@ -283,6 +284,7 @@ class ProcessingController extends RestController
             'storage'               => RequestDataHandler::TYPE_STRING,
             'standards'             => RequestDataHandler::TYPE_STRING,
             'status'                => RequestDataHandler::TYPE_INT,
+            'recipients'            => RequestDataHandler::TYPE_STRING,
         ];
 
         $this->mergeFromRequest($processing, $updatableAttributes, $request);

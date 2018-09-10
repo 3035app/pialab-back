@@ -52,6 +52,7 @@ class ProcessingCest
         'id'                    => 'integer',
         'created_at'            => 'string',
         'updated_at'            => 'string',
+        'recipients'            => 'string|null',
     ];
 
     public function create_processing_test(\ApiTester $I)
