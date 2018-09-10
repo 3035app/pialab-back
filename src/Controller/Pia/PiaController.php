@@ -147,7 +147,6 @@ class PiaController extends RestController
      * @Swg\Parameter(
      *     name="PIA",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
@@ -226,7 +225,6 @@ class PiaController extends RestController
      * @Swg\Parameter(
      *     name="PIA",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
@@ -295,7 +293,6 @@ class PiaController extends RestController
      * @Swg\Parameter(
      *     name="PIA",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
@@ -420,7 +417,6 @@ class PiaController extends RestController
      * @Swg\Parameter(
      *     name="PIA Data",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",

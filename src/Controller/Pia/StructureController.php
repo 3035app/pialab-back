@@ -156,7 +156,6 @@ class StructureController extends RestController
      * @Swg\Parameter(
      *     name="Structure",
      *     in="body",
-     *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
@@ -220,7 +219,6 @@ class StructureController extends RestController
      * @Swg\Parameter(
      *     name="Structure",
      *     in="body",
-     *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",

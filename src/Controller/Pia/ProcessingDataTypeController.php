@@ -138,7 +138,6 @@ class ProcessingDataTypeController extends RestController
      * @Swg\Parameter(
      *     name="ProcessingDataType",
      *     in="body",
-     *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
@@ -208,7 +207,6 @@ class ProcessingDataTypeController extends RestController
      * @Swg\Parameter(
      *     name="ProcessingDataType",
      *     in="body",
-     *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",

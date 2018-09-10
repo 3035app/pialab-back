@@ -159,7 +159,6 @@ class UserController extends RestController
      * @Swg\Parameter(
      *     name="User",
      *     in="body",
-     *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
@@ -242,7 +241,6 @@ class UserController extends RestController
      * @Swg\Parameter(
      *     name="User",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
