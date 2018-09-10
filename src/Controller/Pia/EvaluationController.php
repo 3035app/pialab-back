@@ -127,7 +127,6 @@ class EvaluationController extends PiaSubController
      * @Swg\Parameter(
      *     name="Evaluation",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
@@ -189,7 +188,6 @@ class EvaluationController extends PiaSubController
      * @Swg\Parameter(
      *     name="Evaluation",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",

@@ -160,7 +160,6 @@ class StructureFolderController extends RestController
      * @Swg\Parameter(
      *     name="Folder",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
@@ -240,7 +239,6 @@ class StructureFolderController extends RestController
      * @Swg\Parameter(
      *     name="Folder",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",

@@ -135,7 +135,6 @@ class PortfolioController extends RestController
      * @Swg\Parameter(
      *     name="Portfolio",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
@@ -203,7 +202,6 @@ class PortfolioController extends RestController
      * @Swg\Parameter(
      *     name="Portfolio",
      *     in="body",
-     *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
