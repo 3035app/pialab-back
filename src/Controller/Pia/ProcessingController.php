@@ -158,7 +158,7 @@ class ProcessingController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         required={"name", "author", "controllers"},
+     *         required={"name", "author", "designated_controller"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author", type="string"),
      *         @Swg\Property(property="status", type="number"),
@@ -167,6 +167,7 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="storage", type="string"),
      *         @Swg\Property(property="standards", type="string"),
      *         @Swg\Property(property="processors", type="string"),
+     *         @Swg\Property(property="designated_controller", type="string"),
      *         @Swg\Property(property="controllers", type="string"),
      *         @Swg\Property(property="non_eu_transfer", type="string"),
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
@@ -198,7 +199,7 @@ class ProcessingController extends RestController
             $request->get('name'),
             $folder,
             $request->get('author'),
-            $request->get('controllers')
+            $request->get('designated_controller')
         );
 
         $this->persist($processing);
@@ -239,6 +240,7 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="storage", type="string"),
      *         @Swg\Property(property="standards", type="string"),
      *         @Swg\Property(property="processors", type="string"),
+     *         @Swg\Property(property="designated_controller", type="string"),
      *         @Swg\Property(property="controllers", type="string"),
      *         @Swg\Property(property="non_eu_transfer", type="string"),
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
@@ -269,17 +271,18 @@ class ProcessingController extends RestController
         $this->canAccessResourceOr403($processing);
 
         $updatableAttributes = [
-            'folder'            => Folder::class,
-            'name'              => RequestDataHandler::TYPE_STRING,
-            'author'            => RequestDataHandler::TYPE_STRING,
-            'description'       => RequestDataHandler::TYPE_STRING,
-            'processors'        => RequestDataHandler::TYPE_STRING,
-            'controllers'       => RequestDataHandler::TYPE_STRING,
-            'non_eu_transfer'   => RequestDataHandler::TYPE_STRING,
-            'life_cycle'        => RequestDataHandler::TYPE_STRING,
-            'storage'           => RequestDataHandler::TYPE_STRING,
-            'standards'         => RequestDataHandler::TYPE_STRING,
-            'status'            => RequestDataHandler::TYPE_INT,
+            'folder'                => Folder::class,
+            'name'                  => RequestDataHandler::TYPE_STRING,
+            'author'                => RequestDataHandler::TYPE_STRING,
+            'description'           => RequestDataHandler::TYPE_STRING,
+            'processors'            => RequestDataHandler::TYPE_STRING,
+            'designated_controller' => RequestDataHandler::TYPE_STRING,
+            'controllers'           => RequestDataHandler::TYPE_STRING,
+            'non_eu_transfer'       => RequestDataHandler::TYPE_STRING,
+            'life_cycle'            => RequestDataHandler::TYPE_STRING,
+            'storage'               => RequestDataHandler::TYPE_STRING,
+            'standards'             => RequestDataHandler::TYPE_STRING,
+            'status'                => RequestDataHandler::TYPE_INT,
         ];
 
         $this->mergeFromRequest($processing, $updatableAttributes, $request);

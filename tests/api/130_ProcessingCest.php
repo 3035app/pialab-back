@@ -26,10 +26,10 @@ class ProcessingCest
      * @var array
      */
     private $processingData = [
-        'name'        => 'Processing CI',
-        'folder'      => [],
-        'author'      => 'Author 1',
-        'controllers' => 'Controller 1, Controller 2, Controller 3',
+        'name'                  => 'Processing CI',
+        'folder'                => [],
+        'author'                => 'Author 1',
+        'designated_controller' => 'Designated controller',
     ];
 
     /**
@@ -44,7 +44,7 @@ class ProcessingCest
         'storage'               => 'string|null',
         'standards'             => 'string|null',
         'processors'            => 'string|null',
-        'controllers'           => 'string',
+        'designated_controller' => 'string',
         'non_eu_transfer'       => 'string|null',
         'processing_data_types' => 'array',
         'pias_count'            => 'integer',

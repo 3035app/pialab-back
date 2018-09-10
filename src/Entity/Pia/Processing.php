@@ -100,6 +100,14 @@ class Processing
      *
      * @var string
      */
+    protected $designatedController;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string
+     */
     protected $controllers;
 
     /**
@@ -149,12 +157,12 @@ class Processing
         string $name,
         Folder $folder,
         string $author,
-        string $controllers
+        string $designatedController
     ) {
         $this->name = $name;
         $this->folder = $folder;
         $this->author = $author;
-        $this->controllers = $controllers;
+        $this->designatedController = $designatedController;
 
         $this->processingDataTypes = new ArrayCollection();
         $this->pias = new ArrayCollection();
@@ -448,5 +456,21 @@ class Processing
     public function setTemplate(?ProcessingTemplate $template): void
     {
         $this->template = $template;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDesignatedController(): string
+    {
+        return $this->designatedController;
+    }
+
+    /**
+     * @param string $designatedController
+     */
+    public function setDesignatedController(string $designatedController): void
+    {
+        $this->designatedController = $designatedController;
     }
 }
