@@ -119,7 +119,6 @@ class AnswerController extends PiaSubController
      * @Swg\Parameter(
      *     name="Answer",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
@@ -177,7 +176,6 @@ class AnswerController extends PiaSubController
      * @Swg\Parameter(
      *     name="Answer",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",

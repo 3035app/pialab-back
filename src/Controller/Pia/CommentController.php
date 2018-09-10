@@ -127,7 +127,6 @@ class CommentController extends PiaSubController
      * @Swg\Parameter(
      *     name="Comment",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
@@ -186,7 +185,6 @@ class CommentController extends PiaSubController
      * @Swg\Parameter(
      *     name="Comment",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",

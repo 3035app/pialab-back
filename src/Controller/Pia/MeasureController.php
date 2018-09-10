@@ -127,7 +127,6 @@ class MeasureController extends PiaSubController
      * @Swg\Parameter(
      *     name="Measure",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
@@ -186,7 +185,6 @@ class MeasureController extends PiaSubController
      * @Swg\Parameter(
      *     name="Measure",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",

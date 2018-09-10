@@ -127,7 +127,6 @@ class AttachmentController extends PiaSubController
      * @Swg\Parameter(
      *     name="Attachment",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
@@ -186,7 +185,6 @@ class AttachmentController extends PiaSubController
      * @Swg\Parameter(
      *     name="Attachment",
      *     in="body",
-     *     type="json",
      *     required=true,
      *     @Swg\Schema(
      *         type="object",

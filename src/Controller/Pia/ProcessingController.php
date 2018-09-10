@@ -155,7 +155,6 @@ class ProcessingController extends RestController
      * @Swg\Parameter(
      *     name="Processing",
      *     in="body",
-     *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
@@ -229,7 +228,6 @@ class ProcessingController extends RestController
      * @Swg\Parameter(
      *     name="full Processing",
      *     in="body",
-     *     type="json",
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
