@@ -216,11 +216,11 @@ class ProcessingTemplate implements Timestampable
     }
 
     /**
-     * @return array|Structure[]
+     * @return Collection|Structure[]
      */
-    public function getStructures(): array
+    public function getStructures(): Collection
     {
-        return $this->structures->getValues();
+        return $this->structures;
     }
 
     /**
@@ -285,7 +285,7 @@ class ProcessingTemplate implements Timestampable
     {
         if (!$this->structureTypes->contains($structureType)) {
             throw new \InvalidArgumentException(
-                sprintf('The ProcessingTemplate « %s » is not allowed for StructureType « %s » and so cannot be disociated', $this->name, $structureType)    
+                sprintf('The ProcessingTemplate « %s » is not allowed for StructureType « %s » and so cannot be disociated', $this->name, $structureType)
             );
         }
         $this->structureTypes->removeElement($structureType);

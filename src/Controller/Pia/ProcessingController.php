@@ -12,6 +12,7 @@ namespace PiaApi\Controller\Pia;
 
 use PiaApi\Services\ProcessingService;
 use PiaApi\Entity\Pia\Processing;
+use PiaApi\Entity\Pia\ProcessingTemplate;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
@@ -25,6 +26,7 @@ use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use PiaApi\Exception\ApiException;
 
 class ProcessingController extends RestController
 {
@@ -380,5 +382,80 @@ class ProcessingController extends RestController
         $serializedPia = $this->jsonToEntityTransformer->entityToJson($processing);
 
         return new Response($serializedPia, Response::HTTP_OK);
+    }
+
+    /**
+     * Creates a PIA from a template.
+     *
+     * @Swg\Tag(name="Processing")
+     *
+     * @FOSRest\Post("/processings/new-from-template/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing template"
+     * )
+     * @Swg\Parameter(
+     *     name="Processing",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"author_name","evaluator_name","validator_name","folder"},
+     *         @Swg\Property(property="author_name", type="string"),
+     *         @Swg\Property(property="evaluator_name", type="string"),
+     *         @Swg\Property(property="validator_name", type="string"),
+     *         @Swg\Property(property="folder_id", type="number")
+     *     ),
+     *     description="The Processing content"
+     * )
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns the newly created Processing",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Processing::class, groups={"Default"})
+     *     )
+     * )
+     *
+     * @Security("is_granted('CAN_CREATE_PROCESSING')")
+     *
+     * @return array
+     */
+    public function createFromTemplateAction(Request $request, $id)
+    {
+        /** @var ProcessingTemplate $pTemplate */
+        $pTemplate = $this->getDoctrine()->getRepository(ProcessingTemplate::class)->find($id);
+        if ($pTemplate === null) {
+            return $this->view($pTemplate, Response::HTTP_NOT_FOUND);
+        }
+
+        $pia = $this->jsonToEntityTransformer->transform($pTemplate->getData());
+        $folder = $this->getResource($request->get('folder', ['id' => -1])['id'], Folder::class);
+        $processing = new Processing(
+            $pTemplate->getName(),
+            $folder,
+            $request->get('author_name', $pia->getAuthorName()),
+            $request->get('designated_controller', $pia->getEvaluatorName())
+        );
+        $processing->setTemplate($pTemplate);
+        $pia->setProcessing($processing);
+        $pia->setStructure($folder->getStructure());
+
+        $this->persist($processing);
+        $this->persist($pia);
+
+        return $this->view($processing, Response::HTTP_OK);
     }
 }

@@ -16,7 +16,6 @@ use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\Pia;
-use PiaApi\Entity\Pia\ProcessingTemplate;
 use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\Answer;
 use PiaApi\Entity\Pia\Measure;
@@ -213,74 +212,6 @@ class PiaController extends RestController
         }
 
         $pia->setProcessing($processing);
-        $this->persist($pia);
-
-        return $this->view($pia, Response::HTTP_OK);
-    }
-
-    /**
-     * Creates a PIA from a template.
-     *
-     * @Swg\Tag(name="Pia")
-     *
-     * @FOSRest\Post("/pias/new-from-template/{id}")
-     *
-     * @Swg\Parameter(
-     *     name="Authorization",
-     *     in="header",
-     *     type="string",
-     *     required=true,
-     *     description="The API token. e.g.: Bearer <TOKEN>"
-     * )
-     * @Swg\Parameter(
-     *     name="id",
-     *     in="path",
-     *     type="string",
-     *     required=true,
-     *     description="The ID of the PIA's template"
-     * )
-     * @Swg\Parameter(
-     *     name="PIA",
-     *     in="body",
-     *     required=true,
-     *     @Swg\Schema(
-     *         type="object",
-     *         required={"author_name","evaluator_name","validator_name","processing"},
-     *         @Swg\Property(property="author_name", type="string"),
-     *         @Swg\Property(property="evaluator_name", type="string"),
-     *         @Swg\Property(property="validator_name", type="string"),
-     *         @Swg\Property(property="processing", type="object", required={"id"}, @Swg\Property(property="id", type="number"))
-     *     ),
-     *     description="The PIA content"
-     * )
-     *
-     * @Swg\Response(
-     *     response=200,
-     *     description="Returns the newly created PIA",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
-     *     )
-     * )
-     *
-     * @Security("is_granted('CAN_CREATE_PIA')")
-     *
-     * @return array
-     */
-    public function createFromTemplateAction(Request $request, $id)
-    {
-        /** @var ProcessingTemplate $pTemplate */
-        $pTemplate = $this->getDoctrine()->getRepository(ProcessingTemplate::class)->find($id);
-        if ($pTemplate === null) {
-            return $this->view($pTemplate, Response::HTTP_NOT_FOUND);
-        }
-
-        $pia = $this->jsonToEntityTransformer->transform($pTemplate->getData());
-        $pia->setAuthorName($request->get('author_name', $pia->getAuthorName()));
-        $pia->setEvaluatorName($request->get('evaluator_name', $pia->getEvaluatorName()));
-        $pia->setValidatorName($request->get('validator_name', $pia->getValidatorName()));
-        $pia->setStructure($this->getUser()->getStructure());
-        $pia->setProcessing($this->getResource($request->get('processing', ['id' => -1])['id'], Processing::class));
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
