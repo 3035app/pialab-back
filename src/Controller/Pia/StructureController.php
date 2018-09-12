@@ -161,7 +161,8 @@ class StructureController extends RestController
      *         type="object",
      *         required={"name"},
      *         @Swg\Property(property="name", type="string"),
-     *         @Swg\Property(property="type", type="object", ref=@Nelmio\Model(type=StructureType::class, groups={"Default"}))
+     *         @Swg\Property(property="structureType", type="number"),
+     *         @Swg\Property(property="portfolio", type="number")
      *     ),
      *     description="The Structure content"
      * )
@@ -223,7 +224,16 @@ class StructureController extends RestController
      *     @Swg\Schema(
      *         type="object",
      *         @Swg\Property(property="name", type="string"),
-     *         @Swg\Property(property="type", type="object", ref=@Nelmio\Model(type=StructureType::class, groups={"Default"}))
+     *         @Swg\Property(property="type", type="object", ref=@Nelmio\Model(type=StructureType::class, groups={"Default"})),
+     *         @Swg\Property(property="portfolio", type="object", ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"})),
+     *         @Swg\Property(property="address", type="string"),
+     *         @Swg\Property(property="phone", type="string"),
+     *         @Swg\Property(property="siren", type="string"),
+     *         @Swg\Property(property="siret", type="string"),
+     *         @Swg\Property(property="vat_number", type="string"),
+     *         @Swg\Property(property="activity_code", type="string"),
+     *         @Swg\Property(property="legal_form", type="string"),
+     *         @Swg\Property(property="registration_date", type="string")
      *     ),
      *     description="The Structure content"
      * )
@@ -247,9 +257,17 @@ class StructureController extends RestController
         $this->canAccessResourceOr403($structure);
 
         $updatableAttributes = [
-            'name'      => RequestDataHandler::TYPE_STRING,
-            'type'      => StructureType::class,
-            'portfolio' => Portfolio::class,
+            'name'              => RequestDataHandler::TYPE_STRING,
+            'type'              => StructureType::class,
+            'portfolio'         => Portfolio::class,
+            'address'           => RequestDataHandler::TYPE_STRING,
+            'phone'             => RequestDataHandler::TYPE_STRING,
+            'siren'             => RequestDataHandler::TYPE_STRING,
+            'siret'             => RequestDataHandler::TYPE_STRING,
+            'vat_number'        => RequestDataHandler::TYPE_STRING,
+            'activity_code'     => RequestDataHandler::TYPE_STRING,
+            'legal_form'        => RequestDataHandler::TYPE_STRING,
+            'registration_date' => RequestDataHandler::TYPE_STRING,
         ];
 
         $this->mergeFromRequest($structure, $updatableAttributes, $request);
