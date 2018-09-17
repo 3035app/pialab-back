@@ -53,6 +53,11 @@ then
     fi
 fi
 
+if [ -z "$DatabaseVersion" ]
+then
+    DatabaseVersion=5.7
+fi
+
 if [ -z "$DatabaseName" ]
 then
     DatabaseName=pia_db_$Suffix
@@ -154,6 +159,7 @@ $ETCDCTLCMD put $Prefix/postgres/hostname $postgreshost $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/root/username $postgresuser $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/root/password $postgrespass $ETCDENDPOINT
 
+$ETCDCTLCMD put $Prefix/postgres/default/version $DatabaseVersion $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/dbname $DatabaseName $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/username $DatabaseUser $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/password $DatabasePassword $ETCDENDPOINT

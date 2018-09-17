@@ -28,7 +28,9 @@ class Processing
         TimestampableEntity;
 
     const STATUS_DOING = 0;
-    const STATUS_ARCHIVED = 1;
+    const STATUS_UNDER_VALIDATION = 1;
+    const STATUS_VALIDATED = 2;
+    const STATUS_ARCHIVED = 3;
 
     /**
      * @ORM\Column(type="string")
@@ -125,6 +127,53 @@ class Processing
      * @var string|null
      */
     protected $recipients;
+  
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $contextOfImplementation;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $lawfulness;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $minimization;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $rightsGuarantee;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $exactness;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $consent;
 
     /**
      * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"remove"})
@@ -211,7 +260,7 @@ class Processing
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -219,7 +268,7 @@ class Processing
     /**
      * @param string $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description = null): void
     {
         $this->description = $description;
     }
@@ -227,7 +276,7 @@ class Processing
     /**
      * @return string
      */
-    public function getLifeCycle(): string
+    public function getLifeCycle(): ?string
     {
         return $this->lifeCycle;
     }
@@ -235,7 +284,7 @@ class Processing
     /**
      * @param string $lifeCycle
      */
-    public function setLifeCycle(string $lifeCycle): void
+    public function setLifeCycle(?string $lifeCycle = null): void
     {
         $this->lifeCycle = $lifeCycle;
     }
@@ -243,7 +292,7 @@ class Processing
     /**
      * @return string
      */
-    public function getDataMedium(): string
+    public function getDataMedium(): ?string
     {
         return $this->dataMedium;
     }
@@ -251,7 +300,7 @@ class Processing
     /**
      * @param string $dataMedium
      */
-    public function setDataMedium(string $dataMedium): void
+    public function setDataMedium(?string $dataMedium = null): void
     {
         $this->dataMedium = $dataMedium;
     }
@@ -259,7 +308,7 @@ class Processing
     /**
      * @return string
      */
-    public function getStandards(): string
+    public function getStandards(): ?string
     {
         return $this->standards;
     }
@@ -267,7 +316,7 @@ class Processing
     /**
      * @param string $standards
      */
-    public function setStandards(string $standards): void
+    public function setStandards(?string $standards): void
     {
         $this->standards = $standards;
     }
@@ -275,7 +324,7 @@ class Processing
     /**
      * @return string
      */
-    public function getProcessors(): string
+    public function getProcessors(): ?string
     {
         return $this->processors;
     }
@@ -283,7 +332,7 @@ class Processing
     /**
      * @param string $processors
      */
-    public function setProcessors(string $processors): void
+    public function setProcessors(?string $processors = null): void
     {
         $this->processors = $processors;
     }
@@ -291,7 +340,7 @@ class Processing
     /**
      * @return string
      */
-    public function getControllers(): string
+    public function getControllers(): ?string
     {
         return $this->controllers;
     }
@@ -299,9 +348,89 @@ class Processing
     /**
      * @param string $controllers
      */
-    public function setControllers(string $controllers): void
+    public function setControllers(?string $controllers = null): void
     {
         $this->controllers = $controllers;
+    }
+    
+     /**
+     * @return string
+     */
+    public function getLawfulness(): ?string
+    {
+        return $this->lawfulness;
+    }
+
+    /**
+     * @param string $lawfulness
+     */
+    public function setLawfulness(?string $lawfulness = null): void
+    {
+        $this->lawfulness = $lawfulness;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMinimization(): ?string
+    {
+        return $this->minimization;
+    }
+
+    /**
+     * @param string $minimization
+     */
+    public function setMinimization(?string $minimization = null): void
+    {
+        $this->minimization = $minimization;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRightsGuarantee(): ?string
+    {
+        return $this->rightsGuarantee;
+    }
+
+    /**
+     * @param string $rightsGuarantee
+     */
+    public function setRightsGuarantee(?string $rightsGuarantee = null): void
+    {
+        $this->rightsGuarantee = $rightsGuarantee;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExactness(): ?string
+    {
+        return $this->exactness;
+    }
+
+    /**
+     * @param string $exactness
+     */
+    public function setExactness(?string $exactness = null): void
+    {
+        $this->exactness = $exactness;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConsent(): ?string
+    {
+        return $this->consent;
+    }
+
+    /**
+     * @param string $consent
+     */
+    public function setConsent(?string $consent = null): void
+    {
+        $this->consent = $consent;
     }
 
     /**
@@ -444,7 +573,12 @@ class Processing
      */
     public function setStatus(int $status): void
     {
-        if ($status !== self::STATUS_DOING && $status !== self::STATUS_ARCHIVED) {
+        if (!in_array($status, [
+            self::STATUS_DOING,
+            self::STATUS_UNDER_VALIDATION,
+            self::STATUS_VALIDATED,
+            self::STATUS_ARCHIVED,
+        ])) {
             throw new \InvalidArgumentException(sprintf('Status « %d » is not valid', $status));
         }
         $this->status = $status;
@@ -496,5 +630,21 @@ class Processing
     public function setRecipients(?string $recipients = null): void
     {
         $this->recipients = $recipients;
+    }
+  
+    /**
+     * @return string|null
+     */
+    public function getContextOfImplementation(): ?string
+    {
+        return $this->contextOfImplementation;
+    }
+
+    /**
+     * @param string|null $contextOfImplementation
+     */
+    public function setContextOfImplementation(?string $contextOfImplementation = null): void
+    {
+        $this->contextOfImplementation = $contextOfImplementation;
     }
 }
