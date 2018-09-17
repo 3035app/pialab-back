@@ -168,6 +168,11 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="standards", type="string"),
      *         @Swg\Property(property="processors", type="string"),
      *         @Swg\Property(property="designated_controller", type="string"),
+     *         @Swg\Property(property="lawfulness", type="string"),
+     *         @Swg\Property(property="minimization", type="string"),
+     *         @Swg\Property(property="rights_guarantee", type="string"),
+     *         @Swg\Property(property="exactness", type="string"),
+     *         @Swg\Property(property="consent", type="string"),
      *         @Swg\Property(property="controllers", type="string"),
      *         @Swg\Property(property="non_eu_transfer", type="string"),
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
@@ -242,6 +247,11 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="processors", type="string"),
      *         @Swg\Property(property="designated_controller", type="string"),
      *         @Swg\Property(property="controllers", type="string"),
+     *         @Swg\Property(property="lawfulness", type="string"),
+     *         @Swg\Property(property="minimization", type="string"),
+     *         @Swg\Property(property="rights_guarantee", type="string"),
+     *         @Swg\Property(property="exactness", type="string"),
+     *         @Swg\Property(property="consent", type="string"),
      *         @Swg\Property(property="non_eu_transfer", type="string"),
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
@@ -282,6 +292,11 @@ class ProcessingController extends RestController
             'life_cycle'            => RequestDataHandler::TYPE_STRING,
             'storage'               => RequestDataHandler::TYPE_STRING,
             'standards'             => RequestDataHandler::TYPE_STRING,
+            'lawfulness'            => RequestDataHandler::TYPE_STRING,
+            'minimization'          => RequestDataHandler::TYPE_STRING,
+            'rights_guarantee'      => RequestDataHandler::TYPE_STRING,
+            'exactness'             => RequestDataHandler::TYPE_STRING,
+            'consent'               => RequestDataHandler::TYPE_STRING,
             'status'                => RequestDataHandler::TYPE_INT,
         ];
 

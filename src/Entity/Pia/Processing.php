@@ -119,6 +119,45 @@ class Processing
     protected $nonEuTransfer;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $lawfulness;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $minimization;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $rightsGuarantee;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $exactness;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $consent;
+
+    /**
      * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
@@ -294,6 +333,86 @@ class Processing
     public function setControllers(string $controllers): void
     {
         $this->controllers = $controllers;
+    }
+    
+     /**
+     * @return string
+     */
+    public function getLawfulness(): string
+    {
+        return $this->lawfulness;
+    }
+
+    /**
+     * @param string $lawfulness
+     */
+    public function setLawfulness(string $lawfulness): void
+    {
+        $this->lawfulness = $lawfulness;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMinimization(): string
+    {
+        return $this->minimization;
+    }
+
+    /**
+     * @param string $minimization
+     */
+    public function setMinimization(string $minimization): void
+    {
+        $this->minimization = $minimization;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRightsGuarantee(): string
+    {
+        return $this->rightsGuarantee;
+    }
+
+    /**
+     * @param string $rightsGuarantee
+     */
+    public function setRightsGuarantee(string $rightsGuarantee): void
+    {
+        $this->rightsGuarantee = $rightsGuarantee;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExactness(): string
+    {
+        return $this->exactness;
+    }
+
+    /**
+     * @param string $exactness
+     */
+    public function setExactness(string $exactness): void
+    {
+        $this->exactness = $exactness;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConsent(): string
+    {
+        return $this->consent;
+    }
+
+    /**
+     * @param string $consent
+     */
+    public function setConsent(string $consent): void
+    {
+        $this->consent = $consent;
     }
 
     /**
