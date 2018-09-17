@@ -242,7 +242,7 @@ class Processing
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -250,7 +250,7 @@ class Processing
     /**
      * @param string $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description = null): void
     {
         $this->description = $description;
     }
@@ -258,7 +258,7 @@ class Processing
     /**
      * @return string
      */
-    public function getLifeCycle(): string
+    public function getLifeCycle(): ?string
     {
         return $this->lifeCycle;
     }
@@ -266,7 +266,7 @@ class Processing
     /**
      * @param string $lifeCycle
      */
-    public function setLifeCycle(string $lifeCycle): void
+    public function setLifeCycle(?string $lifeCycle = null): void
     {
         $this->lifeCycle = $lifeCycle;
     }
@@ -274,7 +274,7 @@ class Processing
     /**
      * @return string
      */
-    public function getDataMedium(): string
+    public function getDataMedium(): ?string
     {
         return $this->dataMedium;
     }
@@ -282,7 +282,7 @@ class Processing
     /**
      * @param string $dataMedium
      */
-    public function setDataMedium(string $dataMedium): void
+    public function setDataMedium(?string $dataMedium = null): void
     {
         $this->dataMedium = $dataMedium;
     }
@@ -290,7 +290,7 @@ class Processing
     /**
      * @return string
      */
-    public function getStandards(): string
+    public function getStandards(): ?string
     {
         return $this->standards;
     }
@@ -298,7 +298,7 @@ class Processing
     /**
      * @param string $standards
      */
-    public function setStandards(string $standards): void
+    public function setStandards(?string $standards): void
     {
         $this->standards = $standards;
     }
@@ -306,7 +306,7 @@ class Processing
     /**
      * @return string
      */
-    public function getProcessors(): string
+    public function getProcessors(): ?string
     {
         return $this->processors;
     }
@@ -314,7 +314,7 @@ class Processing
     /**
      * @param string $processors
      */
-    public function setProcessors(string $processors): void
+    public function setProcessors(?string $processors = null): void
     {
         $this->processors = $processors;
     }
@@ -322,7 +322,7 @@ class Processing
     /**
      * @return string
      */
-    public function getControllers(): string
+    public function getControllers(): ?string
     {
         return $this->controllers;
     }
@@ -330,7 +330,7 @@ class Processing
     /**
      * @param string $controllers
      */
-    public function setControllers(string $controllers): void
+    public function setControllers(?string $controllers = null): void
     {
         $this->controllers = $controllers;
     }
@@ -338,7 +338,7 @@ class Processing
      /**
      * @return string
      */
-    public function getLawfulness(): string
+    public function getLawfulness(): ?string
     {
         return $this->lawfulness;
     }
@@ -346,7 +346,7 @@ class Processing
     /**
      * @param string $lawfulness
      */
-    public function setLawfulness(string $lawfulness): void
+    public function setLawfulness(?string $lawfulness = null): void
     {
         $this->lawfulness = $lawfulness;
     }
@@ -354,7 +354,7 @@ class Processing
     /**
      * @return string
      */
-    public function getMinimization(): string
+    public function getMinimization(): ?string
     {
         return $this->minimization;
     }
@@ -362,7 +362,7 @@ class Processing
     /**
      * @param string $minimization
      */
-    public function setMinimization(string $minimization): void
+    public function setMinimization(?string $minimization = null): void
     {
         $this->minimization = $minimization;
     }
@@ -370,7 +370,7 @@ class Processing
     /**
      * @return string
      */
-    public function getRightsGuarantee(): string
+    public function getRightsGuarantee(): ?string
     {
         return $this->rightsGuarantee;
     }
@@ -378,7 +378,7 @@ class Processing
     /**
      * @param string $rightsGuarantee
      */
-    public function setRightsGuarantee(string $rightsGuarantee): void
+    public function setRightsGuarantee(?string $rightsGuarantee = null): void
     {
         $this->rightsGuarantee = $rightsGuarantee;
     }
@@ -386,7 +386,7 @@ class Processing
     /**
      * @return string
      */
-    public function getExactness(): string
+    public function getExactness(): ?string
     {
         return $this->exactness;
     }
@@ -394,7 +394,7 @@ class Processing
     /**
      * @param string $exactness
      */
-    public function setExactness(string $exactness): void
+    public function setExactness(?string $exactness = null): void
     {
         $this->exactness = $exactness;
     }
@@ -402,7 +402,7 @@ class Processing
     /**
      * @return string
      */
-    public function getConsent(): string
+    public function getConsent(): ?string
     {
         return $this->consent;
     }
@@ -410,7 +410,7 @@ class Processing
     /**
      * @param string $consent
      */
-    public function setConsent(string $consent): void
+    public function setConsent(?string $consent = null): void
     {
         $this->consent = $consent;
     }
