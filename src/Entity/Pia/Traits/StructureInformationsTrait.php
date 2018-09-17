@@ -72,7 +72,7 @@ trait StructureInformationsTrait
      * @ORM\Column(type="datetime", nullable=true)
      * @JMS\Groups({"Default", "Export"})
      *
-     * @var string
+     * @var \DateTime
      */
     protected $registrationDate;
 
@@ -189,17 +189,17 @@ trait StructureInformationsTrait
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
-    public function getRegistrationDate(): ?string
+    public function getRegistrationDate(): ?\DateTime
     {
         return $this->registrationDate;
     }
 
     /**
-     * @param string $registrationDate
+     * @param \DateTime $registrationDate
      */
-    public function setRegistrationDate(?string $registrationDate = null): void
+    public function setRegistrationDate(?\DateTime $registrationDate = null): void
     {
         $this->registrationDate = $registrationDate;
     }
