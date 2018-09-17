@@ -35,7 +35,6 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
             '20180801152601',
             '20180803133256',
             '20180808143035',
-            '20180917124818',
         ],
         'data' => [
             // Please move here versions that uses directly doctrine entity manager
@@ -212,28 +211,6 @@ class Version1_4_1 extends AbstractMigration implements ContainerAwareInterface
         $this->addSql('ALTER TABLE pia_processing_data_type ALTER data TYPE TEXT');
         $this->addSql('ALTER TABLE pia_processing_data_type ALTER data DROP DEFAULT');
         $this->addSql('COMMENT ON COLUMN pia_processing_data_type.data IS \'(DC2Type:json)\';');
-    }
-
-    public function Version20180917124818_up(Schema $schema): void
-    {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
-        $this->addSql('ALTER TABLE pia_processing ADD lawfulness TEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE pia_processing ADD minimization TEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE pia_processing ADD rights_guarantee TEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE pia_processing ADD exactness TEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE pia_processing ADD consent TEXT DEFAULT NULL');
-    }
-
-    public function Version20180917124818_down(Schema $schema): void
-    {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
-        $this->addSql('ALTER TABLE pia_processing DROP lawfulness');
-        $this->addSql('ALTER TABLE pia_processing DROP minimization');
-        $this->addSql('ALTER TABLE pia_processing DROP rights_guarantee');
-        $this->addSql('ALTER TABLE pia_processing DROP exactness');
-        $this->addSql('ALTER TABLE pia_processing DROP consent');
     }
 
     protected function movePiasIntoDedicatedProcessing(): void
