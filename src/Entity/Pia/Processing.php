@@ -28,7 +28,9 @@ class Processing
         TimestampableEntity;
 
     const STATUS_DOING = 0;
-    const STATUS_ARCHIVED = 1;
+    const STATUS_UNDER_VALIDATION = 1;
+    const STATUS_VALIDATED = 2;
+    const STATUS_ARCHIVED = 3;
 
     /**
      * @ORM\Column(type="string")
@@ -563,7 +565,12 @@ class Processing
      */
     public function setStatus(int $status): void
     {
-        if ($status !== self::STATUS_DOING && $status !== self::STATUS_ARCHIVED) {
+        if (!in_array($status, [
+            self::STATUS_DOING,
+            self::STATUS_UNDER_VALIDATION,
+            self::STATUS_VALIDATED,
+            self::STATUS_ARCHIVED,
+        ])) {
             throw new \InvalidArgumentException(sprintf('Status « %d » is not valid', $status));
         }
         $this->status = $status;
