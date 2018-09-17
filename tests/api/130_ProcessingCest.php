@@ -47,6 +47,7 @@ class ProcessingCest
         'designated_controller'     => 'string',
         'non_eu_transfer'           => 'string|null',
         'context_of_implementation' => 'string|null',
+        'recipients'                => 'string|null',
         'lawfulness'                => 'string|null',
         'minimization'              => 'string|null',
         'rights_guarantee'          => 'string|null',

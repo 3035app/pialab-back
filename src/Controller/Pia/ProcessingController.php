@@ -258,6 +258,7 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
      *         )),
+     *         @Swg\Property(property="recipients", type="string")
      *     ),
      *     description="The Processing content"
      * )
@@ -291,6 +292,7 @@ class ProcessingController extends RestController
             'designated_controller'     => RequestDataHandler::TYPE_STRING,
             'controllers'               => RequestDataHandler::TYPE_STRING,
             'non_eu_transfer'           => RequestDataHandler::TYPE_STRING,
+            'recipients'                => RequestDataHandler::TYPE_STRING,
             'life_cycle'                => RequestDataHandler::TYPE_STRING,
             'storage'                   => RequestDataHandler::TYPE_STRING,
             'standards'                 => RequestDataHandler::TYPE_STRING,

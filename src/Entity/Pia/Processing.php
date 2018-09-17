@@ -126,6 +126,14 @@ class Processing
      *
      * @var string|null
      */
+    protected $recipients;
+  
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
     protected $contextOfImplementation;
 
     /**
@@ -608,6 +616,22 @@ class Processing
         $this->designatedController = $designatedController;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getRecipients(): ?string
+    {
+        return $this->recipients;
+    }
+
+    /**
+     * @param string|null $recipients
+     */
+    public function setRecipients(?string $recipients = null): void
+    {
+        $this->recipients = $recipients;
+    }
+  
     /**
      * @return string|null
      */
