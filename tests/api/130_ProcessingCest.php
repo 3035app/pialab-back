@@ -46,13 +46,18 @@ class ProcessingCest
         'processors'                => 'string|null',
         'designated_controller'     => 'string',
         'non_eu_transfer'           => 'string|null',
+        'context_of_implementation' => 'string|null',
+        'lawfulness'                => 'string|null',
+        'minimization'              => 'string|null',
+        'rights_guarantee'          => 'string|null',
+        'exactness'                 => 'string|null',
+        'consent'                   => 'string|null',
         'processing_data_types'     => 'array',
         'pias_count'                => 'integer',
         'folder'                    => 'array',
         'id'                        => 'integer',
         'created_at'                => 'string',
         'updated_at'                => 'string',
-        'context_of_implementation' => 'string|null',
     ];
 
     public function create_processing_test(\ApiTester $I)

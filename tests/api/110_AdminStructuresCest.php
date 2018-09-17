@@ -28,13 +28,21 @@ class AdminStructuresCest
      * @var array
      */
     private $structureJsonType = [
-        'id'         => 'integer',
-        'name'       => 'string',
-        'type'       => 'array|null',
-        'rootFolder' => 'array',
-        'portfolio'  => 'null|array',
-        'created_at' => 'string',
-        'updated_at' => 'string',
+        'id'                => 'integer',
+        'name'              => 'string',
+        'type'              => 'array|null',
+        'rootFolder'        => 'array',
+        'portfolio'         => 'null|array',
+        'created_at'        => 'string',
+        'updated_at'        => 'string',
+        'address'           => 'string|null',
+        'phone'             => 'string|null',
+        'siren'             => 'string|null',
+        'siret'             => 'string|null',
+        'vat_number'        => 'string|null',
+        'activity_code'     => 'string|null',
+        'legal_form'        => 'string|null',
+        'registration_date' => 'string|null',
     ];
 
     private $structure = [];
