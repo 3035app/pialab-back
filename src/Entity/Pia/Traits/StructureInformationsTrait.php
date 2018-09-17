@@ -69,7 +69,7 @@ trait StructureInformationsTrait
     protected $legalForm;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      * @JMS\Groups({"Default", "Export"})
      *
      * @var string

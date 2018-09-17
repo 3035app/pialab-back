@@ -30,7 +30,7 @@ class Version20180912084122 extends AbstractMigration implements ContainerAwareI
         $this->addSql('ALTER TABLE pia_structure ADD vat_number VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE pia_structure ADD activity_code VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE pia_structure ADD legal_form VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE pia_structure ADD registration_date VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE pia_structure ADD registration_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
     }
 
     public function down(Schema $schema)
