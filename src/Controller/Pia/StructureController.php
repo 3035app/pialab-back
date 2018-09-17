@@ -11,7 +11,6 @@
 namespace PiaApi\Controller\Pia;
 
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\Entity\Pia\Structure;
 use PiaApi\Services\StructureService;
@@ -267,7 +266,7 @@ class StructureController extends RestController
             'vat_number'        => RequestDataHandler::TYPE_STRING,
             'activity_code'     => RequestDataHandler::TYPE_STRING,
             'legal_form'        => RequestDataHandler::TYPE_STRING,
-            'registration_date' => RequestDataHandler::TYPE_STRING,
+            'registration_date' => \DateTime::class,
         ];
 
         $this->mergeFromRequest($structure, $updatableAttributes, $request);
