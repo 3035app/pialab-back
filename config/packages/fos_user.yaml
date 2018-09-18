@@ -4,7 +4,7 @@ fos_user:
     user_class: PiaApi\Entity\Oauth\User
     from_email: 
         address: '%env(MAILER_SENDER)%'
-        sender_name: PiaLab Account Manager
+        sender_name: '%env(MAILER_SENDER_NAME)%'
     use_flash_notifications: false
     service:
         mailer: fos_user.mailer.twig_swift
