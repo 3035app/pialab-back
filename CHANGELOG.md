@@ -1,8 +1,18 @@
 # Change Log
 
-## [Unreleased](https://github.com/pia-lab/pialab-back/tree/HEAD)
+## [1.4.11](https://github.com/pia-lab/pialab-back/tree/1.4.11) (2018-09-18)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...1.4.11)
 
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...HEAD)
+**Merged pull requests:**
+
+- Add missing properties to Processing entity [\#80](https://github.com/pia-lab/pialab-back/pull/80) ([RomainSanchez](https://github.com/RomainSanchez))
+- Add Structure detailled informations [\#77](https://github.com/pia-lab/pialab-back/pull/77) ([PapsOu](https://github.com/PapsOu))
+- Add Processing context\_of\_implementation field [\#75](https://github.com/pia-lab/pialab-back/pull/75) ([PapsOu](https://github.com/PapsOu))
+- Add processing status for validation [\#74](https://github.com/pia-lab/pialab-back/pull/74) ([PapsOu](https://github.com/PapsOu))
+- Add recipients to Processing [\#73](https://github.com/pia-lab/pialab-back/pull/73) ([PapsOu](https://github.com/PapsOu))
+
+## [1.4.10](https://github.com/pia-lab/pialab-back/tree/1.4.10) (2018-09-14)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.9...1.4.10)
 
 **Closed issues:**
 
@@ -11,12 +21,6 @@
 **Merged pull requests:**
 
 - Replace 'pia-templates' by 'processing-templates' in api\_pattern [\#76](https://github.com/pia-lab/pialab-back/pull/76) ([GlennCavarle](https://github.com/GlennCavarle))
-
-## [1.4.10](https://github.com/pia-lab/pialab-back/tree/1.4.10) (2018-09-10)
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.9...1.4.10)
-
-**Merged pull requests:**
-
 - Change Processing models for designated\_controller fields [\#72](https://github.com/pia-lab/pialab-back/pull/72) ([PapsOu](https://github.com/PapsOu))
 
 ## [1.4.9](https://github.com/pia-lab/pialab-back/tree/1.4.9) (2018-09-07)
