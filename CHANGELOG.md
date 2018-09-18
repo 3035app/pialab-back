@@ -1,10 +1,10 @@
 # Change Log
 
-## [1.4.12](https://github.com/pia-lab/pialab-back/tree/1.4.12) (2018-09-18)
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.11...1.4.12)
+## [1.4.13](https://github.com/pia-lab/pialab-back/tree/1.4.13) (2018-09-18)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.12...1.4.13)
 
-## [1.4.11](https://github.com/pia-lab/pialab-back/tree/1.4.11) (2018-09-18)
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...1.4.11)
+## [1.4.12](https://github.com/pia-lab/pialab-back/tree/1.4.12) (2018-09-18)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...1.4.12)
 
 **Merged pull requests:**
 
