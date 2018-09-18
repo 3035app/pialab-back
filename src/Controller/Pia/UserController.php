@@ -252,10 +252,9 @@ class UserController extends RestController
      *         @Swg\Property(property="enabled", type="boolean"),
      *         @Swg\Property(property="locked", type="boolean"),
      *         @Swg\Property(property="expiration_date", type="string"),
-     *         @Swg\Property(property="structure", type="object", @Swg\Property(property="id", type="number")),
      *         @Swg\Property(property="roles", type="array", @Swg\Items(type="string")),
-     *         @Swg\Property(property="structure", type="integer"),
-     *         @Swg\Property(property="application", type="integer")
+     *         @Swg\Property(property="structure", type="object", @Swg\Property(property="id", type="number")),
+     *         @Swg\Property(property="application", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The User content"
      * )
