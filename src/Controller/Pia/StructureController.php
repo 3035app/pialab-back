@@ -12,16 +12,17 @@ namespace PiaApi\Controller\Pia;
 
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
+use PiaApi\DataHandler\RequestDataHandler;
+use PiaApi\Entity\Pia\Portfolio;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Pia\StructureType;
 use PiaApi\Services\StructureService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use PiaApi\Entity\Pia\StructureType;
-use PiaApi\Entity\Pia\Portfolio;
-use PiaApi\DataHandler\RequestDataHandler;
 
 class StructureController extends RestController
 {
