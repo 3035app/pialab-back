@@ -158,27 +158,11 @@ class ProcessingController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         required={"name", "author", "designated_controller"},
+     *         required={"name", "author", "designated_controller", "folder"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author", type="string"),
-     *         @Swg\Property(property="status", type="number"),
-     *         @Swg\Property(property="description", type="string"),
-     *         @Swg\Property(property="life_cycle", type="string"),
-     *         @Swg\Property(property="storage", type="string"),
-     *         @Swg\Property(property="standards", type="string"),
-     *         @Swg\Property(property="processors", type="string"),
      *         @Swg\Property(property="designated_controller", type="string"),
-     *         @Swg\Property(property="lawfulness", type="string"),
-     *         @Swg\Property(property="minimization", type="string"),
-     *         @Swg\Property(property="rights_guarantee", type="string"),
-     *         @Swg\Property(property="exactness", type="string"),
-     *         @Swg\Property(property="consent", type="string"),
-     *         @Swg\Property(property="controllers", type="string"),
-     *         @Swg\Property(property="non_eu_transfer", type="string"),
-     *         @Swg\Property(property="context_of_implementation", type="string"),
-     *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
-     *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
-     *         )),
+     *         @Swg\Property(property="folder", required={"id"}, type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The Processing content"
      * )
@@ -258,7 +242,10 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
      *         )),
-     *         @Swg\Property(property="recipients", type="string")
+     *         @Swg\Property(property="recipients", type="string"),
+     *         @Swg\Property(property="evaluationComment", type="string"),
+     *         @Swg\Property(property="evaluationState", type="integer"),
+     *         @Swg\Property(property="folder", required={"id"}, type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The Processing content"
      * )
@@ -303,6 +290,8 @@ class ProcessingController extends RestController
             'exactness'                 => RequestDataHandler::TYPE_STRING,
             'consent'                   => RequestDataHandler::TYPE_STRING,
             'status'                    => RequestDataHandler::TYPE_INT,
+            'evaluationComment'         => RequestDataHandler::TYPE_STRING,
+            'evaluationState'           => RequestDataHandler::TYPE_INT,
         ];
 
         $this->mergeFromRequest($processing, $updatableAttributes, $request);

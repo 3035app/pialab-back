@@ -57,6 +57,8 @@ class ProcessingCest
         'pias_count'                => 'integer',
         'folder'                    => 'array',
         'id'                        => 'integer',
+        'evaluation_comment'        => 'string|null',
+        'evaluation_state'          => 'integer',
         'created_at'                => 'string',
         'updated_at'                => 'string',
     ];
