@@ -11,18 +11,18 @@
 namespace PiaApi\Controller\Pia;
 
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
+use PiaApi\DataHandler\RequestDataHandler;
+use PiaApi\Entity\Pia\Portfolio;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Pia\StructureType;
 use PiaApi\Services\StructureService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use PiaApi\Entity\Pia\StructureType;
-use PiaApi\Entity\Pia\Portfolio;
-use PiaApi\DataHandler\RequestDataHandler;
 
 class StructureController extends RestController
 {
@@ -45,6 +45,14 @@ class StructureController extends RestController
      * @Swg\Tag(name="Structure")
      *
      * @FOSRest\Get("/structures")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -90,6 +98,21 @@ class StructureController extends RestController
      *
      * @FOSRest\Get("/structures/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns one Structure",
@@ -122,6 +145,27 @@ class StructureController extends RestController
      * @Swg\Tag(name="Structure")
      *
      * @FOSRest\Post("/structures")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="Structure",
+     *     in="body",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"name"},
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="structureType", type="number"),
+     *         @Swg\Property(property="portfolio", type="number")
+     *     ),
+     *     description="The Structure content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -157,6 +201,43 @@ class StructureController extends RestController
      *
      * @Swg\Tag(name="Structure")
      *
+     * @FOSRest\Put("/structures/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     * @Swg\Parameter(
+     *     name="Structure",
+     *     in="body",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="type", type="object", ref=@Nelmio\Model(type=StructureType::class, groups={"Default"})),
+     *         @Swg\Property(property="portfolio", type="object", ref=@Nelmio\Model(type=Portfolio::class, groups={"Default"})),
+     *         @Swg\Property(property="address", type="string"),
+     *         @Swg\Property(property="phone", type="string"),
+     *         @Swg\Property(property="siren", type="string"),
+     *         @Swg\Property(property="siret", type="string"),
+     *         @Swg\Property(property="vat_number", type="string"),
+     *         @Swg\Property(property="activity_code", type="string"),
+     *         @Swg\Property(property="legal_form", type="string"),
+     *         @Swg\Property(property="registration_date", type="string")
+     *     ),
+     *     description="The Structure content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated Structure",
@@ -165,8 +246,6 @@ class StructureController extends RestController
      *         ref=@Nelmio\Model(type=Structure::class, groups={"Default"})
      *     )
      * )
-     *
-     * @FOSRest\Put("/structures/{id}", requirements={"id"="\d+"})
      *
      * @Security("is_granted('CAN_EDIT_STRUCTURE')")
      *
@@ -178,9 +257,17 @@ class StructureController extends RestController
         $this->canAccessResourceOr403($structure);
 
         $updatableAttributes = [
-            'name'      => RequestDataHandler::TYPE_STRING,
-            'type'      => StructureType::class,
-            'portfolio' => Portfolio::class,
+            'name'              => RequestDataHandler::TYPE_STRING,
+            'type'              => StructureType::class,
+            'portfolio'         => Portfolio::class,
+            'address'           => RequestDataHandler::TYPE_STRING,
+            'phone'             => RequestDataHandler::TYPE_STRING,
+            'siren'             => RequestDataHandler::TYPE_STRING,
+            'siret'             => RequestDataHandler::TYPE_STRING,
+            'vat_number'        => RequestDataHandler::TYPE_STRING,
+            'activity_code'     => RequestDataHandler::TYPE_STRING,
+            'legal_form'        => RequestDataHandler::TYPE_STRING,
+            'registration_date' => \DateTime::class,
         ];
 
         $this->mergeFromRequest($structure, $updatableAttributes, $request);
@@ -195,12 +282,27 @@ class StructureController extends RestController
      *
      * @Swg\Tag(name="Structure")
      *
+     * @FOSRest\Delete("/structures/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Empty content"
      * )
-     *
-     * @FOSRest\Delete("/structures/{id}", requirements={"id"="\d+"})
      *
      * @Security("is_granted('CAN_DELETE_STRUCTURE')")
      *

@@ -27,6 +27,21 @@ class CommentController extends PiaSubController
      *
      * @FOSRest\Get("/pias/{piaId}/comments")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all Comments of given Treatment",
@@ -49,6 +64,28 @@ class CommentController extends PiaSubController
      * @Swg\Tag(name="Comment")
      *
      * @FOSRest\Get("/pias/{piaId}/comments/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Comment"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -73,6 +110,34 @@ class CommentController extends PiaSubController
      *
      * @FOSRest\Post("/pias/{piaId}/comments")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="Comment",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"description", "reference_to"},
+     *         @Swg\Property(property="description", type="string"),
+     *         @Swg\Property(property="for_measure", type="boolean"),
+     *         @Swg\Property(property="reference_to", type="string")
+     *     ),
+     *     description="The Comment content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the newly created Comment",
@@ -96,6 +161,40 @@ class CommentController extends PiaSubController
      *
      * @FOSRest\Put("/pias/{piaId}/comments/{id}")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Comment"
+     * )
+     * @Swg\Parameter(
+     *     name="Comment",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="description", type="string"),
+     *         @Swg\Property(property="for_measure", type="boolean"),
+     *         @Swg\Property(property="reference_to", type="string")
+     *     ),
+     *     description="The Comment content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated Comment",
@@ -118,6 +217,28 @@ class CommentController extends PiaSubController
      * @Swg\Tag(name="Comment")
      *
      * @FOSRest\Delete("pias/{piaId}/comments/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Comment"
+     * )
      *
      * @Swg\Response(
      *     response=200,

@@ -13,6 +13,7 @@ namespace PiaApi\DataExchange\Validator;
 use PiaApi\Entity\Pia\Pia;
 use JMS\Serializer\SerializerBuilder;
 use PiaApi\DataExchange\DataExchangeDescriptor;
+use JMS\Serializer\DeserializationContext;
 
 class JsonValidator
 {
@@ -27,7 +28,7 @@ class JsonValidator
     {
         try {
             $serializer = SerializerBuilder::create()->build();
-            $objectAsArray = $serializer->deserialize($json, 'array', 'json');
+            $objectAsArray = $serializer->deserialize($json, 'array', 'json', DeserializationContext::create()->setSerializeNull(true));
         } catch (\Exception $e) {
             throw new \InvalidArgumentException(sprintf('Cannot deserialize json, reason : %s', $e->getMessage()));
         }

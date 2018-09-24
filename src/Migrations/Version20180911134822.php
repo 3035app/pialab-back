@@ -14,23 +14,21 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use PiaApi\Entity\Pia\Processing;
 
-class Version20180801152601 extends AbstractMigration implements ContainerAwareInterface
+class Version20180911134822 extends AbstractMigration implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
-        $this->addSql('ALTER TABLE pia_processing ALTER processors DROP NOT NULL');
+        // Change status Processing::STATUS_ARCHIVED old value (1) to new value (3)
+        $this->addSql('UPDATE pia_processing SET status = 3 WHERE status = 1');
     }
 
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-
-        $this->addSql('CREATE SCHEMA public');
-        $this->addSql('ALTER TABLE pia_processing ALTER processors SET NOT NULL');
+        // Change status Processing::STATUS_ARCHIVED new value (3) to old value (1)
+        $this->addSql('UPDATE pia_processing SET status = 1 WHERE status = 3');
     }
 }

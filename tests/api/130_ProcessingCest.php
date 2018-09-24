@@ -26,10 +26,10 @@ class ProcessingCest
      * @var array
      */
     private $processingData = [
-        'name'        => 'Processing CI',
-        'folder'      => [],
-        'author'      => 'Author 1',
-        'controllers' => 'Controller 1, Controller 2, Controller 3',
+        'name'                  => 'Processing CI',
+        'folder'                => [],
+        'author'                => 'Author 1',
+        'designated_controller' => 'Designated controller',
     ];
 
     private $importDataPia = [
@@ -73,22 +73,29 @@ class ProcessingCest
      * @var array
      */
     private $processingJsonType = [
-        'name'                  => 'string',
-        'author'                => 'string',
-        'status'                => 'integer',
-        'description'           => 'string|null',
-        'life_cycle'            => 'string|null',
-        'storage'               => 'string|null',
-        'standards'             => 'string|null',
-        'processors'            => 'string|null',
-        'controllers'           => 'string',
-        'non_eu_transfer'       => 'string|null',
-        'processing_data_types' => 'array',
-        'pias_count'            => 'integer',
-        'folder'                => 'array',
-        'id'                    => 'integer',
-        'created_at'            => 'string',
-        'updated_at'            => 'string',
+        'name'                      => 'string',
+        'author'                    => 'string',
+        'status'                    => 'integer',
+        'description'               => 'string|null',
+        'life_cycle'                => 'string|null',
+        'storage'                   => 'string|null',
+        'standards'                 => 'string|null',
+        'processors'                => 'string|null',
+        'designated_controller'     => 'string',
+        'non_eu_transfer'           => 'string|null',
+        'context_of_implementation' => 'string|null',
+        'recipients'                => 'string|null',
+        'lawfulness'                => 'string|null',
+        'minimization'              => 'string|null',
+        'rights_guarantee'          => 'string|null',
+        'exactness'                 => 'string|null',
+        'consent'                   => 'string|null',
+        'processing_data_types'     => 'array',
+        'pias_count'                => 'integer',
+        'folder'                    => 'array',
+        'id'                        => 'integer',
+        'created_at'                => 'string',
+        'updated_at'                => 'string',
     ];
 
     public function import_processing_with_pia_test(\ApiTester $I)

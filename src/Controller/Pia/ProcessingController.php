@@ -14,6 +14,7 @@ use PiaApi\Services\ProcessingService;
 use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\DataHandler\RequestDataHandler;
+use PiaApi\Entity\Pia\ProcessingDataType;
 use JMS\Serializer\SerializerInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
@@ -68,6 +69,14 @@ class ProcessingController extends RestController
      *
      * @FOSRest\Get("/processings")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all Processings",
@@ -98,6 +107,21 @@ class ProcessingController extends RestController
      *
      * @FOSRest\Get("/processings/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns one Processing",
@@ -123,6 +147,44 @@ class ProcessingController extends RestController
      *
      * @FOSRest\Post("/processings")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="Processing",
+     *     in="body",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"name", "author", "designated_controller"},
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="author", type="string"),
+     *         @Swg\Property(property="status", type="number"),
+     *         @Swg\Property(property="description", type="string"),
+     *         @Swg\Property(property="life_cycle", type="string"),
+     *         @Swg\Property(property="storage", type="string"),
+     *         @Swg\Property(property="standards", type="string"),
+     *         @Swg\Property(property="processors", type="string"),
+     *         @Swg\Property(property="designated_controller", type="string"),
+     *         @Swg\Property(property="lawfulness", type="string"),
+     *         @Swg\Property(property="minimization", type="string"),
+     *         @Swg\Property(property="rights_guarantee", type="string"),
+     *         @Swg\Property(property="exactness", type="string"),
+     *         @Swg\Property(property="consent", type="string"),
+     *         @Swg\Property(property="controllers", type="string"),
+     *         @Swg\Property(property="non_eu_transfer", type="string"),
+     *         @Swg\Property(property="context_of_implementation", type="string"),
+     *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
+     *         )),
+     *     ),
+     *     description="The Processing content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the newly created Processing",
@@ -145,7 +207,7 @@ class ProcessingController extends RestController
             $request->get('name'),
             $folder,
             $request->get('author'),
-            $request->get('controllers')
+            $request->get('designated_controller')
         );
 
         $this->persist($processing);
@@ -157,6 +219,51 @@ class ProcessingController extends RestController
      * Updates a processing.
      *
      * @Swg\Tag(name="Processing")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing"
+     * )
+     * @Swg\Parameter(
+     *     name="full Processing",
+     *     in="body",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="author", type="string"),
+     *         @Swg\Property(property="status", type="number"),
+     *         @Swg\Property(property="description", type="string"),
+     *         @Swg\Property(property="life_cycle", type="string"),
+     *         @Swg\Property(property="storage", type="string"),
+     *         @Swg\Property(property="standards", type="string"),
+     *         @Swg\Property(property="processors", type="string"),
+     *         @Swg\Property(property="designated_controller", type="string"),
+     *         @Swg\Property(property="controllers", type="string"),
+     *         @Swg\Property(property="lawfulness", type="string"),
+     *         @Swg\Property(property="minimization", type="string"),
+     *         @Swg\Property(property="rights_guarantee", type="string"),
+     *         @Swg\Property(property="exactness", type="string"),
+     *         @Swg\Property(property="consent", type="string"),
+     *         @Swg\Property(property="non_eu_transfer", type="string"),
+     *         @Swg\Property(property="context_of_implementation", type="string"),
+     *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
+     *         )),
+     *         @Swg\Property(property="recipients", type="string")
+     *     ),
+     *     description="The Processing content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -179,17 +286,25 @@ class ProcessingController extends RestController
         $this->canAccessResourceOr403($processing);
 
         $updatableAttributes = [
-            'folder'            => Folder::class,
-            'name'              => RequestDataHandler::TYPE_STRING,
-            'author'            => RequestDataHandler::TYPE_STRING,
-            'description'       => RequestDataHandler::TYPE_STRING,
-            'processors'        => RequestDataHandler::TYPE_STRING,
-            'controllers'       => RequestDataHandler::TYPE_STRING,
-            'non_eu_transfer'   => RequestDataHandler::TYPE_STRING,
-            'life_cycle'        => RequestDataHandler::TYPE_STRING,
-            'storage'           => RequestDataHandler::TYPE_STRING,
-            'standards'         => RequestDataHandler::TYPE_STRING,
-            'status'            => RequestDataHandler::TYPE_INT,
+            'folder'                    => Folder::class,
+            'name'                      => RequestDataHandler::TYPE_STRING,
+            'author'                    => RequestDataHandler::TYPE_STRING,
+            'description'               => RequestDataHandler::TYPE_STRING,
+            'processors'                => RequestDataHandler::TYPE_STRING,
+            'designated_controller'     => RequestDataHandler::TYPE_STRING,
+            'controllers'               => RequestDataHandler::TYPE_STRING,
+            'non_eu_transfer'           => RequestDataHandler::TYPE_STRING,
+            'recipients'                => RequestDataHandler::TYPE_STRING,
+            'life_cycle'                => RequestDataHandler::TYPE_STRING,
+            'storage'                   => RequestDataHandler::TYPE_STRING,
+            'standards'                 => RequestDataHandler::TYPE_STRING,
+            'context_of_implementation' => RequestDataHandler::TYPE_STRING,
+            'lawfulness'                => RequestDataHandler::TYPE_STRING,
+            'minimization'              => RequestDataHandler::TYPE_STRING,
+            'rights_guarantee'          => RequestDataHandler::TYPE_STRING,
+            'exactness'                 => RequestDataHandler::TYPE_STRING,
+            'consent'                   => RequestDataHandler::TYPE_STRING,
+            'status'                    => RequestDataHandler::TYPE_INT,
         ];
 
         $this->mergeFromRequest($processing, $updatableAttributes, $request);
@@ -204,12 +319,27 @@ class ProcessingController extends RestController
      *
      * @Swg\Tag(name="Processing")
      *
+     * @FOSRest\Delete("/processings/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Empty content"
      * )
-     *
-     * @FOSRest\Delete("/processings/{id}", requirements={"id"="\d+"})
      *
      * @Security("is_granted('CAN_DELETE_PROCESSING')")
      *
@@ -235,6 +365,21 @@ class ProcessingController extends RestController
      * @Swg\Tag(name="Processing")
      *
      * @FOSRest\Get("/processings/{id}/export", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing"
+     * )
      *
      * @Swg\Response(
      *     response=200,

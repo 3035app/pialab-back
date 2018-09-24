@@ -48,6 +48,21 @@ class StructureFolderController extends RestController
      *
      * @FOSRest\Get("/structures/{structureId}/folders", requirements={"structureId"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="structureId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all root Folders of given Structure",
@@ -74,6 +89,28 @@ class StructureFolderController extends RestController
      * @Swg\Tag(name="StructureFolder")
      *
      * @FOSRest\Get("/structures/{structureId}/folders/{id}", requirements={"structureId"="\d+","id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="structureId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Folder"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -105,6 +142,33 @@ class StructureFolderController extends RestController
      * @Swg\Tag(name="StructureFolder")
      *
      * @FOSRest\Post("/structures/{structureId}/folders",requirements={"structureId"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="structureId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     * @Swg\Parameter(
+     *     name="Folder",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"name"},
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
+     *     ),
+     *     description="The Folder content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -151,6 +215,39 @@ class StructureFolderController extends RestController
      *
      * @FOSRest\Put("/structures/{structureId}/folders/{id}", requirements={"structureId"="\d+","id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="structureId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Folder"
+     * )
+     * @Swg\Parameter(
+     *     name="Folder",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
+     *     ),
+     *     description="The Folder content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated Folder",
@@ -194,6 +291,28 @@ class StructureFolderController extends RestController
      * @Swg\Tag(name="StructureFolder")
      *
      * @FOSRest\Delete("/structures/{structureId}/folders/{id}", requirements={"structureId"="\d+","id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="structureId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Structure"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Folder"
+     * )
      *
      * @Swg\Response(
      *     response=200,

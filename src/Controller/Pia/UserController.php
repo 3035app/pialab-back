@@ -11,13 +11,11 @@
 namespace PiaApi\Controller\Pia;
 
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use Pagerfanta\Pagerfanta;
 use PiaApi\Entity\Oauth\Client;
 use PiaApi\Entity\Oauth\User;
 use PiaApi\Entity\Pia\Structure;
-use PiaApi\Entity\Pia\UserProfile;
 use PiaApi\Services\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as Swg;
@@ -26,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\DataHandler\RequestDataHandler;
+use PharIo\Manifest\Application;
 
 class UserController extends RestController
 {
@@ -48,6 +47,14 @@ class UserController extends RestController
      * @Swg\Tag(name="User")
      *
      * @FOSRest\Get("/users")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -94,6 +101,21 @@ class UserController extends RestController
      *
      * @FOSRest\Get("/users/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the User"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns one User",
@@ -126,6 +148,30 @@ class UserController extends RestController
      * @Swg\Tag(name="User")
      *
      * @FOSRest\Post("/users")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="User",
+     *     in="body",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"email", "password"},
+     *         @Swg\Property(property="email", type="string"),
+     *         @Swg\Property(property="password", type="string"),
+     *         @Swg\Property(property="roles", type="array", @Swg\Items(type="string")),
+     *         @Swg\Property(property="sendResettingEmail", type="boolean"),
+     *         @Swg\Property(property="structure", type="integer"),
+     *         @Swg\Property(property="application", type="integer")
+     *     ),
+     *     description="The User content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -180,6 +226,39 @@ class UserController extends RestController
      *
      * @FOSRest\Put("/users/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the User"
+     * )
+     * @Swg\Parameter(
+     *     name="User",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="username", type="string"),
+     *         @Swg\Property(property="email", type="string"),
+     *         @Swg\Property(property="password", type="string"),
+     *         @Swg\Property(property="enabled", type="boolean"),
+     *         @Swg\Property(property="locked", type="boolean"),
+     *         @Swg\Property(property="expiration_date", type="string"),
+     *         @Swg\Property(property="roles", type="array", @Swg\Items(type="string")),
+     *         @Swg\Property(property="structure", type="object", @Swg\Property(property="id", type="number")),
+     *         @Swg\Property(property="application", type="object", @Swg\Property(property="id", type="number"))
+     *     ),
+     *     description="The User content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated User",
@@ -206,8 +285,8 @@ class UserController extends RestController
             'roles'           => RequestDataHandler::TYPE_ARRAY,
             'expiration_date' => \DateTime::class,
             'locked'          => RequestDataHandler::TYPE_BOOL,
-            'profile'         => UserProfile::class,
             'structure'       => Structure::class,
+            'application'     => Client::class,
         ];
 
         $this->mergeFromRequest($user, $updatableAttributes, $request);
@@ -223,6 +302,21 @@ class UserController extends RestController
      * @Swg\Tag(name="User")
      *
      * @FOSRest\Delete("/users/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the User"
+     * )
      *
      * @Swg\Response(
      *     response=200,

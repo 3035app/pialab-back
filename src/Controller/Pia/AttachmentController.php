@@ -27,6 +27,21 @@ class AttachmentController extends PiaSubController
      *
      * @FOSRest\Get("/pias/{piaId}/attachments")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all Attachments of given Treatment",
@@ -49,6 +64,28 @@ class AttachmentController extends PiaSubController
      * @Swg\Tag(name="Attachment")
      *
      * @FOSRest\Get("/pias/{piaId}/attachments/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Attachment"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -73,6 +110,34 @@ class AttachmentController extends PiaSubController
      *
      * @FOSRest\Post("/pias/{piaId}/attachments")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="Attachment",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"file", "mime_type", "name"},
+     *         @Swg\Property(property="file", type="string"),
+     *         @Swg\Property(property="mime_type", type="string"),
+     *         @Swg\Property(property="name", type="string")
+     *     ),
+     *     description="The Attachment content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the newly created Attachment",
@@ -96,6 +161,40 @@ class AttachmentController extends PiaSubController
      *
      * @FOSRest\Put("/pias/{piaId}/attachments/{id}")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Attachment"
+     * )
+     * @Swg\Parameter(
+     *     name="Attachment",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="file", type="string"),
+     *         @Swg\Property(property="mime_type", type="string"),
+     *         @Swg\Property(property="name", type="string")
+     *     ),
+     *     description="The Attachment content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Return the updated Attachment",
@@ -118,6 +217,28 @@ class AttachmentController extends PiaSubController
      * @Swg\Tag(name="Attachment")
      *
      * @FOSRest\Delete("pias/{piaId}/attachments/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Attachment"
+     * )
      *
      * @Swg\Response(
      *     response=200,

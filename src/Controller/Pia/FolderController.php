@@ -48,6 +48,14 @@ class FolderController extends RestController
      *
      * @FOSRest\Get("/folders")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns all Folders",
@@ -75,6 +83,21 @@ class FolderController extends RestController
      * @Swg\Tag(name="Folder")
      *
      * @FOSRest\Get("/folders/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Folder"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -107,6 +130,26 @@ class FolderController extends RestController
      * @Swg\Tag(name="Folder")
      *
      * @FOSRest\Post("/folders")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="Folder",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"name"},
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
+     *     ),
+     *     description="The Folder content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -150,6 +193,32 @@ class FolderController extends RestController
      *
      * @FOSRest\Put("/folders/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Folder"
+     * )
+     * @Swg\Parameter(
+     *     name="Folder",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
+     *     ),
+     *     description="The Folder content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the updated Folder",
@@ -191,6 +260,21 @@ class FolderController extends RestController
      * @Swg\Tag(name="Folder")
      *
      * @FOSRest\Delete("/folders/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Folder"
+     * )
      *
      * @Swg\Response(
      *     response=200,

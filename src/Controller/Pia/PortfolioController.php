@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\Structure;
+use PiaApi\Entity\Oauth\User;
 
 class PortfolioController extends RestController
 {
@@ -44,6 +45,14 @@ class PortfolioController extends RestController
      * @Swg\Tag(name="Portfolio")
      *
      * @FOSRest\Get("/portfolios")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -70,6 +79,21 @@ class PortfolioController extends RestController
      * @Swg\Tag(name="Portfolio")
      *
      * @FOSRest\Get("/portfolios/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Portfolio"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -101,6 +125,27 @@ class PortfolioController extends RestController
      *
      * @FOSRest\Post("/portfolios")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="Portfolio",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"name"},
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="user", type="number"),
+     *         @Swg\Property(property="structure", type="number")
+     *     ),
+     *     description="The Portfolio content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
      *     description="Returns the newly created Portfolio",
@@ -116,8 +161,11 @@ class PortfolioController extends RestController
      */
     public function createAction(Request $request)
     {
-        $user = $this->getUser();
-        $structure = $user->getStructure();
+        $userId = $request->get('user', null);
+        $user = $userId !== null ? $this->getRepository(User::class)->find($userId) : $this->getUser();
+
+        $structureId = $request->get('structure', null);
+        $structure = $structureId !== null ? $this->getRepository(Structure::class)->find($structureId) : $user->getStructure();
 
         $portfolio = $this->portfolioService->newPortfolio($request->get('name'));
         $portfolio->addUser($user);
@@ -136,6 +184,33 @@ class PortfolioController extends RestController
      * Updates a Portfolio.
      *
      * @Swg\Tag(name="Portfolio")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Portfolio"
+     * )
+     * @Swg\Parameter(
+     *     name="Portfolio",
+     *     in="body",
+     *     required=false,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="user", type="number"),
+     *         @Swg\Property(property="structure", type="number")
+     *     ),
+     *     description="The Portfolio content"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -178,6 +253,21 @@ class PortfolioController extends RestController
      * Deletes a Portfolio.
      *
      * @Swg\Tag(name="Portfolio")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Portfolio"
+     * )
      *
      * @Swg\Response(
      *     response=200,

@@ -13,9 +13,9 @@ namespace PiaApi\Controller\Pia;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
-use PiaApi\Command\ImportPiaTemplatesCommand;
+use PiaApi\Command\ImportProcessingTemplatesCommand;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
-use PiaApi\Entity\Pia\PiaTemplate;
+use PiaApi\Entity\Pia\ProcessingTemplate;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as Swg;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -28,7 +28,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-class PiaTemplateController extends RestController
+class ProcessingTemplateController extends RestController
 {
     /**
      * @var JsonToEntityTransformer
@@ -44,22 +44,30 @@ class PiaTemplateController extends RestController
     }
 
     /**
-     * Lists all PiaTemplates, for a Structure if User is not a Technical admin.
+     * Lists all ProcessingTemplates, for a Structure if User is not a Technical admin.
      *
-     * @Swg\Tag(name="PiaTemplate")
+     * @Swg\Tag(name="ProcessingTemplate")
      *
-     * @FOSRest\Get("/pia-templates")
+     * @FOSRest\Get("/processing-templates")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all PiaTemplates",
+     *     description="Returns all ProcessingTemplates",
      *     @Swg\Schema(
      *         type="array",
-     *         @Swg\Items(ref=@Nelmio\Model(type=PiaTemplate::class, groups={"Default"}))
+     *         @Swg\Items(ref=@Nelmio\Model(type=ProcessingTemplate::class, groups={"Default"}))
      *     )
      * )
      *
-     * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_SHOW_PROCESSING_TEMPLATE')")
      *
      * @return View
      */
@@ -67,7 +75,7 @@ class PiaTemplateController extends RestController
     {
         $structure = $this->getUser()->getStructure();
         if ($structure !== null) {
-            $collection = $this->getRepository()->findAvailablePiaTemplatesForStructure($structure);
+            $collection = $this->getRepository()->findAvailableProcessingTemplatesForStructure($structure);
         } elseif ($this->isGranted('ROLE_TECHNICAL_ADMIN')) {
             $collection = $this->getRepository()->findAll();
         } else {
@@ -78,58 +86,95 @@ class PiaTemplateController extends RestController
     }
 
     /**
-     * Shows one PiaTemplate by its ID.
+     * Shows one ProcessingTemplate by its ID.
      *
-     * @Swg\Tag(name="PiaTemplate")
+     * @Swg\Tag(name="ProcessingTemplate")
      *
-     * @FOSRest\Get("/pia-templates/{id}")
+     * @FOSRest\Get("/processing-templates/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the ProcessingTemplate"
+     * )
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one PiaTemplate",
+     *     description="Returns one ProcessingTemplate",
      *     @Swg\Schema(
      *         type="object",
-     *         ref=@Nelmio\Model(type=PiaTemplate::class, groups={"Default"})
+     *         ref=@Nelmio\Model(type=ProcessingTemplate::class, groups={"Default"})
      *     )
      * )
      * @Swg\Response(
      *     response=404,
-     *     description="PiaTemplate does not exists"
+     *     description="ProcessingTemplate does not exists"
      * )
      *
-     * @Security("is_granted('CAN_SHOW_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_SHOW_PROCESSING_TEMPLATE')")
      *
      * @return View
      */
     public function showAction(Request $request, $id)
     {
-        $piaTemplate = $this->getRepository()->find($id);
-        if ($piaTemplate === null) {
-            return $this->view($piaTemplate, Response::HTTP_NOT_FOUND);
+        $pTemplate = $this->getRepository()->find($id);
+        if ($pTemplate === null) {
+            return $this->view($pTemplate, Response::HTTP_NOT_FOUND);
         }
 
-        $this->canAccessResourceOr403($piaTemplate);
+        $this->canAccessResourceOr403($pTemplate);
 
-        return $this->view($piaTemplate, Response::HTTP_OK);
+        return $this->view($pTemplate, Response::HTTP_OK);
     }
 
     /**
-     * Imports PiaTemplates contained in a given archive.
+     * Imports ProcessingTemplates contained in a given archive.
      *
-     * @Swg\Tag(name="PiaTemplate")
+     * @Swg\Tag(name="ProcessingTemplate")
      *
-     * @FOSRest\Post("/pia-templates/importCollection")
+     * @FOSRest\Post("/processing-templates/importCollection")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="enableAll",
+     *     in="formData",
+     *     type="boolean",
+     *     required=true,
+     *     description="Auto enable all templates"
+     * )
+     * @Swg\Parameter(
+     *     name="collection",
+     *     in="formData",
+     *     type="file",
+     *     required=true,
+     *     description="The archive of ProcessingTemplates"
+     * )
      *
      * @Swg\Response(
      *     response=200,
-     *     description="Empty content, Import PiaTemplates is OK"
+     *     description="Empty content, Import ProcessingTemplates is OK"
      * )
      * @Swg\Response(
      *     response=500,
-     *     description="Empty content, Import PiaTemplates fails"
+     *     description="Empty content, Import ProcessingTemplates fails"
      * )
      *
-     * @Security("is_granted('CAN_CREATE_PIA_TEMPLATE')")
+     * @Security("is_granted('CAN_CREATE_PROCESSING_TEMPLATE')")
      *
      * @return View
      */
@@ -146,7 +191,7 @@ class PiaTemplateController extends RestController
         $application->setAutoExit(false);
 
         $inputData = [
-            'command'                  => ImportPiaTemplatesCommand::NAME,
+            'command'                  => ImportProcessingTemplatesCommand::NAME,
             'templatesFolderOrArchive' => $uploadedFile->getRealPath(),
             '--no-interaction'         => true,
         ];
@@ -165,12 +210,12 @@ class PiaTemplateController extends RestController
 
     protected function getEntityClass()
     {
-        return PiaTemplate::class;
+        return ProcessingTemplate::class;
     }
 
     public function canAccessResourceOr403($resource): void
     {
-        if (!$resource instanceof PiaTemplate) {
+        if (!$resource instanceof ProcessingTemplate) {
             throw new AccessDeniedHttpException();
         }
 

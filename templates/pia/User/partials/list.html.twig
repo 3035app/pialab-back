@@ -77,17 +77,17 @@
             </td>
             <td class="right aligned collapsing">
               <div class="ui small buttons">
-                <a class="ui green tiny icon button" data-modal="data-modal" title="Modifier l'utilisateur" href="{{ path('manage_users_edit_user', {'userId':user.id, 'redirect': app.request.pathinfo}) }}">
+                <a class="ui green tiny icon button" data-modal="data-modal" title="Modifier l'utilisateur" href="{{ path('manage_users_edit_user', {'userId':user.id, 'redirect': app.request.requestUri}) }}">
                   <i class="pencil icon"></i>
                 </a>
-                <a class="ui orange tiny icon button" data-modal="data-modal" title="Envoyer l'email de réinitialisation de mot de passe" href="{{ path('manage_users_send_reset_password_email', {'userId':user.id, 'redirect': app.request.pathinfo}) }}">
+                <a class="ui orange tiny icon button" data-modal="data-modal" title="Envoyer l'email de réinitialisation de mot de passe" href="{{ path('manage_users_send_reset_password_email', {'userId':user.id, 'redirect': app.request.requestUri}) }}">
                   <i class="icons">
                     <i class="envelope outline icon"></i>
                     <i class="bottom right corner plus icon"></i>
                   </i>
                 </a>
                 {% if app.user != user %}
-                  <a class="ui red tiny icon button" data-modal="data-modal" title="Supprimer l'utilisateur" href="{{ path('manage_users_remove_user', {'userId':user.id,'redirect': app.request.pathinfo}) }}">
+                  <a class="ui red tiny icon button" data-modal="data-modal" title="Supprimer l'utilisateur" href="{{ path('manage_users_remove_user', {'userId':user.id,'redirect': app.request.requestUri}) }}">
                     <i class="trash icon"></i>
                   </a>
                 {% else %}

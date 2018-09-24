@@ -94,7 +94,7 @@ pia:
 
 
     templates:
-        title: Gabarits de PIA
+        title: Gabarits de Traitement
 
         list:
             id: "#"
@@ -109,7 +109,7 @@ pia:
             structure_types_number: Types de structure
 
         add:
-            title: Ajouter une application
+            title: Ajouter un gabarit
 
         modals:
             remove:
@@ -118,7 +118,7 @@ pia:
                 resume:
                     template: Gabarit
                     name: Nom
-                    pias_number: PIA issues de ce gabarit
+                    processing_number: Traitements issues de ce gabarit
 
         forms:
             create:
@@ -145,7 +145,7 @@ pia:
             name: Nom
             type: Type
             users_number: "Utilisateurs"
-            pias_number: PIA
+            processing_number: Traitements
             created_at: Créé le
 
         add:
@@ -159,7 +159,7 @@ pia:
                     structure: Structure
                     name: Nom
                     users_number: "Utilisateurs associés"
-                    pias_number: PIA associées
+                    processing_number: Traitements associés
 
         forms:
             create:
@@ -172,7 +172,7 @@ pia:
                 structures: Structures à associer
                 submit: Associer les structures
             edit:
-                templates: Gabarits de PIA disponibles
+                templates: Gabarits de Traitement disponibles
                 templates_help: Les gabarits sélectionnés seront accessibles à cette structure
 
                 cancel: Annuler
@@ -205,7 +205,7 @@ pia:
                 name: Nom
                 submit: Créer le type de structure
             edit:
-                templates: Gabarits de PIA disponibles
+                templates: Gabarits de Traitement disponibles
                 templates_help: Les gabarits sélectionnés seront accessibles à toutes les structures de ce type de structure
                 cancel: Annuler
                 submit: Enregistrer le type de structure

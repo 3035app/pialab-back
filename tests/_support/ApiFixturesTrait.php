@@ -15,7 +15,6 @@ trait ApiFixturesTrait
     private $piaDatas = [
         'author_name'                       => 'codecept-author',
         'evaluator_name'                    => 'codecept-evaluator',
-        'name'                              => 'codecept-name',
         'validator_name'                    => 'codecept-validator',
         'type'                              => 'regular',
         'concerned_people_searched_opinion' => 0,
@@ -27,7 +26,6 @@ trait ApiFixturesTrait
     private $piaJsonType = [
         'progress'                          => 'integer',
         'status'                            => 'integer',
-        'name'                              => 'string',
         'author_name'                       => 'string',
         'evaluator_name'                    => 'string',
         'validator_name'                    => 'string',
@@ -73,10 +71,10 @@ trait ApiFixturesTrait
         $I->login();
 
         $processingData = [
-            'name'        => 'Processing CI',
-            'folder'      => $I->getRootFolder(),
-            'author'      => 'Author 1',
-            'controllers' => 'Controller 1, Controller 2, Controller 3',
+            'name'                  => 'Processing CI',
+            'folder'                => $I->getRootFolder(),
+            'author'                => 'Author 1',
+            'designated_controller' => 'Designated controller',
         ];
 
         $I->sendJsonToCreate('/processings', $processingData);

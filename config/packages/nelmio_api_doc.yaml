@@ -1,6 +1,5 @@
 nelmio_api_doc:
     documentation:
-        #host: api.test.pialab.io
         schemes: [http]
         info:
             title: Pialab API
@@ -14,6 +13,10 @@ nelmio_api_doc:
                 in: header
         security:
             - Bearer: []
+        consumes:
+            - application/json
+        produces:
+            - application/json
 
     areas:
         default:

@@ -15,7 +15,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class Version20180731151014 extends AbstractMigration implements ContainerAwareInterface
+class Version20180912075445 extends AbstractMigration implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
@@ -23,13 +23,13 @@ class Version20180731151014 extends AbstractMigration implements ContainerAwareI
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_processing ADD status INT NOT NULL');
+        $this->addSql('ALTER TABLE pia_processing ADD context_of_implementation TEXT DEFAULT NULL');
     }
 
     public function down(Schema $schema)
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_processing DROP status');
+        $this->addSql('ALTER TABLE pia_processing DROP context_of_implementation');
     }
 }

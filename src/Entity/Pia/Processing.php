@@ -27,6 +27,11 @@ class Processing
         ResourceTrait,
         TimestampableEntity;
 
+    const STATUS_DOING = 0;
+    const STATUS_UNDER_VALIDATION = 1;
+    const STATUS_VALIDATED = 2;
+    const STATUS_ARCHIVED = 3;
+
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -44,7 +49,7 @@ class Processing
     protected $author;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default": Processing::STATUS_DOING})
      * @JMS\Groups({"Default", "Export"})
      *
      * @var int
@@ -97,6 +102,14 @@ class Processing
      *
      * @var string
      */
+    protected $designatedController;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string
+     */
     protected $controllers;
 
     /**
@@ -108,7 +121,62 @@ class Processing
     protected $nonEuTransfer;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing")
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $recipients;
+  
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $contextOfImplementation;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $lawfulness;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $minimization;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $rightsGuarantee;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $exactness;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $consent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
      *
@@ -134,16 +202,24 @@ class Processing
      */
     protected $folder;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="ProcessingTemplate", inversedBy="processings")
+     * @JMS\Groups({"Full"})
+     *
+     * @var ProcessingTemplate
+     */
+    protected $template;
+
     public function __construct(
         string $name,
         Folder $folder,
         string $author,
-        string $controllers
+        string $designatedController
     ) {
         $this->name = $name;
         $this->folder = $folder;
         $this->author = $author;
-        $this->controllers = $controllers;
+        $this->designatedController = $designatedController;
 
         $this->processingDataTypes = new ArrayCollection();
         $this->pias = new ArrayCollection();
@@ -192,7 +268,7 @@ class Processing
     /**
      * @param string $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description = null): void
     {
         $this->description = $description;
     }
@@ -208,13 +284,29 @@ class Processing
     /**
      * @param string $lifeCycle
      */
-    public function setLifeCycle(string $lifeCycle): void
+    public function setLifeCycle(?string $lifeCycle = null): void
     {
         $this->lifeCycle = $lifeCycle;
     }
 
     /**
      * @return string|null
+     */
+    public function getDataMedium(): ?string
+    {
+        return $this->dataMedium;
+    }
+
+    /**
+     * @param string $dataMedium
+     */
+    public function setDataMedium(?string $dataMedium = null): void
+    {
+        $this->dataMedium = $dataMedium;
+    }
+
+    /**
+     * @return string
      */
     public function getStandards(): ?string
     {
@@ -224,7 +316,7 @@ class Processing
     /**
      * @param string $standards
      */
-    public function setStandards(string $standards): void
+    public function setStandards(?string $standards): void
     {
         $this->standards = $standards;
     }
@@ -240,7 +332,7 @@ class Processing
     /**
      * @param string $processors
      */
-    public function setProcessors(string $processors): void
+    public function setProcessors(?string $processors = null): void
     {
         $this->processors = $processors;
     }
@@ -248,7 +340,7 @@ class Processing
     /**
      * @return string
      */
-    public function getControllers(): string
+    public function getControllers(): ?string
     {
         return $this->controllers;
     }
@@ -256,9 +348,89 @@ class Processing
     /**
      * @param string $controllers
      */
-    public function setControllers(string $controllers): void
+    public function setControllers(?string $controllers = null): void
     {
         $this->controllers = $controllers;
+    }
+    
+     /**
+     * @return string
+     */
+    public function getLawfulness(): ?string
+    {
+        return $this->lawfulness;
+    }
+
+    /**
+     * @param string $lawfulness
+     */
+    public function setLawfulness(?string $lawfulness = null): void
+    {
+        $this->lawfulness = $lawfulness;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMinimization(): ?string
+    {
+        return $this->minimization;
+    }
+
+    /**
+     * @param string $minimization
+     */
+    public function setMinimization(?string $minimization = null): void
+    {
+        $this->minimization = $minimization;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRightsGuarantee(): ?string
+    {
+        return $this->rightsGuarantee;
+    }
+
+    /**
+     * @param string $rightsGuarantee
+     */
+    public function setRightsGuarantee(?string $rightsGuarantee = null): void
+    {
+        $this->rightsGuarantee = $rightsGuarantee;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExactness(): ?string
+    {
+        return $this->exactness;
+    }
+
+    /**
+     * @param string $exactness
+     */
+    public function setExactness(?string $exactness = null): void
+    {
+        $this->exactness = $exactness;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConsent(): ?string
+    {
+        return $this->consent;
+    }
+
+    /**
+     * @param string $consent
+     */
+    public function setConsent(?string $consent = null): void
+    {
+        $this->consent = $consent;
     }
 
     /**
@@ -409,9 +581,78 @@ class Processing
      */
     public function setStatus(int $status): void
     {
-        if (!ProcessingStatus::isValid($status)) {
+        if (!in_array($status, [
+            self::STATUS_DOING,
+            self::STATUS_UNDER_VALIDATION,
+            self::STATUS_VALIDATED,
+            self::STATUS_ARCHIVED,
+        ])) {
             throw new \InvalidArgumentException(sprintf('Status « %d » is not valid', $status));
         }
         $this->status = $status;
+    }
+
+    /**
+     * @return ProcessingTemplate
+     */
+    public function getTemplate(): ?ProcessingTemplate
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param ProcessingTemplate $template
+     */
+    public function setTemplate(?ProcessingTemplate $template): void
+    {
+        $this->template = $template;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDesignatedController(): string
+    {
+        return $this->designatedController;
+    }
+
+    /**
+     * @param string $designatedController
+     */
+    public function setDesignatedController(string $designatedController): void
+    {
+        $this->designatedController = $designatedController;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRecipients(): ?string
+    {
+        return $this->recipients;
+    }
+
+    /**
+     * @param string|null $recipients
+     */
+    public function setRecipients(?string $recipients = null): void
+    {
+        $this->recipients = $recipients;
+    }
+  
+    /**
+     * @return string|null
+     */
+    public function getContextOfImplementation(): ?string
+    {
+        return $this->contextOfImplementation;
+    }
+
+    /**
+     * @param string|null $contextOfImplementation
+     */
+    public function setContextOfImplementation(?string $contextOfImplementation = null): void
+    {
+        $this->contextOfImplementation = $contextOfImplementation;
     }
 }

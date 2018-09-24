@@ -15,7 +15,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class Version20180808143035 extends AbstractMigration implements ContainerAwareInterface
+class Version20180910133232 extends AbstractMigration implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
@@ -23,17 +23,13 @@ class Version20180808143035 extends AbstractMigration implements ContainerAwareI
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_processing_data_type ALTER data TYPE TEXT');
-        $this->addSql('ALTER TABLE pia_processing_data_type ALTER data DROP DEFAULT');
-        $this->addSql('COMMENT ON COLUMN pia_processing_data_type.data IS NULL;');
+        $this->addSql('ALTER TABLE pia_processing ADD recipients TEXT DEFAULT NULL');
     }
 
     public function down(Schema $schema)
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE pia_processing_data_type ALTER data TYPE TEXT');
-        $this->addSql('ALTER TABLE pia_processing_data_type ALTER data DROP DEFAULT');
-        $this->addSql('COMMENT ON COLUMN pia_processing_data_type.data IS \'(DC2Type:json)\';');
+        $this->addSql('ALTER TABLE pia_processing DROP recipients');
     }
 }

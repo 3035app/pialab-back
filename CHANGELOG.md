@@ -1,5 +1,112 @@
 # Change Log
 
+## [Unreleased](https://github.com/pia-lab/pialab-back/tree/HEAD)
+
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...HEAD)
+
+**Closed issues:**
+
+- error during installation [\#79](https://github.com/pia-lab/pialab-back/issues/79)
+
+**Merged pull requests:**
+
+- Replace 'pia-templates' by 'processing-templates' in api\_pattern [\#76](https://github.com/pia-lab/pialab-back/pull/76) ([GlennCavarle](https://github.com/GlennCavarle))
+
+## [1.4.10](https://github.com/pia-lab/pialab-back/tree/1.4.10) (2018-09-10)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.9...1.4.10)
+
+**Merged pull requests:**
+
+- Change Processing models for designated\_controller fields [\#72](https://github.com/pia-lab/pialab-back/pull/72) ([PapsOu](https://github.com/PapsOu))
+
+## [1.4.9](https://github.com/pia-lab/pialab-back/tree/1.4.9) (2018-09-07)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.8...1.4.9)
+
+**Merged pull requests:**
+
+- Move templates from pia to processing [\#71](https://github.com/pia-lab/pialab-back/pull/71) ([GlennCavarle](https://github.com/GlennCavarle))
+- Fix naming between processing and pia [\#69](https://github.com/pia-lab/pialab-back/pull/69) ([GlennCavarle](https://github.com/GlennCavarle))
+- Add some @deprecated annotations [\#68](https://github.com/pia-lab/pialab-back/pull/68) ([GlennCavarle](https://github.com/GlennCavarle))
+- Remove PIA name field [\#67](https://github.com/pia-lab/pialab-back/pull/67) ([PapsOu](https://github.com/PapsOu))
+- Fix template error when the type of structure is not defined [\#66](https://github.com/pia-lab/pialab-back/pull/66) ([GlennCavarle](https://github.com/GlennCavarle))
+
+## [1.4.8](https://github.com/pia-lab/pialab-back/tree/1.4.8) (2018-09-06)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.7...1.4.8)
+
+## [1.4.7](https://github.com/pia-lab/pialab-back/tree/1.4.7) (2018-09-06)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.6...1.4.7)
+
+**Fixed bugs:**
+
+- Twig error runtime  [\#28](https://github.com/pia-lab/pialab-back/issues/28)
+
+**Closed issues:**
+
+- error when i manage users [\#61](https://github.com/pia-lab/pialab-back/issues/61)
+
+**Merged pull requests:**
+
+- Cascading delete ProcessingDataType when deleting a Processing [\#65](https://github.com/pia-lab/pialab-back/pull/65) ([PapsOu](https://github.com/PapsOu))
+- Add missing required object attributes on parameters [\#64](https://github.com/pia-lab/pialab-back/pull/64) ([PapsOu](https://github.com/PapsOu))
+
+## [1.4.6](https://github.com/pia-lab/pialab-back/tree/1.4.6) (2018-08-31)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.6...1.4.6)
+
+## [1.2.6](https://github.com/pia-lab/pialab-back/tree/1.2.6) (2018-08-29)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.5...1.2.6)
+
+## [1.4.5](https://github.com/pia-lab/pialab-back/tree/1.4.5) (2018-08-28)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.4...1.4.5)
+
+## [1.4.4](https://github.com/pia-lab/pialab-back/tree/1.4.4) (2018-08-28)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.3...1.4.4)
+
+## [1.4.3](https://github.com/pia-lab/pialab-back/tree/1.4.3) (2018-08-27)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.5...1.4.3)
+
+## [1.2.5](https://github.com/pia-lab/pialab-back/tree/1.2.5) (2018-08-23)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.3.1...1.2.5)
+
+**Closed issues:**
+
+- Unable to login after last git updates [\#63](https://github.com/pia-lab/pialab-back/issues/63)
+
+## [1.3.1](https://github.com/pia-lab/pialab-back/tree/1.3.1) (2018-08-21)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.2...1.3.1)
+
+**Merged pull requests:**
+
+- Fix UI [\#62](https://github.com/pia-lab/pialab-back/pull/62) ([PapsOu](https://github.com/PapsOu))
+
+## [1.4.2](https://github.com/pia-lab/pialab-back/tree/1.4.2) (2018-08-14)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.1...1.4.2)
+
+## [1.4.1](https://github.com/pia-lab/pialab-back/tree/1.4.1) (2018-08-13)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.0...1.4.1)
+
+## [1.4.0](https://github.com/pia-lab/pialab-back/tree/1.4.0) (2018-08-13)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.3.0...1.4.0)
+
+**Merged pull requests:**
+
+- Fix create PIA from template [\#60](https://github.com/pia-lab/pialab-back/pull/60) ([PapsOu](https://github.com/PapsOu))
+- Add data field to the data type [\#58](https://github.com/pia-lab/pialab-back/pull/58) ([Fabrice-li](https://github.com/Fabrice-li))
+- Add fields to the creation of a data type [\#57](https://github.com/pia-lab/pialab-back/pull/57) ([Fabrice-li](https://github.com/Fabrice-li))
+- Change ProcessingDataType from json to string [\#56](https://github.com/pia-lab/pialab-back/pull/56) ([PapsOu](https://github.com/PapsOu))
+- Fix Pia progress count [\#55](https://github.com/pia-lab/pialab-back/pull/55) ([PapsOu](https://github.com/PapsOu))
+- Try to fix PIA create [\#53](https://github.com/pia-lab/pialab-back/pull/53) ([PapsOu](https://github.com/PapsOu))
+- Fix a bug whith processing testing [\#52](https://github.com/pia-lab/pialab-back/pull/52) ([Fabrice-li](https://github.com/Fabrice-li))
+- Add export action for processing entity [\#51](https://github.com/pia-lab/pialab-back/pull/51) ([Fabrice-li](https://github.com/Fabrice-li))
+- Fix the processing create action [\#50](https://github.com/pia-lab/pialab-back/pull/50) ([Fabrice-li](https://github.com/Fabrice-li))
+- Fix processing serialization [\#49](https://github.com/pia-lab/pialab-back/pull/49) ([PapsOu](https://github.com/PapsOu))
+- Processing Data Type - Add CRUDL methods [\#48](https://github.com/pia-lab/pialab-back/pull/48) ([Fabrice-li](https://github.com/Fabrice-li))
+- Processing - Add Create, Edit, Delete method to the processing API [\#47](https://github.com/pia-lab/pialab-back/pull/47) ([Fabrice-li](https://github.com/Fabrice-li))
+- Fix back button when requesting a password reset [\#45](https://github.com/pia-lab/pialab-back/pull/45) ([GlennCavarle](https://github.com/GlennCavarle))
+- \(Processing\) - Add List action [\#44](https://github.com/pia-lab/pialab-back/pull/44) ([Fabrice-li](https://github.com/Fabrice-li))
+- FOS\_REST - Replace paths with a global tag [\#43](https://github.com/pia-lab/pialab-back/pull/43) ([Fabrice-li](https://github.com/Fabrice-li))
+- Add Processing entity [\#41](https://github.com/pia-lab/pialab-back/pull/41) ([PapsOu](https://github.com/PapsOu))
+- Update /oauth/v2/token example [\#40](https://github.com/pia-lab/pialab-back/pull/40) ([PapsOu](https://github.com/PapsOu))
+
 ## [1.3.0](https://github.com/pia-lab/pialab-back/tree/1.3.0) (2018-08-01)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.4...1.3.0)
 
