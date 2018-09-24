@@ -38,9 +38,18 @@ class ProcessingDescriptor extends AbstractDescriptor
      * @JMS\Groups({"Default", "Export"})
      * @Assert\NotBlank
      *
-     * @var string
+     * @var string|null
      */
     protected $controllers = '';
+
+    /**
+     * @JMS\Type("string")
+     * @JMS\Groups({"Default", "Export"})
+     * @Assert\NotBlank
+     *
+     * @var string
+     */
+    protected $designatedController = '';
 
     /**
      * @JMS\Type("string")
@@ -49,6 +58,62 @@ class ProcessingDescriptor extends AbstractDescriptor
      * @var string|null
      */
     protected $description = '';
+
+    /**
+     * @JMS\Type("string")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $lawfulness = '';
+
+    /**
+     * @JMS\Type("string")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $minimization = '';
+
+    /**
+     * @JMS\Type("string")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $rightsGuarantee = '';
+
+    /**
+     * @JMS\Type("string")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $exactness = '';
+
+    /**
+     * @JMS\Type("string")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $consent = '';
+
+    /**
+     * @JMS\Type("string")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $contextOfImplementation = '';
+
+    /**
+     * @JMS\Type("string")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $recipients = '';
 
     /**
      * @JMS\Type("string")
@@ -120,10 +185,17 @@ class ProcessingDescriptor extends AbstractDescriptor
      */
     protected $pias = [];
 
+    /**
+     * @JMS\Type("array")
+     * @JMS\Groups({"Default", "Export"})
+     */
+    protected $processingDataTypes = [];
+
     public function __construct(
         string $name,
         string $author,
-        string $controllers,
+        string $designatedController,
+        string $controllers = null,
         string $description = null,
         string $processors = null,
         string $nonEuTransfer = null,
@@ -131,11 +203,19 @@ class ProcessingDescriptor extends AbstractDescriptor
         string $storage = null,
         string $standards = null,
         string $status = null,
+        string $lawfulness = null,
+        string $minimization = null,
+        string $rightsGuarantee = null,
+        string $exactness = null,
+        string $consent = null,
+        string $contextOfImplementation = null,
+        string $recipients = null,
         \DateTime $createdAt = null,
         \DateTime $updatedAt = null
     ) {
         $this->name = $name;
         $this->author = $author;
+        $this->designatedController = $designatedController;
         $this->controllers = $controllers;
         $this->description = $description;
         $this->processors = $processors;
@@ -144,6 +224,13 @@ class ProcessingDescriptor extends AbstractDescriptor
         $this->storage = $storage;
         $this->standards = $standards;
         $this->status = $status;
+        $this->lawfulness = $lawfulness;
+        $this->minimization = $minimization;
+        $this->rightsGuarantee = $rightsGuarantee;
+        $this->exactness = $exactness;
+        $this->consent = $consent;
+        $this->contextOfImplementation = $contextOfImplementation;
+        $this->recipients = $recipients;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
     }
@@ -151,5 +238,10 @@ class ProcessingDescriptor extends AbstractDescriptor
     public function mergePias(array $pias)
     {
         $this->pias = array_merge($this->pias, $pias);
+    }
+
+    public function mergeDataTypes(array $types)
+    {
+        $this->processingDataTypes = array_merge($this->processingDataTypes, $types);
     }
 }

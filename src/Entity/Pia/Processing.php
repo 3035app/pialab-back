@@ -127,7 +127,7 @@ class Processing
      * @var string|null
      */
     protected $recipients;
-  
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -176,7 +176,7 @@ class Processing
     protected $consent;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"persist", "remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
      *
@@ -352,8 +352,8 @@ class Processing
     {
         $this->controllers = $controllers;
     }
-    
-     /**
+
+    /**
      * @return string
      */
     public function getLawfulness(): ?string
@@ -639,7 +639,7 @@ class Processing
     {
         $this->recipients = $recipients;
     }
-  
+
     /**
      * @return string|null
      */

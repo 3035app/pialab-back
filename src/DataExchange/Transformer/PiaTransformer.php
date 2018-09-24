@@ -68,7 +68,6 @@ class PiaTransformer extends AbstractTransformer
     public function toPia(PiaDescriptor $descriptor): Pia
     {
         $pia = new Pia();
-        $pia->setName($descriptor->getName());
         $pia->setStatus(PiaStatus::getStatusFromName($descriptor->getStatus()));
         $pia->setAuthorName($descriptor->getAuthorName());
         $pia->setEvaluatorName($descriptor->getEvaluatorName());
@@ -96,7 +95,6 @@ class PiaTransformer extends AbstractTransformer
     public function fromPia(Pia $pia): PiaDescriptor
     {
         $descriptor = new PiaDescriptor(
-            $pia->getName(),
             $pia->getStatusName(),
             $pia->getAuthorName(),
             $pia->getEvaluatorName(),

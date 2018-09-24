@@ -31,6 +31,12 @@ class Pia implements Timestampable
     const TYPE_SIMPLIFIED = 'simplified';
     const TYPE_ADVANCED = 'advanced';
 
+    protected const QUESTIONS = [
+        self::TYPE_SIMPLIFIED => 6,
+        self::TYPE_REGULAR    => 18,
+        self::TYPE_ADVANCED   => 36,
+    ];
+
     const QUESTION_NUMBER = 30;
     const OLD_QUESTION_NUMBER = 36;
 

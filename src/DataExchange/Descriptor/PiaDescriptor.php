@@ -22,15 +22,6 @@ class PiaDescriptor extends AbstractDescriptor
      *
      * @var string
      */
-    protected $name = '';
-
-    /**
-     * @JMS\Type("string")
-     * @JMS\Groups({"Default", "Export"})
-     * @Assert\NotBlank
-     *
-     * @var string
-     */
     protected $status = '';
 
     /**
@@ -199,7 +190,6 @@ class PiaDescriptor extends AbstractDescriptor
     protected $answers = [];
 
     public function __construct(
-        string $name,
         string $status,
         string $author,
         string $evaluator,
@@ -221,7 +211,6 @@ class PiaDescriptor extends AbstractDescriptor
         int $numberOfQuestions,
         int $progress
     ) {
-        $this->name = $name;
         $this->status = $status;
         $this->authorName = $author;
         $this->evaluatorName = $evaluator;

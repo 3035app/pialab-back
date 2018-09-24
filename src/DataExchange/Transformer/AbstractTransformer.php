@@ -13,9 +13,29 @@ namespace PiaApi\DataExchange\Transformer;
 use JMS\Serializer\SerializationContext;
 use PiaApi\DataExchange\Descriptor\AbstractDescriptor;
 use PiaApi\Exception\DataImportException;
+use JMS\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AbstractTransformer
 {
+    /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
+
+    /**
+     * @var ValidatorInterface
+     */
+    protected $validator;
+
+    public function __construct(
+        SerializerInterface $serializer,
+        ValidatorInterface $validator
+    ) {
+        $this->serializer = $serializer;
+        $this->validator = $validator;
+    }
+
     protected function validate(AbstractDescriptor $descriptor): bool
     {
         $errors = $this->validator->validate($descriptor);

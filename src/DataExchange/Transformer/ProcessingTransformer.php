@@ -11,7 +11,6 @@
 namespace PiaApi\DataExchange\Transformer;
 
 use PiaApi\Entity\Pia\Processing;
-use PiaApi\Entity\Pia\ProcessingStatus;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\DataExchange\Descriptor\ProcessingDescriptor;
 use PiaApi\Services\ProcessingService;
@@ -21,19 +20,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ProcessingTransformer extends AbstractTransformer
 {
     /**
-     * @var SerializerInterface
-     */
-    protected $serializer;
-
-    /**
      * @var ProcessingService
      */
     protected $processingService;
-
-    /**
-     * @var ValidatorInterface
-     */
-    protected $validator;
 
     /**
      * @var Folder|null
@@ -45,16 +34,23 @@ class ProcessingTransformer extends AbstractTransformer
      */
     protected $piaTransformer;
 
+    /**
+     * @var DataTypeTransformer
+     */
+    protected $dataTypeTransformer;
+
     public function __construct(
         SerializerInterface $serializer,
         ProcessingService $processingService,
         ValidatorInterface $validator,
-        PiaTransformer $piaTransformer
+        PiaTransformer $piaTransformer,
+        DataTypeTransformer $dataTypeTransformer
     ) {
-        $this->serializer = $serializer;
+        parent::__construct($serializer, $validator);
+
         $this->processingService = $processingService;
-        $this->validator = $validator;
         $this->piaTransformer = $piaTransformer;
+        $this->dataTypeTransformer = $dataTypeTransformer;
     }
 
     public function setFolder(Folder $folder)
@@ -73,7 +69,7 @@ class ProcessingTransformer extends AbstractTransformer
             $descriptor->getName(),
             $this->getFolder(),
             $descriptor->getAuthor(),
-            $descriptor->getControllers()
+            $descriptor->getDesignatedController()
         );
 
         $processing->setDescription($descriptor->getDescription());
@@ -82,7 +78,14 @@ class ProcessingTransformer extends AbstractTransformer
         $processing->setLifeCycle($descriptor->getLifeCycle());
         $processing->setStorage($descriptor->getStorage());
         $processing->setStandards($descriptor->getStandards());
-        $processing->setStatus(ProcessingStatus::getStatusFromName($descriptor->getStatus()));
+        $processing->setStatus($descriptor->getStatus());
+        $processing->setLawfulness($descriptor->getLawfulness());
+        $processing->setMinimization($descriptor->getMinimization());
+        $processing->setRightsGuarantee($descriptor->getRightsGuarantee());
+        $processing->setExactness($descriptor->getExactness());
+        $processing->setConsent($descriptor->getConsent());
+        $processing->setRecipients($descriptor->getRecipients());
+        $processing->setContextOfImplementation($descriptor->getContextOfImplementation());
 
         return $processing;
     }
@@ -92,6 +95,7 @@ class ProcessingTransformer extends AbstractTransformer
         $descriptor = new ProcessingDescriptor(
             $processing->getName(),
             $processing->getAuthor(),
+            $processing->getDesignatedController(),
             $processing->getControllers(),
             $processing->getDescription(),
             $processing->getProcessors(),
@@ -100,12 +104,23 @@ class ProcessingTransformer extends AbstractTransformer
             $processing->getStorage(),
             $processing->getStandards(),
             $processing->getStatusName(),
+            $processing->getLawfulness(),
+            $processing->getMinimization(),
+            $processing->getRightsGuarantee(),
+            $processing->getExactness(),
+            $processing->getConsent(),
+            $processing->getContextOfImplementation(),
+            $processing->getRecipients(),
             $processing->getCreatedAt(),
             $processing->getUpdatedAt()
         );
 
         $descriptor->mergePias(
             $this->piaTransformer->importPias($processing->getPias())
+        );
+
+        $descriptor->mergeDataTypes(
+            $this->dataTypeTransformer->importDataTypes($processing->getProcessingDataTypes())
         );
 
         return $descriptor;
@@ -130,5 +145,12 @@ class ProcessingTransformer extends AbstractTransformer
         $this->piaTransformer->setProcessing($processing);
 
         return $this->piaTransformer->jsonToPia($json);
+    }
+
+    public function extractDataType(Processing $processing, array $json)
+    {
+        $this->dataTypeTransformer->setProcessing($processing);
+
+        return $this->dataTypeTransformer->jsonToDataType($json);
     }
 }

@@ -429,17 +429,22 @@ class ProcessingController extends RestController
 
         try {
             $processing = $this->processingTransformer->jsonToProcessing($data);
+            $this->persist($processing);
+
+            $descriptor = $this->processingTransformer->fromJson($data, ProcessingDescriptor::class);
+
+            foreach ($descriptor->getPias() as $pia) {
+                $processing->addPia($this->processingTransformer->extractPia($processing, $pia));
+            }
+
+            foreach ($descriptor->getProcessingDataTypes() as $types) {
+                $processing->addProcessingDataType($this->processingTransformer->extractDataType($processing, $types));
+            }
+
+            $this->persist($processing);
         } catch (DataImportException $ex) {
             return $this->view(unserialize($ex->getMessage()), Response::HTTP_OK);
         }
-
-        $this->persist($processing);
-
-        foreach ($this->processingTransformer->fromJson($data, ProcessingDescriptor::class)->getPias() as $pia) {
-            $processing->addPia($this->processingTransformer->extractPia($processing, $pia));
-        }
-
-        $this->persist($processing);
 
         return $this->view($processing, Response::HTTP_OK);
     }
