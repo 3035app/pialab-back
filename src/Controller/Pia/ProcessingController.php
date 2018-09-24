@@ -16,6 +16,7 @@ use PiaApi\Entity\Pia\Folder;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\ProcessingDataType;
+use PiaApi\Entity\Pia\ProcessingComment;
 use JMS\Serializer\SerializerInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
@@ -179,6 +180,9 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
      *         )),
+     *         @Swg\Property(property="comments", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
+     *         )),
      *     ),
      *     description="The Processing content"
      * )
@@ -257,6 +261,9 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="context_of_implementation", type="string"),
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
+     *         )),
+     *  *      @Swg\Property(property="comments", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
      *         )),
      *         @Swg\Property(property="recipients", type="string")
      *     ),
