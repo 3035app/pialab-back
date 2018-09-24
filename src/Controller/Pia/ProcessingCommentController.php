@@ -224,10 +224,8 @@ class ProcessingCommentController extends RestController
         $this->canAccessResourceOr403($processingComment);
 
         $updatableAttributes = [
-            'reference'         => RequestDataHandler::TYPE_STRING,
-            'data'              => RequestDataHandler::TYPE_STRING,
-            'retention_period'  => RequestDataHandler::TYPE_STRING,
-            'sensitive'         => RequestDataHandler::TYPE_BOOL,
+            'content'         => RequestDataHandler::TYPE_STRING,
+            'field'              => RequestDataHandler::TYPE_STRING,
         ];
 
         $this->mergeFromRequest($processingComment, $updatableAttributes, $request);
