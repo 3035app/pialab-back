@@ -1,5 +1,38 @@
 # Change Log
 
+## [Unreleased](https://github.com/pia-lab/pialab-back/tree/HEAD)
+
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...HEAD)
+
+**Closed issues:**
+
+- error during installation [\#79](https://github.com/pia-lab/pialab-back/issues/79)
+
+**Merged pull requests:**
+
+- Replace 'pia-templates' by 'processing-templates' in api\_pattern [\#76](https://github.com/pia-lab/pialab-back/pull/76) ([GlennCavarle](https://github.com/GlennCavarle))
+
+## [1.4.10](https://github.com/pia-lab/pialab-back/tree/1.4.10) (2018-09-10)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.9...1.4.10)
+
+**Merged pull requests:**
+
+- Change Processing models for designated\_controller fields [\#72](https://github.com/pia-lab/pialab-back/pull/72) ([PapsOu](https://github.com/PapsOu))
+
+## [1.4.9](https://github.com/pia-lab/pialab-back/tree/1.4.9) (2018-09-07)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.8...1.4.9)
+
+**Merged pull requests:**
+
+- Move templates from pia to processing [\#71](https://github.com/pia-lab/pialab-back/pull/71) ([GlennCavarle](https://github.com/GlennCavarle))
+- Fix naming between processing and pia [\#69](https://github.com/pia-lab/pialab-back/pull/69) ([GlennCavarle](https://github.com/GlennCavarle))
+- Add some @deprecated annotations [\#68](https://github.com/pia-lab/pialab-back/pull/68) ([GlennCavarle](https://github.com/GlennCavarle))
+- Remove PIA name field [\#67](https://github.com/pia-lab/pialab-back/pull/67) ([PapsOu](https://github.com/PapsOu))
+- Fix template error when the type of structure is not defined [\#66](https://github.com/pia-lab/pialab-back/pull/66) ([GlennCavarle](https://github.com/GlennCavarle))
+
+## [1.4.8](https://github.com/pia-lab/pialab-back/tree/1.4.8) (2018-09-06)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.7...1.4.8)
+
 ## [1.4.7](https://github.com/pia-lab/pialab-back/tree/1.4.7) (2018-09-06)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.6...1.4.7)
 

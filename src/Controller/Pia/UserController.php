@@ -11,7 +11,6 @@
 namespace PiaApi\Controller\Pia;
 
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use Pagerfanta\Pagerfanta;
 use PiaApi\Entity\Oauth\Client;
@@ -25,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\DataHandler\RequestDataHandler;
+use PharIo\Manifest\Application;
 
 class UserController extends RestController
 {
@@ -166,7 +166,9 @@ class UserController extends RestController
      *         @Swg\Property(property="email", type="string"),
      *         @Swg\Property(property="password", type="string"),
      *         @Swg\Property(property="roles", type="array", @Swg\Items(type="string")),
-     *         @Swg\Property(property="sendResettingEmail", type="boolean")
+     *         @Swg\Property(property="sendResettingEmail", type="boolean"),
+     *         @Swg\Property(property="structure", type="integer"),
+     *         @Swg\Property(property="application", type="integer")
      *     ),
      *     description="The User content"
      * )
@@ -250,8 +252,9 @@ class UserController extends RestController
      *         @Swg\Property(property="enabled", type="boolean"),
      *         @Swg\Property(property="locked", type="boolean"),
      *         @Swg\Property(property="expiration_date", type="string"),
+     *         @Swg\Property(property="roles", type="array", @Swg\Items(type="string")),
      *         @Swg\Property(property="structure", type="object", @Swg\Property(property="id", type="number")),
-     *         @Swg\Property(property="roles", type="array", @Swg\Items(type="string"))
+     *         @Swg\Property(property="application", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The User content"
      * )
@@ -283,6 +286,7 @@ class UserController extends RestController
             'expiration_date' => \DateTime::class,
             'locked'          => RequestDataHandler::TYPE_BOOL,
             'structure'       => Structure::class,
+            'application'     => Client::class,
         ];
 
         $this->mergeFromRequest($user, $updatableAttributes, $request);
