@@ -698,6 +698,11 @@ class Processing
             );
         }
 
+        if ($this->evaluationState === $evaluationState) {
+            // Skipping status management if evaluation state is not changed
+            return;
+        }
+
         if (
             $evaluationState === Processing::EVALUATION_STATE_ACCEPTABLE ||
             $evaluationState === Processing::EVALUATION_STATE_IMPROVABLE

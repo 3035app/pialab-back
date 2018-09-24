@@ -290,8 +290,8 @@ class ProcessingController extends RestController
             'exactness'                 => RequestDataHandler::TYPE_STRING,
             'consent'                   => RequestDataHandler::TYPE_STRING,
             'status'                    => RequestDataHandler::TYPE_INT,
-            'evaluationComment'         => RequestDataHandler::TYPE_STRING,
-            'evaluationState'           => RequestDataHandler::TYPE_INT,
+            'evaluation_comment'        => RequestDataHandler::TYPE_STRING,
+            'evaluation_state'          => RequestDataHandler::TYPE_INT,
         ];
 
         $this->mergeFromRequest($processing, $updatableAttributes, $request);
