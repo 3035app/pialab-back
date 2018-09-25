@@ -1,10 +1,15 @@
 # Change Log
 
-## [1.4.13](https://github.com/pia-lab/pialab-back/tree/1.4.13) (2018-09-18)
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.12...1.4.13)
+## [1.4.14](https://github.com/pia-lab/pialab-back/tree/1.4.14) (2018-09-25)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.13...1.4.14)
 
-## [1.4.12](https://github.com/pia-lab/pialab-back/tree/1.4.12) (2018-09-18)
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...1.4.12)
+**Merged pull requests:**
+
+- Add ProcessingComment entity and API controller [\#82](https://github.com/pia-lab/pialab-back/pull/82) ([RomainSanchez](https://github.com/RomainSanchez))
+- Add Import and Export for processing entity [\#59](https://github.com/pia-lab/pialab-back/pull/59) ([Fabrice-li](https://github.com/Fabrice-li))
+
+## [1.4.13](https://github.com/pia-lab/pialab-back/tree/1.4.13) (2018-09-18)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...1.4.13)
 
 **Merged pull requests:**
 
