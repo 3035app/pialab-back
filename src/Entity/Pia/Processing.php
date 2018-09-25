@@ -54,7 +54,7 @@ class Processing
      *
      * @var int
      */
-    protected $status = self::STATUS_DOING;
+    protected $status = ProcessingStatus::STATUS_DOING;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -127,7 +127,7 @@ class Processing
      * @var string|null
      */
     protected $recipients;
-  
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -176,7 +176,7 @@ class Processing
     protected $consent;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"persist", "remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
      *
@@ -194,7 +194,7 @@ class Processing
     protected $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing")
+     * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing", cascade={"persist"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\Exclude()
      *
@@ -267,7 +267,7 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDescription(): ?string
     {
@@ -283,7 +283,7 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLifeCycle(): ?string
     {
@@ -299,7 +299,7 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDataMedium(): ?string
     {
@@ -331,7 +331,7 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getProcessors(): ?string
     {
@@ -361,8 +361,8 @@ class Processing
     {
         $this->controllers = $controllers;
     }
-    
-     /**
+
+    /**
      * @return string
      */
     public function getLawfulness(): ?string
@@ -612,6 +612,14 @@ class Processing
     }
 
     /**
+     * @return string
+     */
+    public function getStatusName(): string
+    {
+        return ProcessingStatus::getStatusName($this->status);
+    }
+
+    /**
      * @param int $status
      */
     public function setStatus(int $status): void
@@ -674,7 +682,7 @@ class Processing
     {
         $this->recipients = $recipients;
     }
-  
+
     /**
      * @return string|null
      */

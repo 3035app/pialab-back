@@ -32,6 +32,51 @@ class ProcessingCest
         'designated_controller' => 'Designated controller',
     ];
 
+    private $importDataPia = [
+        'folder_id'  => 1,
+        'processing' => [
+            'name'                      => 'ProcessingCI edited',
+            'author'                    => 'Author edited',
+            'designated_controller'     => 'Controller',
+            'controllers'               => 'Controllers edited',
+            'description'               => 'Description edited',
+            'processors'                => 'Processors edited',
+            'recipients'                => 'Recipients',
+            'context_of_implementation' => 'Context',
+            'lawfulness'                => 'Lawfulness',
+            'minimization'              => 'Minimization',
+            'rights_guarantee'          => 'Rights',
+            'exactness'                 => 'Exactness',
+            'consent'                   => 'Consent',
+            'non_eu_transfer'           => 'non eu transfer edited',
+            'life_cycle'                => 'life cycle edited',
+            'storage'                   => 'storage edited',
+            'standards'                 => 'standards edited',
+            'status'                    => 3,
+            'created_at'                => '2018-08-01T17:17:16+0200',
+            'updated_at'                => '2018-08-03T11:55:27+0200',
+            'pias'                      => [[
+                'name'                              => 'codecept-name-edited',
+                'status'                            => 'SIGNED_VALIDATION',
+                'author_name'                       => 'codecept-author',
+                'evaluator_name'                    => 'codecept-evaluator',
+                'validator_name'                    => 'codecept-validator',
+                'dpo_status'                        => 0,
+                'dpo_opinion'                       => '',
+                'concerned_people_opinion'          => '',
+                'concerned_people_status'           => 0,
+                'concerned_people_searched_opinion' => false,
+                'concerned_people_searched_content' => '',
+                'rejection_reason'                  => '',
+                'applied_adjustments'               => '',
+                'dpos_names'                        => 'dpos',
+                'people_names'                      => '',
+                'is_example'                        => false,
+                'type'                              => 'regular',
+            ]],
+        ],
+    ];
+
     /**
      * @var array
      */
@@ -60,6 +105,20 @@ class ProcessingCest
         'created_at'                => 'string',
         'updated_at'                => 'string',
     ];
+
+    public function import_processing_with_pia_test(\ApiTester $I)
+    {
+        $I->amGoingTo('Import a processing with a pia');
+        $I->login();
+
+        $this->importDataPia['folder_id'] = $I->getRootFolder()['id'];
+
+        $I->sendJsonToCreate(ProcessingCest::ROUTE . '/import', $this->importDataPia);
+
+        $I->seeResponseContainsJson([
+            'name'  => $this->importDataPia['processing']['name'],
+        ]);
+    }
 
     public function create_processing_test(\ApiTester $I)
     {
@@ -125,7 +184,6 @@ class ProcessingCest
 
         $I->seeResponseContainsJson([
             'name'  => $this->processingData['name'],
-            'id'    => $this->processing['id'],
         ]);
     }
 

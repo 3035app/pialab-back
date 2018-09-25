@@ -31,6 +31,12 @@ class Pia implements Timestampable
     const TYPE_SIMPLIFIED = 'simplified';
     const TYPE_ADVANCED = 'advanced';
 
+    protected const QUESTIONS = [
+        self::TYPE_SIMPLIFIED => 6,
+        self::TYPE_REGULAR    => 18,
+        self::TYPE_ADVANCED   => 36,
+    ];
+
     const QUESTION_NUMBER = 30;
     const OLD_QUESTION_NUMBER = 36;
 
@@ -128,7 +134,7 @@ class Pia implements Timestampable
      *
      * @var string
      */
-    protected $appliedAdjustements = '';
+    protected $appliedAdjustments = '';
 
     /**
      * @ORM\Column(type="string")
@@ -227,6 +233,20 @@ class Pia implements Timestampable
         $this->evaluations = new ArrayCollection();
         $this->measures = new ArrayCollection();
         $this->attachments = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfQuestions(): int
+    {
+        $number = 0;
+
+        if (array_key_exists($this->type, self::QUESTIONS)) {
+            $number = self::QUESTIONS[$this->type];
+        }
+
+        return $number;
     }
 
     /**
@@ -395,11 +415,35 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return int
+     */
+    public function getDpoStatus(): int
+    {
+        return $this->dpoStatus;
+    }
+
+    /**
      * @param int $dpoStatus
      */
     public function setDpoStatus(?int $dpoStatus): void
     {
         $this->dpoStatus = $dpoStatus;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusName(): string
+    {
+        return PiaStatus::getStatusName($this->status);
     }
 
     /**
@@ -411,11 +455,27 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return int
+     */
+    public function getConcernedPeopleStatus(): int
+    {
+        return $this->concernedPeopleStatus;
+    }
+
+    /**
      * @param int $concernedPeopleStatus
      */
     public function setConcernedPeopleStatus(int $concernedPeopleStatus): void
     {
         $this->concernedPeopleStatus = $concernedPeopleStatus;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDpoOpinion(): ?string
+    {
+        return $this->dpoOpinion;
     }
 
     /**
@@ -427,11 +487,27 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return string|null
+     */
+    public function getConcernedPeopleOpinion(): ?string
+    {
+        return $this->concernedPeopleOpinion;
+    }
+
+    /**
      * @param string $concernedPeopleOpinion
      */
     public function setConcernedPeopleOpinion(?string $concernedPeopleOpinion): void
     {
         $this->concernedPeopleOpinion = $concernedPeopleOpinion;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getConcernedPeopleSearchedContent(): ?string
+    {
+        return $this->concernedPeopleSearchedContent;
     }
 
     /**
@@ -443,11 +519,27 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return string|null
+     */
+    public function getRejectionReason(): ?string
+    {
+        return $this->rejectionReason;
+    }
+
+    /**
      * @param string $rejectionReason
      */
     public function setRejectionReason(?string $rejectionReason): void
     {
         $this->rejectionReason = $rejectionReason;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAppliedAdjustments(): ?string
+    {
+        return $this->appliedAdjustments;
     }
 
     /**
@@ -459,11 +551,27 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return string
+     */
+    public function getDposNames(): string
+    {
+        return $this->dposNames;
+    }
+
+    /**
      * @param string $dposNames
      */
     public function setDposNames(?string $dposNames): void
     {
         $this->dposNames = $dposNames;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPeopeNames(): string
+    {
+        return $this->peopleNames;
     }
 
     /**
@@ -475,11 +583,43 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return bool
+     */
+    public function getConcernedPeopleSearchedOpinion(): bool
+    {
+        return $this->concernedPeopleSearchedOpinion;
+    }
+
+    /**
      * @param bool $concernedPeopleSearchedOpinion
      */
     public function setConcernedPeopleSearchedOpinion(?bool $concernedPeopleSearchedOpinion): void
     {
         $this->concernedPeopleSearchedOpinion = $concernedPeopleSearchedOpinion;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsExample(): bool
+    {
+        return $this->isExample;
+    }
+
+    /**
+     * @param bool
+     */
+    public function setIsExample(bool $example)
+    {
+        $this->isExample = $example;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
     }
 
     /**
