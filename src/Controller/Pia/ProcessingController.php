@@ -483,11 +483,11 @@ class ProcessingController extends RestController
      *     name="Processing",
      *     in="body",
      *     required=true,
+     *     description="The Processing content",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Processing::class, groups={"Default"})
      *     )
-     *     description="The Processing content"
      * )
      *
      * @Swg\Response(
