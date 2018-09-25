@@ -185,6 +185,15 @@ class Processing
     protected $processingDataTypes;
 
     /**
+     * @ORM\OneToMany(targetEntity="ProcessingComment", mappedBy="processing", cascade={"remove"})
+     * @JMS\Groups({"Default", "Export"})
+     * @JMS\MaxDepth(2)
+     *
+     * @var Collection|ProcessingComment[]
+     */
+    protected $comments;
+
+    /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing", cascade={"persist"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\Exclude()
@@ -431,6 +440,40 @@ class Processing
     public function setConsent(?string $consent = null): void
     {
         $this->consent = $consent;
+    }
+
+    /**
+     * @return array|ProcessingComment[]
+     */
+    public function getComments(): array
+    {
+        return $this->comments->getValues();
+    }
+
+    /**
+     * @param ProcessingComment $comment
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addComment(ProcessingComment $comment): void
+    {
+        if ($this->comments->contains($comment)) {
+            throw new \InvalidArgumentException(sprintf('Comment « %s » already belongs to Processing « #%d »', $comment->getId(), $this->getId()));
+        }
+        $this->comments->add($comment);
+    }
+
+    /**
+     * @param ProcessingComment $comment
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function removeComment(ProcessingComment $comment): void
+    {
+        if (!$this->comments->contains($comment)) {
+            throw new \InvalidArgumentException(sprintf('Comment « %s » does not belong to Processing « #%d »', $comment->getId(), $this->getId()));
+        }
+        $this->comments->removeElement($comment);
     }
 
     /**

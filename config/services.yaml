@@ -5,7 +5,7 @@ imports:
 
 parameters:
     locale: 'fr'
-    api_pattern: ^/(pias|profile|processing-templates|folders|structures|users|portfolios|processings|processing-data-types)
+    api_pattern: ^/(pias|profile|processing-templates|folders|structures|users|portfolios|processings|processing-data-types|processing-comments)
 
 services:
     _defaults:
