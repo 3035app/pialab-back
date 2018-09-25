@@ -88,15 +88,15 @@ class ProcessingDataType
     /**
      * @return string
      */
-    public function getRetentionPeriod(): string
+    public function getRetentionPeriod(): ?string
     {
         return $this->retentionPeriod;
     }
 
     /**
-     * @param string $retentionPeriod
+     * @param string|null $retentionPeriod
      */
-    public function setRetentionPeriod(string $retentionPeriod): void
+    public function setRetentionPeriod(?string $retentionPeriod): void
     {
         $this->retentionPeriod = $retentionPeriod;
     }

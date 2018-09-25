@@ -14,9 +14,9 @@ use PiaApi\Services\ProcessingService;
 use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\ProcessingTemplate;
 use PiaApi\Entity\Pia\Folder;
-use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\ProcessingDataType;
+use PiaApi\Entity\Pia\ProcessingComment;
 use JMS\Serializer\SerializerInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
@@ -27,6 +27,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use PiaApi\Exception\ApiException;
+use PiaApi\DataExchange\Transformer\ProcessingTransformer;
+use PiaApi\Exception\DataImportException;
+use PiaApi\DataExchange\Descriptor\ProcessingDescriptor;
 
 class ProcessingController extends RestController
 {
@@ -36,9 +39,9 @@ class ProcessingController extends RestController
     protected $processingService;
 
     /**
-     * @var jsonToEntityTransformer
+     * @var ProcessingTransformer
      */
-    protected $jsonToEntityTransformer;
+    protected $processingTransformer;
 
     /**
      * @var SerializerInterface
@@ -48,12 +51,12 @@ class ProcessingController extends RestController
     public function __construct(
         PropertyAccessorInterface $propertyAccessor,
         ProcessingService $processingService,
-        JsonToEntityTransformer $jsonToEntityTransformer,
+        ProcessingTransformer $processingTransformer,
         SerializerInterface $serializer
     ) {
         parent::__construct($propertyAccessor);
         $this->processingService = $processingService;
-        $this->jsonToEntityTransformer = $jsonToEntityTransformer;
+        $this->processingTransformer = $processingTransformer;
         $this->serializer = $serializer;
     }
 
@@ -181,6 +184,9 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
      *         )),
+     *         @Swg\Property(property="comments", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
+     *         )),
      *     ),
      *     description="The Processing content"
      * )
@@ -259,6 +265,9 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="context_of_implementation", type="string"),
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
+     *         )),
+     *  *      @Swg\Property(property="comments", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
      *         )),
      *         @Swg\Property(property="recipients", type="string")
      *     ),
@@ -399,9 +408,54 @@ class ProcessingController extends RestController
         $processing = $this->getResource($id);
         $this->canAccessResourceOr403($processing);
 
-        $serializedPia = $this->jsonToEntityTransformer->entityToJson($processing);
+        $json = $this->processingTransformer->processingToJson($processing);
 
-        return new Response($serializedPia, Response::HTTP_OK);
+        return new Response($json, Response::HTTP_OK);
+    }
+
+    /**
+     * Imports a PROCESSING.
+     *
+     * @Swg\Tag(name="Processing")
+     *
+     * @FOSRest\Post("/processings/import")
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns the imported PROCESSING"
+     * )
+     *
+     * @Security("is_granted('CAN_IMPORT_PIA')")
+     *
+     * @return array
+     */
+    public function importAction(Request $request)
+    {
+        $data = $request->get('processing');
+        $folder = $this->getResource($request->get('folder_id'), Folder::class);
+
+        $this->processingTransformer->setFolder($folder);
+
+        try {
+            $processing = $this->processingTransformer->jsonToProcessing($data);
+            $this->persist($processing);
+
+            $descriptor = $this->processingTransformer->fromJson($data, ProcessingDescriptor::class);
+
+            foreach ($descriptor->getPias() as $pia) {
+                $processing->addPia($this->processingTransformer->extractPia($processing, $pia));
+            }
+
+            foreach ($descriptor->getProcessingDataTypes() as $types) {
+                $processing->addProcessingDataType($this->processingTransformer->extractDataType($processing, $types));
+            }
+
+            $this->persist($processing);
+        } catch (DataImportException $ex) {
+            return $this->view(unserialize($ex->getMessage()), Response::HTTP_OK);
+        }
+
+        return $this->view($processing, Response::HTTP_OK);
     }
 
     /**
