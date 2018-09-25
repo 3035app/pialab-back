@@ -485,12 +485,8 @@ class ProcessingController extends RestController
      *     required=true,
      *     @Swg\Schema(
      *         type="object",
-     *         required={"author_name","evaluator_name","validator_name","folder"},
-     *         @Swg\Property(property="author_name", type="string"),
-     *         @Swg\Property(property="evaluator_name", type="string"),
-     *         @Swg\Property(property="validator_name", type="string"),
-     *         @Swg\Property(property="folder_id", type="number")
-     *     ),
+     *         ref=@Nelmio\Model(type=Processing::class, groups={"Default"})
+     *     )
      *     description="The Processing content"
      * )
      *
@@ -511,24 +507,41 @@ class ProcessingController extends RestController
     {
         /** @var ProcessingTemplate $pTemplate */
         $pTemplate = $this->getDoctrine()->getRepository(ProcessingTemplate::class)->find($id);
-        if ($pTemplate === null) {
+        $folder = $this->getResource($request->get('folder', ['id' => -1])['id'], Folder::class);
+
+        if ($pTemplate === null || $folder === null) {
             return $this->view($pTemplate, Response::HTTP_NOT_FOUND);
         }
 
-        $pia = $this->jsonToEntityTransformer->transform($pTemplate->getData());
-        $folder = $this->getResource($request->get('folder', ['id' => -1])['id'], Folder::class);
-        $processing = new Processing(
-            $pTemplate->getName(),
-            $folder,
-            $request->get('author_name', $pia->getAuthorName()),
-            $request->get('designated_controller', $pia->getEvaluatorName())
-        );
-        $processing->setTemplate($pTemplate);
-        $pia->setProcessing($processing);
-        $pia->setStructure($folder->getStructure());
+        $this->processingTransformer->setFolder($folder);
 
-        $this->persist($processing);
-        $this->persist($pia);
+        try {
+            $processing = $this->processingTransformer->jsonToProcessing($pTemplate->getData());
+            $processing->setAuthor($request->get('author_name'));
+            $processing->setDesignatedController($request->get('designated_controller'));
+            $this->persist($processing);
+
+            $descriptor = $this->processingTransformer->fromJson($pTemplate->getData(), ProcessingDescriptor::class);
+
+            //only last PIA is used
+            if (count($descriptor->getPias()) > 0) {
+                $pia = $this->processingTransformer->extractPia($processing, end($descriptor->getPias()));
+                $processing->addPia($pia);
+                $pia->setProcessing($processing);
+                $pia->setStructure($folder->getStructure()); //@todo to be removed, a Pia do not need a structure
+                $this->persist($pia);
+            }
+
+            foreach ($descriptor->getProcessingDataTypes() as $types) {
+                $processing->addProcessingDataType($this->processingTransformer->extractDataType($processing, $types));
+            }
+
+            $processing->setTemplate($pTemplate);
+
+            $this->persist($processing);
+        } catch (DataImportException $ex) {
+            return $this->view(unserialize($ex->getMessage()), Response::HTTP_OK);
+        }
 
         return $this->view($processing, Response::HTTP_OK);
     }
