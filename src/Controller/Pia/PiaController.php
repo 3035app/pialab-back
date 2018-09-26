@@ -162,7 +162,7 @@ class PiaController extends RestController
      *             "concerned_people_searched_opinion",
      *             "concerned_people_searched_content",
      *             "rejection_reason",
-     *             "applied_adjustements",
+     *             "applied_adjustments",
      *             "dpos_names",
      *             "people_names",
      *             "processing"
@@ -178,7 +178,7 @@ class PiaController extends RestController
      *         @Swg\Property(property="concerned_people_searched_opinion", type="boolean"),
      *         @Swg\Property(property="concerned_people_searched_content", type="string"),
      *         @Swg\Property(property="rejection_reason", type="string"),
-     *         @Swg\Property(property="applied_adjustements", type="string"),
+     *         @Swg\Property(property="applied_adjustments", type="string"),
      *         @Swg\Property(property="dpos_names", type="string"),
      *         @Swg\Property(property="people_names", type="string"),
      *         @Swg\Property(property="processing", type="object", required={"id"}, @Swg\Property(property="id", type="number"))
@@ -324,7 +324,7 @@ class PiaController extends RestController
      *         @Swg\Property(property="concerned_people_searched_opinion", type="boolean"),
      *         @Swg\Property(property="concerned_people_searched_content", type="string"),
      *         @Swg\Property(property="rejection_reason", type="string"),
-     *         @Swg\Property(property="applied_adjustements", type="string"),
+     *         @Swg\Property(property="applied_adjustments", type="string"),
      *         @Swg\Property(property="dpos_names", type="string"),
      *         @Swg\Property(property="people_names", type="string"),
      *         @Swg\Property(property="processing", type="object", required={"id"}, @Swg\Property(property="id", type="number"))

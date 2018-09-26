@@ -29,7 +29,7 @@ class DataExchangeDescriptor
             'concerned_people_searched_opinion' => null,
             'concerned_people_searched_content' => null,
             'rejection_reason'                  => null,
-            'applied_adjustements'              => null,
+            'applied_adjustments'              => null,
             'dpos_names'                        => null,
             'people_names'                      => null,
             'created_at'                        => null,
