@@ -16,6 +16,7 @@ use PiaApi\Entity\Pia\Folder;
 use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\ProcessingDataType;
+use PiaApi\Exception\ApiException;
 use JMS\Serializer\SerializerInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
