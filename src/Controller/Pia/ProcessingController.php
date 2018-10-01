@@ -185,6 +185,9 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="comments", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
      *         )),
+     *         @Swg\Property(property="attachments", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingAttachment::class, groups={"Default"})
+     *         )),
      *     ),
      *     description="The Processing content"
      * )
@@ -266,6 +269,9 @@ class ProcessingController extends RestController
      *         )),
      *  *      @Swg\Property(property="comments", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
+     *         )),
+     *         @Swg\Property(property="attachments", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingAttachment::class, groups={"Default"})
      *         )),
      *         @Swg\Property(property="recipients", type="string")
      *     ),

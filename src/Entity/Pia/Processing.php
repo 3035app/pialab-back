@@ -192,6 +192,15 @@ class Processing
      * @var Collection|ProcessingComment[]
      */
     protected $comments;
+    
+     /**
+     * @ORM\OneToMany(targetEntity="ProcessingAttachment", mappedBy="processing", cascade={"remove"})
+     * @JMS\Groups({"Default", "Export"})
+     * @JMS\MaxDepth(2)
+     *
+     * @var Collection|ProcessingAttachment[]
+     */
+    protected $attachments;
 
     /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing", cascade={"persist"})
@@ -474,6 +483,40 @@ class Processing
             throw new \InvalidArgumentException(sprintf('Comment « %s » does not belong to Processing « #%d »', $comment->getId(), $this->getId()));
         }
         $this->comments->removeElement($comment);
+    }
+
+    /**
+     * @return array|ProcessingAttachment[]
+     */
+    public function getAttachments(): array
+    {
+        return $this->attachments->getValues();
+    }
+
+    /**
+     * @param ProcessingAttachment $attachment
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addAttachment(ProcessingAttachment $attachment): void
+    {
+        if ($this->attachments->contains($attachment)) {
+            throw new \InvalidArgumentException(sprintf('Attachment « %s » already belongs to Processing « #%d »', $attachment->getId(), $this->getId()));
+        }
+        $this->attachments->add($attachment);
+    }
+
+    /**
+     * @param ProcessingAttachment $attachment
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function removeAttachment(ProcessingAttachment $attachment): void
+    {
+        if (!$this->attachments->contains($attachment)) {
+            throw new \InvalidArgumentException(sprintf('Attachment « %s » does not belong to Processing « #%d »', $attachment->getId(), $this->getId()));
+        }
+        $this->attachments->removeElement($attachment);
     }
 
     /**
