@@ -167,7 +167,8 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author", type="string"),
      *         @Swg\Property(property="designated_controller", type="string"),
-     *         @Swg\Property(property="folder", required={"id"}, type="object", @Swg\Property(property="id", type="number"))
+     *         @Swg\Property(property="folder", required={"id"}, type="object", 
+     *         @Swg\Property(property="id", type="number")),
      *         @Swg\Property(property="lawfulness", type="string"),
      *         @Swg\Property(property="minimization", type="string"),
      *         @Swg\Property(property="rights_guarantee", type="string"),
@@ -264,8 +265,9 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="recipients", type="string"),
      *         @Swg\Property(property="evaluationComment", type="string"),
      *         @Swg\Property(property="evaluationState", type="integer"),
-     *         @Swg\Property(property="folder", required={"id"}, type="object", @Swg\Property(property="id", type="number"))
-     *  *      @Swg\Property(property="comments", type="array", @Swg\Items(
+     *         @Swg\Property(property="folder", required={"id"}, type="object", 
+     *         @Swg\Property(property="id", type="number")),
+     *         @Swg\Property(property="comments", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
      *         )),
      *         @Swg\Property(property="recipients", type="string")
