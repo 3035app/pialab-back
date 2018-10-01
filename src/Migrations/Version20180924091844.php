@@ -25,7 +25,6 @@ class Version20180924091844 extends AbstractMigration implements ContainerAwareI
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP SEQUENCE pia_processing_comment_id_seq CASCADE');
         $this->addSql('DROP TABLE pia_processing_comment');
     }

@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\View;
 use Doctrine\Common\Util\Inflector as Inflector;
 use PiaApi\Entity\Pia\Pia;
+use PiaApi\Entity\Pia\Processing;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Doctrine\ORM\EntityRepository;
@@ -184,11 +185,15 @@ abstract class RestController extends FOSRestController
         return $entity;
     }
 
-    protected function newFromRequest(Request $request, $piaId = null)
+    protected function newFromRequest(Request $request, $piaId = null, $processingId = null)
     {
         $entity = $this->get('jms_serializer')->deserialize($request->getContent(), $this->getEntityClass(), 'json');
         if ($piaId !== null) {
             $entity->setPia($this->getEntityManager()->getReference(Pia::class, $piaId));
+        }
+
+        if ($processingId !== null) {
+            $entity->setProcessing($this->getEntityManager()->getReference(Processing::class, $processingId));
         }
 
         return $entity;

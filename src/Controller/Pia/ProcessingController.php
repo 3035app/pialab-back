@@ -54,6 +54,7 @@ class ProcessingController extends RestController
         SerializerInterface $serializer
     ) {
         parent::__construct($propertyAccessor);
+        
         $this->processingService = $processingService;
         $this->processingTransformer = $processingTransformer;
         $this->serializer = $serializer;
@@ -162,16 +163,12 @@ class ProcessingController extends RestController
      *     required=false,
      *     @Swg\Schema(
      *         type="object",
-     *         required={"name", "author", "designated_controller"},
+     *         required={"name", "author", "designated_controller", "folder"},
      *         @Swg\Property(property="name", type="string"),
      *         @Swg\Property(property="author", type="string"),
-     *         @Swg\Property(property="status", type="number"),
-     *         @Swg\Property(property="description", type="string"),
-     *         @Swg\Property(property="life_cycle", type="string"),
-     *         @Swg\Property(property="storage", type="string"),
-     *         @Swg\Property(property="standards", type="string"),
-     *         @Swg\Property(property="processors", type="string"),
      *         @Swg\Property(property="designated_controller", type="string"),
+     *         @Swg\Property(property="folder", required={"id"}, type="object",
+     *         @Swg\Property(property="id", type="number")),
      *         @Swg\Property(property="lawfulness", type="string"),
      *         @Swg\Property(property="minimization", type="string"),
      *         @Swg\Property(property="rights_guarantee", type="string"),
@@ -185,6 +182,9 @@ class ProcessingController extends RestController
      *         )),
      *         @Swg\Property(property="comments", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
+     *         )),
+     *         @Swg\Property(property="attachments", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingAttachment::class, groups={"Default"})
      *         )),
      *     ),
      *     description="The Processing content"
@@ -265,8 +265,16 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
      *         )),
-     *  *      @Swg\Property(property="comments", type="array", @Swg\Items(
+     *         @Swg\Property(property="recipients", type="string"),
+     *         @Swg\Property(property="evaluationComment", type="string"),
+     *         @Swg\Property(property="evaluationState", type="integer"),
+     *         @Swg\Property(property="folder", required={"id"}, type="object", 
+     *         @Swg\Property(property="id", type="number")),
+     *         @Swg\Property(property="comments", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
+     *         )),
+     *         @Swg\Property(property="attachments", type="array", @Swg\Items(
+     *              ref=@Nelmio\Model(type=ProcessingAttachment::class, groups={"Default"})
      *         )),
      *         @Swg\Property(property="recipients", type="string")
      *     ),
@@ -313,6 +321,8 @@ class ProcessingController extends RestController
             'exactness'                 => RequestDataHandler::TYPE_STRING,
             'consent'                   => RequestDataHandler::TYPE_STRING,
             'status'                    => RequestDataHandler::TYPE_INT,
+            'evaluation_comment'        => RequestDataHandler::TYPE_STRING,
+            'evaluation_state'          => RequestDataHandler::TYPE_INT,
         ];
 
         $this->mergeFromRequest($processing, $updatableAttributes, $request);

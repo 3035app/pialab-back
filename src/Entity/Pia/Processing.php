@@ -32,6 +32,11 @@ class Processing
     const STATUS_VALIDATED = 2;
     const STATUS_ARCHIVED = 3;
 
+    const EVALUATION_STATE_NONE = -1;
+    const EVALUATION_STATE_TO_CORRECT = 0;
+    const EVALUATION_STATE_IMPROVABLE = 1;
+    const EVALUATION_STATE_ACCEPTABLE = 2;
+
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -176,6 +181,22 @@ class Processing
     protected $consent;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
+    protected $evaluationComment;
+
+    /**
+     * @ORM\Column(type="integer", options={"default": Processing::EVALUATION_STATE_NONE})
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var int
+     */
+    protected $evaluationState = Processing::EVALUATION_STATE_NONE;
+
+    /**
      * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"persist", "remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
@@ -192,6 +213,15 @@ class Processing
      * @var Collection|ProcessingComment[]
      */
     protected $comments;
+    
+     /**
+     * @ORM\OneToMany(targetEntity="ProcessingAttachment", mappedBy="processing", cascade={"remove"})
+     * @JMS\Groups({"Default", "Export"})
+     * @JMS\MaxDepth(2)
+     *
+     * @var Collection|ProcessingAttachment[]
+     */
+    protected $attachments;
 
     /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing", cascade={"persist"})
@@ -477,6 +507,40 @@ class Processing
     }
 
     /**
+     * @return array|ProcessingAttachment[]
+     */
+    public function getAttachments(): array
+    {
+        return $this->attachments->getValues();
+    }
+
+    /**
+     * @param ProcessingAttachment $attachment
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addAttachment(ProcessingAttachment $attachment): void
+    {
+        if ($this->attachments->contains($attachment)) {
+            throw new \InvalidArgumentException(sprintf('Attachment « %s » already belongs to Processing « #%d »', $attachment->getId(), $this->getId()));
+        }
+        $this->attachments->add($attachment);
+    }
+
+    /**
+     * @param ProcessingAttachment $attachment
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function removeAttachment(ProcessingAttachment $attachment): void
+    {
+        if (!$this->attachments->contains($attachment)) {
+            throw new \InvalidArgumentException(sprintf('Attachment « %s » does not belong to Processing « #%d »', $attachment->getId(), $this->getId()));
+        }
+        $this->attachments->removeElement($attachment);
+    }
+
+    /**
      * @return array|ProcessingDataType[]
      */
     public function getProcessingDataTypes(): array
@@ -697,5 +761,71 @@ class Processing
     public function setContextOfImplementation(?string $contextOfImplementation = null): void
     {
         $this->contextOfImplementation = $contextOfImplementation;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEvaluationState(): int
+    {
+        return $this->evaluationState;
+    }
+
+    /**
+     * @param int $evaluationState
+     */
+    public function setEvaluationState(int $evaluationState): void
+    {
+        $availableStates = [
+            Processing::EVALUATION_STATE_NONE,
+            Processing::EVALUATION_STATE_TO_CORRECT,
+            Processing::EVALUATION_STATE_IMPROVABLE,
+            Processing::EVALUATION_STATE_ACCEPTABLE,
+        ];
+        if (!in_array($evaluationState, $availableStates)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Evaluation state « %d » is not valid. Valid states are « %s »',
+                    $evaluationState,
+                    implode(', ', $availableStates)
+                )
+            );
+        }
+
+        if ($this->evaluationState === $evaluationState) {
+            // Skipping status management if evaluation state is not changed
+            return;
+        }
+
+        if (
+            $evaluationState === Processing::EVALUATION_STATE_ACCEPTABLE ||
+            $evaluationState === Processing::EVALUATION_STATE_IMPROVABLE
+        ) {
+            // Self validate if Processing is evaluated as acceptable
+            $this->setStatus(Processing::STATUS_VALIDATED);
+        } elseif (
+            $evaluationState === Processing::EVALUATION_STATE_TO_CORRECT
+        ) {
+            // Go back to draft (Doing) if Processing is evaluated as not correct
+            $this->setStatus(Processing::STATUS_DOING);
+        }
+
+        $this->evaluationState = $evaluationState;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEvaluationComment(): ?string
+    {
+        return $this->evaluationComment;
+    }
+
+    /**
+     * @param string|null $evaluationComment
+     */
+    public function setEvaluationComment(?string $evaluationComment = null): void
+    {
+        $this->evaluationComment = $evaluationComment;
     }
 }

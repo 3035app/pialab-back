@@ -290,11 +290,11 @@ class FolderController extends RestController
         $folder = $this->getResource($id);
         $this->canAccessResourceOr403($folder);
 
-        if (count($folder->getProcessings())) {
+        if (count($folder->getProcessings()) && !$request->get('force', false)) {
             throw new NonEmptyFolderCannotBeDeletedException();
         }
 
-        if ($folder->isRoot() && $folder->getStructure() !== null) {
+        if ($folder->isRoot() && $folder->getStructure() !== null && !$request->get('force', false)) {
             throw new RootFolderCannotBeDeletedException();
         }
 
