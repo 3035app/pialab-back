@@ -20,13 +20,12 @@ class ProcessingAttachmentsCest
     use _support\ApiFixturesTrait;
 
     private $attachmentJsonType = [
-        'processing_id'     => 'integer',
-        'name'       => 'string',
-        'mime_type'  => 'string',
-        'file'       => 'string',
-        'id'         => 'integer',
-        'created_at' => 'string',
-        'updated_at' => 'string',
+        'name'          => 'string',
+        'mime_type'     => 'string',
+        'file'          => 'string',
+        'id'            => 'integer',
+        'created_at'    => 'string',
+        'updated_at'    => 'string',
     ];
 
     private $attachmentData = [
@@ -39,7 +38,6 @@ class ProcessingAttachmentsCest
 
     public function create_processing_test(ApiTester $I)
     {
-        $this->createTestProcessing($I);
         $this->createTestProcessing($I);
     }
 
@@ -64,7 +62,7 @@ class ProcessingAttachmentsCest
      */
     public function create_an_attachment_for_processing_test(ApiTester $I)
     {
-        $I->amGoingTo('Create an attachment for specific Processing');
+        $I->amGoingTo('Create an attachment for a specific Processing');
 
         $I->login();
 
@@ -77,33 +75,9 @@ class ProcessingAttachmentsCest
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
-
         $I->seeResponseMatchesJsonType($this->attachmentJsonType);
 
         $this->attachment = json_decode(json_encode($I->getPreviousResponse()), JSON_OBJECT_AS_ARRAY);
-    }
-
-    /**
-     * @depends create_an_attachment_for_processing_test
-     */
-    public function edit_created_processing_attachment_for_processing_test(ApiTester $I)
-    {
-        $I->amGoingTo('Edit content of previously created processing attachment, with id: ' . $this->attachment['id']);
-
-        $I->login();
-
-        $this->attachment['name'] = 'codecept-attachment-edited';
-        $this->attachmentData['name'] = $this->attachment['name'];
-
-        $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT('/processings/' . $this->processing['id'] . '/attachments/' . $this->attachment['id'], $this->attachment);
-
-        $I->seeResponseCodeIs(HttpCode::OK);
-        $I->seeResponseIsJson();
-
-        $I->seeResponseMatchesJsonType($this->attachmentJsonType);
-
-        $I->canSeeResponseContainsJson(['name' => $this->attachmentData['name']]);
     }
 
     /**
