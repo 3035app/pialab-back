@@ -36,7 +36,7 @@ trait ApiFixturesTrait
         'concerned_people_searched_opinion' => 'boolean',
         'concerned_people_searched_content' => 'string|null',
         'rejection_reason'                  => 'string|null',
-        'applied_adjustements'              => 'string|null',
+        'applied_adjustments'               => 'string|null',
         'dpos_names'                        => 'string|null',
         'people_names'                      => 'string|null',
         'is_example'                        => 'boolean',

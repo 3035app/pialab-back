@@ -59,7 +59,7 @@ class Processing
      *
      * @var int
      */
-    protected $status = self::STATUS_DOING;
+    protected $status = ProcessingStatus::STATUS_DOING;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -197,7 +197,7 @@ class Processing
     protected $evaluationState = Processing::EVALUATION_STATE_NONE;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="ProcessingDataType", mappedBy="processing", cascade={"persist", "remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
      *
@@ -206,7 +206,16 @@ class Processing
     protected $processingDataTypes;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing")
+     * @ORM\OneToMany(targetEntity="ProcessingComment", mappedBy="processing", cascade={"remove"})
+     * @JMS\Groups({"Default", "Export"})
+     * @JMS\MaxDepth(2)
+     *
+     * @var Collection|ProcessingComment[]
+     */
+    protected $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Pia", mappedBy="processing", cascade={"persist"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\Exclude()
      *
@@ -279,7 +288,7 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDescription(): ?string
     {
@@ -295,7 +304,7 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLifeCycle(): ?string
     {
@@ -311,7 +320,7 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDataMedium(): ?string
     {
@@ -343,7 +352,7 @@ class Processing
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getProcessors(): ?string
     {
@@ -452,6 +461,40 @@ class Processing
     public function setConsent(?string $consent = null): void
     {
         $this->consent = $consent;
+    }
+
+    /**
+     * @return array|ProcessingComment[]
+     */
+    public function getComments(): array
+    {
+        return $this->comments->getValues();
+    }
+
+    /**
+     * @param ProcessingComment $comment
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addComment(ProcessingComment $comment): void
+    {
+        if ($this->comments->contains($comment)) {
+            throw new \InvalidArgumentException(sprintf('Comment « %s » already belongs to Processing « #%d »', $comment->getId(), $this->getId()));
+        }
+        $this->comments->add($comment);
+    }
+
+    /**
+     * @param ProcessingComment $comment
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function removeComment(ProcessingComment $comment): void
+    {
+        if (!$this->comments->contains($comment)) {
+            throw new \InvalidArgumentException(sprintf('Comment « %s » does not belong to Processing « #%d »', $comment->getId(), $this->getId()));
+        }
+        $this->comments->removeElement($comment);
     }
 
     /**
@@ -587,6 +630,14 @@ class Processing
     public function getStatus(): int
     {
         return $this->status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusName(): string
+    {
+        return ProcessingStatus::getStatusName($this->status);
     }
 
     /**
