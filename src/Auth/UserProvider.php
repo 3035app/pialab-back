@@ -14,6 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use PiaApi\Entity\Oauth\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use OAuth2\OAuth2ServerException;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserProvider implements UserProviderInterface
 {
@@ -29,7 +31,17 @@ class UserProvider implements UserProviderInterface
 
     public function loadUserByUsername($usernameOrEmail)
     {
-        return $this->doctrine->getRepository(User::class)->findUserByUsernameOrEmail($usernameOrEmail);
+        $user = $this->doctrine->getRepository(User::class)->findUserByUsernameOrEmail($usernameOrEmail);
+
+        if (
+            !$user->isEnabled() ||
+            $user->isLocked() ||
+            $user->getExpirationDate() < new \DateTime()
+        ) {
+            throw new OAuth2ServerException(Response::HTTP_FORBIDDEN, 'The account is locked and/or expired');
+        }
+
+        return $user;
     }
 
     public function refreshUser(UserInterface $user): UserInterface

@@ -10,7 +10,7 @@
 
 namespace PiaApi\Entity\Pia;
 
-class PiaStatus
+class PiaStatus extends AbstractStatus
 {
     public const IN_PROGRESS = 0;
     public const REFUSED = 1;
@@ -18,4 +18,13 @@ class PiaStatus
     public const SIGNED_VALIDATION = 3;
     public const ARCHIVED = 4;
     public const WAITING_FOR_VALIDATION = 5;
+
+    protected static $statusNames = [
+        self::IN_PROGRESS             => 'IN_PROGRESS',
+        self::REFUSED                 => 'REFUSED',
+        self::SIMPLE_VALIDATION       => 'SIMPLE_VALIDATION',
+        self::SIGNED_VALIDATION       => 'SIGNED_VALIDATION',
+        self::ARCHIVED                => 'ARCHIVED',
+        self::WAITING_FOR_VALIDATION  => 'WAITING_FOR_VALIDATION',
+    ];
 }

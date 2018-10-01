@@ -11,13 +11,13 @@
 namespace PiaApi\Controller\Pia;
 
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
-use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
+use PiaApi\DataExchange\Transformer\PiaTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\Entity\Pia\ProcessingTemplate;
 use PiaApi\Entity\Pia\Processing;
+use PiaApi\Exception\DataImportException;
 use PiaApi\Entity\Pia\Answer;
 use PiaApi\Entity\Pia\Measure;
 use PiaApi\Entity\Pia\Evaluation;
@@ -33,16 +33,16 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 class PiaController extends RestController
 {
     /**
-     * @var jsonToEntityTransformer
+     * @var PiaTransformer
      */
-    protected $jsonToEntityTransformer;
+    protected $piaTransformer;
 
     public function __construct(
         PropertyAccessorInterface $propertyAccessor,
-        JsonToEntityTransformer $jsonToEntityTransformer
+        PiaTransformer $piaTransformer
     ) {
         parent::__construct($propertyAccessor);
-        $this->jsonToEntityTransformer = $jsonToEntityTransformer;
+        $this->piaTransformer = $piaTransformer;
     }
 
     /**
@@ -162,7 +162,7 @@ class PiaController extends RestController
      *             "concerned_people_searched_opinion",
      *             "concerned_people_searched_content",
      *             "rejection_reason",
-     *             "applied_adjustements",
+     *             "applied_adjustments",
      *             "dpos_names",
      *             "people_names",
      *             "processing"
@@ -178,7 +178,7 @@ class PiaController extends RestController
      *         @Swg\Property(property="concerned_people_searched_opinion", type="boolean"),
      *         @Swg\Property(property="concerned_people_searched_content", type="string"),
      *         @Swg\Property(property="rejection_reason", type="string"),
-     *         @Swg\Property(property="applied_adjustements", type="string"),
+     *         @Swg\Property(property="applied_adjustments", type="string"),
      *         @Swg\Property(property="dpos_names", type="string"),
      *         @Swg\Property(property="people_names", type="string"),
      *         @Swg\Property(property="processing", type="object", required={"id"}, @Swg\Property(property="id", type="number"))
@@ -324,7 +324,7 @@ class PiaController extends RestController
      *         @Swg\Property(property="concerned_people_searched_opinion", type="boolean"),
      *         @Swg\Property(property="concerned_people_searched_content", type="string"),
      *         @Swg\Property(property="rejection_reason", type="string"),
-     *         @Swg\Property(property="applied_adjustements", type="string"),
+     *         @Swg\Property(property="applied_adjustments", type="string"),
      *         @Swg\Property(property="dpos_names", type="string"),
      *         @Swg\Property(property="people_names", type="string"),
      *         @Swg\Property(property="processing", type="object", required={"id"}, @Swg\Property(property="id", type="number"))
@@ -458,13 +458,17 @@ class PiaController extends RestController
      */
     public function importAction(Request $request)
     {
-        $importData = $request->get('data', null);
-        if ($importData === null) {
-            return $this->view($importData, Response::HTTP_BAD_REQUEST);
+        $data = $request->get('pia');
+        $processing = $this->getResource($request->get('processing_id'), Processing::class);
+
+        $this->piaTransformer->setProcessing($processing);
+
+        try {
+            $pia = $this->piaTransformer->jsonToPia($data);
+        } catch (DataImportException $ex) {
+            return $this->view(unserialize($ex->getMessage()), Response::HTTP_PRECONDITION_FAILED);
         }
 
-        $pia = $this->jsonToEntityTransformer->transform($importData);
-        $pia->setStructure($this->getUser()->getStructure());
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
@@ -512,14 +516,12 @@ class PiaController extends RestController
      */
     public function exportAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
-
-        $pia = $this->getRepository()->find($id);
+        $pia = $this->getResource($id);
         $this->canAccessResourceOr403($pia);
 
-        $serializedPia = $this->jsonToEntityTransformer->reverseTransform($pia);
+        $json = $this->piaTransformer->piaToJson($pia);
 
-        return new Response($serializedPia, Response::HTTP_OK);
+        return new Response($json, Response::HTTP_OK);
     }
 
     protected function getEntityClass()
