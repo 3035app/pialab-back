@@ -1,10 +1,28 @@
 # Change Log
 
-## [1.4.13](https://github.com/pia-lab/pialab-back/tree/1.4.13) (2018-09-18)
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.12...1.4.13)
+## [1.4.17](https://github.com/pia-lab/pialab-back/tree/1.4.17) (2018-10-01)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.16...1.4.17)
 
-## [1.4.12](https://github.com/pia-lab/pialab-back/tree/1.4.12) (2018-09-18)
-[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...1.4.12)
+**Merged pull requests:**
+
+- Add processing attachments [\#84](https://github.com/pia-lab/pialab-back/pull/84) ([RomainSanchez](https://github.com/RomainSanchez))
+
+## [1.4.16](https://github.com/pia-lab/pialab-back/tree/1.4.16) (2018-09-26)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.15...1.4.16)
+
+## [1.4.15](https://github.com/pia-lab/pialab-back/tree/1.4.15) (2018-09-26)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.14...1.4.15)
+
+## [1.4.14](https://github.com/pia-lab/pialab-back/tree/1.4.14) (2018-09-25)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.13...1.4.14)
+
+**Merged pull requests:**
+
+- Add ProcessingComment entity and API controller [\#82](https://github.com/pia-lab/pialab-back/pull/82) ([RomainSanchez](https://github.com/RomainSanchez))
+- Add Import and Export for processing entity [\#59](https://github.com/pia-lab/pialab-back/pull/59) ([Fabrice-li](https://github.com/Fabrice-li))
+
+## [1.4.13](https://github.com/pia-lab/pialab-back/tree/1.4.13) (2018-09-18)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...1.4.13)
 
 **Merged pull requests:**
 
