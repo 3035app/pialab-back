@@ -27,7 +27,6 @@ use Swagger\Annotations as Swg;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use PiaApi\Exception\ApiException;
 use PiaApi\DataExchange\Transformer\ProcessingTransformer;
 use PiaApi\Exception\DataImportException;
 use PiaApi\DataExchange\Descriptor\ProcessingDescriptor;
@@ -56,7 +55,7 @@ class ProcessingController extends RestController
         SerializerInterface $serializer
     ) {
         parent::__construct($propertyAccessor);
-        
+
         $this->processingService = $processingService;
         $this->processingTransformer = $processingTransformer;
         $this->serializer = $serializer;
@@ -270,7 +269,7 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="recipients", type="string"),
      *         @Swg\Property(property="evaluationComment", type="string"),
      *         @Swg\Property(property="evaluationState", type="integer"),
-     *         @Swg\Property(property="folder", required={"id"}, type="object", 
+     *         @Swg\Property(property="folder", required={"id"}, type="object",
      *         @Swg\Property(property="id", type="number")),
      *         @Swg\Property(property="comments", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
