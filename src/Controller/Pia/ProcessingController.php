@@ -526,16 +526,18 @@ class ProcessingController extends RestController
         $this->processingTransformer->setFolder($folder);
 
         try {
-            $processing = $this->processingTransformer->jsonToProcessing($pTemplate->getData());
-            $processing->setAuthor($request->get('author_name'));
+            $tplData = json_decode($pTemplate->getData(), true);
+            $processing = $this->processingTransformer->jsonToProcessing($tplData);
+            $processing->setAuthor($request->get('author'));
             $processing->setDesignatedController($request->get('designated_controller'));
             $this->persist($processing);
 
-            $descriptor = $this->processingTransformer->fromJson($pTemplate->getData(), ProcessingDescriptor::class);
+            $descriptor = $this->processingTransformer->fromJson($tplData, ProcessingDescriptor::class);
 
             //only last PIA is used
             if (count($descriptor->getPias()) > 0) {
-                $pia = $this->processingTransformer->extractPia($processing, end($descriptor->getPias()));
+                $pias = $descriptor->getPias();
+                $pia = $this->processingTransformer->extractPia($processing, end($pias));
                 $processing->addPia($pia);
                 $pia->setProcessing($processing);
                 $pia->setStructure($folder->getStructure()); //@todo to be removed, a Pia do not need a structure
@@ -550,7 +552,7 @@ class ProcessingController extends RestController
 
             $this->persist($processing);
         } catch (DataImportException $ex) {
-            return $this->view(unserialize($ex->getMessage()), Response::HTTP_OK);
+            return $this->view(unserialize($ex->getMessage()), Response::HTTP_BAD_REQUEST);
         }
 
         return $this->view($processing, Response::HTTP_OK);

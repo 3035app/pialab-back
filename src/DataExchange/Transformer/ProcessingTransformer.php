@@ -78,7 +78,7 @@ class ProcessingTransformer extends AbstractTransformer
         $processing->setLifeCycle($descriptor->getLifeCycle());
         $processing->setStorage($descriptor->getStorage());
         $processing->setStandards($descriptor->getStandards());
-        $processing->setStatus($descriptor->getStatus());
+        $processing->setStatus((int) $descriptor->getStatus());
         $processing->setLawfulness($descriptor->getLawfulness());
         $processing->setMinimization($descriptor->getMinimization());
         $processing->setRightsGuarantee($descriptor->getRightsGuarantee());
