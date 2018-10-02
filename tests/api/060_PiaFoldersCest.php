@@ -220,7 +220,7 @@ class PiaFoldersCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE('/folders/' . $this->rootFolderId);
+        $I->sendDELETE('/folders/' . $this->rootFolderId . '?force=true');
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();

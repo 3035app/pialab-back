@@ -97,7 +97,7 @@ class Folder implements Timestampable
     private $children;
 
     /**
-     * @ORM\OneToMany(targetEntity="Processing", mappedBy="folder",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Processing", mappedBy="folder", cascade={"remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
      *
