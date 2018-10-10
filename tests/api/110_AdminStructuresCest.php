@@ -42,6 +42,9 @@ class AdminStructuresCest
         'vat_number'        => 'string|null',
         'activity_code'     => 'string|null',
         'legal_form'        => 'string|null',
+        'executive'         => 'string|null',
+        'backup'            => 'string|null',
+        'dpo'               => 'string|null',
         'registration_date' => 'string|null',
     ];
 

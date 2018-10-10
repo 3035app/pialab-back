@@ -18,6 +18,30 @@ trait StructureInformationsTrait
      *
      * @var string
      */
+    protected $executive;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string
+     */
+    protected $backup;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string
+     */
+    protected $dpo;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string
+     */
     protected $address;
 
     /**
@@ -75,6 +99,54 @@ trait StructureInformationsTrait
      * @var \DateTime
      */
     protected $registrationDate;
+
+    /**
+     * @return string
+     */
+    public function getExecutive(): ?string
+    {
+        return $this->executive;
+    }
+
+    /**
+     * @param string $executive
+     */
+    public function setExecutive(?string $executive = null): void
+    {
+        $this->executive = $executive;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackup(): ?string
+    {
+        return $this->backup;
+    }
+
+    /**
+     * @param string $backup
+     */
+    public function setBackup(?string $backup = null): void
+    {
+        $this->backup = $backup;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDpo(): ?string
+    {
+        return $this->dpo;
+    }
+
+    /**
+     * @param string $dpo
+     */
+    public function setDpo(?string $dpo = null): void
+    {
+        $this->dpo = $dpo;
+    }
 
     /**
      * @return string
