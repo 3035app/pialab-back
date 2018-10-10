@@ -165,6 +165,7 @@ class StructureFolderController extends RestController
      *         type="object",
      *         required={"name"},
      *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="person_in_charge", type="string"),
      *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The Folder content"
@@ -194,7 +195,8 @@ class StructureFolderController extends RestController
         $folder = $this->folderService->createFolder(
             $request->get('name'),
             $structure,
-            $parent
+            $parent,
+            $request->get('person_in_charge')
         );
         $this->canAccessResourceOr403($folder);
 
@@ -243,6 +245,7 @@ class StructureFolderController extends RestController
      *     @Swg\Schema(
      *         type="object",
      *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="person_in_charge", type="string"),
      *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The Folder content"
@@ -272,6 +275,7 @@ class StructureFolderController extends RestController
 
         $updatableAttributes = [
             'name'   => RequestDataHandler::TYPE_STRING,
+            'person_in_charge' => RequestDataHandler::TYPE_STRING,
             'parent' => Folder::class,
         ];
 

@@ -39,6 +39,14 @@ class Folder implements Timestampable
     private $name;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     * @JMS\Groups({"Default"})
+     *
+     * @var string
+     */
+    private $personInCharge;
+
+    /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
      * @JMS\Groups({"Default"})
@@ -268,6 +276,22 @@ class Folder implements Timestampable
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPersonInCharge(): string
+    {
+        return $this->personInCharge;
+    }   
+
+    /**
+     * @param string $personInCharge
+     */
+    public function setPersonInCharge(string $personInCharge): void
+    {
+        $this->personInCharge = $personInCharge;
     }
 
     /**
