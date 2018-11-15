@@ -178,6 +178,7 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="controllers", type="string"),
      *         @Swg\Property(property="non_eu_transfer", type="string"),
      *         @Swg\Property(property="context_of_implementation", type="string"),
+     *         @Swg\Property(property="concerned_people", type="string"),
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
      *         )),
@@ -261,6 +262,7 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="rights_guarantee", type="string"),
      *         @Swg\Property(property="exactness", type="string"),
      *         @Swg\Property(property="consent", type="string"),
+     *         @Swg\Property(property="concerned_people", type="string"),
      *         @Swg\Property(property="non_eu_transfer", type="string"),
      *         @Swg\Property(property="context_of_implementation", type="string"),
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
@@ -321,6 +323,7 @@ class ProcessingController extends RestController
             'rights_guarantee'          => RequestDataHandler::TYPE_STRING,
             'exactness'                 => RequestDataHandler::TYPE_STRING,
             'consent'                   => RequestDataHandler::TYPE_STRING,
+            'concerned_people'          => RequestDataHandler::TYPE_STRING,
             'status'                    => RequestDataHandler::TYPE_INT,
             'evaluation_comment'        => RequestDataHandler::TYPE_STRING,
             'evaluation_state'          => RequestDataHandler::TYPE_INT,

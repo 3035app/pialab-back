@@ -146,6 +146,7 @@ class FolderController extends RestController
      *         type="object",
      *         required={"name"},
      *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="person_in_charge", type="string"),
      *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The Folder content"
@@ -173,7 +174,8 @@ class FolderController extends RestController
         $folder = $this->folderService->createFolder(
             $request->get('name'),
             $structure,
-            $parent
+            $parent,
+            $request->get('person_in_charge')
         );
 
         $this->persist($folder);
@@ -214,6 +216,7 @@ class FolderController extends RestController
      *     @Swg\Schema(
      *         type="object",
      *         @Swg\Property(property="name", type="string"),
+     *         @Swg\Property(property="person_in_charge", type="string"),
      *         @Swg\Property(property="parent", type="object", @Swg\Property(property="id", type="number"))
      *     ),
      *     description="The Folder content"
@@ -238,8 +241,9 @@ class FolderController extends RestController
         $this->canAccessResourceOr403($folder);
 
         $updatableAttributes = [
-            'name'   => RequestDataHandler::TYPE_STRING,
-            'parent' => Folder::class,
+            'name'             => RequestDataHandler::TYPE_STRING,
+            'person_in_charge' => RequestDataHandler::TYPE_STRING,
+            'parent'           => Folder::class,
         ];
 
         $this->mergeFromRequest($folder, $updatableAttributes, $request);
