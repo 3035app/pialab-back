@@ -24,6 +24,7 @@ class Version20180906142940 extends AbstractMigration implements ContainerAwareI
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('ALTER TABLE pia DROP name');
+        $this->addSql('ALTER TABLE pia RENAME COLUMN applied_adjustements TO applied_adjustments');
     }
 
     public function down(Schema $schema)
@@ -31,5 +32,6 @@ class Version20180906142940 extends AbstractMigration implements ContainerAwareI
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('ALTER TABLE pia ADD name VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE pia RENAME COLUMN applied_adjustments TO applied_adjustements');
     }
 }
