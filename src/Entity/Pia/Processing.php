@@ -186,6 +186,14 @@ class Processing
      *
      * @var string|null
      */
+    protected $concernedPeople;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
     protected $evaluationComment;
 
     /**
@@ -470,6 +478,22 @@ class Processing
     public function setConsent(?string $consent = null): void
     {
         $this->consent = $consent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConcernedPeople(): ?string
+    {
+        return $this->concernedPeople;
+    }
+
+    /**
+     * @param string $concernedPeople
+     */
+    public function setConcernedPeople(?string $concernedPeople = null): void
+    {
+        $this->concernedPeople = $concernedPeople;
     }
 
     /**

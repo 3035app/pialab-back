@@ -12,6 +12,7 @@ namespace PiaApi\Controller\Pia;
 
 use PiaApi\Services\ProcessingService;
 use PiaApi\Entity\Pia\Processing;
+use PiaApi\Entity\Pia\ProcessingTemplate;
 use PiaApi\Entity\Pia\Folder;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\ProcessingDataType;
@@ -54,7 +55,7 @@ class ProcessingController extends RestController
         SerializerInterface $serializer
     ) {
         parent::__construct($propertyAccessor);
-        
+
         $this->processingService = $processingService;
         $this->processingTransformer = $processingTransformer;
         $this->serializer = $serializer;
@@ -177,6 +178,7 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="controllers", type="string"),
      *         @Swg\Property(property="non_eu_transfer", type="string"),
      *         @Swg\Property(property="context_of_implementation", type="string"),
+     *         @Swg\Property(property="concerned_people", type="string"),
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingDataType::class, groups={"Default"})
      *         )),
@@ -260,6 +262,7 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="rights_guarantee", type="string"),
      *         @Swg\Property(property="exactness", type="string"),
      *         @Swg\Property(property="consent", type="string"),
+     *         @Swg\Property(property="concerned_people", type="string"),
      *         @Swg\Property(property="non_eu_transfer", type="string"),
      *         @Swg\Property(property="context_of_implementation", type="string"),
      *         @Swg\Property(property="processing_data_types", type="array", @Swg\Items(
@@ -268,7 +271,7 @@ class ProcessingController extends RestController
      *         @Swg\Property(property="recipients", type="string"),
      *         @Swg\Property(property="evaluationComment", type="string"),
      *         @Swg\Property(property="evaluationState", type="integer"),
-     *         @Swg\Property(property="folder", required={"id"}, type="object", 
+     *         @Swg\Property(property="folder", required={"id"}, type="object",
      *         @Swg\Property(property="id", type="number")),
      *         @Swg\Property(property="comments", type="array", @Swg\Items(
      *              ref=@Nelmio\Model(type=ProcessingComment::class, groups={"Default"})
@@ -320,6 +323,7 @@ class ProcessingController extends RestController
             'rights_guarantee'          => RequestDataHandler::TYPE_STRING,
             'exactness'                 => RequestDataHandler::TYPE_STRING,
             'consent'                   => RequestDataHandler::TYPE_STRING,
+            'concerned_people'          => RequestDataHandler::TYPE_STRING,
             'status'                    => RequestDataHandler::TYPE_INT,
             'evaluation_comment'        => RequestDataHandler::TYPE_STRING,
             'evaluation_state'          => RequestDataHandler::TYPE_INT,
@@ -462,6 +466,97 @@ class ProcessingController extends RestController
             $this->persist($processing);
         } catch (DataImportException $ex) {
             return $this->view(unserialize($ex->getMessage()), Response::HTTP_OK);
+        }
+
+        return $this->view($processing, Response::HTTP_OK);
+    }
+
+    /**
+     * Creates a PIA from a template.
+     *
+     * @Swg\Tag(name="Processing")
+     *
+     * @FOSRest\Post("/processings/new-from-template/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing template"
+     * )
+     * @Swg\Parameter(
+     *     name="Processing",
+     *     in="body",
+     *     required=true,
+     *     description="The Processing content",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Processing::class, groups={"Default"})
+     *     )
+     * )
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns the newly created Processing",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Processing::class, groups={"Default"})
+     *     )
+     * )
+     *
+     * @Security("is_granted('CAN_CREATE_PROCESSING')")
+     *
+     * @return array
+     */
+    public function createFromTemplateAction(Request $request, $id)
+    {
+        /** @var ProcessingTemplate $pTemplate */
+        $pTemplate = $this->getDoctrine()->getRepository(ProcessingTemplate::class)->find($id);
+        $folder = $this->getResource($request->get('folder', ['id' => -1])['id'], Folder::class);
+
+        if ($pTemplate === null || $folder === null) {
+            return $this->view($pTemplate, Response::HTTP_NOT_FOUND);
+        }
+
+        $this->processingTransformer->setFolder($folder);
+
+        try {
+            $tplData = json_decode($pTemplate->getData(), true);
+            $processing = $this->processingTransformer->jsonToProcessing($tplData);
+            $processing->setAuthor($request->get('author'));
+            $processing->setDesignatedController($request->get('designated_controller'));
+
+            $this->persist($processing);
+
+            $descriptor = $this->processingTransformer->fromJson($tplData, ProcessingDescriptor::class);
+
+            //only last PIA is used
+            if (count($descriptor->getPias()) > 0) {
+                $pias = $descriptor->getPias();
+                $pia = $this->processingTransformer->extractPia($processing, end($pias));
+                $processing->addPia($pia);
+                $pia->setProcessing($processing);
+                $pia->setStructure($folder->getStructure()); //@todo to be removed, a Pia do not need a structure
+                $this->persist($pia);
+            }
+
+            foreach ($descriptor->getProcessingDataTypes() as $types) {
+                $processing->addProcessingDataType($this->processingTransformer->extractDataType($processing, $types));
+            }
+
+            $processing->setTemplate($pTemplate);
+
+            $this->persist($processing);
+        } catch (DataImportException $ex) {
+            return $this->view(unserialize($ex->getMessage()), Response::HTTP_BAD_REQUEST);
         }
 
         return $this->view($processing, Response::HTTP_OK);

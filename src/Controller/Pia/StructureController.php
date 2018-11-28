@@ -232,6 +232,9 @@ class StructureController extends RestController
      *         @Swg\Property(property="siret", type="string"),
      *         @Swg\Property(property="vat_number", type="string"),
      *         @Swg\Property(property="activity_code", type="string"),
+     *         @Swg\Property(property="executive", type="string"),
+     *         @Swg\Property(property="backup", type="string"),
+     *         @Swg\Property(property="dpo", type="string"),
      *         @Swg\Property(property="legal_form", type="string"),
      *         @Swg\Property(property="registration_date", type="string")
      *     ),
@@ -266,6 +269,9 @@ class StructureController extends RestController
             'siret'             => RequestDataHandler::TYPE_STRING,
             'vat_number'        => RequestDataHandler::TYPE_STRING,
             'activity_code'     => RequestDataHandler::TYPE_STRING,
+            'executive'         => RequestDataHandler::TYPE_STRING,
+            'backup'            => RequestDataHandler::TYPE_STRING,
+            'dpo'               => RequestDataHandler::TYPE_STRING,
             'legal_form'        => RequestDataHandler::TYPE_STRING,
             'registration_date' => \DateTime::class,
         ];

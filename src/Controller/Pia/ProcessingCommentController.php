@@ -11,7 +11,6 @@
 namespace PiaApi\Controller\Pia;
 
 use PiaApi\DataHandler\RequestDataHandler;
-use PiaApi\Services\ProcessingCommentService;
 use PiaApi\Entity\Pia\ProcessingComment;
 use PiaApi\Entity\Pia\Processing;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
@@ -25,7 +24,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class ProcessingCommentController extends RestController
 {
-    public function __construct(PropertyAccessorInterface $propertyAccessor) {
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
+    {
         parent::__construct($propertyAccessor);
     }
 
@@ -224,7 +224,7 @@ class ProcessingCommentController extends RestController
         $this->canAccessResourceOr403($processingComment);
 
         $updatableAttributes = [
-            'content'         => RequestDataHandler::TYPE_STRING,
+            'content'            => RequestDataHandler::TYPE_STRING,
             'field'              => RequestDataHandler::TYPE_STRING,
         ];
 

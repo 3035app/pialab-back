@@ -120,7 +120,6 @@ class PiaDescriptor extends AbstractDescriptor
     /**
      * @JMS\Type("string")
      * @JMS\Groups({"Default", "Export"})
-     * @Assert\NotBlank
      *
      * @var string
      */
@@ -195,15 +194,15 @@ class PiaDescriptor extends AbstractDescriptor
         string $evaluator,
         string $validator,
         int $dpoStatus,
-        string $dpoOpinion,
-        string $concernedPeopleOpinion,
+        ?string $dpoOpinion,
+        ?string $concernedPeopleOpinion,
         int $concernedPeopleStatus,
         bool $concernedPeopleSearchedOpinion,
-        string $concernedPeopleSearchedContent,
-        string $rejectionReason,
-        string $appliedAdjustments,
-        string $dposNames,
-        string $peopleNames,
+        ?string $concernedPeopleSearchedContent,
+        ?string $rejectionReason,
+        ?string $appliedAdjustments,
+        ?string $dposNames,
+        ?string $peopleNames,
         bool $isExample,
         \DateTime $createdAt,
         \DateTime $updatedAt,

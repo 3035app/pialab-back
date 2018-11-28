@@ -49,12 +49,11 @@ class ProcessingComment implements Timestampable
      * @var Processing
      */
     protected $processing;
-    
 
     public function __construct(Processing $processing, string $content, string $field)
     {
         $this->processing = $processing;
-        $this->content = $content;  
+        $this->content = $content;
         $this->field = $field;
     }
 
@@ -89,7 +88,6 @@ class ProcessingComment implements Timestampable
     {
         $this->field = $field;
     }
-
 
     /**
      * @return Processing

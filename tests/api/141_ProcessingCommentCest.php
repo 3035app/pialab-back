@@ -99,7 +99,7 @@ class ProcessingCommentCest
         $field = 'edited field';
 
         $data = array_merge($this->processingComment, [
-            'content' => $content,
+            'content'    => $content,
             'field'      => $field,
         ]);
 

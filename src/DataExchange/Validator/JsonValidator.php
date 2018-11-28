@@ -18,7 +18,7 @@ use JMS\Serializer\DeserializationContext;
 class JsonValidator
 {
     /**
-     * Validates that the json is a valid representation of Pia end serve array representation.
+     * Validates that the json is a valid representation of Pia and serve array representation.
      *
      * @param string $json
      *
