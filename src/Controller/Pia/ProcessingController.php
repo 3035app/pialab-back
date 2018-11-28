@@ -533,6 +533,7 @@ class ProcessingController extends RestController
             $processing = $this->processingTransformer->jsonToProcessing($tplData);
             $processing->setAuthor($request->get('author'));
             $processing->setDesignatedController($request->get('designated_controller'));
+
             $this->persist($processing);
 
             $descriptor = $this->processingTransformer->fromJson($tplData, ProcessingDescriptor::class);
