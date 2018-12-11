@@ -445,9 +445,13 @@ class ProcessingController extends RestController
     public function importAction(Request $request)
     {
         $data = $request->get('processing');
-        $folder = $this->getResource($request->get('folder_id'), Folder::class);
+        $folderId = $request->get('folder_id');
 
-        $this->processingTransformer->setFolder($folder);
+        if ($folderId) {
+            $folder = $this->getResource($folderId, Folder::class);
+
+            $this->processingTransformer->setFolder($folder);
+        }
 
         try {
             $processing = $this->processingTransformer->jsonToProcessing($data);
