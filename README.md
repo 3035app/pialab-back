@@ -29,7 +29,7 @@ bin/console server:start
 Create your super admin user :
 
 ```bash
-bin/console pia:user:create --email=your@email.address --password=yourSecretPassword
+bin/console pia:user:create your@email.address yourSecretPassword
 bin/console pia:user:promote your@email.address --role=ROLE_SUPER_ADMIN
 ```
 
