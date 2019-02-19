@@ -65,7 +65,7 @@ Note: You can create this Oauth application in the backend admin UI.
 ### Create a standard user
 
 ```bash
-bin/console pia:user:create --email=api@pia.io --password=pia
+bin/console pia:user:create api@pia.io pia
 ```
 
 Note: You can create this user in the backend admin UI.
