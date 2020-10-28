@@ -53,14 +53,14 @@ class StructuresCest
         $I->fillField('edit_structure_type_form[name]', 'edited-' . $this->structureType);
         $I->click($formName . ' [type="submit"]');
 
-        // $I->canSeeNumberOfElements('//td[contains(text(), "edited-' . $this->structureType . '")]', 1);
+        $I->canSeeNumberOfElements('//td[contains(text(), "edited-' . $this->structureType . '")]', 2); // 2 because of two tables present in the same page (structure types and structures)
 
         $I->click('//td[contains(text(), "edited-' . $this->structureType . '")]/ancestor::tr/descendant::a[contains(@href,"/manageStructures/editStructureType/")]');
         $I->waitForElementVisible($formName . ' input[name="edit_structure_type_form[name]"]');
         $I->fillField('edit_structure_type_form[name]', $this->structureType);
         $I->click($formName . ' [type="submit"]');
 
-        // $I->canSeeNumberOfElements('//td[contains(text(), "' . $this->structureType . '")]', 1);
+        $I->canSeeNumberOfElements('//td[contains(text(), "' . $this->structureType . '")]', 2); // 2 because of two tables present in the same page (structure types and structures)
     }
 
     public function edit_newly_created_structure_test(Webguy $I)
@@ -77,14 +77,14 @@ class StructuresCest
         $I->fillField('edit_structure_form[name]', 'edited-' . $this->structure);
         $I->click($formName . ' [type="submit"]');
 
-        // $I->canSeeNumberOfElements('//td[contains(text(), "edited-' . $this->structure . '")]', 1);
+        $I->canSeeNumberOfElements('//td[contains(text(), "edited-' . $this->structure . '")]', 1);
 
         $I->click('//td[contains(text(), "edited-' . $this->structure . '")]/ancestor::tr/descendant::a[contains(@href,"/manageStructures/editStructure/")]');
         $I->waitForElementVisible($formName . ' input[name="edit_structure_form[name]"]');
         $I->fillField('edit_structure_form[name]', $this->structure);
         $I->click($formName . ' [type="submit"]');
 
-        // $I->canSeeNumberOfElements('//td[contains(text(), "' . $this->structure . '")]', 1);
+        $I->canSeeNumberOfElements('//td[contains(text(), "' . $this->structure . '")]', 1);
     }
 
     public function remove_newly_created_structure_test(Webguy $I)

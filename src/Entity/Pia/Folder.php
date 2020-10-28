@@ -17,7 +17,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use JMS\Serializer\Annotation as JMS;
-use PiaApi\Entity\Pia\Traits\HasManyPiasTrait;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
 
 /**
@@ -29,7 +28,6 @@ use PiaApi\Entity\Pia\Traits\ResourceTrait;
 class Folder implements Timestampable
 {
     use ResourceTrait,
-        HasManyPiasTrait,
         TimestampableEntity;
 
     /**
@@ -39,6 +37,14 @@ class Folder implements Timestampable
      * @var string
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @JMS\Groups({"Default"})
+     *
+     * @var string
+     */
+    private $personInCharge;
 
     /**
      * @Gedmo\TreeLeft
@@ -90,7 +96,7 @@ class Folder implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Folder", mappedBy="parent")
-     * @ORM\OrderBy({"lft" = "ASC"})
+     * @ORM\OrderBy({"name" = "ASC"})
      * @JMS\Groups({"Default"})
      * @JMS\MaxDepth(2)
      *
@@ -99,13 +105,13 @@ class Folder implements Timestampable
     private $children;
 
     /**
-     * @ORM\OneToMany(targetEntity="Pia", mappedBy="folder",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Processing", mappedBy="folder", cascade={"remove"})
      * @JMS\Groups({"Default", "Export"})
      * @JMS\MaxDepth(2)
      *
-     * @var Collection
+     * @var Collection|Processing[]
      */
-    protected $pias;
+    protected $processings;
 
     /**
      * @ORM\ManyToOne(targetEntity="Structure", inversedBy="folders").
@@ -124,8 +130,20 @@ class Folder implements Timestampable
             $structure->getFolders()->add($this);
         }
 
-        $this->pias = new ArrayCollection();
         $this->children = new ArrayCollection();
+        $this->processings = new ArrayCollection();
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("structure_id")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return string|null
+     */
+    public function getStructureId(): ?string
+    {
+        return $this->structure !== null ? $this->structure->getId() : null;
     }
 
     /**
@@ -261,6 +279,22 @@ class Folder implements Timestampable
     }
 
     /**
+     * @return string
+     */
+    public function getPersonInCharge(): string
+    {
+        return $this->personInCharge;
+    }   
+
+    /**
+     * @param string $personInCharge
+     */
+    public function setPersonInCharge(string $personInCharge): void
+    {
+        $this->personInCharge = $personInCharge;
+    }
+
+    /**
      * @JMS\VirtualProperty
      * @JMS\SerializedName("path")
      * @JMS\Groups({"Default", "Export"})
@@ -290,5 +324,52 @@ class Folder implements Timestampable
         ];
 
         return $ancestorHierarchy;
+    }
+
+    /**
+     * @return array|Processing[]
+     */
+    public function getProcessings(): array
+    {
+        return $this->processings->getValues();
+    }
+
+    /**
+     * @param Processing $processing
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addProcessing(Processing $processing): void
+    {
+        if ($this->processings->contains($processing)) {
+            throw new \InvalidArgumentException(sprintf('Processing « %s » is already in Folder « #%d »', $processing, $this->getId()));
+        }
+        $this->processings->add($processing);
+    }
+
+    /**
+     * @param Processing $processing
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function removeProcessing(Processing $processing): void
+    {
+        if (!$this->processings->contains($processing)) {
+            throw new \InvalidArgumentException(sprintf('Processing « %s » is not in Folder « #%d »', $processing, $this->getId()));
+        }
+        $this->processings->removeElement($processing);
+    }
+
+    /**
+     * @return array|Processing[]
+     */
+    public function flatCollectProcessings()
+    {
+        return array_merge(
+            $this->getProcessings(),
+            ...$this->getChildren()->map(function ($folder) {
+                return $folder->flatCollectProcessings();
+            })->getValues()
+        );
     }
 }

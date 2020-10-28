@@ -12,8 +12,10 @@
     <table class="ui compact stackable striped table">
       <thead>
         <tr>
-          {% if is_granted('CAN_MANAGE_USERS') %}
+          {% if is_granted('CAN_MANAGE_USERS')%}
           <th>{{ 'pia.users.list.application'|trans }}</th>
+           {% endif %}
+          {% if is_granted('CAN_MANAGE_USERS') or is_granted('CAN_MANAGE_ONLY_OWNED_USERS') %}
           <th>{{ 'pia.users.list.structure'|trans }}</th>
           {% endif %}
           <th>{{ 'pia.users.list.username'|trans }}</th>
@@ -32,7 +34,7 @@
 
         {% for user in users %}
           <tr>
-            {% if is_granted('CAN_MANAGE_USERS') %}
+            {% if is_granted('CAN_MANAGE_USERS')%}
               <td>
                 {% if user.application is not null %}
                   <a href="{{ path('manage_applications') }}">
@@ -42,6 +44,8 @@
                   {{ 'pia.labels.n_a'|trans }}
                 {% endif %}
               </td>
+               {% endif %}
+              {% if is_granted('CAN_MANAGE_USERS') or is_granted('CAN_MANAGE_ONLY_OWNED_USERS')%}
               <td>
                 {% if user.structure is not null %}
                   <a href="{{ path('manage_structures') }}">
@@ -73,17 +77,17 @@
             </td>
             <td class="right aligned collapsing">
               <div class="ui small buttons">
-                <a class="ui green tiny icon button" data-modal="data-modal" title="Modifier l'utilisateur" href="{{ path('manage_users_edit_user', {'userId':user.id}) }}">
+                <a class="ui green tiny icon button" data-modal="data-modal" title="Modifier l'utilisateur" href="{{ path('manage_users_edit_user', {'userId':user.id, 'redirect': app.request.requestUri}) }}">
                   <i class="pencil icon"></i>
                 </a>
-                <a class="ui orange tiny icon button" data-modal="data-modal" title="Envoyer l'email de réinitialisation de mot de passe" href="{{ path('manage_users_send_reset_password_email', {'userId':user.id}) }}">
+                <a class="ui orange tiny icon button" data-modal="data-modal" title="Envoyer l'email de réinitialisation de mot de passe" href="{{ path('manage_users_send_reset_password_email', {'userId':user.id, 'redirect': app.request.requestUri}) }}">
                   <i class="icons">
                     <i class="envelope outline icon"></i>
                     <i class="bottom right corner plus icon"></i>
                   </i>
                 </a>
                 {% if app.user != user %}
-                  <a class="ui red tiny icon button" data-modal="data-modal" title="Supprimer l'utilisateur" href="{{ path('manage_users_remove_user', {'userId':user.id}) }}">
+                  <a class="ui red tiny icon button" data-modal="data-modal" title="Supprimer l'utilisateur" href="{{ path('manage_users_remove_user', {'userId':user.id,'redirect': app.request.requestUri}) }}">
                     <i class="trash icon"></i>
                   </a>
                 {% else %}

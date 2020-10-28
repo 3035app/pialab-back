@@ -1,0 +1,47 @@
+{% trans_default_domain 'Pia' %} 
+
+{% set template = form.vars.value %}
+
+<div class="ui negative message">
+    <div class="ui clearing basic segment">
+        <div class="header">
+            {{ 'pia.templates.modals.remove.title'|trans }}
+        </div>
+        <i style="float:right;">{{ 'pia.templates.modals.remove.sub_title'|trans }}</i>
+    </div>
+</div>
+
+<table class="ui single line table">
+    <thead>
+        <tr>
+            <th colspan="100%">
+                {{ 'pia.templates.modals.remove.resume.template'|trans }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="collapsing">
+                <i class="building icon"></i>
+                <b>{{ 'pia.templates.modals.remove.resume.name'|trans }}</b>
+            </td>
+            <td>{{ template.name }}</td>
+        </tr>
+        <tr>
+            <td class="collapsing">
+                <i class="folder open icon"></i>
+                <b>{{ 'pia.templates.modals.remove.resume.processing_number'|trans }}</b>
+            </td>
+            <td>{{ template.processings|length }}</td>
+        </tr>
+    </tbody>
+</table>
+
+{{ form_start(form) }}
+
+{% do 
+    form.submit.setRendered() %}
+
+<input type="submit" class="ui fluid red button" value="{{ 'pia.actions.remove'|trans }}"/>
+
+{{ form_end(form) }}

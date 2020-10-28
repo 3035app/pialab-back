@@ -25,17 +25,21 @@
 
         {% block body %}{% endblock %}
 
+        {% include 'pia/Layout/flashes.html.twig' %}
+
         {% include 'pia/Layout/modal.html.twig' %}
 
         {% block javascripts %}
             <script src="{{ asset('assets/js/semantic.min.js') }}"></script>
             <script src="{{ asset('assets/js/semantic-custom.min.js') }}"></script>
             <script src="{{ asset('assets/js/modal.js') }}"></script>
+            <script src="{{ asset('assets/js/flash_messages.js') }}"></script>
             <script>
                 $(document).ready(function () {
                     $('.ui.checkbox').checkbox();
                     $('.ui.dropdown').dropdown();
                     $('[data-popup]').popup({on: 'click'});
+                    
                 })
             </script>
         {% endblock %}

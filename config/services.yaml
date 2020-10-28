@@ -5,6 +5,7 @@ imports:
 
 parameters:
     locale: 'fr'
+    api_pattern: ^/(pias|profile|processing-templates|folders|structures|users|portfolios|processings|processing-data-types|processing-comments)
 
 services:
     _defaults:
@@ -19,6 +20,7 @@ services:
 
             # Services
             FOS\UserBundle\Mailer\MailerInterface: '@fos_user.mailer.twig_swift'
+            Nelmio\ApiDocBundle\ApiDocGenerator: '@nelmio_api_doc.generator.default'
 
     PiaApi\:
         resource: '../src/*'
@@ -35,19 +37,19 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-
-    PiaApi\Form\Type\RolesType:
-        tags: [form.type]
-
-    PiaApi\Security\Voter\PermissionVoter:
-        arguments: ['@security.role_hierarchy']
-        tags: [security.voter]
-    PiaApi\Security\Voter\CanManageUsersVoter:
+    PiaApi\Security\Voter\:
+        resource: '../src/Security/Voter/*'
         tags: [security.voter]
 
     PiaApi\Security\Role\RoleHierarchy:
         arguments: ['@security.token_storage', '%security.role_hierarchy.roles%', '@security.role_hierarchy']
 
+    FOS\OAuthServerBundle\Controller\TokenController: '@PiaApi\Controller\Pia\OauthController'
+
+    PiaApi\Controller\Pia\OauthController:
+        arguments:
+            - '@fos_oauth_server.server'
+        public: true
 
     PiaApi\Auth\ClientManager:
         arguments:

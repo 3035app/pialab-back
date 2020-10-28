@@ -53,6 +53,11 @@ then
     fi
 fi
 
+if [ -z "$DatabaseVersion" ]
+then
+    DatabaseVersion=5.7
+fi
+
 if [ -z "$DatabaseName" ]
 then
     DatabaseName=pia_db_$Suffix
@@ -71,7 +76,16 @@ fi
 if [ -z "$MailerUrl" ]
 then
     MailerUrl=smtp://127.0.0.1:1025
+fi
 
+if [ -z "$MailerSender" ]
+then
+    MailerSender=no-reply@pialab.io
+fi
+
+if [ -z "$MailerSenderName" ]
+then
+    MailerSenderName='PiaLab Account Manager'
 fi
 
 if [ -z "${CLIENTURL}" ]
@@ -150,11 +164,14 @@ $ETCDCTLCMD put $Prefix/postgres/hostname $postgreshost $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/root/username $postgresuser $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/root/password $postgrespass $ETCDENDPOINT
 
+$ETCDCTLCMD put $Prefix/postgres/default/version $DatabaseVersion $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/dbname $DatabaseName $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/username $DatabaseUser $ETCDENDPOINT
 $ETCDCTLCMD put $Prefix/postgres/default/password $DatabasePassword $ETCDENDPOINT
 
 $ETCDCTLCMD put $Prefix/smtp/default/url $MailerUrl $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/smtp/default/sender $MailerSender $ETCDENDPOINT
+$ETCDCTLCMD put $Prefix/smtp/default/sender/name $MailerSenderName $ETCDENDPOINT
 
 # set symfony env
 $ETCDCTLCMD put $Prefix/symfony/env $SYMFONYENV $ETCDENDPOINT

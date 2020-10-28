@@ -21,23 +21,24 @@ class PiaFoldersCest
     use _support\ApiFixturesTrait;
 
     private $folderJsonType = [
-        'isRoot'     => 'boolean',
-        'path'       => 'string',
-        'hierarchy'  => 'array',
-        'name'       => 'string',
-        'lft'        => 'integer',
-        'lvl'        => 'integer',
-        'rgt'        => 'integer',
-        'parent'     => 'array|null',
-        'children'   => 'array',
-        'pias'       => 'array',
-        'id'         => 'integer',
-        'created_at' => 'string',
-        'updated_at' => 'string',
+        'isRoot'           => 'boolean',
+        'path'             => 'string',
+        'hierarchy'        => 'array',
+        'name'             => 'string',
+        'person_in_charge' => 'string|null',
+        'lft'              => 'integer',
+        'lvl'              => 'integer',
+        'rgt'              => 'integer',
+        'parent'           => 'array|null',
+        'children'         => 'array',
+        'id'               => 'integer',
+        'created_at'       => 'string',
+        'updated_at'       => 'string',
     ];
 
     private $folderData = [
         'name' => 'codecept-folder',
+        'person_in_charge' => 'codecept-person-in-charge'
     ];
 
     private $folder = [];
@@ -164,7 +165,7 @@ class PiaFoldersCest
         ];
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('/folders/' . $folderToBeMoved['id'], $folderToBeMoved);
+        $I->sendPUT('/folders/' . $folderToBeMoved['id'], $folderToBeMoved);
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -221,7 +222,7 @@ class PiaFoldersCest
         $I->login();
 
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendDELETE('/folders/' . $this->rootFolderId);
+        $I->sendDELETE('/folders/' . $this->rootFolderId . '?force=true');
 
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();

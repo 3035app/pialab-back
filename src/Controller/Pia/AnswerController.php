@@ -21,13 +21,22 @@ use PiaApi\Entity\Pia\Answer;
 class AnswerController extends PiaSubController
 {
     /**
+     * Lists all Answers for a specific Treatment.
+     *
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Get("/pias/{piaId}/answers")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns all Answsers for a specific Treatment",
+     *     description="Returns all Answers of given Treatment",
      *     @Swg\Schema(
      *         type="array",
      *         @Swg\Items(ref=@Nelmio\Model(type=Answer::class, groups={"Default"}))
@@ -42,13 +51,37 @@ class AnswerController extends PiaSubController
     }
 
     /**
+     * Shows a specific Answer by its ID and specific Treatment.
+     *
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Get("/pias/{piaId}/answers/{id}")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Answer"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one Answer by its id and for a specific Treatment",
+     *     description="Returns one Answer",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Answer::class, groups={"Default"})
@@ -63,13 +96,42 @@ class AnswerController extends PiaSubController
     }
 
     /**
+     * Creates an Answer for a specific Treatment.
+     *
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Post("/pias/{piaId}/answers")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="Answer",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"data", "reference_to"},
+     *         @Swg\Property(property="data", type="object", @Swg\Property(property="text", type="string")),
+     *         @Swg\Property(property="reference_to", type="string")
+     *     ),
+     *     description="The Answer text content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates an Answer for a specific Treatment",
+     *     description="Returns the newly created Answer",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Answer::class, groups={"Default"})
@@ -84,13 +146,48 @@ class AnswerController extends PiaSubController
     }
 
     /**
+     * Updates an Answer for a specific Treatment.
+     *
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Put("/pias/{piaId}/answers/{id}")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Answer"
+     * )
+     * @Swg\Parameter(
+     *     name="Answer",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="data", type="object", @Swg\Property(property="text", type="string")),
+     *         @Swg\Property(property="reference_to", type="string")
+     *     ),
+     *     description="The Answer text content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Update an Answer for a specific Treatment",
+     *     description="Returns the updated Answer",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Answer::class, groups={"Default"})
@@ -105,17 +202,37 @@ class AnswerController extends PiaSubController
     }
 
     /**
+     * Delete an Answer for a specific Treatment.
+     *
      * @Swg\Tag(name="Answer")
      *
      * @FOSRest\Delete("pias/{piaId}/answers/{id}")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Answer"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete an Answer for a specific Treatment",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Answer::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @Security("is_granted('CAN_DELETE_ANSWER')")

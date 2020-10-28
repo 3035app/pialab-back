@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2018 Libre Informatique
+ * Copyright (C) 2015-2019 Libre Informatique
  *
  * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
@@ -10,39 +10,55 @@
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use PiaApi\Entity\Pia\Pia;
-use PiaApi\DataExchange\Transformer\JsonToEntityTransformer;
-use PiaApi\Entity\Pia\PiaTemplate;
-use PiaApi\Entity\Pia\Folder;
-use Swagger\Annotations as Swg;
 use Nelmio\ApiDocBundle\Annotation as Nelmio;
+use PiaApi\DataExchange\Transformer\PiaTransformer;
+use PiaApi\DataHandler\RequestDataHandler;
+use PiaApi\Entity\Pia\Pia;
+use PiaApi\Entity\Pia\Processing;
+use PiaApi\Entity\Pia\Structure;
+use PiaApi\Exception\DataImportException;
+use PiaApi\Entity\Pia\Answer;
+use PiaApi\Entity\Pia\Measure;
+use PiaApi\Entity\Pia\Evaluation;
+use PiaApi\Entity\Pia\Comment;
+use PiaApi\Entity\Pia\Attachment;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as Swg;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class PiaController extends RestController
 {
     /**
-     * @var jsonToEntityTransformer
+     * @var PiaTransformer
      */
-    protected $jsonToEntityTransformer;
+    protected $piaTransformer;
 
     public function __construct(
         PropertyAccessorInterface $propertyAccessor,
-        JsonToEntityTransformer $jsonToEntityTransformer
+        PiaTransformer $piaTransformer
     ) {
         parent::__construct($propertyAccessor);
-        $this->jsonToEntityTransformer = $jsonToEntityTransformer;
+        $this->piaTransformer = $piaTransformer;
     }
 
     /**
-     * @Swg\Tag(name="PIA")
+     * Lists all PIAs.
+     *
+     * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Get("/pias")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -59,22 +75,43 @@ class PiaController extends RestController
      */
     public function listAction(Request $request)
     {
-        $structure = $this->getUser()->getStructure();
+        $processing = $this->getResource($request->get('processing'), Processing::class);
 
-        $criteria = array_merge($this->extractCriteria($request), ['structure' => $structure]);
-        $collection = $this->getRepository()->findBy($criteria);
+        $criteria = [
+            'processing' => $processing->getId(),
+            // 'structure'  => $processing->getFolder()->getStructureId(),
+        ];
+
+        $collection = $this->getRepository()->findBy($criteria, ['createdAt' => 'DESC']);
 
         return $this->view($collection, Response::HTTP_OK);
     }
 
     /**
-     * @Swg\Tag(name="PIA")
+     * Shows one PIA by its ID.
+     *
+     * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Get("/pias/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Returns one PIA by its id",
+     *     description="Returns one PIA",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
@@ -92,19 +129,70 @@ class PiaController extends RestController
             return $this->view($pia, Response::HTTP_NOT_FOUND);
         }
 
-        $this->canAccessResourceOr403($pia);
+        //$this->canAccessResourceOr403($pia);
 
         return $this->view($pia, Response::HTTP_OK);
     }
 
     /**
-     * @Swg\Tag(name="PIA")
+     * Creates a PIA.
+     *
+     * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Post("/pias")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="PIA",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={
+     *             "author_name",
+     *             "evaluator_name",
+     *             "validator_name",
+     *             "status",
+     *             "dpo_status",
+     *             "dpo_opinion",
+     *             "concerned_people_opinion",
+     *             "concerned_people_status",
+     *             "concerned_people_searched_opinion",
+     *             "concerned_people_searched_content",
+     *             "rejection_reason",
+     *             "applied_adjustments",
+     *             "dpos_names",
+     *             "people_names",
+     *             "processing"
+     *         },
+     *         @Swg\Property(property="author_name", type="string"),
+     *         @Swg\Property(property="evaluator_name", type="string"),
+     *         @Swg\Property(property="validator_name", type="string"),
+     *         @Swg\Property(property="status", type="number"),
+     *         @Swg\Property(property="dpo_status", type="number"),
+     *         @Swg\Property(property="dpo_opinion", type="string"),
+     *         @Swg\Property(property="concerned_people_opinion", type="string"),
+     *         @Swg\Property(property="concerned_people_status", type="number"),
+     *         @Swg\Property(property="concerned_people_searched_opinion", type="boolean"),
+     *         @Swg\Property(property="concerned_people_searched_content", type="string"),
+     *         @Swg\Property(property="rejection_reason", type="string"),
+     *         @Swg\Property(property="applied_adjustments", type="string"),
+     *         @Swg\Property(property="dpos_names", type="string"),
+     *         @Swg\Property(property="people_names", type="string"),
+     *         @Swg\Property(property="processing", type="object", required={"id"}, @Swg\Property(property="id", type="number"))
+     *     ),
+     *     description="The PIA content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Creates a PIA",
+     *     description="Returns the newly created PIA",
      *     @Swg\Schema(
      *         type="object",
      *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
@@ -117,77 +205,85 @@ class PiaController extends RestController
      */
     public function createAction(Request $request)
     {
+        $processingId = $request->get('processing', ['id' => -1])['id'];
+        $structureId = $request->get('processing')['folder']['structure_id'];
+
+        $structure = $this->getResource($structureId, Structure::class);
+        $processing = $this->getResource($processingId, Processing::class);
+
+        if ($processing === null) {
+            return $this->view(['You must set Processing to create PIA'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($structure === null) {
+            return $this->view(['You must set Structure to create PIA'], Response::HTTP_BAD_REQUEST);
+        }
+
         $pia = $this->newFromRequest($request);
 
-        if ($request->get('folder') !== null) {
-            $folderId = $request->get('folder')['id'];
-            $folder = $this->getResource($folderId, Folder::class);
-        } else {
-            $folder = $this->getUser()->getStructure() ? $this->getUser()->getStructure()->getRootFolder() : null;
-        }
-        $pia->setFolder($folder);
-        $pia->setStructure($this->getUser()->getStructure());
+        $pia->setProcessing($processing);
+        $pia->setStructure($structure);
+
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
     }
 
     /**
-     * @Swg\Tag(name="PIA")
+     * Updates a PIA.
      *
-     * @FOSRest\Post("/pias/new-from-template/{id}")
-     *
-     * @Swg\Response(
-     *     response=200,
-     *     description="Create a PIA from a template",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
-     *     )
-     * )
-     *
-     * @Security("is_granted('CAN_CREATE_PIA')")
-     *
-     * @return array
-     */
-    public function createFromTemplateAction(Request $request, $id)
-    {
-        /** @var PiaTemplate $piaTemplate */
-        $piaTemplate = $this->getDoctrine()->getRepository(PiaTemplate::class)->find($id);
-        if ($piaTemplate === null) {
-            return $this->view($piaTemplate, Response::HTTP_NOT_FOUND);
-        }
-
-        $pia = $this->jsonToEntityTransformer->transform($piaTemplate->getData());
-        if (($folderId = $request->get('folder')) !== null) {
-            $folder = $this->getResource($request->get('folder')['id'], Folder::class);
-        } else {
-            $folder = $this->getUser()->getStructure() ? $this->getUser()->getStructure()->getRootFolder() : null;
-        }
-        $pia->setFolder($folder);
-        $pia->setName($request->get('name', $pia->getName()));
-        $pia->setAuthorName($request->get('author_name', $pia->getAuthorName()));
-        $pia->setEvaluatorName($request->get('evaluator_name', $pia->getEvaluatorName()));
-        $pia->setValidatorName($request->get('validator_name', $pia->getValidatorName()));
-        $pia->setStructure($this->getUser()->getStructure());
-        $this->persist($pia);
-
-        return $this->view($pia, Response::HTTP_OK);
-    }
-
-    /**
-     * @Swg\Tag(name="PIA")
-     *
-     * @Swg\Response(
-     *     response=200,
-     *     description="Update a PIA",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
-     *     )
-     * )
+     * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Put("/pias/{id}", requirements={"id"="\d+"})
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="PIA",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="author_name", type="string"),
+     *         @Swg\Property(property="evaluator_name", type="string"),
+     *         @Swg\Property(property="validator_name", type="string"),
+     *         @Swg\Property(property="status", type="number"),
+     *         @Swg\Property(property="dpo_status", type="number"),
+     *         @Swg\Property(property="dpo_opinion", type="string"),
+     *         @Swg\Property(property="concerned_people_opinion", type="string"),
+     *         @Swg\Property(property="concerned_people_status", type="number"),
+     *         @Swg\Property(property="concerned_people_searched_opinion", type="boolean"),
+     *         @Swg\Property(property="concerned_people_searched_content", type="string"),
+     *         @Swg\Property(property="rejection_reason", type="string"),
+     *         @Swg\Property(property="applied_adjustments", type="string"),
+     *         @Swg\Property(property="dpos_names", type="string"),
+     *         @Swg\Property(property="people_names", type="string"),
+     *         @Swg\Property(property="processing", type="object", required={"id"}, @Swg\Property(property="id", type="number"))
+     *     ),
+     *     description="The PIA content"
+     * )
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns the updated PIA",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *     )
+     * )
+     *
      *
      * @Security("is_granted('CAN_EDIT_PIA')")
      *
@@ -199,23 +295,22 @@ class PiaController extends RestController
         $this->canAccessResourceOr403($pia);
 
         $updatableAttributes = [
-            'name'                              => 'string',
-            'author_name'                       => 'string',
-            'evaluator_name'                    => 'string',
-            'validator_name'                    => 'string',
-            'folder'                            => Folder::class,
-            'dpo_status'                        => 'int',
-            'concerned_people_status'           => 'int',
-            'status'                            => 'int',
-            'dpo_opinion'	                      => 'string',
-            'concerned_people_opinion'	         => 'string',
-            'concerned_people_searched_opinion' => 'boolean',
-            'concerned_people_searched_content' => 'string',
-            'rejection_reason'	                 => 'string',
-            'applied_adjustments'	              => 'string',
-            'dpos_names'                        => 'string',
-            'people_names'                      => 'string',
-            'type'                              => 'string',
+            'author_name'                        => RequestDataHandler::TYPE_STRING,
+            'evaluator_name'                     => RequestDataHandler::TYPE_STRING,
+            'validator_name'                     => RequestDataHandler::TYPE_STRING,
+            'dpo_status'                         => RequestDataHandler::TYPE_INT,
+            'concerned_people_status'            => RequestDataHandler::TYPE_INT,
+            'status'                             => RequestDataHandler::TYPE_INT,
+            'dpo_opinion'                        => RequestDataHandler::TYPE_STRING,
+            'concerned_people_opinion'           => RequestDataHandler::TYPE_STRING,
+            'concerned_people_searched_opinion'  => RequestDataHandler::TYPE_BOOL,
+            'concerned_people_searched_content'  => RequestDataHandler::TYPE_STRING,
+            'rejection_reason'                   => RequestDataHandler::TYPE_STRING,
+            'applied_adjustments'                => RequestDataHandler::TYPE_STRING,
+            'dpos_names'                         => RequestDataHandler::TYPE_STRING,
+            'people_names'                       => RequestDataHandler::TYPE_STRING,
+            'type'                               => RequestDataHandler::TYPE_STRING,
+            'processing'                         => Processing::class,
         ];
 
         $this->mergeFromRequest($pia, $updatableAttributes, $request);
@@ -226,17 +321,30 @@ class PiaController extends RestController
     }
 
     /**
-     * @Swg\Tag(name="PIA")
+     * Deletes a PIA.
+     *
+     * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Delete("/pias/{id}", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Delete a PIA",
-     *     @Swg\Schema(
-     *         type="object",
-     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
-     *     )
+     *     description="Empty content"
      * )
      *
      * @Security("is_granted('CAN_DELETE_PIA')")
@@ -253,13 +361,38 @@ class PiaController extends RestController
     }
 
     /**
-     * @Swg\Tag(name="PIA")
+     * Imports a PIA.
+     *
+     * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Post("/pias/import")
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="PIA Data",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="pia", type="object", ref=@Nelmio\Model(type=Pia::class, groups={"Default"})),
+     *         @Swg\Property(property="answers", type="array", @Swg\Items(ref=@Nelmio\Model(type=Answer::class, groups={"Default"}))),
+     *         @Swg\Property(property="measures", type="array", @Swg\Items(ref=@Nelmio\Model(type=Measure::class, groups={"Default"}))),
+     *         @Swg\Property(property="evaluations", type="array", @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))),
+     *         @Swg\Property(property="comments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Comment::class, groups={"Default"}))),
+     *         @Swg\Property(property="attachments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})))
+     *     ),
+     *     description="The PIA content"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Import a PIA"
+     *     description="Returns the imported PIA"
      * )
      *
      * @Security("is_granted('CAN_IMPORT_PIA')")
@@ -268,30 +401,55 @@ class PiaController extends RestController
      */
     public function importAction(Request $request)
     {
-        $importData = $request->get('data', null);
-        if ($importData === null) {
-            return $this->view($importData, Response::HTTP_BAD_REQUEST);
+        $data = $request->get('pia');
+        $processing = $this->getResource($request->get('processing_id'), Processing::class);
+
+        $this->piaTransformer->setProcessing($processing);
+
+        try {
+            $pia = $this->piaTransformer->jsonToPia($data);
+        } catch (DataImportException $ex) {
+            return $this->view(unserialize($ex->getMessage()), Response::HTTP_PRECONDITION_FAILED);
         }
 
-        $pia = $this->jsonToEntityTransformer->transform($importData);
-        $pia->setStructure($this->getUser()->getStructure());
-        $pia->setFolder($this->getUser()->getStructure()->getRootFolder());
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);
     }
 
     /**
-     * @Swg\Tag(name="PIA")
+     * Exports a PIA.
+     *
+     * @Swg\Tag(name="Pia")
      *
      * @FOSRest\Get("/pias/{id}/export", requirements={"id"="\d+"})
      *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     *
      * @Swg\Response(
      *     response=200,
-     *     description="Export a PIA",
+     *     description="Returns an export format of PIA",
      *     @Swg\Schema(
      *         type="object",
-     *         ref=@Nelmio\Model(type=Pia::class, groups={"Default"})
+     *         @Swg\Property(property="pia", type="object", ref=@Nelmio\Model(type=Pia::class, groups={"Default"})),
+     *         @Swg\Property(property="answers", type="array", @Swg\Items(ref=@Nelmio\Model(type=Answer::class, groups={"Default"}))),
+     *         @Swg\Property(property="measures", type="array", @Swg\Items(ref=@Nelmio\Model(type=Measure::class, groups={"Default"}))),
+     *         @Swg\Property(property="evaluations", type="array", @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))),
+     *         @Swg\Property(property="comments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Comment::class, groups={"Default"}))),
+     *         @Swg\Property(property="attachments", type="array", @Swg\Items(ref=@Nelmio\Model(type=Attachment::class, groups={"Default"})))
      *     )
      * )
      *
@@ -301,14 +459,12 @@ class PiaController extends RestController
      */
     public function exportAction(Request $request, $id)
     {
-        $this->canAccessRouteOr403();
-
-        $pia = $this->getRepository()->find($id);
+        $pia = $this->getResource($id);
         $this->canAccessResourceOr403($pia);
 
-        $serializedPia = $this->jsonToEntityTransformer->reverseTransform($pia);
+        $json = $this->piaTransformer->piaToJson($pia);
 
-        return new Response($serializedPia, Response::HTTP_OK);
+        return new Response($json, Response::HTTP_OK);
     }
 
     protected function getEntityClass()
@@ -321,8 +477,13 @@ class PiaController extends RestController
         if (!$resource instanceof Pia) {
             throw new AccessDeniedHttpException();
         }
+        $resourceStructure = $resource->getStructure();
+        $structures = array_merge(
+            [$this->getUser()->getStructure()],
+            $this->getUser()->getProfile()->getPortfolioStructures()
+        );
 
-        if ($resource->getStructure() !== $this->getUser()->getStructure()) {
+        if (!in_array($resourceStructure, $structures)) {
             throw new AccessDeniedHttpException();
         }
     }

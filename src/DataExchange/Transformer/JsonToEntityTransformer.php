@@ -55,8 +55,6 @@ class JsonToEntityTransformer
             $objectAsArray = $this->validator->parseAndValidate($jsonOrArray);
         }
 
-        // dump($objectAsArray);
-
         // Creates the PIA
 
         /** @var Pia $pia */
@@ -81,7 +79,7 @@ class JsonToEntityTransformer
             /** @var Answer $piaAnswer */
             $piaAnswer = $this->serializer->fromArray(array_replace_recursive(DataExchangeDescriptor::STRUCTURE['answers'], $answer), Answer::class);
             $data = $piaAnswer->getData();
-            if (count($data['list']) > 0) {
+            if (is_array($data['list']) && count($data['list']) > 0) {
                 // Dirty hack to remove numeric array keys that produce a json object instead of json array
                 $data['list'] = array_values($data['list']);
             }
@@ -156,5 +154,15 @@ class JsonToEntityTransformer
         $serializedPia = $this->serializer->serialize($exportObject, 'json', $context);
 
         return $serializedPia;
+    }
+
+    public function entityToJson($object): string
+    {
+        $context = SerializationContext::create();
+        $context->setGroups(['Export']);
+
+        $serializedObject = $this->serializer->serialize($object, 'json', $context);
+
+        return $serializedObject;
     }
 }

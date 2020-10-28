@@ -18,7 +18,6 @@ use PiaApi\Entity\Pia\Folder;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\Entity\Pia\Structure;
 use PiaApi\Migrations\Lib\MigrationTrait;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -374,68 +373,49 @@ class Version1_0_0 extends AbstractMigration implements ContainerAwareInterface
 
     protected function Version20180530095437_up(Schema $schema): void
     {
-        // Create and associate mandatory rootFolders for each structures
+        // Fetch all structures
+        $structures = $this->connection->executeQuery('SELECT id FROM pia_structure')->fetchAll();
 
-        /** @var RegistryInterface $doctrine */
-        $doctrine = $this->container->get('doctrine');
-        $structures = $doctrine->getRepository(Structure::class)->findAll();
-
-        /** @var Structure $structure */
         foreach ($structures as $structure) {
-            if ($structure->getRootFolder() === null) {
-                $rootFolder = new Folder('root', $structure);
-                $doctrine->getManager()->persist($rootFolder);
-                $doctrine->getManager()->flush($rootFolder);
-            }
+            // Creating default root folder for each structure
+            $this->connection->executeQuery('INSERT INTO pia_folder(id, name, structure_id) VALUES (nextval(\'pia_folder_id_seq\'), \'root\',' . $structure['id'] . ')');
         }
     }
 
     protected function Version20180530095437_down(Schema $schema): void
     {
-        // Dissociate mandatory rootFolders for each structures
-
-        /** @var RegistryInterface $doctrine */
-        $doctrine = $this->container->get('doctrine');
-        $structures = $doctrine->getRepository(Structure::class)->findAll();
-
-        /** @var Structure $structure */
-        foreach ($structures as $structure) {
-            if (($rootFolder = $structure->getRootFolder()) !== null) {
-                $rootFolder->setStructure(null);
-                $doctrine->getManager()->flush($rootFolder);
-            }
-        }
+        // Deleting folders of structures
+        $this->connection->executeQuery('DELETE FROM pia_folder WHERE structure_id IS NOT NULL');
     }
 
     protected function Version20180605082149_up(Schema $schema): void
     {
-        /** @var RegistryInterface $doctrine */
-        $doctrine = $this->container->get('doctrine');
-        $structures = $doctrine->getRepository(Structure::class)->findAll();
+        // Fetch pias and folder ids
+        $pias = $this->connection->executeQuery('
+            SELECT
+                p.id, 
+                f.id as folderId 
+            FROM 
+                pia p 
+            LEFT JOIN 
+                pia_structure s ON 
+                    p.structure_id = s.id 
+            LEFT JOIN 
+                pia_folder f ON 
+                    s.id = f.structure_id 
+                    AND 
+                    f.tree_root = f.id
+            WHERE
+                s.id IS NOT NULL
+        ')->fetchAll();
 
-        /** @var Structure $structure */
-        foreach ($structures as $structure) {
-            $rootFolder = $structure->getRootFolder();
-            /** @var Pia $pia */
-            foreach ($structure->getPias() as $pia) {
-                $pia->setFolder($rootFolder);
-            }
+        foreach ($pias as $pia) {
+            $this->connection->executeQuery('UPDATE pia SET folder_id = ' . $pia['folderId'] . ' WHERE id = ' . $pia['id']);
         }
-
-        $doctrine->getManager()->flush();
     }
 
     protected function Version20180605082149_down(Schema $schema): void
     {
-        /** @var RegistryInterface $doctrine */
-        $doctrine = $this->container->get('doctrine');
-        $pias = $doctrine->getRepository(Pia::class)->findAll();
-
-        /** @var Pia $pia */
-        foreach ($pias as $pia) {
-            $pia->setFolder(null);
-        }
-
-        $doctrine->getManager()->flush();
+        $this->connection->executeQuery('UPDATE pia SET folder_id = NULL WHERE folder_id IS NOT NULL');
     }
 }

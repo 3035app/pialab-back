@@ -10,16 +10,39 @@
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\Entity\Pia\UserProfile;
+use Swagger\Annotations as Swg;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserProfileController extends RestController
 {
     /**
+     * Shows the current User's profile.
+     *
+     * @Swg\Tag(name="UserProfile")
+     *
      * @FOSRest\Get("/profile")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns the current User's profile",
+     *     @Swg\Schema(
+     *         type="array",
+     *         @Swg\Items(ref=@Nelmio\Model(type=UserProfile::class, groups={"Default"}))
+     *     )
+     * )
      *
      * @return array
      */
@@ -28,6 +51,37 @@ class UserProfileController extends RestController
         $this->canAccessRouteOr403();
 
         return $this->view($user->getProfile(), Response::HTTP_OK);
+    }
+
+    /**
+     * Shows the current User's profile.
+     *
+     * @Swg\Tag(name="UserProfile")
+     *
+     * @FOSRest\Get("/profile/structures")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns the current User's profile",
+     *     @Swg\Schema(
+     *         type="array",
+     *         @Swg\Items(ref=@Nelmio\Model(type=UserProfile::class, groups={"Default"}))
+     *     )
+     * )
+     *
+     * @return array
+     */
+    public function profileStructuresAction(UserInterface $user = null)
+    {
+        return $this->profileAction($user);
     }
 
     protected function getEntityClass()

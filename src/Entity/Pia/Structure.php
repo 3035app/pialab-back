@@ -10,13 +10,14 @@
 
 namespace PiaApi\Entity\Pia;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use PiaApi\Entity\Pia\Traits\ResourceTrait;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
+use PiaApi\Entity\Pia\Traits\StructureInformationsTrait;
 
 /**
  * @ORM\Entity(repositoryClass="PiaApi\Repository\StructureRepository")
@@ -25,7 +26,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Structure implements Timestampable
 {
     use ResourceTrait,
-        TimestampableEntity;
+        TimestampableEntity,
+        StructureInformationsTrait
+    ;
 
     /**
      * @ORM\Column(name="name", type="string", nullable=false)
@@ -44,6 +47,14 @@ class Structure implements Timestampable
     protected $type;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Portfolio", inversedBy="structures", cascade={"persist"})
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var Portfolio
+     */
+    protected $portfolio;
+
+    /**
      * @ORM\OneToMany(targetEntity="Pia", mappedBy="structure", cascade={"remove"})
      * @JMS\Exclude()
      *
@@ -60,7 +71,7 @@ class Structure implements Timestampable
     protected $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="PiaTemplate", mappedBy="structures")
+     * @ORM\ManyToMany(targetEntity="ProcessingTemplate", mappedBy="structures")
      * @JMS\Exclude()
      *
      * @var Collection
@@ -102,6 +113,24 @@ class Structure implements Timestampable
     }
 
     /**
+     * @return Portfolio
+     */
+    public function getPortfolio(): ?Portfolio
+    {
+        return $this->portfolio;
+    }
+
+    /**
+     * @param Portfolio $portfolio
+     */
+    public function setPortfolio(?Portfolio $portfolio): void
+    {
+        $this->portfolio = $portfolio;
+    }
+
+    /**
+     * @deprecated since 1.4
+     *
      * @return Collection
      */
     public function getPias(): Collection
@@ -110,6 +139,8 @@ class Structure implements Timestampable
     }
 
     /**
+     * @deprecated since 1.4
+     *
      * @param Collection $pias
      */
     public function setPias(Collection $pias): void
@@ -150,7 +181,7 @@ class Structure implements Timestampable
     }
 
     /**
-     * @return array|PiaTemplate[]
+     * @return array|ProcessingTemplate[]
      */
     public function getTemplates(): array
     {
@@ -158,28 +189,32 @@ class Structure implements Timestampable
     }
 
     /**
-     * @param PiaTemplate $template
+     * @param ProcessingTemplate $template
      *
      * @throws InvalidArgumentException
      */
-    public function addTemplate(PiaTemplate $template): void
+    public function addTemplate(ProcessingTemplate $template): void
     {
         if ($this->templates->contains($template)) {
-            throw new InvalidArgumentException(sprintf('Template « %s » is already in THIS', $template));
+            throw new InvalidArgumentException(
+                sprintf('The ProcessingTemplate « %s » is already allowed for Structure « %s »', $template->getName(), $this->name)
+            );
         }
         $template->addStructure($this);
         $this->templates->add($template);
     }
 
     /**
-     * @param PiaTemplate $template
+     * @param ProcessingTemplate $template
      *
      * @throws InvalidArgumentException
      */
-    public function removeTemplate(PiaTemplate $template): void
+    public function removeTemplate(ProcessingTemplate $template): void
     {
         if (!$this->templates->contains($template)) {
-            throw new InvalidArgumentException(sprintf('Template « %s » is not in THIS', $template));
+            throw new InvalidArgumentException(
+                sprintf('The ProcessingTemplate « %s » is not allowed for Structure « %s » and so cannot be disociated', $template->getName(), $this->name)
+                );
         }
         $template->removeStructure($this);
         $this->templates->removeElement($template);
@@ -215,5 +250,13 @@ class Structure implements Timestampable
         });
 
         return $roots->count() > 0 ? $roots->first() : null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProcessings()
+    {
+        return $this->getRootFolder()->flatCollectProcessings();
     }
 }

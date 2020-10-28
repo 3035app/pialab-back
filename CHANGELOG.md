@@ -1,6 +1,86 @@
 # Change Log
 
-## [1.2.6](https://github.com/pia-lab/pialab-back/tree/1.2.6) (2018-08-28)
+## [1.4.18](https://github.com/pia-lab/pialab-back/tree/1.4.18) (2018-10-02)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.17...1.4.18)
+
+## [1.4.17](https://github.com/pia-lab/pialab-back/tree/1.4.17) (2018-10-02)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.16...1.4.17)
+
+**Merged pull requests:**
+
+- Add processing attachments [\#84](https://github.com/pia-lab/pialab-back/pull/84) ([RomainSanchez](https://github.com/RomainSanchez))
+
+## [1.4.16](https://github.com/pia-lab/pialab-back/tree/1.4.16) (2018-09-26)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.15...1.4.16)
+
+## [1.4.15](https://github.com/pia-lab/pialab-back/tree/1.4.15) (2018-09-26)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.14...1.4.15)
+
+## [1.4.14](https://github.com/pia-lab/pialab-back/tree/1.4.14) (2018-09-25)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.13...1.4.14)
+
+**Merged pull requests:**
+
+- Add ProcessingComment entity and API controller [\#82](https://github.com/pia-lab/pialab-back/pull/82) ([RomainSanchez](https://github.com/RomainSanchez))
+- Add Import and Export for processing entity [\#59](https://github.com/pia-lab/pialab-back/pull/59) ([Fabrice-li](https://github.com/Fabrice-li))
+
+## [1.4.13](https://github.com/pia-lab/pialab-back/tree/1.4.13) (2018-09-18)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.10...1.4.13)
+
+**Merged pull requests:**
+
+- Add missing properties to Processing entity [\#80](https://github.com/pia-lab/pialab-back/pull/80) ([RomainSanchez](https://github.com/RomainSanchez))
+- Add Structure detailled informations [\#77](https://github.com/pia-lab/pialab-back/pull/77) ([PapsOu](https://github.com/PapsOu))
+- Add Processing context\_of\_implementation field [\#75](https://github.com/pia-lab/pialab-back/pull/75) ([PapsOu](https://github.com/PapsOu))
+- Add processing status for validation [\#74](https://github.com/pia-lab/pialab-back/pull/74) ([PapsOu](https://github.com/PapsOu))
+- Add recipients to Processing [\#73](https://github.com/pia-lab/pialab-back/pull/73) ([PapsOu](https://github.com/PapsOu))
+
+## [1.4.10](https://github.com/pia-lab/pialab-back/tree/1.4.10) (2018-09-14)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.9...1.4.10)
+
+**Closed issues:**
+
+- error during installation [\#79](https://github.com/pia-lab/pialab-back/issues/79)
+
+**Merged pull requests:**
+
+- Replace 'pia-templates' by 'processing-templates' in api\_pattern [\#76](https://github.com/pia-lab/pialab-back/pull/76) ([GlennCavarle](https://github.com/GlennCavarle))
+- Change Processing models for designated\_controller fields [\#72](https://github.com/pia-lab/pialab-back/pull/72) ([PapsOu](https://github.com/PapsOu))
+
+## [1.4.9](https://github.com/pia-lab/pialab-back/tree/1.4.9) (2018-09-07)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.8...1.4.9)
+
+**Merged pull requests:**
+
+- Move templates from pia to processing [\#71](https://github.com/pia-lab/pialab-back/pull/71) ([GlennCavarle](https://github.com/GlennCavarle))
+- Fix naming between processing and pia [\#69](https://github.com/pia-lab/pialab-back/pull/69) ([GlennCavarle](https://github.com/GlennCavarle))
+- Add some @deprecated annotations [\#68](https://github.com/pia-lab/pialab-back/pull/68) ([GlennCavarle](https://github.com/GlennCavarle))
+- Remove PIA name field [\#67](https://github.com/pia-lab/pialab-back/pull/67) ([PapsOu](https://github.com/PapsOu))
+- Fix template error when the type of structure is not defined [\#66](https://github.com/pia-lab/pialab-back/pull/66) ([GlennCavarle](https://github.com/GlennCavarle))
+
+## [1.4.8](https://github.com/pia-lab/pialab-back/tree/1.4.8) (2018-09-06)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.7...1.4.8)
+
+## [1.4.7](https://github.com/pia-lab/pialab-back/tree/1.4.7) (2018-09-06)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.6...1.4.7)
+
+**Fixed bugs:**
+
+- Twig error runtime  [\#28](https://github.com/pia-lab/pialab-back/issues/28)
+
+**Closed issues:**
+
+- error when i manage users [\#61](https://github.com/pia-lab/pialab-back/issues/61)
+
+**Merged pull requests:**
+
+- Cascading delete ProcessingDataType when deleting a Processing [\#65](https://github.com/pia-lab/pialab-back/pull/65) ([PapsOu](https://github.com/PapsOu))
+- Add missing required object attributes on parameters [\#64](https://github.com/pia-lab/pialab-back/pull/64) ([PapsOu](https://github.com/PapsOu))
+
+## [1.4.6](https://github.com/pia-lab/pialab-back/tree/1.4.6) (2018-08-31)
+[Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.2.6...1.4.6)
+
+## [1.2.6](https://github.com/pia-lab/pialab-back/tree/1.2.6) (2018-08-29)
 [Full Changelog](https://github.com/pia-lab/pialab-back/compare/1.4.5...1.2.6)
 
 ## [1.4.5](https://github.com/pia-lab/pialab-back/tree/1.4.5) (2018-08-28)

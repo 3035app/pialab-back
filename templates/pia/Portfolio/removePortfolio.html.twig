@@ -1,0 +1,21 @@
+{% trans_default_domain 'Pia' %}
+
+{% set portfolio = form.vars.value %}
+
+<div class="ui negative message">
+    <div class="ui clearing basic segment">
+        <div class="header">
+            {{ 'pia.portfolios.modals.remove.title'|trans }}
+        </div>
+        <i style="float:right;">{{ 'pia.portfolios.modals.remove.sub_title'|trans }}</i>
+    </div>
+</div>
+
+{{ form_start(form) }}
+
+{% do 
+    form.submit.setRendered() %}
+
+<input type="submit" class="ui fluid red button" value="{{ 'pia.actions.remove'|trans }}"/>
+
+{{ form_end(form) }}

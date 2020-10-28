@@ -10,16 +10,47 @@
 
 namespace PiaApi\Controller\Pia;
 
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
+use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use PiaApi\Entity\Pia\Evaluation;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as Swg;
+use Symfony\Component\HttpFoundation\Request;
 
 class EvaluationController extends PiaSubController
 {
     /**
+     * Lists all Answers for a specific Treatment.
+     *
+     * @Swg\Tag(name="Evaluation")
+     *
      * @FOSRest\Get("/pias/{piaId}/evaluations")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns all Answers of given Treatment",
+     *     @Swg\Schema(
+     *         type="array",
+     *         @Swg\Items(ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"}))
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_EVALUATION')")
      */
     public function listAction(Request $request, $piaId)
@@ -28,7 +59,43 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Shows one Evaluation by its ID and specific Treatment.
+     *
+     * @Swg\Tag(name="Evaluation")
+     *
      * @FOSRest\Get("/pias/{piaId}/evaluations/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Evaluation"
+     * )
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns one Evaluation",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_SHOW_EVALUATION')")
      */
     public function showAction(Request $request, $piaId, $id)
@@ -37,7 +104,52 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Creates an Evaluation for a specific Treatment.
+     *
+     * @Swg\Tag(name="Evaluation")
+     *
      * @FOSRest\Post("/pias/{piaId}/evaluations")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="Evaluation",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         required={"action_plan_comment", "evaluation_comment","person_in_charge","reference_to"},
+     *         @Swg\Property(property="action_plan_comment", type="string"),
+     *         @Swg\Property(property="evaluation_comment", type="string"),
+     *         @Swg\Property(property="global_status", type="number"),
+     *         @Swg\Property(property="person_in_charge", type="string"),
+     *         @Swg\Property(property="reference_to", type="string"),
+     *         @Swg\Property(property="status", type="number")
+     *     ),
+     *     description="The Evaluation content"
+     * )
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns the newly created Evaluation",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_CREATE_EVALUATION')")
      */
     public function createAction(Request $request, $piaId)
@@ -46,9 +158,58 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Updates an Evaluation for a specific Treatment.
+     *
+     * @Swg\Tag(name="Evaluation")
+     *
      * @FOSRest\Put("/pias/{piaId}/evaluations/{id}")
-     * @FOSRest\Patch("/pias/{piaId}/evaluations/{id}")
-     * @FOSRest\Post("/pias/{piaId}/evaluations/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Evaluation"
+     * )
+     * @Swg\Parameter(
+     *     name="Evaluation",
+     *     in="body",
+     *     required=true,
+     *     @Swg\Schema(
+     *         type="object",
+     *         @Swg\Property(property="action_plan_comment", type="string"),
+     *         @Swg\Property(property="evaluation_comment", type="string"),
+     *         @Swg\Property(property="global_status", type="number"),
+     *         @Swg\Property(property="person_in_charge", type="string"),
+     *         @Swg\Property(property="reference_to", type="string"),
+     *         @Swg\Property(property="status", type="number")
+     *     ),
+     *     description="The Evaluation content"
+     * )
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Returns the updated Evaluation",
+     *     @Swg\Schema(
+     *         type="object",
+     *         ref=@Nelmio\Model(type=Evaluation::class, groups={"Default"})
+     *     )
+     * )
+     *
      * @Security("is_granted('CAN_EDIT_EVALUATION')")
      */
     public function updateAction(Request $request, $piaId, $id)
@@ -57,7 +218,39 @@ class EvaluationController extends PiaSubController
     }
 
     /**
+     * Deletes an Evaluation for a specific Treatment.
+     *
+     * @Swg\Tag(name="Evaluation")
+     *
      * @FOSRest\Delete("pias/{piaId}/evaluations/{id}")
+     *
+     * @Swg\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     required=true,
+     *     description="The API token. e.g.: Bearer <TOKEN>"
+     * )
+     * @Swg\Parameter(
+     *     name="piaId",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the PIA"
+     * )
+     * @Swg\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Evaluation"
+     * )
+     *
+     * @Swg\Response(
+     *     response=200,
+     *     description="Empty content"
+     * )
+     *
      * @Security("is_granted('CAN_DELETE_EVALUATION')")
      *
      * @return array

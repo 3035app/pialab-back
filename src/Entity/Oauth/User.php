@@ -10,11 +10,15 @@
 
 namespace PiaApi\Entity\Oauth;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use FOS\UserBundle\Model\User as BaseUser;
+use JMS\Serializer\Annotation as JMS;
+use PiaApi\Entity\Pia\Portfolio;
 use PiaApi\Entity\Pia\Structure;
 use PiaApi\Entity\Pia\UserProfile;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="PiaApi\Repository\UserRepository")
@@ -34,12 +38,14 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\Column(name="creationDate", type="datetime")
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $creationDate;
 
     /**
      * @ORM\Column(name="expirationDate", type="datetime")
+     *
+     * @JMS\Type("DateTime")
      *
      * @var \DateTime
      */
@@ -53,7 +59,18 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     protected $locked = false;
 
     /**
+     * Encrypted password. Must be persisted.
+     *
+     * @JMS\Exclude()
+     *
+     * @var string
+     */
+    protected $password;
+
+    /**
      * @ORM\OneToOne(targetEntity="PiaApi\Entity\Pia\UserProfile", mappedBy="user", cascade={"persist", "remove"})
+     *
+     * @JMS\MaxDepth(2)
      *
      * @var bool
      */
@@ -62,6 +79,8 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\ManyToOne(targetEntity="Client", inversedBy="users")
      *
+     * @JMS\MaxDepth(1)
+     *
      * @var Client
      */
     protected $application;
@@ -69,9 +88,24 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\ManyToOne(targetEntity="PiaApi\Entity\Pia\Structure", inversedBy="users")
      *
+     * @JMS\MaxDepth(1)
+     *
      * @var Structure
      */
     protected $structure;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="PiaApi\Entity\Pia\Portfolio", inversedBy="users")
+     * @ORM\JoinTable(
+     *      name="pia_users__portfolios",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_portfolio_id", referencedColumnName="id")}
+     * )
+     * @JMS\Exclude()
+     *
+     * @var Collection
+     */
+    protected $portfolios;
 
     public function __construct(?string $email = null)
     {
@@ -79,9 +113,10 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
         $this->username = $email;
         $this->roles = ['ROLE_USER'];
         $this->creationDate = new \DateTime();
-        $this->expirationDate = new \DateTimeImmutable('+1 Year');
+        $this->expirationDate = new \DateTime('+1 Year');
         $this->enabled = true;
         $this->profile = new UserProfile();
+        $this->portfolios = new ArrayCollection();
     }
 
     /**
@@ -173,6 +208,31 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     public function setUsername($username)
     {
         $this->username = $username;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPortfolios(): array
+    {
+        return $this->portfolios->getValues();
+    }
+
+    public function setPortfolios(iterable $portfolios): void
+    {
+        foreach ($portfolios as $portfolio) {
+            $this->addPortfolio($portfolio);
+        }
+    }
+
+    public function addPortfolio(Portfolio $portfolio)
+    {
+        $this->portfolios->add($portfolio);
+    }
+
+    public function removePortfolio(Portfolio $portfolio): void
+    {
+        $this->portfolios->removeElement($portfolio);
     }
 
     public function eraseCredentials()
@@ -311,6 +371,14 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * @return bool
+     */
+    public function hasStructure(): bool
+    {
+        return $this->structure !== null;
+    }
+
+    /**
      * @return Structure
      */
     public function getStructure(): ?Structure
@@ -341,5 +409,21 @@ class User extends BaseUser implements AdvancedUserInterface, \Serializable
     {
         $profile->setUser($this);
         $this->profile = $profile;
+    }
+
+    public function getPortfolioStructures(): array
+    {
+        $allStructures = new ArrayCollection();
+
+        foreach ($this->portfolios as $portfolio) {
+            $structures = $portfolio->getStructures();
+            foreach ($structures as $structure) {
+                if (!$allStructures->contains($structure)) {
+                    $allStructures->add($structure);
+                }
+            }
+        }
+
+        return $allStructures->toArray();
     }
 }

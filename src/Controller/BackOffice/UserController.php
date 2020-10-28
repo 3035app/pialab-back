@@ -24,6 +24,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class UserController extends BackOfficeAbstractController
 {
@@ -68,26 +69,27 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers", name="manage_users")
-     * @Security("is_granted('CAN_SHOW_USER')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_USER')")
      *
      * @param Request $request
      */
     public function manageUsersAction(Request $request)
     {
+        $userPager = null;
         if ($this->isGranted('CAN_MANAGE_ONLY_OWNED_USERS')) {
             $structure = $this->getUser()->getStructure();
             $userPager = $this->getDoctrine()
               ->getRepository(User::class)
-              ->getPaginatedUsersByStructure($structure);
-
-            $userPage = $request->get('page', 1);
-            $userLimit = $request->get('limit', $userPager->getMaxPerPage());
-
-            $userPager->setMaxPerPage($userLimit);
-            $userPager->setCurrentPage($userPager->getNbPages() < $userPage ? $userPager->getNbPages() : $userPage);
+              ->getReachableUsersPaginated($this->getUser());
         } else {
             $userPager = $this->buildPager($request, User::class);
         }
+
+        $userPage = $request->get('page', 1);
+        $userLimit = $request->get('limit', $userPager->getMaxPerPage());
+
+        $userPager->setMaxPerPage($userLimit);
+        $userPager->setCurrentPage($userPager->getNbPages() < $userPage ? $userPager->getNbPages() : $userPage);
 
         return $this->render('pia/User/manageUsers.html.twig', [
             'users' => $userPager,
@@ -96,7 +98,7 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/addUser", name="manage_users_add_user")
-     * @Security("is_granted('CAN_CREATE_USER')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_CREATE_USER')")
      *
      * @param Request $request
      */
@@ -104,8 +106,9 @@ class UserController extends BackOfficeAbstractController
     {
         $form = $this->createForm(CreateUserForm::class, ['roles' => ['ROLE_USER']], [
             'action'      => $this->generateUrl('manage_users_add_user'),
-            'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') ? false : $this->getUser()->getStructure(),
-            'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') ? false : $this->getUser()->getApplication(),
+            'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES') ? false : $this->getUser()->getStructure(),
+            'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_APPLICATIONS') ? false : $this->getUser()->getApplication(),
+            'redirect'    => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -124,28 +127,26 @@ class UserController extends BackOfficeAbstractController
                 $user->addRole($role);
             }
 
-            $user->getProfile()->setFirstName($userData['profile']['firstName']);
-            $user->getProfile()->setLastName($userData['profile']['lastName']);
-
-            $user->setUsername($this->generateUsername($user));
-            $user->setApplication($userData['application']);
-
-            $this->userService->encodePassword($user, $userData['password']);
-
-            //a ROLE_ADMIN (which contains CAN_MANAGE_ONLY_OWNED_USERS) must have a structure
-            if (!$userData['structure'] && $user->hasRole('ROLE_ADMIN')) {
-                throw new \DomainException('A Functional Administrator must be assigned to a Structure');
-            }
-            $user->setStructure($userData['structure']);
+            $user->setProfile($userData['profile']);
 
             $this->getDoctrine()->getManager()->persist($user);
-            $this->getDoctrine()->getManager()->flush();
+
+            try {
+                $this->getDoctrine()->getManager()->flush();
+            } catch (UniqueConstraintViolationException $e) {
+                $this->addFlash('error', 'pia.flashes.user_emails_must_be_unique');
+
+                return $this->redirect($this->generateUrl('manage_users'));
+            }
 
             if (isset($userData['sendResettingEmail']) && $userData['sendResettingEmail'] === true) {
                 $this->userService->sendResettingEmail($user);
             }
 
-            return $this->redirect($this->generateUrl('manage_users'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_users');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/Layout/form.html.twig', [
@@ -155,7 +156,7 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/editUser/{userId}", name="manage_users_edit_user")
-     * @Security("is_granted('CAN_EDIT_USER')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_EDIT_USER')")
      *
      * @param Request $request
      */
@@ -173,9 +174,11 @@ class UserController extends BackOfficeAbstractController
         }
 
         $form = $this->createForm(EditUserForm::class, $user, [
-            'action'      => $this->generateUrl('manage_users_edit_user', ['userId' => $user->getId()]),
-            'structure'   => $this->isGranted('CAN_MANAGE_STRUCTURES') ? false : $this->getUser()->getStructure(),
-            'application' => $this->isGranted('CAN_MANAGE_APPLICATIONS') ? false : $this->getUser()->getApplication(),
+            'action'       => $this->generateUrl('manage_users_edit_user', ['userId' => $user->getId()]),
+            'structure'    => $this->isGranted('CAN_MANAGE_STRUCTURES') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_STRUCTURES') ? false : $this->getUser()->getStructure(),
+            'application'  => $this->isGranted('CAN_MANAGE_APPLICATIONS') || $this->isGranted('CAN_MANAGE_ONLY_OWNED_APPLICATIONS') ? false : $this->getUser()->getApplication(),
+            'redirect'     => $this->getQueryRedirectUrl($request),
+            'hasPortfolio' => $this->isGranted('CAN_MANAGE_PORTFOLIOS') && $this->roleHierarchy->isGranted($user, 'ROLE_SHARED_DPO'),
         ]);
 
         $form->handleRequest($request);
@@ -186,7 +189,10 @@ class UserController extends BackOfficeAbstractController
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirect($this->generateUrl('manage_users'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_users');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/User/editForm.html.twig', [
@@ -196,7 +202,7 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/removeUser/{userId}", name="manage_users_remove_user")
-     * @Security("is_granted('CAN_DELETE_USER')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_DELETE_USER')")
      *
      * @param Request $request
      */
@@ -212,8 +218,13 @@ class UserController extends BackOfficeAbstractController
             throw new NotFoundHttpException('You cannot delete yourself !');
         }
 
+        if (!$this->roleHierarchy->hasHigherRole($this->getUser(), $user)) {
+            throw new NotFoundHttpException('You cannot delete user with an higher role !');
+        }
+
         $form = $this->createForm(RemoveUserForm::class, $user, [
-            'action' => $this->generateUrl('manage_users_remove_user', ['userId' => $user->getId()]),
+            'action'   => $this->generateUrl('manage_users_remove_user', ['userId' => $user->getId()]),
+            'redirect' => $this->getQueryRedirectUrl($request),
         ]);
 
         $form->handleRequest($request);
@@ -224,7 +235,10 @@ class UserController extends BackOfficeAbstractController
             $this->getDoctrine()->getManager()->remove($user);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirect($this->generateUrl('manage_users'));
+            $customRedirect = $form->get('redirect')->getData();
+            $redirectUrl = $customRedirect ?? $this->generateUrl('manage_users');
+
+            return $this->redirect($redirectUrl);
         }
 
         return $this->render('pia/User/removeUser.html.twig', [
@@ -234,15 +248,13 @@ class UserController extends BackOfficeAbstractController
 
     /**
      * @Route("/manageUsers/sendResetPasswordEmail/{userId}", name="manage_users_send_reset_password_email")
-     * @Security("is_granted('CAN_SHOW_USER')")
+     * @Security("is_granted('CAN_ACCESS_BACK_OFFICE') and is_granted('CAN_SHOW_USER')")
      *
      * @param Request $request
      * @param string  $username
      */
     public function sendResetPasswordEmailAction(Request $request, $userId)
     {
-        $this->canAccess();
-
         $user = $this->userService->getRepository()->find($userId);
 
         if ($user === null) {
@@ -272,13 +284,5 @@ class UserController extends BackOfficeAbstractController
         return $this->render('pia/User/sendResetPasswordEmail.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-    protected function generateUsername(User $user)
-    {
-        $emailParts = explode('@', $user->getEmail());
-        $str = preg_replace('/[^a-z0-9]+/i', ' ', $emailParts[0]);
-
-        return '@' . str_replace(' ', '', ucwords($str));
     }
 }

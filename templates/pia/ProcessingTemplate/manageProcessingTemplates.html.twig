@@ -1,0 +1,154 @@
+{% trans_default_domain 'Pia' %}
+
+{% extends 'pia/Layout/base.html.twig' %}
+
+{% import 'pia/Layout/_macros.html.twig' as macro %}
+
+{% block title %}{{ 'pia.templates.title'|trans }}{% endblock title %}
+
+{% block navbar %}
+    {% include 'pia/Layout/navbar.html.twig' with {
+        'activeItem' : 'pia_templates'
+    } %}
+{% endblock navbar %}
+
+{% block body %}
+
+    <div class="ui grid">
+
+        <div class="twelve wide column">
+
+            <div class="ui segment">
+
+                <h2>
+                    <a href="?limit=1000" class="ui tiny button" style="float:right;">{{ 'pia.actions.display'|trans }} 1000</a>
+                    {{ 'pia.templates.title'|trans }}
+                </h2>
+
+                <div class="table responsive wrapper">
+                    <table class="ui compact striped table">
+                        <thead>
+                            <tr>
+                                <th>{{ 'pia.templates.list.id'|trans }}</th>
+                                <th>{{ 'pia.templates.list.name'|trans }}</th>
+                                <th>{{ 'pia.templates.list.description'|trans }}</th>
+                                <th>{{ 'pia.templates.list.enabled'|trans }}</th>
+                                <th>{{ 'pia.templates.list.data_size'|trans }}</th>
+                                <th>{{ 'pia.templates.list.filename'|trans }}</th>
+                                <th>{{ 'pia.templates.list.created_at'|trans }}</th>
+                                <th>{{ 'pia.templates.list.updated_at'|trans }}</th>
+                                <th><i class="building icon" title="{{ 'pia.templates.list.structures_number'|trans }}"></i></th>
+                                <th><i class="building outline icon" title="{{ 'pia.templates.list.structure_types_number'|trans }}"></i></th>
+                                <th class="right aligned">
+                                    <i class="cog icon"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for template in templates %}
+                                <tr>
+                                    <td>{{ template.id }}</td>
+                                    <td>{{ template.name }}</td>
+                                    <td>
+                                        {% set hyphen = '' %}
+                                        {% if template.description|length > 32 %}
+                                            {% set hyphen = ' <i>[...]</i>' %}
+                                        {% endif %}
+                                        
+                                        {{ (template.description[:32] ~ hyphen)|raw }}
+                                    </td>
+                                    <td>{{ template.isEnabled() ? ('<span class="ui green label">'~'pia.labels.yes'|trans~'</span>')|raw : ('<span class="ui red label">'~'pia.labels.no'|trans~'</span>')|raw }}</td>
+                                    <td>{{ macro.getOctets(template.data) }}</td>
+                                    <td>{{ template.importedFileName }}</td>
+                                    <td>
+                                        {{ template.createdAt|date('d/m/Y H:i')}}
+                                    </td>
+                                    <td>
+                                        {{ template.updatedAt|date('d/m/Y H:i')}}
+                                    </td>
+                                    <td>
+                                        <div class="ui teal label" {% if template.structures|length == 0 %}style="opacity:0.3;"{% endif %}>
+                                            {{ template.structures|length }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui blue label" {% if template.structureTypes|length == 0 %}style="opacity:0.3;"{% endif %}>
+                                            {{ template.structureTypes|length }}
+                                        </div>
+                                    </td>
+                                    <td class="right aligned">
+                                        <div class="ui small buttons">
+                                            <a class="ui green tiny icon button" title="{{ 'pia.actions.edit'|trans }}" data-modal="data-modal" href="{{ path('manage_processing_templates_edit_processing_template', {'templateId':template.id}) }}">
+                                                <i class="pencil icon"></i>
+                                            </a>
+                                            <a class="ui red tiny icon button" title="{{ 'pia.actions.remove'|trans }}" data-modal="data-modal" href="{{ path('manage_processing_templates_remove_processing_template', {'templateId':template.id}) }}">
+                                                <i class="trash icon"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                {{ pagerfanta(templates, 'semantic_ui') }}
+            </div>
+
+        </div>
+
+        <div class="four wide column">
+            <div class="ui segment">
+
+                <h2>{{ 'pia.templates.add.title'|trans }}</h2>
+
+                {{ render(controller('PiaApi\\Controller\\BackOffice\\ProcessingTemplateController:addProcessingTemplateAction')) }}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).on('click', 'a[data-modal]', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            let button = $(e.currentTarget);
+            let url = button.attr('href');
+
+            let modal = $('.ui.modal');
+            modal.hide();
+
+            $.ajax({
+                url: url,
+                success: (html) => {
+                    let modal = $('.ui.modal');
+
+                    modal.find('.header').html(button.attr('title'));
+
+                    modal
+                        .find('.content')
+                        .html(html);
+
+                    modal.find('.content .negative, .content .deny, .content .cancel').on('click', (e) => {
+                        $(e.currentTarget).closest('.ui.modal').modal('hide');
+                    });
+
+                    modal.find('.actions').remove();
+
+                    $('.ui.checkbox').checkbox();
+                    $('.ui.dropdown').dropdown();
+
+                    modal.modal('show');
+                }
+            })
+        });
+    </script>
+{% endblock javascripts %}

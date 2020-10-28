@@ -46,12 +46,11 @@ class WebGuy extends \Codeception\Actor
 
     public function getBaseUrl()
     {
-        dump(getenv('TEST_URL'));
         if (!isset($this->baseurl)) {
-            if (getenv('TEST_URL') === false) {
-                die("Env var TEST_URL is mandatory \n export TEST_URL='/'");
+            $this->baseurl = '';
+            if (getenv('TEST_URL') !== false) {
+                $this->baseurl = getenv('TEST_URL');
             }
-            $this->baseurl = getenv('TEST_URL');
         }
 
         return  $this->baseurl;
@@ -59,8 +58,11 @@ class WebGuy extends \Codeception\Actor
 
     public function getUser()
     {
-        if (getenv('TEST_USER')) {
-            $this->user = getenv('TEST_USER');
+        if (!isset($this->user)) {
+            $this->user = 'ci@pialab.io';
+            if (getenv('TEST_USER')) {
+                $this->user = getenv('TEST_USER');
+            }
         }
 
         return  $this->user;
@@ -68,11 +70,11 @@ class WebGuy extends \Codeception\Actor
 
     public function getPassword()
     {
-        if (getenv('TEST_PASSWORD')) {
-            $this->password = getenv('TEST_PASSWORD');
-        }
-        if (!isset($this->baseurl)) {
+        if (!isset($this->password)) {
             $this->password = '42';
+            if (getenv('TEST_PASSWORD')) {
+                $this->password = getenv('TEST_PASSWORD');
+            }
         }
 
         return  $this->password;
@@ -142,10 +144,13 @@ class WebGuy extends \Codeception\Actor
         return $this->clickOriginal($element);
     }
 
-    public function selectOptionFromSUISelect($selectName, $optionLabel)
+    public function selectOptionFromSUISelect($selectName, $optionLabel, bool $blur = true)
     {
         $this->click('//select[@name="' . $selectName . '"]/ancestor::div[contains(@class,"ui dropdown")]');
         $this->click('//select[@name="' . $selectName . '"]/ancestor::div[contains(@class,"ui dropdown")]/div[contains(@class, "menu")]/div[contains(@class, "item")][contains(text(), "' . str_replace('"', '\"', $optionLabel) . '")]');
+        if ($blur) {
+            $this->click('body'); // Trigger blur event after selecting option
+        }
     }
 
     public function dontSeeNavMenuWithHref($href)

@@ -70,7 +70,7 @@ class UserProfile implements Timestampable
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -78,7 +78,7 @@ class UserProfile implements Timestampable
     /**
      * @param string $firstName
      */
-    public function setFirstName(string $firstName): void
+    public function setFirstName(?string $firstName): void
     {
         $this->firstName = $firstName;
     }
@@ -86,7 +86,7 @@ class UserProfile implements Timestampable
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -94,7 +94,7 @@ class UserProfile implements Timestampable
     /**
      * @param string $lastName
      */
-    public function setLastName(string $lastName): void
+    public function setLastName(?string $lastName): void
     {
         $this->lastName = $lastName;
     }
@@ -134,5 +134,52 @@ class UserProfile implements Timestampable
     public function getRoles()
     {
         return $this->user->getRoles();
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\Type("PiaApi\Entity\Pia\Structure")
+     * @JMS\SerializedName("structure")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return array
+     */
+    public function getStructure()
+    {
+        $structure = $this->user->getStructure();
+
+        return $structure ?: null;
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\Type("array<PiaApi\Entity\Pia\Portfolio>")
+     * @JMS\SerializedName("portfolios")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return array
+     */
+    public function getPortfolios()
+    {
+        return $this->user->getPortfolios();
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\Type("array<PiaApi\Entity\Pia\Structure>")
+     * @JMS\SerializedName("portfolio_structures")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @return array
+     */
+    public function getPortfolioStructures()
+    {
+        $structures = [];
+        $portfolios = $this->getPortfolios();
+        foreach ($portfolios as $portfolio) {
+            $structures = array_merge($structures, $portfolio->getStructures());
+        }
+
+        return array_unique($structures, SORT_REGULAR);
     }
 }

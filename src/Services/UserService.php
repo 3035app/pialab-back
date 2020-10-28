@@ -74,11 +74,17 @@ class UserService extends AbstractService
      * @param string               $password
      * @param Structure|null       $structure
      * @param ClientInterface|null $application
+     * @param string|null          $username
      *
      * @return User
      */
-    public function createUser(string $email, string $password, ?Structure $structure = null, ?ClientInterface $application = null): User
-    {
+    public function createUser(
+        string $email,
+        string $password,
+        ?Structure $structure = null,
+        ?ClientInterface $application = null,
+        ?string $username = null
+    ): User {
         $user = new User($email);
 
         $this->encodePassword($user, $password);
@@ -94,6 +100,8 @@ class UserService extends AbstractService
         if ($application !== null) {
             $user->setApplication($application);
         }
+
+        $user->setUsername($username ?? $this->generateUsername($user));
 
         return $user;
     }
@@ -123,5 +131,21 @@ class UserService extends AbstractService
     {
         $encoder = $this->encoderFactory->getEncoder($user);
         $user->setPassword($encoder->encodePassword($password, $user->getSalt()));
+    }
+
+    /**
+     * Generates a username.
+     *
+     * @param User $user
+     *
+     * @return string
+     */
+    public function generateUsername(User $user): string
+    {
+        // TODO: Check if duplicates already exists in databse before serving a username.
+        $emailParts = explode('@', $user->getEmail());
+        $str = preg_replace('/[^a-z0-9]+/i', ' ', $emailParts[0]);
+
+        return '@' . str_replace(' ', '', ucwords($str));
     }
 }

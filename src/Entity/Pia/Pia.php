@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2018 Libre Informatique
+ * Copyright (C) 2015-2019 Libre Informatique
  *
  * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
@@ -31,6 +31,15 @@ class Pia implements Timestampable
     const TYPE_SIMPLIFIED = 'simplified';
     const TYPE_ADVANCED = 'advanced';
 
+    protected const QUESTIONS = [
+        self::TYPE_SIMPLIFIED => 6,
+        self::TYPE_REGULAR    => 18,
+        self::TYPE_ADVANCED   => 18,
+    ];
+
+    const QUESTION_NUMBER = 18;
+    const OLD_QUESTION_NUMBER = 36;
+
     /**
      * @ORM\Column(type="smallint")
      * @JMS\Groups({"Default", "Export"})
@@ -38,13 +47,7 @@ class Pia implements Timestampable
      * @var int
      */
     protected $status = 0;
-    /**
-     * @ORM\Column(type="string")
-     * @JMS\Groups({"Default", "Export"})
-     *
-     * @var string
-     */
-    protected $name;
+
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -52,6 +55,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $authorName = '';
+
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -59,6 +63,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $evaluatorName = '';
+
     /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Export"})
@@ -66,6 +71,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $validatorName = '';
+
     /**
      * @ORM\Column(type="smallint")
      * @JMS\Groups({"Default", "Export"})
@@ -73,6 +79,7 @@ class Pia implements Timestampable
      * @var int
      */
     protected $dpoStatus = 0;
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -80,6 +87,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $dpoOpinion = '';
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -87,6 +95,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $concernedPeopleOpinion = '';
+
     /**
      * @ORM\Column(type="smallint")
      * @JMS\Groups({"Default", "Export"})
@@ -94,6 +103,7 @@ class Pia implements Timestampable
      * @var int
      */
     protected $concernedPeopleStatus = 0;
+
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -101,6 +111,7 @@ class Pia implements Timestampable
      * @var bool
      */
     protected $concernedPeopleSearchedOpinion;
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -108,6 +119,7 @@ class Pia implements Timestampable
      * @var string
      */
     protected $concernedPeopleSearchedContent;
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
@@ -115,13 +127,14 @@ class Pia implements Timestampable
      * @var string
      */
     protected $rejectionReason = '';
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @JMS\Groups({"Default", "Export"})
      *
      * @var string
      */
-    protected $appliedAdjustements = '';
+    protected $appliedAdjustments = '';
 
     /**
      * @ORM\Column(type="string")
@@ -150,7 +163,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Full", "Export"})
      *
      * @var Collection|Answer[]
      */
@@ -158,7 +171,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Full", "Export"})
      *
      * @var Collection|Comment[]
      */
@@ -166,7 +179,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Full", "Export"})
      *
      * @var Collection|Evaluation[]
      */
@@ -174,7 +187,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Measure", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Full", "Export"})
      *
      * @var Collection|Measure[]
      */
@@ -182,7 +195,7 @@ class Pia implements Timestampable
 
     /**
      * @ORM\OneToMany(targetEntity="Attachment", mappedBy="pia", cascade={"persist","remove"})
-     * @JMS\Groups({"Full"})
+     * @JMS\Groups({"Full", "Export"})
      *
      * @var Collection|Attachment[]
      */
@@ -197,29 +210,21 @@ class Pia implements Timestampable
     protected $structure;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PiaTemplate", inversedBy="pias")
-     * @JMS\Groups({"Full"})
-     *
-     * @var PiaTemplate
-     */
-    protected $template;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Folder", inversedBy="pias")
-     * @JMS\Groups({"Default", "Export"})
-     * @JMS\MaxDepth(1)
-     *
-     * @var Folder
-     */
-    protected $folder;
-
-    /**
      * @ORM\Column(type="string")
      * @JMS\Groups({"Default", "Full"})
      *
      * @var string
      */
     protected $type = self::TYPE_ADVANCED;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Processing", inversedBy="pias")
+     * @JMS\Groups({"Default", "Full"})
+     * @JMS\MaxDepth(1)
+     *
+     * @var Processing
+     */
+    protected $processing;
 
     public function __construct()
     {
@@ -231,6 +236,20 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return int
+     */
+    public function getNumberOfQuestions(): int
+    {
+        $number = 0;
+
+        if (array_key_exists($this->type, self::QUESTIONS)) {
+            $number = self::QUESTIONS[$this->type];
+        }
+
+        return $number;
+    }
+
+    /**
      * @JMS\VirtualProperty
      * @JMS\SerializedName("progress")
      * @JMS\Groups({"Default", "Export"})
@@ -239,17 +258,11 @@ class Pia implements Timestampable
      */
     public function computeProgress(): int
     {
-        $questions = 36;
+        $currentAnswerCount = count($this->answers ?? []);
 
-        if ($this->type == self::TYPE_REGULAR) {
-            $questions = 18;
-        }
+        $progress = round((100 / self::QUESTION_NUMBER) * $currentAnswerCount);
 
-        if ($this->type == self::TYPE_SIMPLIFIED) {
-            $questions = 6;
-        }
-
-        return round((100 / $questions) * count($this->answers ?? []));
+        return $progress;
     }
 
     /**
@@ -266,22 +279,6 @@ class Pia implements Timestampable
     public function setStructure(?Structure $structure): void
     {
         $this->structure = $structure;
-    }
-
-    /**
-     * @return PiaTemplate
-     */
-    public function getTemplate(): ?PiaTemplate
-    {
-        return $this->template;
-    }
-
-    /**
-     * @param PiaTemplate $template
-     */
-    public function setTemplate(?PiaTemplate $template): void
-    {
-        $this->template = $template;
     }
 
     /**
@@ -367,22 +364,6 @@ class Pia implements Timestampable
     /**
      * @return string
      */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
     public function getAuthorName(): string
     {
         return $this->authorName;
@@ -429,19 +410,11 @@ class Pia implements Timestampable
     }
 
     /**
-     * @return Folder
+     * @return int
      */
-    public function getFolder(): ?Folder
+    public function getDpoStatus(): int
     {
-        return $this->folder;
-    }
-
-    /**
-     * @param Folder $folder
-     */
-    public function setFolder(?Folder $folder): void
-    {
-        $this->folder = $folder;
+        return $this->dpoStatus;
     }
 
     /**
@@ -453,11 +426,35 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusName(): string
+    {
+        return PiaStatus::getStatusName($this->status);
+    }
+
+    /**
      * @param int $status
      */
     public function setStatus(?int $status): void
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return int
+     */
+    public function getConcernedPeopleStatus(): int
+    {
+        return $this->concernedPeopleStatus;
     }
 
     /**
@@ -469,11 +466,27 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return string|null
+     */
+    public function getDpoOpinion(): ?string
+    {
+        return $this->dpoOpinion;
+    }
+
+    /**
      * @param string $dpoOpinion
      */
     public function setDpoOpinion(?string $dpoOpinion): void
     {
         $this->dpoOpinion = $dpoOpinion;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getConcernedPeopleOpinion(): ?string
+    {
+        return $this->concernedPeopleOpinion;
     }
 
     /**
@@ -485,11 +498,27 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return string|null
+     */
+    public function getConcernedPeopleSearchedContent(): ?string
+    {
+        return $this->concernedPeopleSearchedContent;
+    }
+
+    /**
      * @param string $concernedPeopleSearchedContent
      */
     public function setConcernedPeopleSearchedContent(?string $concernedPeopleSearchedContent): void
     {
         $this->concernedPeopleSearchedContent = $concernedPeopleSearchedContent;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRejectionReason(): ?string
+    {
+        return $this->rejectionReason;
     }
 
     /**
@@ -501,11 +530,27 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return string|null
+     */
+    public function getAppliedAdjustments(): ?string
+    {
+        return $this->appliedAdjustments;
+    }
+
+    /**
      * @param string $appliedAdjustments
      */
     public function setAppliedAdjustments(?string $appliedAdjustments): void
     {
         $this->appliedAdjustments = $appliedAdjustments;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDposNames(): string
+    {
+        return $this->dposNames;
     }
 
     /**
@@ -517,11 +562,27 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return string
+     */
+    public function getPeopeNames(): string
+    {
+        return $this->peopleNames;
+    }
+
+    /**
      * @param string $peopleNames
      */
     public function setPeopleNames(?string $peopleNames): void
     {
         $this->peopleNames = $peopleNames;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getConcernedPeopleSearchedOpinion(): bool
+    {
+        return $this->concernedPeopleSearchedOpinion;
     }
 
     /**
@@ -533,10 +594,50 @@ class Pia implements Timestampable
     }
 
     /**
+     * @return bool
+     */
+    public function getIsExample(): bool
+    {
+        return $this->isExample;
+    }
+
+    /**
+     * @param bool
+     */
+    public function setIsExample(bool $example)
+    {
+        $this->isExample = $example;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
      * @param string $type
      */
     public function setType(?string $type): void
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return Processing
+     */
+    public function getProcessing(): Processing
+    {
+        return $this->processing;
+    }
+
+    /**
+     * @param Processing $processing
+     */
+    public function setProcessing(Processing $processing): void
+    {
+        $this->processing = $processing;
     }
 }
