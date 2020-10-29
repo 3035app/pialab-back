@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2018 Libre Informatique
+ * Copyright (C) 2015-2020 C-Labs
  *
  * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
