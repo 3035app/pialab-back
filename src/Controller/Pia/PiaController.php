@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2018 Libre Informatique
+ * Copyright (C) 2015-2019 Libre Informatique
  *
  * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
@@ -16,6 +16,7 @@ use PiaApi\DataExchange\Transformer\PiaTransformer;
 use PiaApi\DataHandler\RequestDataHandler;
 use PiaApi\Entity\Pia\Pia;
 use PiaApi\Entity\Pia\Processing;
+use PiaApi\Entity\Pia\Structure;
 use PiaApi\Exception\DataImportException;
 use PiaApi\Entity\Pia\Answer;
 use PiaApi\Entity\Pia\Measure;
@@ -74,9 +75,13 @@ class PiaController extends RestController
      */
     public function listAction(Request $request)
     {
-        $structure = $this->getUser()->getStructure();
+        $processing = $this->getResource($request->get('processing'), Processing::class);
 
-        $criteria = array_merge($this->extractCriteria($request), ['structure' => $structure]);
+        $criteria = [
+            'processing' => $processing->getId(),
+            // 'structure'  => $processing->getFolder()->getStructureId(),
+        ];
+
         $collection = $this->getRepository()->findBy($criteria, ['createdAt' => 'DESC']);
 
         return $this->view($collection, Response::HTTP_OK);
@@ -124,7 +129,7 @@ class PiaController extends RestController
             return $this->view($pia, Response::HTTP_NOT_FOUND);
         }
 
-        $this->canAccessResourceOr403($pia);
+        //$this->canAccessResourceOr403($pia);
 
         return $this->view($pia, Response::HTTP_OK);
     }
@@ -200,18 +205,25 @@ class PiaController extends RestController
      */
     public function createAction(Request $request)
     {
-        $pia = $this->newFromRequest($request);
-        $pia->setStructure($this->getUser()->getStructure());
-
         $processingId = $request->get('processing', ['id' => -1])['id'];
+        $structureId = $request->get('processing')['folder']['structure_id'];
 
+        $structure = $this->getResource($structureId, Structure::class);
         $processing = $this->getResource($processingId, Processing::class);
 
         if ($processing === null) {
             return $this->view(['You must set Processing to create PIA'], Response::HTTP_BAD_REQUEST);
         }
 
+        if ($structure === null) {
+            return $this->view(['You must set Structure to create PIA'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $pia = $this->newFromRequest($request);
+
         $pia->setProcessing($processing);
+        $pia->setStructure($structure);
+
         $this->persist($pia);
 
         return $this->view($pia, Response::HTTP_OK);

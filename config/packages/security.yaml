@@ -51,13 +51,18 @@ security:
             - CAN_SHOW_EVALUATION
             - CAN_SHOW_ANSWER
             - CAN_SHOW_COMMENT
+            - CAN_SHOW_ATTACHMENT
 
         CAN_MANAGE_PROCESSINGS:
             - CAN_SHOW_PROCESSING
             - CAN_CREATE_PROCESSING
             - CAN_EDIT_PROCESSING
             - CAN_DELETE_PROCESSING
-
+        
+        CAN_EDIT_PROCESSING:
+            - CAN_MOVE_PROCESSING
+            - CAN_EDIT_CARD_PROCESSING
+        
         CAN_MANAGE_PIAS:
             - CAN_SHOW_PIA
             - CAN_CREATE_PIA
@@ -93,7 +98,6 @@ security:
             - CAN_CREATE_ATTACHMENT
             - CAN_EDIT_ATTACHMENT
             - CAN_DELETE_ATTACHMENT
-
 
         CAN_MANAGE_USERS:
             - CAN_SHOW_USER
@@ -131,15 +135,21 @@ security:
             - ROLE_USER
             - CAN_MANAGE_MEASURES
             - CAN_MANAGE_ANSWERS
-            - CAN_MANAGE_COMMENTS
-            - CAN_MANAGE_ATTACHMENTS
-            - CAN_MANAGE_EVALUATIONS
+            - CAN_EDIT_PROCESSING
+            - CAN_EDIT_PIA
+            - CAN_CREATE_COMMENT
+            - CAN_CREATE_ATTACHMENT
 
         ROLE_DPO:
-            - ROLE_CONTROLLER
-            - CAN_MANAGE_PROCESSINGS
-            - CAN_MANAGE_PIAS
-            - CAN_ACCESS_BACK_OFFICE
+            - ROLE_USER
+            - CAN_CREATE_PROCESSING
+            - CAN_DELETE_PROCESSING
+            - CAN_MOVE_PROCESSING
+            - CAN_EDIT_CARD_PROCESSING
+            - CAN_CREATE_PIA
+            - CAN_DELETE_PIA
+            - CAN_MANAGE_EVALUATIONS
+            - CAN_MANAGE_ATTACHMENTS
             - CAN_SHOW_PROCESSING_TEMPLATE
             - CAN_IMPORT_PIA
             - CAN_MANAGE_FOLDERS
@@ -152,18 +162,12 @@ security:
             - CAN_MANAGE_ONLY_OWNED_PORTFOLIOS
         
         ROLE_ADMIN:
+            - CAN_ACCESS_BACK_OFFICE
             - ROLE_SHARED_DPO
             #includes - ROLE_DPO
             #includes - CAN_ACCESS_BACK_OFFICE
             - CAN_MANAGE_USERS
             - CAN_MANAGE_PORTFOLIOS
-            - CAN_MANAGE_STRUCTURES
-            - CAN_MANAGE_STRUCTURE_TYPES
-
-
-        ROLE_TECHNICAL_ADMIN:
-            - ROLE_ADMIN
-            - CAN_MANAGE_USERS
             - CAN_MANAGE_STRUCTURES
             - CAN_MANAGE_STRUCTURE_TYPES
             - CAN_MANAGE_APPLICATIONS
@@ -173,6 +177,7 @@ security:
 
         ROLE_SUPER_ADMIN:
             - ROLE_TECHNICAL_ADMIN
+            - ROLE_ADMIN
             - CAN_EXPORT_PIA
             - CAN_MANAGE_PROCESSING_TEMPLATES
 

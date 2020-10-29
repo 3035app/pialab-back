@@ -104,6 +104,14 @@ class ProcessingDescriptor extends AbstractDescriptor
      *
      * @var string|null
      */
+    protected $concernedPeople = '';
+
+    /**
+     * @JMS\Type("string")
+     * @JMS\Groups({"Default", "Export"})
+     *
+     * @var string|null
+     */
     protected $contextOfImplementation = '';
 
     /**
@@ -207,6 +215,7 @@ class ProcessingDescriptor extends AbstractDescriptor
         string $rightsGuarantee = null,
         string $exactness = null,
         string $consent = null,
+        string $concernedPeople = null,
         string $contextOfImplementation = null,
         string $recipients = null,
         \DateTime $createdAt = null,
@@ -228,6 +237,7 @@ class ProcessingDescriptor extends AbstractDescriptor
         $this->rightsGuarantee = $rightsGuarantee;
         $this->exactness = $exactness;
         $this->consent = $consent;
+        $this->concernedPeople = $concernedPeople;
         $this->contextOfImplementation = $contextOfImplementation;
         $this->recipients = $recipients;
         $this->createdAt = $createdAt;

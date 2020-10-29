@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2018 Libre Informatique
+ * Copyright (C) 2015-2019 C-Labs
  *
  * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
@@ -68,7 +68,7 @@ class PiaTransformer extends AbstractTransformer
     public function toPia(PiaDescriptor $descriptor): Pia
     {
         $pia = new Pia();
-        $pia->setStatus(PiaStatus::getStatusFromName($descriptor->getStatus()));
+        $pia->setStatus($descriptor->getStatus());
         $pia->setAuthorName($descriptor->getAuthorName());
         $pia->setEvaluatorName($descriptor->getEvaluatorName());
         $pia->setValidatorName($descriptor->getValidatorName());

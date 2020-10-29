@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2018 Libre Informatique
+ * Copyright (C) 2015-2020 C-Labs
  *
  * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
@@ -84,6 +84,7 @@ class ProcessingTransformer extends AbstractTransformer
         $processing->setRightsGuarantee($descriptor->getRightsGuarantee());
         $processing->setExactness($descriptor->getExactness());
         $processing->setConsent($descriptor->getConsent());
+        $processing->setConcernedPeople($descriptor->getConcernedPeople());
         $processing->setRecipients($descriptor->getRecipients());
         $processing->setContextOfImplementation($descriptor->getContextOfImplementation());
 
@@ -109,6 +110,7 @@ class ProcessingTransformer extends AbstractTransformer
             $processing->getRightsGuarantee(),
             $processing->getExactness(),
             $processing->getConsent(),
+            $processing->getConcernedPeople(),
             $processing->getContextOfImplementation(),
             $processing->getRecipients(),
             $processing->getCreatedAt(),

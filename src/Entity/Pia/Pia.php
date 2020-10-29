@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2018 Libre Informatique
+ * Copyright (C) 2015-2020 C-Labs
  *
  * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
@@ -34,10 +34,10 @@ class Pia implements Timestampable
     protected const QUESTIONS = [
         self::TYPE_SIMPLIFIED => 6,
         self::TYPE_REGULAR    => 18,
-        self::TYPE_ADVANCED   => 36,
+        self::TYPE_ADVANCED   => 18,
     ];
 
-    const QUESTION_NUMBER = 30;
+    const QUESTION_NUMBER = 18;
     const OLD_QUESTION_NUMBER = 36;
 
     /**
@@ -259,13 +259,8 @@ class Pia implements Timestampable
     public function computeProgress(): int
     {
         $currentAnswerCount = count($this->answers ?? []);
-        $currentQuestionCount = self::QUESTION_NUMBER;
 
-        if ($currentAnswerCount > $currentQuestionCount) {
-            $currentQuestionCount = self::OLD_QUESTION_NUMBER;
-        }
-
-        $progress = round((100 / $currentQuestionCount) * $currentAnswerCount);
+        $progress = round((100 / self::QUESTION_NUMBER) * $currentAnswerCount);
 
         return $progress;
     }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2018 Libre Informatique
+ * Copyright (C) 2015-2020 C-Labs
  *
  * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
@@ -57,6 +57,13 @@ class ProcessingDataTypeController extends RestController
      *     required=true,
      *     description="The API token. e.g.: Bearer <TOKEN>"
      * )
+     * @Swg\Parameter(
+     *     name="processing",
+     *     in="path",
+     *     type="string",
+     *     required=true,
+     *     description="The ID of the Processing"
+     * )
      *
      * @Swg\Response(
      *     response=200,
@@ -73,10 +80,10 @@ class ProcessingDataTypeController extends RestController
      */
     public function listAction(Request $request)
     {
-        $structure = $this->getUser()->getStructure();
+        $processingId = $request->get('processing');
 
         $collection = $this->getRepository()
-            ->getPaginatedProcessingDataTypesByStructure($structure);
+            ->findBy(['processing' => $processingId]);
 
         return $this->view($collection, Response::HTTP_OK);
     }

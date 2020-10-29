@@ -29,7 +29,7 @@ bin/console server:start
 Create your super admin user :
 
 ```bash
-bin/console pia:user:create --email=your@email.address --password=yourSecretPassword
+bin/console pia:user:create your@email.address yourSecretPassword
 bin/console pia:user:promote your@email.address --role=ROLE_SUPER_ADMIN
 ```
 
@@ -65,7 +65,7 @@ Note: You can create this Oauth application in the backend admin UI.
 ### Create a standard user
 
 ```bash
-bin/console pia:user:create --email=api@pia.io --password=pia
+bin/console pia:user:create api@pia.io pia
 ```
 
 Note: You can create this user in the backend admin UI.

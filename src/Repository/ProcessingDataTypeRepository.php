@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2018 Libre Informatique
+ * Copyright (C) 2015-2020 C-Labs
  *
  * This file is licensed under the GNU LGPL v3.
  * For the full copyright and license information, please view the LICENSE.md
@@ -13,10 +13,8 @@ namespace PiaApi\Repository;
 use PiaApi\Entity\Pia\Processing;
 use PiaApi\Entity\Pia\ProcessingDataType;
 use PiaApi\Entity\Pia\Structure;
-
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 
@@ -27,27 +25,26 @@ class ProcessingDataTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, ProcessingDataType::class);
     }
 
-    public function getPaginatedProcessingDataTypesByStructure(
-        ?Structure $structure,
-        ?int $defaultLimit = 20,
-        ?int $page = 1
-    ): array {
-        $queryBuilder = $this->createQueryBuilder('pdt');
+    // public function getPaginatedProcessingDataTypesByStructure(
+    //     ?Structure $structure,
+    //     ?int $defaultLimit = 20,
+    //     ?int $page = 1
+    // ): array {
+    //     $queryBuilder = $this->createQueryBuilder('pdt');
 
-        $queryBuilder
-            ->innerJoin('pdt.processing', 'p')
-            ->innerJoin('p.folder', 'f')
-            ->where('f.structure IN (:structure)')
-            ->setParameter('structure', $structure)
-        ;
+    //     $queryBuilder
+    //         ->innerJoin('pdt.processing', 'p')
+    //         ->innerJoin('p.folder', 'f')
+    //         ->where('f.structure IN (:structure)')
+    //         ->setParameter('structure', $structure)
+    //     ;
 
-        $adapter = new DoctrineORMAdapter($queryBuilder);
+    //     $adapter = new DoctrineORMAdapter($queryBuilder);
 
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($defaultLimit);
-        $pagerfanta->setCurrentPage($page);
+    //     $pagerfanta = new Pagerfanta($adapter);
+    //     $pagerfanta->setMaxPerPage($defaultLimit);
+    //     $pagerfanta->setCurrentPage($page);
 
-        return $pagerfanta->getCurrentPageResults()->getArrayCopy();
-    }
-
+    //     return $pagerfanta->getCurrentPageResults()->getArrayCopy();
+    // }
 }
